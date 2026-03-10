@@ -180,34 +180,42 @@
                 <div class="absolute -top-8 -right-8 w-28 h-28 bg-amber-200/40 rounded-full blur-2xl pointer-events-none"></div>
                 <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-200/35 rounded-full blur-2xl pointer-events-none"></div>
                 <div class="relative">
-                    <p class="text-xs tracking-[0.25em] uppercase text-blue-700/80 font-semibold mb-2">The Mission</p>
+                    <p class="text-xs tracking-[0.25em] uppercase text-blue-700/80 font-semibold mb-2">Our Mission</p>
                     <h2 class="font-heading text-4xl sm:text-5xl text-slate-900 font-semibold leading-tight mb-5">
-                        Every Jew Is a Letter in One Living Torah
+                        Every Jew Is a Letter In One Living Torah
                     </h2>
-                    <p class="text-slate-700 text-base mb-4">
-                        <strong>A Letter in the Scroll</strong> is a place to study Torah with heart, clarity, and community. We believe no one learns alone, and no voice is too small to matter.
+
+                    <p class="text-slate-700 text-base mb-3">
+                        The Zohar teaches that every Jewish soul is a <em>letter</em> in the Torah. Just as a Torah scroll is rendered invalid when even a single letter is flawed or missing, no Jewish community is whole when even one voice goes unheard.
                     </p>
-                    <p class="text-slate-700 text-base mb-6">
-                        Our mission is to help friends build holy learning circles, ask deeper questions, and turn insights into action for everyday life.
+                    <p class="text-slate-700 text-base mb-5">
+                        <strong>A Letter in the Scroll</strong> was built on this truth. We give every learner — from the seasoned scholar to the curious beginner — a place to study Torah with depth, warmth, and real friends by their side.
                     </p>
 
                     <div class="space-y-3 mb-6">
                         <div class="mission-point rounded-2xl px-4 py-3">
-                            <p class="text-sm text-slate-800"><span class="font-semibold text-blue-900">Home Dashboard:</span> After sign in, manage rooms, people, and account settings in one place.</p>
+                            <p class="text-sm text-slate-800"><span class="font-semibold text-blue-900">Chavruta Study:</span> Pair or group learning that honors the ancient tradition of studying Torah with a partner — because two voices always illuminate more than one.</p>
                         </div>
                         <div class="mission-point rounded-2xl px-4 py-3">
-                            <p class="text-sm text-slate-800"><span class="font-semibold text-blue-900">Easy Navigation:</span> From dashboard home, jump to study room, holidays, prayers, and songs.</p>
+                            <p class="text-sm text-slate-800"><span class="font-semibold text-blue-900">Universal Connection:</span> Bookmark and react to verses — your highlights are seen by every chavruta you belong to, building a living map of what moves you.</p>
                         </div>
                         <div class="mission-point rounded-2xl px-4 py-3">
-                            <p class="text-sm text-slate-800"><span class="font-semibold text-blue-900">Lead Together:</span> Share responsibility with co-leaders so each room becomes a source of light.</p>
+                            <p class="text-sm text-slate-800"><span class="font-semibold text-blue-900">Lead Together:</span> Promote co-leaders who share the responsibility of guiding a learning circle — because great Torah study is always a shared act.</p>
+                        </div>
+                        <div class="mission-point rounded-2xl px-4 py-3">
+                            <p class="text-sm text-slate-800"><span class="font-semibold text-blue-900">Holidays, Prayers & Songs:</span> Explore the rhythm of Jewish time — from Shabbat zmirot to Yom Tov, prayers to Parshat HaShavua, all in one place.</p>
                         </div>
                     </div>
 
-                    <div class="story-quote rounded-2xl p-4">
+                    <div class="story-quote rounded-2xl p-4 mb-4">
                         <p class="font-heading text-lg text-slate-900 italic leading-relaxed">
-                            "When one letter is missing, the scroll is incomplete. When one person is missing, the people are incomplete."
+                            "When one letter is missing, the scroll is invalid. When one person is absent, the people are incomplete."
                         </p>
                     </div>
+
+                    <p class="text-xs text-slate-500 italic text-center">
+                        Join a chavruta. Study deeply. Be a letter in the scroll.
+                    </p>
                 </div>
             </section>
 
@@ -518,7 +526,12 @@
                 user.displayName ||
                 fallbackNameFromEmail(user.email)
             );
-            const firstName = extractFirstName(existing.firstName || normalizedName, user.email);
+            // If a preferred name was explicitly provided (e.g. on account creation),
+            // always derive firstName from that — never from the stale existing value.
+            const firstNameSource = preferredDisplayName
+                ? normalizedName
+                : (existing.firstName || normalizedName);
+            const firstName = extractFirstName(firstNameSource, user.email);
             const payload = {
                 email: user.email || existing.email || '',
                 emailLower: (user.email || existing.email || '').toLowerCase(),

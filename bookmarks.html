@@ -25,239 +25,326 @@
         }
 
         .bookmarks-hero {
-            background: linear-gradient(140deg, rgba(22, 40, 94, 0.95) 0%, rgba(47, 86, 171, 0.94) 55%, rgba(86, 127, 213, 0.9) 100%);
+            background: linear-gradient(138deg, #16285e 0%, #23408f 55%, #2f56ab 100%);
             color: #fff;
             border-radius: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 26px 48px rgba(15, 23, 42, 0.16);
-            padding: 1.7rem 1.4rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 30px 60px rgba(15, 23, 42, 0.22);
+            padding: 2rem 1.6rem;
             position: relative;
             overflow: hidden;
         }
 
-        .bookmarks-hero::before,
+        .bookmarks-hero::before {
+            content: '';
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(200, 154, 53, 0.28), transparent 70%);
+            top: -90px;
+            right: -60px;
+            pointer-events: none;
+            border-radius: 50%;
+        }
+
         .bookmarks-hero::after {
             content: '';
             position: absolute;
-            border-radius: 999px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(191, 219, 254, 0.2), transparent 70%);
+            bottom: -80px;
+            left: -50px;
             pointer-events: none;
-        }
-
-        .bookmarks-hero::before {
-            width: 210px;
-            height: 210px;
-            background: rgba(251, 191, 36, 0.22);
-            top: -80px;
-            right: -45px;
-            filter: blur(20px);
-        }
-
-        .bookmarks-hero::after {
-            width: 170px;
-            height: 170px;
-            background: rgba(191, 219, 254, 0.22);
-            bottom: -70px;
-            left: -40px;
-            filter: blur(24px);
+            border-radius: 50%;
         }
 
         .hero-eyebrow {
             text-transform: uppercase;
-            letter-spacing: 0.16em;
-            font-size: 0.68rem;
-            color: rgba(255, 255, 255, 0.78);
+            letter-spacing: 0.2em;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.65);
             font-weight: 700;
         }
 
         .hero-title {
             margin-top: 0.45rem;
-            font-size: clamp(1.6rem, 3.2vw, 2.35rem);
+            font-size: clamp(1.7rem, 3.5vw, 2.5rem);
             font-weight: 700;
-            line-height: 1.15;
+            line-height: 1.12;
         }
 
         .hero-subtitle {
-            margin-top: 0.55rem;
-            color: rgba(241, 245, 255, 0.94);
-            max-width: 60ch;
-            font-size: 0.94rem;
-            line-height: 1.5;
+            margin-top: 0.6rem;
+            color: rgba(241, 245, 255, 0.88);
+            max-width: 58ch;
+            font-size: 0.92rem;
+            line-height: 1.55;
         }
 
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 0.75rem;
-            margin-top: 1rem;
+            margin-top: 1.2rem;
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.11);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 0.95rem;
-            padding: 0.75rem 0.85rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 1rem;
+            padding: 0.85rem 1rem;
+            transition: background 0.2s;
         }
 
+        .stat-card:hover { background: rgba(255,255,255,0.13); }
+
         .stat-label {
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: rgba(255, 255, 255, 0.72);
+            letter-spacing: 0.15em;
+            color: rgba(255, 255, 255, 0.65);
             font-weight: 700;
         }
 
         .stat-value {
-            margin-top: 0.24rem;
-            font-size: 1.28rem;
+            margin-top: 0.2rem;
+            font-size: 1.45rem;
             font-weight: 700;
-            color: #fff;
+            color: #fbbf24;
             line-height: 1.2;
         }
 
         .bookmarks-panel {
-            margin-top: 1rem;
-            background: rgba(255, 255, 255, 0.82);
-            border: 1px solid rgba(30, 64, 175, 0.13);
-            border-radius: 1.2rem;
-            box-shadow: 0 16px 38px rgba(30, 64, 175, 0.12);
-            backdrop-filter: blur(8px);
-            padding: 1rem;
+            margin-top: 1.2rem;
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid rgba(30, 64, 175, 0.1);
+            border-radius: 1.4rem;
+            box-shadow: 0 20px 50px rgba(30, 64, 175, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem;
         }
 
         .bookmarks-tabs {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.45rem;
             flex-wrap: wrap;
-            margin-bottom: 0.9rem;
+            margin-bottom: 1.1rem;
         }
 
         .bookmarks-tab {
-            border: 1px solid rgba(30, 64, 175, 0.16);
-            background: rgba(239, 246, 255, 0.78);
+            border: 1.5px solid rgba(30, 64, 175, 0.18);
+            background: rgba(239, 246, 255, 0.7);
             color: #1e3a8a;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 700;
             border-radius: 999px;
-            padding: 0.45rem 0.9rem;
-            transition: all 0.16s ease;
+            padding: 0.4rem 0.85rem;
+            transition: all 0.18s ease;
             cursor: pointer;
         }
 
         .bookmarks-tab.is-active {
-            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            background: linear-gradient(135deg, #16285e, #2f56ab);
             color: #fff;
             border-color: transparent;
-            box-shadow: 0 12px 26px rgba(37, 99, 235, 0.28);
+            box-shadow: 0 10px 24px rgba(22, 40, 94, 0.3);
         }
 
         .panel-section {
             display: none;
-            gap: 0.75rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
         }
 
         .panel-section.is-active {
             display: grid;
         }
 
+        /* ── Verse bookmark cards ── */
         .bookmark-card {
             background: #fff;
-            border: 1px solid rgba(148, 163, 184, 0.24);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-left: 4px solid #c89a35;
             border-radius: 1rem;
-            padding: 0.95rem;
-            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+            padding: 1.1rem 1rem;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .bookmark-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.1);
         }
 
         .bookmark-card-head {
             display: flex;
             justify-content: space-between;
-            gap: 0.7rem;
-            align-items: baseline;
-            margin-bottom: 0.45rem;
+            gap: 0.6rem;
+            align-items: flex-start;
         }
 
         .bookmark-title {
             font-weight: 700;
-            color: #1e3a8a;
-            font-size: 0.95rem;
+            color: #16285e;
+            font-size: 0.93rem;
             line-height: 1.35;
         }
 
         .bookmark-date {
-            color: #64748b;
-            font-size: 0.72rem;
+            color: #94a3b8;
+            font-size: 0.68rem;
             white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .bookmark-body {
             color: #334155;
-            line-height: 1.55;
-            font-size: 0.89rem;
+            line-height: 1.6;
+            font-size: 0.87rem;
+            flex: 1;
         }
 
         .bookmark-source {
-            margin-top: 0.48rem;
             color: #475569;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 600;
+            letter-spacing: 0.01em;
         }
 
         .bookmark-meta {
-            margin-top: 0.5rem;
             display: flex;
-            gap: 0.5rem;
+            gap: 0.4rem;
             flex-wrap: wrap;
+            margin-top: auto;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.15);
         }
 
         .meta-pill {
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             font-weight: 700;
             border-radius: 999px;
-            padding: 0.25rem 0.55rem;
-            border: 1px solid rgba(37, 99, 235, 0.2);
-            background: rgba(239, 246, 255, 0.9);
-            color: #1d4ed8;
+            padding: 0.22rem 0.5rem;
+            border: 1px solid rgba(200, 154, 53, 0.3);
+            background: rgba(251, 191, 36, 0.08);
+            color: #92650a;
+            letter-spacing: 0.02em;
         }
 
+        /* ── Quote bookmark cards ── */
+        .quote-card {
+            border-left-color: #2f56ab;
+        }
+
+        .quote-hebrew {
+            direction: rtl;
+            text-align: right;
+            font-family: 'Times New Roman', 'David', serif;
+            font-size: 1.05rem;
+            color: #16285e;
+            line-height: 1.7;
+            background: rgba(239, 246, 255, 0.6);
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.65rem;
+        }
+
+        .quote-reflection {
+            font-style: italic;
+            color: #475569;
+            font-size: 0.84rem;
+            border-left: 3px solid rgba(200, 154, 53, 0.35);
+            padding-left: 0.65rem;
+        }
+
+        /* ── Community cards ── */
         .community-card {
-            background: linear-gradient(150deg, #ffffff 0%, #f0f5ff 100%);
-            border: 1px solid rgba(59, 130, 246, 0.22);
+            background: linear-gradient(160deg, #f0f7ff 0%, #e8f1fd 100%);
+            border-left-color: #7c3aed;
         }
 
+        .savers-row {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            flex-wrap: wrap;
+            margin-top: 0.4rem;
+        }
+
+        .saver-av {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #16285e, #2f56ab);
+            color: #fff;
+            font-size: 0.68rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 6px rgba(22,40,94,0.2);
+            flex-shrink: 0;
+        }
+
+        .saver-names {
+            font-size: 0.78rem;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        /* ── Empty state ── */
         .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
-            padding: 2.2rem 1rem;
+            padding: 3rem 1.5rem;
             color: #64748b;
-            background: rgba(248, 250, 252, 0.86);
-            border-radius: 0.95rem;
-            border: 1px dashed rgba(148, 163, 184, 0.6);
-            font-size: 0.9rem;
+            grid-column: 1 / -1;
         }
 
+        .empty-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(239, 246, 255, 0.9);
+            border: 1.5px dashed rgba(148, 163, 184, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.9rem;
+        }
+
+        .empty-state p { font-size: 0.88rem; max-width: 34ch; line-height: 1.5; }
+
+        /* ── Loading ── */
         .loading-state {
             text-align: center;
             color: #334155;
-            padding: 2rem 1rem;
-            font-size: 0.92rem;
+            padding: 2.5rem 1rem;
+            font-size: 0.9rem;
+            grid-column: 1 / -1;
         }
 
         .loading-spinner {
-            width: 28px;
-            height: 28px;
+            width: 30px;
+            height: 30px;
             border-radius: 999px;
-            border: 3px solid rgba(148, 163, 184, 0.45);
-            border-top-color: #2563eb;
+            border: 3px solid rgba(148, 163, 184, 0.35);
+            border-top-color: #16285e;
             margin: 0 auto 0.75rem;
-            animation: spin 0.75s linear infinite;
+            animation: spin 0.7s linear infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @media (max-width: 900px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
+        @media (max-width: 640px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .panel-section { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -433,22 +520,30 @@
 
         function renderVerseBookmarks(bookmarks) {
             if (!bookmarks || bookmarks.length === 0) {
-                return renderEmptyState('No verse bookmarks yet. Save a verse in any chavruta and it will appear here.');
+                return `<div class="empty-state">
+                    <div class="empty-icon">
+                        <svg width="22" height="22" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                    </div>
+                    <p>No verse bookmarks yet. Open a study room, tap a verse, and bookmark it to save it here.</p>
+                </div>`;
             }
 
             return bookmarks.map((bookmark) => {
                 const reference = bookmark.verseRef || 'Unknown verse';
-                const text = truncateText(bookmark.verseText || 'Verse text will appear after you bookmark from study.');
+                const text = truncateText(bookmark.verseText || 'Verse text will appear after you open the study room where this verse was bookmarked.');
+                const dateStr = formatDate(bookmark.timestamp);
+                // Extract book name for a subtle accent
+                const book = reference.split(' ')[0] || '';
                 return `
                     <article class="bookmark-card">
                         <div class="bookmark-card-head">
                             <h3 class="bookmark-title">${escapeHtml(reference)}</h3>
-                            <span class="bookmark-date">Saved ${escapeHtml(formatDate(bookmark.timestamp))}</span>
+                            <span class="bookmark-date">${escapeHtml(dateStr)}</span>
                         </div>
                         <p class="bookmark-body">${escapeHtml(text)}</p>
                         <div class="bookmark-meta">
                             <span class="meta-pill">Universal Bookmark</span>
-                            <span class="meta-pill">Synced Across Rooms</span>
+                            ${book ? `<span class="meta-pill">${escapeHtml(book)}</span>` : ''}
                         </div>
                     </article>
                 `;
@@ -457,24 +552,30 @@
 
         function renderQuoteBookmarks(bookmarks) {
             if (!bookmarks || bookmarks.length === 0) {
-                return renderEmptyState('No daily quote bookmarks yet.');
+                return `<div class="empty-state">
+                    <div class="empty-icon">
+                        <svg width="22" height="22" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                    </div>
+                    <p>No daily teaching bookmarks yet. Bookmark a daily quote from the dashboard to save it here.</p>
+                </div>`;
             }
 
             return bookmarks.map((bookmark) => {
                 const translation = truncateText(bookmark.translation || 'Daily teaching');
                 const hebrew = truncateText(bookmark.hebrew || '', 180);
                 const reflection = truncateText(bookmark.reflection || '', 240);
+                const dateStr = formatDate(bookmark.timestamp);
                 return `
-                    <article class="bookmark-card">
+                    <article class="bookmark-card quote-card">
                         <div class="bookmark-card-head">
                             <h3 class="bookmark-title">${escapeHtml(bookmark.source || 'Daily Teaching')}</h3>
-                            <span class="bookmark-date">Saved ${escapeHtml(formatDate(bookmark.timestamp))}</span>
+                            <span class="bookmark-date">${escapeHtml(dateStr)}</span>
                         </div>
+                        ${hebrew ? `<p class="quote-hebrew">${escapeHtml(hebrew)}</p>` : ''}
                         <p class="bookmark-body">"${escapeHtml(translation)}"</p>
-                        ${hebrew ? `<p class="bookmark-body" style="margin-top:0.42rem;direction:rtl;text-align:right;font-family:'Times New Roman',serif">${escapeHtml(hebrew)}</p>` : ''}
-                        ${reflection ? `<p class="bookmark-body" style="margin-top:0.52rem">${escapeHtml(reflection)}</p>` : ''}
+                        ${reflection ? `<p class="quote-reflection">${escapeHtml(reflection)}</p>` : ''}
                         <div class="bookmark-meta">
-                            <span class="meta-pill">Quote ID ${escapeHtml(bookmark.quoteId || '')}</span>
+                            <span class="meta-pill">Daily Teaching</span>
                         </div>
                     </article>
                 `;
@@ -483,15 +584,25 @@
 
         function renderCommunityQuotes(quotes) {
             if (!quotes || quotes.length === 0) {
-                return renderEmptyState('No community quote activity yet.');
+                return `<div class="empty-state">
+                    <div class="empty-icon">
+                        <svg width="22" height="22" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg>
+                    </div>
+                    <p>No community activity yet. When chavruta members bookmark daily quotes, they will appear here.</p>
+                </div>`;
             }
 
+            const colors = ['#16285e','#7c3aed','#c89a35','#27a769','#e74c3c'];
             return quotes.map((quote) => {
                 const translation = truncateText(quote.translation || 'Daily teaching');
-                const saverNames = Array.isArray(quote.savers) && quote.savers.length
-                    ? quote.savers.map((name) => formatDisplayName(name)).join(', ')
-                    : 'No names available';
+                const savers = Array.isArray(quote.savers) && quote.savers.length ? quote.savers : [];
                 const countLabel = quote.count === 1 ? '1 person bookmarked this' : `${quote.count} people bookmarked this`;
+                const saverAvatars = savers.slice(0, 5).map((name, i) => {
+                    const n = formatDisplayName(name);
+                    return `<div class="saver-av" style="background:linear-gradient(135deg,${colors[i%5]},${colors[(i+1)%5]})" title="${escapeHtml(n)}">${n[0].toUpperCase()}</div>`;
+                }).join('');
+                const nameList = savers.slice(0, 3).map(formatDisplayName).join(', ')
+                    + (savers.length > 3 ? ` and ${savers.length - 3} more` : '');
 
                 return `
                     <article class="bookmark-card community-card">
@@ -500,8 +611,11 @@
                             <span class="bookmark-date">${escapeHtml(countLabel)}</span>
                         </div>
                         <p class="bookmark-body">"${escapeHtml(translation)}"</p>
-                        ${quote.reflection ? `<p class="bookmark-body" style="margin-top:0.5rem">${escapeHtml(truncateText(quote.reflection, 220))}</p>` : ''}
-                        <p class="bookmark-source">Recent savers: ${escapeHtml(saverNames)}</p>
+                        ${quote.reflection ? `<p class="quote-reflection">${escapeHtml(truncateText(quote.reflection, 220))}</p>` : ''}
+                        <div class="savers-row">
+                            ${saverAvatars}
+                            ${nameList ? `<span class="saver-names">${escapeHtml(nameList)}</span>` : ''}
+                        </div>
                     </article>
                 `;
             }).join('');
