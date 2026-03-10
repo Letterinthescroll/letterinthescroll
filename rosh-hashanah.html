@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rosh Hashanah Seder Guide | A Letter in the Scroll</title>
+    <meta name="description" content="A complete Rosh Hashanah Seder guide: Kiddush, symbolic foods with prayers, and the blessings for a good and sweet year.">
+    <link rel="icon" type="image/png" href="media/images/Icon.png">
+    <link rel="apple-touch-icon" href="media/images/Icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mobile-overrides.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --p-navy:   #1e3a5f;
+            --p-blue:   #1e3a8a;
+            --p-blue2:  #1e40af;
+            --p-blue3:  #2563eb;
+            --p-gold:   #b7791f;
+            --p-amber:  #f59e0b;
+            --p-border: rgba(30, 58, 138, 0.11);
+            --p-muted:  #4b6278;
+            --p-radius: 16px;
+        }
+        html { scroll-behavior: smooth; }
+        body.haggadah-body {
+            background: linear-gradient(170deg, #f0f5ff 0%, #e8effe 40%, #f5f8ff 100%);
+            min-height: 100vh;
+            color: #1a3147;
+            overflow-x: hidden;
+        }
+        .hag-page { position: relative; z-index: 2; }
+
+        /* ── Hero ──────────────────────────────────────────────────────── */
+        .hag-hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 55%, #2563eb 100%);
+            color: #fff;
+            text-align: center;
+            padding: 3.8rem 1.5rem 3.6rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hag-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 72% 35%, rgba(255,255,255,0.09) 0%, transparent 62%);
+            pointer-events: none;
+        }
+        .hag-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; left: 0; right: 0;
+            height: 46px;
+            background: linear-gradient(to bottom right, transparent 49%, #f0f5ff 50%);
+        }
+        .hag-hero__eyebrow {
+            font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase;
+            color: rgba(255,255,255,0.58); font-weight: 600; margin-bottom: 0.5rem; position: relative;
+        }
+        .hag-hero__hebrew {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 700;
+            direction: rtl; color: #bfdbfe; margin-bottom: 0.35rem; position: relative;
+        }
+        .hag-hero__title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 5.5vw, 3.5rem); font-weight: 800; color: #fff;
+            line-height: 1.1; margin-bottom: 1rem; position: relative;
+        }
+        .hag-hero__title span { color: #93c5fd; }
+        .hag-hero__subtitle {
+            font-size: 0.96rem; color: rgba(255,255,255,0.7); line-height: 1.68;
+            max-width: 560px; margin: 0 auto 1.6rem; position: relative;
+        }
+        .hag-hero__actions {
+            display: flex; justify-content: center; flex-wrap: wrap; gap: 0.65rem; position: relative;
+        }
+        .hag-hero__btn {
+            display: inline-flex; align-items: center; text-decoration: none;
+            border-radius: 999px; padding: 0.6rem 1.2rem; font-weight: 700;
+            font-size: 0.88rem; transition: opacity 0.18s, transform 0.15s;
+        }
+        .hag-hero__btn:hover { opacity: 0.88; transform: translateY(-1px); }
+        .hag-hero__btn--primary {
+            background: rgba(255,255,255,0.2); color: #fff;
+            border: 1.5px solid rgba(255,255,255,0.48); backdrop-filter: blur(6px);
+        }
+        .hag-hero__btn--secondary {
+            background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8);
+            border: 1px solid rgba(255,255,255,0.22);
+        }
+
+        /* ── Shell ─────────────────────────────────────────────────────── */
+        .haggadah-shell { max-width: 1040px; margin: 0 auto; padding: 0 1.25rem 4.4rem; }
+
+        /* ── Section label ─────────────────────────────────────────────── */
+        .hag-section-label {
+            margin: 2rem 0 0.75rem;
+            font-size: 0.65rem; font-weight: 700; letter-spacing: 0.22em;
+            text-transform: uppercase; color: var(--p-blue3);
+            display: flex; align-items: center; gap: 0.7rem;
+        }
+        .hag-section-label::after {
+            content: ''; flex: 1; height: 1px;
+            background: linear-gradient(to right, rgba(37,99,235,0.28), transparent);
+        }
+
+        /* ── Seder section card ────────────────────────────────────────── */
+        .seder-section {
+            margin-top: 1.55rem;
+            background: #fff;
+            border: 1px solid rgba(30,58,138,0.09);
+            border-radius: 18px;
+            padding: 1.6rem 1.65rem 1.5rem;
+            box-shadow: 0 2px 20px rgba(30,58,138,0.07);
+            scroll-margin-top: 82px;
+        }
+        .section-kicker-wrap { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+        .section-kicker {
+            font-size: 0.66rem; font-weight: 800; letter-spacing: 0.18em;
+            text-transform: uppercase; color: var(--p-blue3); margin: 0;
+        }
+        .section-title {
+            margin: 0;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.35rem, 2.8vw, 2.05rem);
+            color: #1e3a5f; line-height: 1.15;
+        }
+        .section-hebrew {
+            margin: 0.25rem 0 0.8rem;
+            direction: rtl; color: var(--p-blue2);
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1rem, 2.2vw, 1.3rem); opacity: 0.72;
+        }
+        .section-subtitle { margin: 0.12rem 0 0; color: var(--p-muted); line-height: 1.74; font-size: 0.94rem; }
+
+        /* ── Step callout ──────────────────────────────────────────────── */
+        .step-callout {
+            margin-top: 1.08rem;
+            background: #eff6ff;
+            border: 1px solid rgba(37,99,235,0.23);
+            border-radius: 10px; padding: 0.86rem 1.05rem;
+            color: #1e3a8a; font-size: 0.9rem; line-height: 1.74;
+        }
+        .step-callout strong { color: #1e3a5f; }
+
+        /* ── Blessing card (3-col Hebrew | Translit | English) ─────────── */
+        .blessing-card {
+            margin-top: 1.1rem;
+            background: #fff;
+            border: 1px solid rgba(183,121,31,0.25);
+            border-radius: 14px; padding: 1.02rem 1.08rem;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.72rem 0.82rem;
+        }
+        .blessing-card h4 { margin: 0 0 0.12rem; color: #7a4e11; font-size: 0.95rem; font-weight: 700; grid-column: 1 / -1; }
+        .blessing-meta { margin: 0.3rem 0 0; color: #5a6d80; font-size: 0.86rem; line-height: 1.66; grid-column: 1 / -1; }
+        .blessing-meta strong { color: #35526b; }
+        .blessing-hebrew {
+            margin: 0; direction: rtl; text-align: right;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.12rem; line-height: 1.92; color: #7c2d12;
+            background: #fffbf2; border: 1px solid rgba(183,121,31,0.17);
+            border-radius: 10px; padding: 0.62rem 0.82rem; grid-column: 1; min-width: 0;
+        }
+        .blessing-translit, .blessing-english {
+            margin: 0; font-size: 0.89rem; line-height: 1.74; color: #334e67;
+            background: #f8fbff; border: 1px solid rgba(30,58,138,0.12);
+            border-radius: 10px; padding: 0.62rem 0.82rem; min-width: 0;
+        }
+        .blessing-translit { grid-column: 2; font-style: italic; }
+        .blessing-english  { grid-column: 3; }
+
+        /* ── Mini heading ──────────────────────────────────────────────── */
+        .mini-heading {
+            margin: 1.35rem 0 0.56rem; color: var(--p-blue);
+            font-size: 0.78rem; letter-spacing: 0.11em;
+            text-transform: uppercase; font-weight: 800;
+        }
+
+        /* ── Note panel ────────────────────────────────────────────────── */
+        .note-panel {
+            background: #f8fbff; border: 1px solid rgba(30,58,138,0.12);
+            border-radius: 12px; padding: 0.85rem 0.95rem; margin-top: 1rem;
+        }
+        .note-panel h4 { margin: 0; color: var(--p-blue); font-size: 0.9rem; font-weight: 700; }
+        .note-panel p, .note-panel li { margin: 0.38rem 0 0; color: #355671; font-size: 0.87rem; line-height: 1.72; }
+
+        /* ── Symbol grid ───────────────────────────────────────────────── */
+        .symbol-grid {
+            margin-top: 1.2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        .symbol-card {
+            background: #fff;
+            border: 1px solid rgba(30,58,138,0.1);
+            border-radius: 14px; overflow: hidden;
+        }
+        .symbol-card__head {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            padding: 0.75rem 1rem 0.6rem;
+            border-bottom: 1px solid rgba(30,58,138,0.1);
+        }
+        .symbol-card__he {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem; color: #1e3a5f;
+            direction: rtl; text-align: right; margin: 0 0 0.1rem;
+        }
+        .symbol-card__en { font-weight: 700; font-size: 0.95rem; color: #1e3a8a; margin: 0; }
+        .symbol-card__body { padding: 0.85rem 1rem 1rem; }
+        .symbol-card__meaning { font-size: 0.92rem; color: #374151; line-height: 1.66; margin: 0 0 0.65rem; }
+        .symbol-card__meaning strong { color: #1e3a5f; }
+        .yehi-box {
+            background: #fff8eb;
+            border: 1px solid rgba(183,121,31,0.22);
+            border-radius: 10px; padding: 0.72rem 0.9rem; margin-top: 0.6rem;
+        }
+        .yehi-label {
+            font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em;
+            text-transform: uppercase; color: var(--p-gold); margin: 0 0 0.4rem;
+        }
+        .yehi-he {
+            direction: rtl; text-align: right;
+            font-family: 'Playfair Display', serif;
+            font-size: 0.98rem; line-height: 1.8; color: #7a4e11; margin: 0 0 0.3rem;
+        }
+        .yehi-tl { font-style: italic; color: #5a6d80; font-size: 0.83rem; line-height: 1.65; margin: 0 0 0.25rem; }
+        .yehi-en { color: #374151; font-size: 0.83rem; line-height: 1.65; margin: 0; }
+
+        /* ── Psalm / prayer block ──────────────────────────────────────── */
+        .psalm-block {
+            background: linear-gradient(145deg, #f0f4ff, #f7f9ff);
+            border: 1px solid rgba(30,58,138,0.13);
+            border-radius: 14px; padding: 1.05rem 1.2rem; margin-bottom: 0.85rem;
+        }
+        .psalm-block__he {
+            direction: rtl; text-align: right;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.04rem; line-height: 1.95; color: #1e3a8a;
+            margin: 0 0 0.8rem;
+        }
+        .psalm-block__en {
+            color: #1e3a8a; font-size: 0.95rem; line-height: 1.7; margin: 0;
+            font-style: italic; border-top: 1px solid rgba(30,58,138,0.1);
+            padding-top: 0.7rem; margin-top: 0.7rem;
+        }
+
+        /* ── Ending banner ─────────────────────────────────────────────── */
+        .ending-banner {
+            margin-top: 1.3rem; text-align: center;
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 55%, #2563eb 100%);
+            border-radius: 20px; padding: 2.2rem 1.5rem;
+            position: relative; overflow: hidden;
+        }
+        .ending-banner::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 60% 40%, rgba(255,255,255,0.09) 0%, transparent 65%);
+            pointer-events: none;
+        }
+        .ending-banner h3 {
+            margin: 0; direction: rtl; color: #bfdbfe;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.9rem, 4.5vw, 2.8rem); line-height: 1.2; position: relative;
+        }
+        .ending-banner p {
+            margin: 0.55rem 0 0; color: rgba(255,255,255,0.76);
+            font-size: 1.05rem; position: relative;
+        }
+        .page-footer { margin: 1.8rem 0 0; color: rgba(30,58,138,0.38); text-align: center; font-size: 0.79rem; }
+
+        /* ── Anchor menu ───────────────────────────────────────────────── */
+        .anchor-menu {
+            position: fixed; right: 0; top: 116px; z-index: 60;
+            width: 92px; max-height: 72vh;
+            overflow-y: auto; overflow-x: hidden;
+            background: rgba(255,255,255,0.74);
+            backdrop-filter: blur(18px) saturate(180%);
+            -webkit-backdrop-filter: blur(18px) saturate(180%);
+            border: 1px solid rgba(30,58,138,0.14); border-right: none;
+            border-radius: 10px 0 0 10px;
+            box-shadow: -4px 6px 28px rgba(30,58,138,0.1), inset 0 1px 0 rgba(255,255,255,0.6);
+            padding: 0.42rem 0.32rem;
+        }
+        .anchor-menu__title {
+            margin: 0 0 0.32rem; padding: 0 0.28rem 0.3rem;
+            font-size: 0.58rem; font-weight: 800; letter-spacing: 0.15em;
+            text-transform: uppercase; color: var(--p-blue3);
+            border-bottom: 1px solid rgba(37,99,235,0.15);
+        }
+        .anchor-link {
+            display: block; text-decoration: none; color: #3b5270;
+            font-size: 0.65rem; font-weight: 600; line-height: 1.3;
+            padding: 0.24rem 0.3rem; border-radius: 7px;
+            transition: background 0.14s, color 0.14s;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .anchor-link:hover { background: rgba(37,99,235,0.09); color: var(--p-blue); }
+        .anchor-link.active { background: rgba(37,99,235,0.13); color: var(--p-blue); font-weight: 700; }
+
+        /* ── Responsive ────────────────────────────────────────────────── */
+        @media (max-width: 1120px) {
+            .anchor-menu { display: none; }
+            .blessing-card { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 860px) {
+            .symbol-grid { grid-template-columns: 1fr; }
+            .hag-hero { padding: 2.8rem 1rem 3rem; }
+        }
+    </style>
+</head>
+<body class="haggadah-body" data-enable-text-size="true" data-header-fallback="true">
+
+    <!-- ── HEADER ────────────────────────────────────────────────────────── -->
+    <header class="header-main relative z-30">
+        <div class="header-container">
+            <div class="header-branding-section">
+                <button id="home-branding" type="button" aria-label="Return to home" class="header-branding-button">
+                    <div class="header-text">
+                        <h1 class="header-title">A Letter in the Scroll</h1>
+                        <p class="header-subtitle">Interactive Weekly Portion Study &amp; Discussion</p>
+                    </div>
+                </button>
+            </div>
+            <div class="header-actions-wrapper">
+                <div id="header-actions" class="header-actions">
+                    <button id="go-to-weekly" class="header-btn header-btn-primary" title="Go to this week's parsha">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span class="header-btn-text">This Week's Parsha</span>
+                    </button>
+                    <a href="prayers.html" class="header-btn header-btn-secondary" title="Important Prayers and Readings">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                        </svg>
+                        <span class="header-btn-text">Prayers</span>
+                    </a>
+                    <a href="songs.html" class="header-btn header-btn-secondary" title="Songs and Poems">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13"/>
+                            <circle cx="6" cy="18" r="3" stroke-width="2"/>
+                            <circle cx="18" cy="16" r="3" stroke-width="2"/>
+                        </svg>
+                        <span class="header-btn-text">Songs and Poems</span>
+                    </a>
+                    <a href="holidays/" class="header-btn header-btn-secondary" title="Jewish Holidays">
+                        <img src="media/images/party.png" class="header-btn-icon" alt="" style="width:22px;height:22px;object-fit:contain;">
+                        <span class="header-btn-text">Holidays</span>
+                    </a>
+                    <a href="about.html" class="header-btn header-btn-secondary" title="About this project">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span class="header-btn-text">About</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ── ANCHOR MENU ───────────────────────────────────────────────────── -->
+    <nav class="anchor-menu" aria-label="Rosh Hashanah section links">
+        <p class="anchor-menu__title">On This Page</p>
+        <a class="anchor-link" href="#hero">Top</a>
+        <a class="anchor-link" href="#overview">Overview</a>
+        <a class="anchor-link" href="#kiddush">Kiddush</a>
+        <a class="anchor-link" href="#symbols">Symbols</a>
+        <a class="anchor-link" href="#prayers">Prayers</a>
+        <a class="anchor-link" href="#closing">Shana Tova</a>
+    </nav>
+
+    <div class="hag-page">
+
+    <!-- ── HERO ─────────────────────────────────────────────────────────── -->
+    <section id="hero" class="hag-hero" aria-labelledby="rh-title">
+        <p class="hag-hero__eyebrow">Complete Seder Guide &middot; Rosh Hashanah</p>
+        <p class="hag-hero__hebrew">סֵדֶר לֵיל רֹאשׁ הַשָּׁנָה</p>
+        <h1 id="rh-title" class="hag-hero__title">Rosh <span>Hashanah</span> Seder</h1>
+        <p class="hag-hero__subtitle">
+            The Jewish New Year and the Day of Judgment — a complete guide to the evening's blessings,
+            symbolic foods with their prayers, and the hopes we carry into the new year.
+        </p>
+        <div class="hag-hero__actions">
+            <a class="hag-hero__btn hag-hero__btn--primary" href="holidays/">All Holidays</a>
+            <a class="hag-hero__btn hag-hero__btn--secondary" href="study.html">Home</a>
+            <a class="hag-hero__btn hag-hero__btn--secondary" href="RoshHashanahSeder.pdf" download>Download PDF</a>
+        </div>
+    </section>
+
+    <!-- ── MAIN CONTENT ──────────────────────────────────────────────────── -->
+    <main class="haggadah-shell">
+
+        <!-- Overview -->
+        <div class="hag-section-label">About the Holiday</div>
+        <section id="overview" class="seder-section" aria-labelledby="overview-title">
+            <div class="section-kicker-wrap">
+                <p class="section-kicker">Introduction</p>
+            </div>
+            <h2 id="overview-title" class="section-title">What is the Rosh Hashanah Seder?</h2>
+            <p class="section-hebrew">מהו סדר ראש השנה</p>
+            <p class="section-subtitle">
+                Rosh Hashanah is the holiday that opens the Hebrew year and is also the Day of Judgment, when our fate for the coming year is decided. The name means "Head of the Year," and it marks the beginning of the High Holy Days — the most spiritually significant period of the Jewish calendar.
+            </p>
+            <div class="step-callout" style="margin-top:1rem;">
+                Despite the serious atmosphere of judgment, we hold joyful festive meals and express hope for a better year. The Rosh Hashanah Seder features a series of symbolic foods — each connected to a special prayer — that express our deepest hopes for the year ahead. The Hebrew or Aramaic name of each food connects to the theme of its prayer by sound or meaning.
+            </div>
+        </section>
+
+        <!-- Kiddush & Opening Blessings -->
+        <div class="hag-section-label">Opening the Evening</div>
+        <section id="kiddush" class="seder-section" aria-labelledby="kiddush-title">
+            <div class="section-kicker-wrap">
+                <p class="section-kicker">Step 1</p>
+            </div>
+            <h2 id="kiddush-title" class="section-title">Kiddush &amp; Opening Blessings</h2>
+            <p class="section-hebrew">קִידּוּשׁ וּבִרְכּוֹת הַפְּתִיחָה</p>
+            <div class="step-callout">
+                <strong>Preparation:</strong> Fill a Kiddush cup with wine or grape juice. The leader holds the cup and recites the following blessings.
+            </div>
+
+            <p class="mini-heading">Kiddush for Rosh Hashanah</p>
+            <div class="blessing-card">
+                <h4>Blessing over the Wine</h4>
+                <p class="blessing-meta">Recited while holding the Kiddush cup.</p>
+                <p class="blessing-hebrew">בָּרוּךְ אַתָּה ה' אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, בּוֹרֵא פְּרִי הַגָּפֶן:</p>
+                <p class="blessing-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, borei p'ri hagafen.</p>
+                <p class="blessing-english">Blessed are You, Lord our God, King of the universe, who creates the fruit of the vine.</p>
+            </div>
+
+            <div class="blessing-card">
+                <h4>Kiddush — Sanctifying the Day</h4>
+                <p class="blessing-meta">This blessing sanctifies Rosh Hashanah as the "Day of Remembrance."</p>
+                <p class="blessing-hebrew">בָּרוּךְ אַתָּה ה' אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר בָּחַר בָּנוּ מִכָּל עָם, וְרוֹמְמָנוּ מִכָּל לָשׁוֹן, וְקִדְּשָׁנוּ בְּמִצְוֹתָיו. וַתִּתֶּן לָנוּ ה' אֱלוֹהֵינוּ בְּאַהֲבָה אֶת יוֹם הַזִּכָּרוֹן, יוֹם זִכְרוֹן תְּרוּעָה בְּאַהֲבָה מִקְרָא קֹדֶשׁ, זֵכֶר לִיצִיאַת מִצְרָיִם. כִּי בָנוּ בָחַרְתָּ וְאוֹתָנוּ קִדַּשְׁתָּ מִכָּל הָעַמִים, וּדְבָרְךָ אֱמֶת וְקַיָּם לָעַד. בָּרוּךְ אַתָּה ה', מֶלֶךְ עַל כֹּל הָאָרֶץ, מְקַדֵּשׁ יִשְׂרָאֵל וְיוֹם הַזִּכָּרוֹן:</p>
+                <p class="blessing-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, asher bachar banu mikol am, v'rom'manu mikol lashon, v'kid'shanu b'mitzvotav. Vatiten lanu Adonai Eloheinu b'ahavah et yom ha-zikaron, yom zichron t'ruah b'ahavah mikra kodesh, zecher litziat Mitzrayim. Ki vanu vacharta v'otanu kidashta mikol ha'amim, u-d'varecha emet v'kayam la'ad. Baruch atah Adonai, Melech al kol ha'aretz, m'kadesh Yisrael v'yom ha-zikaron.</p>
+                <p class="blessing-english">Blessed are You, Lord our God, King of the universe, who has chosen us from all peoples, exalted us above every tongue, and sanctified us with His commandments. You gave us, Lord our God, with love, this Day of Remembrance — a day of memory and the sounding of the shofar — a holy convocation, a memorial of the Exodus from Egypt. For You have chosen us and sanctified us from all the nations. Blessed are You, Lord, King over all the earth, who sanctifies Israel and the Day of Remembrance.</p>
+            </div>
+
+            <div class="step-callout" style="margin-top:0.8rem;">Everyone drinks from the wine or grape juice.</div>
+
+            <p class="mini-heading">Shehecheyanu — Who Has Kept Us Alive</p>
+            <div class="blessing-card">
+                <h4>Shehecheyanu</h4>
+                <p class="blessing-meta">Recited on the first night to thank God for bringing us to this season.</p>
+                <p class="blessing-hebrew">בָּרוּךְ אַתָּה ה', אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, שֶׁהֶחֱיָנוּ וְקִיְּמָנוּ וְהִגִּיעָנוּ לַזְּמַן הַזֶּה:</p>
+                <p class="blessing-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, shehecheyanu v'kiy'manu v'higiyanu lazman hazeh.</p>
+                <p class="blessing-english">Blessed are You, Lord our God, King of the universe, who has kept us alive, sustained us, and brought us to this season.</p>
+            </div>
+
+            <p class="mini-heading">Washing Hands</p>
+            <div class="step-callout">Go to a sink and wash hands by pouring water over the right hand, then the left. Recite the blessing before drying your hands.</div>
+            <div class="blessing-card">
+                <h4>Al Netilat Yadayim — Washing of Hands</h4>
+                <p class="blessing-hebrew">בָּרוּךְ אַתָּה ה' אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו וְצִוָּנוּ עַל נְטִילַת יָדָיִם:</p>
+                <p class="blessing-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, asher kid'shanu b'mitzvotav v'tzivanu al netilat yadayim.</p>
+                <p class="blessing-english">Blessed are You, Lord our God, King of the universe, who has sanctified us with His commandments and commanded us concerning the washing of hands.</p>
+            </div>
+
+            <p class="mini-heading">Blessing on the Challah</p>
+            <div class="step-callout">The leader holds the round challah, recites the blessing, cuts or breaks it. A piece is dipped in honey and passed to everyone.</div>
+            <div class="blessing-card">
+                <h4>Ha-Motzi — Blessing over Bread</h4>
+                <p class="blessing-meta">On Rosh Hashanah the challah is round, symbolizing the cycle of the year and a sweet year ahead.</p>
+                <p class="blessing-hebrew">בָּרוּךְ אַתָּה ה' אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, הַמּוֹצִיא לֶחֶם מִן הָאָרֶץ:</p>
+                <p class="blessing-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, ha-motzi lechem min ha'aretz.</p>
+                <p class="blessing-english">Blessed are You, Lord our God, King of the universe, who brings forth bread from the earth.</p>
+            </div>
+        </section>
+
+        <!-- Symbols -->
+        <div class="hag-section-label">The Symbolic Foods</div>
+        <section id="symbols" class="seder-section" aria-labelledby="symbols-title">
+            <div class="section-kicker-wrap">
+                <p class="section-kicker">Seder Simanim</p>
+            </div>
+            <h2 id="symbols-title" class="section-title">The Symbols of Rosh Hashanah</h2>
+            <p class="section-hebrew">סִימָנֵי רֹאשׁ הַשָּׁנָה</p>
+            <p class="section-subtitle">Each symbolic food is accompanied by a special <em>Yehi Ratzon</em> prayer expressing our hopes for the New Year. The name of each food connects — by sound or meaning — to the theme of its prayer.</p>
+
+            <div class="symbol-grid">
+
+                <div class="symbol-card">
+                    <div class="symbol-card__head">
+                        <p class="symbol-card__he">תָּמָר</p>
+                        <p class="symbol-card__en">Date (Tamar)</p>
+                    </div>
+                    <div class="symbol-card__body">
+                        <p class="symbol-card__meaning"><strong>The Meaning:</strong> The prayer asks that our enemies "will come to an end" (<em>sheyitamu</em>) — a play on the word for date, <em>tamar</em>. We eat the date to symbolize hope for the end of all animosity.</p>
+                        <div class="step-callout" style="margin:0.5rem 0;">Take a date, recite the blessing over fruit, take a bite, then say the Yehi Ratzon.</div>
+                        <div class="yehi-box">
+                            <p class="yehi-label">Yehi Ratzon</p>
+                            <p class="yehi-he">יְהִי רָצוֹן מִלְפָנֶיךָ ה' אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ שֶׁיִּתַּמּוּ אוֹיְבֵינוּ וְשׂנְאֵינוּ וְכָל מְבַקְשֵׁי רָעָתֵנוּ:</p>
+                            <p class="yehi-tl">Yehi ratzon milfanecha Adonai Eloheinu v'Elohei avoteinu, sheyitamu oyveinu v'soneinu v'chol m'vakshei ra'ateinu.</p>
+                            <p class="yehi-en">May it be Your will, Lord our God and God of our fathers, that our enemies, our haters, and all who seek our harm will come to an end.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="symbol-card">
+                    <div class="symbol-card__head">
+                        <p class="symbol-card__he">רִמּוֹן</p>
+                        <p class="symbol-card__en">Pomegranate (Rimon)</p>
+                    </div>
+                    <div class="symbol-card__body">
+                        <p class="symbol-card__meaning"><strong>The Meaning:</strong> A pomegranate is filled with hundreds of seeds. We eat it while praying that our merits in the new year will be as numerous as its seeds.</p>
+                        <div class="step-callout" style="margin:0.5rem 0;">Take some pomegranate seeds and say the following.</div>
+                        <div class="yehi-box">
+                            <p class="yehi-label">Yehi Ratzon</p>
+                            <p class="yehi-he">יְהִי רָצוֹן מִלְפָנֶיךָ ה' אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ שֶׁנִּהְיֶה מְלֵאִים מִצְווֹת כָּרִמּוֹן.</p>
+                            <p class="yehi-tl">Yehi ratzon milfanecha Adonai Eloheinu v'Elohei avoteinu, she'nihiyeh m'leim mitzvot ka'rimon.</p>
+                            <p class="yehi-en">May it be Your will, Lord our God and God of our fathers, that we be as full of mitzvot as the pomegranate.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="symbol-card">
+                    <div class="symbol-card__head">
+                        <p class="symbol-card__he">קָרָא</p>
+                        <p class="symbol-card__en">Gourd / Pumpkin (Kara)</p>
+                    </div>
+                    <div class="symbol-card__body">
+                        <p class="symbol-card__meaning"><strong>The Meaning:</strong> The Aramaic name <em>K'ra</em> sounds like the Hebrew for "to tear" and "to be read." We ask that God tear up negative decrees and that our merits be read before Him.</p>
+                        <div class="step-callout" style="margin:0.5rem 0;">Take a piece of cooked gourd, recite the blessing over vegetables, take a bite, then say the Yehi Ratzon.</div>
+                        <div class="yehi-box">
+                            <p class="yehi-label">Yehi Ratzon</p>
+                            <p class="yehi-he">יְהִי רָצוֹן מִלְפָנֶיךָ ה' אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ שֶׁתִּקְרַע רֹעַ גְּזַר דִּינֵנוּ, וְיִקָּרְאוּ לְפָנֶיךָ זְכֻיּוֹתֵינוּ.</p>
+                            <p class="yehi-tl">Yehi ratzon milfanecha Adonai Eloheinu v'Elohei avoteinu, she'tikra ro'a g'zar dinenu, v'yikare'u l'fanecha z'chuyoteinu.</p>
+                            <p class="yehi-en">May it be Your will, Lord our God and God of our fathers, that You tear up the evil of our verdict and may our merits be read before You.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="symbol-card">
+                    <div class="symbol-card__head">
+                        <p class="symbol-card__he">רוּבִּיָּא</p>
+                        <p class="symbol-card__en">Rubia (Fenugreek / Beans)</p>
+                    </div>
+                    <div class="symbol-card__body">
+                        <p class="symbol-card__meaning"><strong>The Meaning:</strong> The Aramaic name <em>Rubia</em> sounds like the Hebrew word for "increase" (<em>ribui</em>). We eat it to hope that our merits will increase and abound.</p>
+                        <div class="step-callout" style="margin:0.5rem 0;">Take a bite after saying the following.</div>
+                        <div class="yehi-box">
+                            <p class="yehi-label">Yehi Ratzon</p>
+                            <p class="yehi-he">יְהִי רָצוֹן מִלְפָנֶיךָ ה' אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ שֶׁיִּרְבּוּ זְכֻיּוֹתֵינוּ וּתְרַבֶּה הַבְּרָכָה בְּכָל עֲמָלֵנוּ.</p>
+                            <p class="yehi-tl">Yehi ratzon milfanecha Adonai Eloheinu v'Elohei avoteinu, she'yirbu z'chuyoteinu u'trabeh ha'bracha b'chol amaleinu.</p>
+                            <p class="yehi-en">May it be Your will, Lord our God and God of our fathers, that our merits increase and that blessing abound in all our labors.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="symbol-card">
+                    <div class="symbol-card__head">
+                        <p class="symbol-card__he">כַּרְתִּי</p>
+                        <p class="symbol-card__en">Leek (Karti)</p>
+                    </div>
+                    <div class="symbol-card__body">
+                        <p class="symbol-card__meaning"><strong>The Meaning:</strong> The Aramaic name <em>Karti</em> sounds like the Hebrew verb "to cut off" (<em>yikartu</em>). We eat this hoping that our enemies will be "cut off."</p>
+                        <div class="step-callout" style="margin:0.5rem 0;">Take a bite of cooked leek after saying the following.</div>
+                        <div class="yehi-box">
+                            <p class="yehi-label">Yehi Ratzon</p>
+                            <p class="yehi-he">יְהִי רָצוֹן מִלְפָנֶיךָ ה' אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ שֶׁיִּכָּרְתוּ אוֹיְבֵינוּ וְכָל מְבַקְשֵׁי רָעָתֵנוּ.</p>
+                            <p class="yehi-tl">Yehi ratzon milfanecha Adonai Eloheinu v'Elohei avoteinu, she'yikartu oyveinu v'chol m'vakshei ra'ateinu.</p>
+                            <p class="yehi-en">May it be Your will, Lord our God and God of our fathers, that our enemies and all who seek our harm be cut off.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="symbol-card">
+                    <div class="symbol-card__head">
+                        <p class="symbol-card__he">סֶלֶק</p>
+                        <p class="symbol-card__en">Beet (Selek)</p>
+                    </div>
+                    <div class="symbol-card__body">
+                        <p class="symbol-card__meaning"><strong>The Meaning:</strong> The Hebrew word <em>Selek</em> sounds like the word for "remove" (<em>yistalku</em>). We ask that our sins and adversaries be "removed" from before us.</p>
+                        <div class="step-callout" style="margin:0.5rem 0;">Take a bite of cooked beet and say the following.</div>
+                        <div class="yehi-box">
+                            <p class="yehi-label">Yehi Ratzon</p>
+                            <p class="yehi-he">יְהִי רָצוֹן מִלְפָנֶיךָ ה' אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ שֶׁיִּסְתַּלְּקוּ עֲוֹנוֹתֵינוּ וְשׂנְאֵינוּ.</p>
+                            <p class="yehi-tl">Yehi ratzon milfanecha Adonai Eloheinu v'Elohei avoteinu, she'yistaleku avonoteinu v'soneinu.</p>
+                            <p class="yehi-en">May it be Your will, Lord our God and God of our fathers, that our iniquities be removed, and our enemies as well.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="symbol-card">
+                    <div class="symbol-card__head">
+                        <p class="symbol-card__he">תַּפּוּחַ בִּדְבַשׁ</p>
+                        <p class="symbol-card__en">Apple in Honey</p>
+                    </div>
+                    <div class="symbol-card__body">
+                        <p class="symbol-card__meaning"><strong>The Meaning:</strong> Perhaps the most beloved Rosh Hashanah ritual. The apple's sweetness combined with honey is a direct symbol for our hope for a "good and sweet year."</p>
+                        <div class="step-callout" style="margin:0.5rem 0;">Take a slice of apple, dip it in honey, and say the following before eating.</div>
+                        <div class="yehi-box">
+                            <p class="yehi-label">Yehi Ratzon</p>
+                            <p class="yehi-he">יְהִי רָצוֹן מִלְּפָנֶיךָ יְיָ אֱלֹהֵינוּ וֵאלֹהֵי אֲבוֹתֵינוּ שֶׁתְּחַדֵּשׁ עָלֵינוּ שָׁנָה טוֹבָה וּמְתוּקָה.</p>
+                            <p class="yehi-tl">Yehi ratzon milfanecha Adonai Eloheinu v'Elohei avoteinu, she't'chadesh aleinu shanah tovah u'm'tukah.</p>
+                            <p class="yehi-en">May it be Your will, Lord our God and God of our fathers, that You renew for us a good and sweet year.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="symbol-card">
+                    <div class="symbol-card__head">
+                        <p class="symbol-card__he">רֹאשׁ שֶׁל דָּג</p>
+                        <p class="symbol-card__en">Head of a Fish</p>
+                    </div>
+                    <div class="symbol-card__body">
+                        <p class="symbol-card__meaning"><strong>The Meaning:</strong> The Hebrew word for "head" is <em>Rosh</em> — the same word that opens the holiday's name, <em>Rosh Hashanah</em>. We eat from the head to symbolize our desire to be "a head and not a tail" — leaders, not followers — in the year to come.</p>
+                        <div class="step-callout" style="margin:0.5rem 0;">Take a small piece from the head of the fish and say the following.</div>
+                        <div class="yehi-box">
+                            <p class="yehi-label">Yehi Ratzon</p>
+                            <p class="yehi-he">יְהִי רָצוֹן מִלִּפְנֵי אָבִינוּ שֶׁבַּשָּׁמַיִם, שֶׁנִּהְיֶה לְרֹאשׁ וְלֹא לְזָנָב, שֶׁנִּפְרֶה וְנִרְבֶּה כַּדָּגִים.</p>
+                            <p class="yehi-tl">Yehi ratzon milifnei avinu shebashamayim, she'nihiyeh l'rosh v'lo l'zanav, she'nifreh v'nirbeh ka'dagim.</p>
+                            <p class="yehi-en">May it be the will of our Father in Heaven that we be as a head and not as a tail, and that we be fruitful and multiply like fish.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /.symbol-grid -->
+        </section>
+
+        <!-- Prayers -->
+        <div class="hag-section-label">Special Prayers</div>
+        <section id="prayers" class="seder-section" aria-labelledby="prayers-title">
+            <div class="section-kicker-wrap">
+                <p class="section-kicker">Community Prayer</p>
+            </div>
+            <h2 id="prayers-title" class="section-title">Prayers for Our Soldiers &amp; Hostages</h2>
+            <p class="section-hebrew">תְּפִלּוֹת לְשָׁלוֹם חַיָּלֵי צָה"ל וְהַשְׁבַּת הַחֲטוּפִים</p>
+
+            <p class="mini-heading">Psalm 121 · תְּהִלִּים קכ"א</p>
+            <div class="psalm-block">
+                <p class="psalm-block__he">שִׁיר לַמַּעֲלוֹת אֶשָּׂא עֵינַי אֶל־הֶהָרִים מֵאַיִן יָבֹא עֶזְרִי׃ עֶזְרִי מֵעִם יְהֹוָה עֹשֵׂה שָׁמַיִם וָאָרֶץ׃ אַל־יִתֵּן לַמּוֹט רַגְלֶךָ אַל־יָנוּם שֹׁמְרֶךָ׃ הִנֵּה לֹא־יָנוּם וְלֹא יִישָׁן שׁוֹמֵר יִשְׂרָאֵל׃ יְהֹוָה שֹׁמְרֶךָ יְהֹוָה צִלְּךָ עַל־יַד יְמִינֶךָ׃ יוֹמָם הַשֶּׁמֶשׁ לֹא יַכֶּכָּה וְיָרֵחַ בַּלָּיְלָה׃ יְהֹוָה יִשְׁמׇרְךָ מִכָּל־רָע יִשְׁמֹר אֶת־נַפְשֶׁךָ׃ יְהֹוָה יִשְׁמׇר צֵאתְךָ וּבוֹאֶךָ מֵעַתָּה וְעַד־עוֹלָם׃</p>
+                <p class="psalm-block__en">A song for ascents. I turn my eyes to the mountains; from where will my help come? My help comes from the Lord, maker of heaven and earth. He will not let your foot give way; your guardian will not slumber. See, the guardian of Israel neither slumbers nor sleeps! The Lord is your guardian, the Lord is your protection at your right hand. By day the sun will not strike you, nor the moon by night. The Lord will guard you from all harm; He will guard your life. The Lord will guard your going and coming now and forever.</p>
+            </div>
+
+            <p class="mini-heading">Prayer for the IDF Soldiers · תְּפִלָּה לְשָׁלוֹם חַיָּלֵי צָה"ל</p>
+            <div class="psalm-block">
+                <p class="psalm-block__he">מִי שֶׁבֵּרַךְ אֲבוֹתֵינוּ אַבְרָהָם יִצְחָק וְיַעֲקֹב, הוּא יְבָרֵךְ אֶת חַיָּלֵי צְבָא הֲגַנָּה לְיִשְׂרָאֵל, הָעוֹמְדִים עַל מִשְׁמַר אַרְצֵנוּ וְעָרֵי אֱלֹהֵינוּ. הַקָּדוֹשׁ בָּרוּךְ הוּא יִשְׁמֹר וְיַצִּיל אֶת חַיָּלֵינוּ מִכָּל צָרָה וְצוּקָה וּמִכָּל נֶגַע וּמַחְלָה, וְיִשְׁלַח בְּרָכָה וְהַצְלָחָה בְּכָל מַעֲשֵׂה יְדֵיהֶם. בָּרוּךְ אַתָּה ה' שׁוֹמֵר יִשְׂרָאֵל. וְנֹאמַר אָמֵן.</p>
+                <p class="psalm-block__en">May He who blessed our fathers, Abraham, Isaac and Jacob, bless the soldiers of the Israel Defense Forces who stand guard over our land and the cities of our God. May the Holy One, blessed be He, guard and rescue our soldiers from all trouble and distress and from all affliction and illness, and send blessing and success in all the work of their hands. Blessed are You, Lord, Guardian of Israel. And let us say, Amen.</p>
+            </div>
+
+            <p class="mini-heading">Prayer for Those Held in Captivity · תְּפִלָּה לְהַשְׁבַּת הַחֲטוּפִים</p>
+            <div class="psalm-block">
+                <p class="psalm-block__he">מִי שֶׁבֵּרַךְ אֲבוֹתֵינוּ, הוּא יְבָרֵךְ וְיִשְׁמֹר אֶת הַשְּׁבוּיִים בְּתוֹךְ שְׁאָר אֲחֵינוּ בֵּית יִשְׂרָאֵל הַנְּתוּנִים בְּצָרָה וּבְשִׁבְיָה. הַקָּדוֹשׁ בָּרוּךְ הוּא יִמָּלֵא רַחֲמִים עֲלֵיהֶם, וְיוֹצִיאֵם מֵחֹשֶׁךְ וְצַלְמָוֶת, וּמוֹסְרוֹתֵיהֶם יְנַתֵּק, וּמִמְּצוּקוֹתֵיהֶם יוֹשִׁיעֵם, וִישִׁיבֵם מְהֵרָה לְחֵיק מִשְׁפְּחוֹתֵיהֶם. "וּפְדוּיֵי ה' יְשׁוּבוּן וּבָאוּ צִיּוֹן בְּרִנָּה." וְנֹאמַר אָמֵן.</p>
+                <p class="psalm-block__en">May He who blessed our fathers bless and protect the hostages amongst our brethren the House of Israel who are placed in trouble and in captivity. May the Holy One, blessed be He, have compassion upon them and bring them out from darkness and the shadow of death, break their bonds, deliver them from distress, and bring them safely back to their families' embrace. "Those redeemed by the Lord will return and come to Zion with singing." And let us say: Amen.</p>
+            </div>
+        </section>
+
+        <!-- Closing -->
+        <div id="closing" class="ending-banner" aria-label="Shana Tova blessing">
+            <h3>!שָׁנָה טוֹבָה וּמְתוּקָה</h3>
+            <p>A Good and Sweet New Year to all!</p>
+        </div>
+
+        <p class="page-footer">Rosh Hashanah Seder Guide &middot; A Letter in the Scroll</p>
+    </main>
+    </div><!-- /.hag-page -->
+
+    <script>
+        (function() {
+            const links = document.querySelectorAll('.anchor-menu .anchor-link[href^="#"]');
+            const sectionIds = [...links].map(l => l.getAttribute('href').slice(1)).filter(Boolean);
+            const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+            function setActive(id) {
+                links.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + id));
+            }
+            if ('IntersectionObserver' in window && sections.length) {
+                const observer = new IntersectionObserver((entries) => {
+                    const visible = entries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+                    if (visible.length) setActive(visible[0].target.id);
+                }, { rootMargin: '-18% 0px -70% 0px', threshold: [0.01, 0.1, 0.3] });
+                sections.forEach(s => observer.observe(s));
+            }
+            links.forEach(link => link.addEventListener('click', () => {
+                const id = link.getAttribute('href').replace('#', '');
+                if (id) setActive(id);
+            }));
+        })();
+    </script>
+
+    <script src="js/header-fallback.js"></script>
+    <script src="js/text-size-control.js"></script>
+</body>
+</html>

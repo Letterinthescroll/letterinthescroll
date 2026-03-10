@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home — A Letter in the Scroll</title>
+    <link rel="icon" type="image/png" href="media/images/Icon.png">
+    <link rel="apple-touch-icon" href="media/images/Icon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/shabbat.css">
+    <link rel="stylesheet" href="css/mobile-overrides.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f5f7fc; }
+        .font-heading { font-family: 'Cormorant Garamond', serif; }
+
+        /* ─── Header ─── */
+        .site-header { background: linear-gradient(138deg, #16285e 0%, #23408f 55%, #2f56ab 100%); }
+
+        /* ─── Decorative ─── */
+        .gold-line { height: 2px; background: linear-gradient(90deg, transparent, #c89a35, transparent); }
+
+        /* ─── Nav link ─── */
+        .nav-link {
+            color: rgba(255,255,255,0.75); font-size: 0.8125rem; font-weight: 500;
+            padding: 0.375rem 0.75rem; border-radius: 0.5rem;
+            transition: background 0.15s, color 0.15s; white-space: nowrap; text-decoration: none; display: inline-block;
+        }
+        .nav-link:hover { color: #fff; background: rgba(255,255,255,0.12); }
+
+        /* ─── Section card ─── */
+        .section-card {
+            background: #fff; border-radius: 1.25rem;
+            border: 1px solid rgba(20,40,100,0.08);
+            box-shadow: 0 4px 20px rgba(22,40,94,0.07);
+        }
+
+        /* ─── Chavruta card ─── */
+        .chavruta-card {
+            background: #fff; border-radius: 1.25rem;
+            border: 1px solid rgba(20,40,100,0.09);
+            box-shadow: 0 4px 16px rgba(22,40,94,0.07);
+            transition: transform 0.25s ease, box-shadow 0.25s ease; overflow: hidden;
+        }
+        .chavruta-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(22,40,94,0.13); }
+
+        /* ─── Explore grid card ─── */
+        .explore-card {
+            background: #fff; border-radius: 1.25rem;
+            border: 1px solid rgba(20,40,100,0.08);
+            box-shadow: 0 4px 14px rgba(22,40,94,0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            padding: 1.75rem 1.25rem; text-decoration: none;
+        }
+        .explore-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(22,40,94,0.12); }
+
+        /* ─── Settings panel ─── */
+        .settings-panel { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s; opacity: 0; }
+        .settings-panel.open { max-height: 1000px; opacity: 1; }
+
+        /* ─── Animations ─── */
+        .fade-up { animation: fadeUp 0.45s ease-out both; }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+        .fd1{animation-delay:.05s} .fd2{animation-delay:.1s} .fd3{animation-delay:.15s} .fd4{animation-delay:.2s}
+
+        /* ─── Spinner ─── */
+        .spinner { width:30px; height:30px; border:3px solid #dde3f0; border-top-color:#c89a35; border-radius:50%; animation:spin 0.7s linear infinite; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+
+        /* ─── Panel toggle tabs ─── */
+        .ptab { cursor:pointer; padding:0.45rem 1rem; border-radius:0.5rem; font-size:0.8rem; font-weight:600; transition:all 0.15s; border:1.5px solid transparent; }
+        .ptab.active { background:#fff; border-color:rgba(22,40,94,0.15); color:#16285e; box-shadow:0 2px 8px rgba(22,40,94,0.08); }
+        .ptab:not(.active) { color:#6b7280; }
+        .ptab:not(.active):hover { color:#374151; background:rgba(0,0,0,0.04); }
+
+        /* ─── Settings sub-tabs ─── */
+        .stab { flex:1; text-align:center; padding:0.5rem; font-size:0.72rem; font-weight:600; color:#6b7280; border-bottom:2px solid transparent; cursor:pointer; transition:all 0.15s; }
+        .stab.active { color:#16285e; border-bottom-color:#c89a35; }
+        .stab:hover:not(.active) { color:#374151; }
+
+        /* ─── Mobile nav ─── */
+        .mobile-menu { display:none; }
+        .mobile-menu.open { display:block; }
+
+        /* ─── Mono / avatar ─── */
+        .mono-code { font-family:'Menlo','Courier New',monospace; letter-spacing:0.1em; }
+        .av { width:2rem; height:2rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.75rem; color:#fff; border:2px solid #fff; }
+        .av-ring { width:2.1rem; height:2.1rem; border-radius:50%; padding:2px; background:linear-gradient(135deg,#c89a35,#16285e); }
+        .av-inner { width:100%; height:100%; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.7rem; color:#fff; }
+    </style>
+</head>
+<body class="min-h-screen">
+
+<!-- ═══ HEADER ═══ -->
+<header class="header-main relative z-30">
+    <div class="header-container">
+        <div class="header-branding-section">
+            <a id="home-branding" href="dashboard.html" aria-label="Go to dashboard home" class="header-branding-button" style="text-decoration:none">
+                <div class="header-text">
+                    <h1 class="header-title">A Letter in the Scroll</h1>
+                    <p class="header-subtitle">Interactive Weekly Portion Study & Discussion</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="header-actions-wrapper">
+            <div id="header-actions" class="header-actions">
+                <a href="dashboard.html" aria-current="page" class="header-btn header-btn-primary" title="Dashboard home">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10.5L12 3l9 7.5M5 9.5V21h14V9.5"></path>
+                    </svg>
+                    <span class="header-btn-text">Home</span>
+                </a>
+                <a id="go-to-weekly" href="study.html" class="header-btn header-btn-secondary" title="Open study room">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    <span class="header-btn-text">Study</span>
+                </a>
+                <a href="holidays/index.html" class="header-btn header-btn-secondary" title="Jewish holidays">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <rect x="3" y="5" width="18" height="16" rx="2" ry="2" stroke-width="2"></rect>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3v4M8 3v4M3 11h18"></path>
+                    </svg>
+                    <span class="header-btn-text">Holidays</span>
+                </a>
+                <a href="prayers.html" class="header-btn header-btn-secondary" title="Important prayers">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3l2.4 4.9L20 9l-4 3.9.9 5.6L12 16l-4.9 2.5.9-5.6L4 9l5.6-1.1L12 3z"></path>
+                    </svg>
+                    <span class="header-btn-text">Prayers</span>
+                </a>
+                <a href="songs.html" class="header-btn header-btn-secondary" title="Songs and poems">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13"></path>
+                        <circle cx="6" cy="18" r="3" stroke-width="2"></circle>
+                        <circle cx="18" cy="16" r="3" stroke-width="2"></circle>
+                    </svg>
+                    <span class="header-btn-text">Songs</span>
+                </a>
+                <a href="about.html" class="header-btn header-btn-secondary" title="About this project">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="header-btn-text">About</span>
+                </a>
+                <a id="my-bookmarks-btn" href="bookmarks.html" class="header-btn header-btn-secondary" title="View your saved verses">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                    </svg>
+                    <span class="header-btn-text">Bookmarks</span>
+                </a>
+                <span id="user-greeting" class="header-btn header-btn-secondary hidden lg:inline-flex cursor-default pointer-events-none"></span>
+                <button id="logout-btn" onclick="signOutUser()" class="header-btn header-btn-secondary" title="Sign out">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                    <span class="header-btn-text">Sign Out</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<!-- ═══ MAIN ═══ -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-10">
+
+    <!-- Loading -->
+    <div id="loading-state" class="flex flex-col items-center justify-center py-24 gap-3">
+        <div class="spinner"></div>
+        <p class="text-sm text-slate-400">Loading your home…</p>
+    </div>
+
+    <!-- Content (hidden until auth) -->
+    <div id="main-content" class="hidden space-y-10">
+
+        <!-- Banner -->
+        <div id="auto-join-banner" class="hidden">
+            <div id="auto-join-inner" class="bg-green-50 border border-green-200 rounded-2xl px-5 py-3.5 flex items-center gap-3 shadow-sm">
+                <svg class="w-5 h-5 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <span id="auto-join-message" class="text-sm font-medium"></span>
+            </div>
+        </div>
+
+        <!-- ── WELCOME HERO ── -->
+        <section class="section-card p-7 sm:p-8 fade-up fd1 relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-44 h-44 rounded-full bg-amber-100/40 blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-10 -left-10 w-36 h-36 rounded-full bg-blue-100/40 blur-3xl pointer-events-none"></div>
+            <div class="relative flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-widest text-blue-600/60 mb-1">Welcome back</p>
+                    <h1 id="welcome-heading" class="font-heading text-4xl sm:text-5xl text-slate-900 font-semibold leading-tight" style="font-family:'Cormorant Garamond',serif">Shalom!</h1>
+                    <p class="text-slate-500 text-sm mt-2 max-w-sm">Choose a study group below to enter your room, or explore any section using the navigation above.</p>
+                </div>
+                <div class="flex flex-col sm:items-end gap-2 shrink-0">
+                    <a id="hero-study-btn" href="study.html"
+                       class="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-white shadow-lg hover:shadow-xl transition-all text-sm hover:-translate-y-0.5 transform"
+                       style="background:linear-gradient(135deg,#16285e,#2f56ab)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        Enter Study Room
+                    </a>
+                    <a href="settings.html" class="text-xs text-slate-400 hover:text-blue-600 transition-colors">Account Settings</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="daily-inspiration" class="daily-inspiration-section fade-up fd2">
+            <div class="daily-inspiration-card">
+                <div class="daily-inspiration-content">
+                    <p data-quote-hebrew class="daily-inspiration-hebrew">Loading today's teaching...</p>
+                    <p data-quote-translation class="daily-inspiration-translation"></p>
+                    <span data-quote-source class="daily-inspiration-source"></span>
+                    <p data-quote-reflection class="daily-inspiration-reflection">An inspiring reflection will appear here each day.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── MY STUDY GROUPS ── -->
+        <section class="fade-up fd2">
+            <!-- Section header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-1 h-7 rounded-full" style="background:#c89a35"></div>
+                    <h2 class="text-xl font-bold text-slate-800">My Study Groups</h2>
+                    <span id="chavruta-count" class="text-xs font-semibold text-slate-400 bg-slate-100 px-2.5 py-0.5 rounded-full"></span>
+                </div>
+                <!-- Create / Join tabs -->
+                <div class="flex items-center gap-1 bg-slate-100 rounded-xl p-1 self-start sm:self-auto">
+                    <button class="ptab active" id="ptab-create" onclick="showPanel('create')">+ New Group</button>
+                    <button class="ptab" id="ptab-join" onclick="showPanel('join')">Join with Code</button>
+                </div>
+            </div>
+
+            <!-- Create / Join inline panel -->
+            <div class="section-card p-5 sm:p-6 mb-6">
+                <!-- Create -->
+                <div id="pp-create">
+                    <p class="text-sm text-slate-500 mb-3">Give your group a name and choose a size. You'll get a shareable invite code right away.</p>
+                    <form id="create-form" onsubmit="createChavruta(event)" class="flex flex-col sm:flex-row gap-3">
+                        <input type="text" id="create-name" minlength="2" maxlength="50" required placeholder="Group name (e.g. Shabbat Morning)"
+                            class="flex-1 px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all text-slate-800">
+                        <select id="create-max-members" class="px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm bg-white text-slate-700 focus:border-blue-500 focus:outline-none transition-all">
+                            <option value="2">2 people</option><option value="3">3 people</option><option value="4">4 people</option>
+                            <option value="5">5 people</option><option value="6">6 people</option><option value="7">7 people</option>
+                            <option value="8" selected>8 people</option><option value="10">10 people</option><option value="12">12 people</option>
+                        </select>
+                        <button type="submit" id="create-btn" class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all whitespace-nowrap" style="background:linear-gradient(135deg,#16285e,#2f56ab)">
+                            Create Group
+                        </button>
+                    </form>
+                    <!-- success -->
+                    <div id="create-success" class="hidden mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                        <p class="text-sm font-bold text-blue-800 mb-3">Group created. Share this with your friends:</p>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-blue-400 w-10 shrink-0">Code</span>
+                                <code id="created-invite-code" class="flex-1 mono-code text-sm font-bold text-blue-900 bg-white px-3 py-1.5 rounded-lg border border-blue-200 select-all"></code>
+                                <button onclick="copyText(document.getElementById('created-invite-code').textContent,this)" class="text-xs font-semibold text-blue-600 hover:text-blue-800 px-2.5 py-1.5 rounded-lg hover:bg-blue-100 transition-colors border border-blue-200 shrink-0">Copy</button>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-blue-400 w-10 shrink-0">Link</span>
+                                <input id="created-invite-link" readonly class="flex-1 text-xs text-slate-500 bg-white px-3 py-1.5 rounded-lg border border-blue-200 truncate">
+                                <button onclick="copyText(document.getElementById('created-invite-link').value,this)" class="text-xs font-semibold text-blue-600 hover:text-blue-800 px-2.5 py-1.5 rounded-lg hover:bg-blue-100 transition-colors border border-blue-200 shrink-0">Copy</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="create-error" class="hidden mt-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl p-3"></div>
+                </div>
+                <!-- Join -->
+                <div id="pp-join" class="hidden">
+                    <p class="text-sm text-slate-500 mb-3">Ask your study partner for their 16-character invite code, then paste it here.</p>
+                    <form id="join-form" onsubmit="joinChavruta(event)" class="flex flex-col sm:flex-row gap-3">
+                        <input type="text" id="join-code" required placeholder="Paste 16-character invite code here" maxlength="16"
+                            class="flex-1 px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm mono-code uppercase tracking-widest focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition-all text-slate-800"
+                            oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
+                        <button type="submit" id="join-btn" class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all whitespace-nowrap" style="background:linear-gradient(135deg,#b7871e,#c89a35)">
+                            Join Group
+                        </button>
+                    </form>
+                    <div id="join-success" class="hidden mt-3 text-sm text-green-700 bg-green-50 border border-green-200 rounded-xl p-3"></div>
+                    <div id="join-error"   class="hidden mt-3 text-sm text-red-600   bg-red-50   border border-red-200   rounded-xl p-3"></div>
+                </div>
+            </div>
+
+            <!-- Empty state -->
+            <div id="empty-state" class="hidden section-card py-16 text-center">
+                <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style="background:#eff4ff">
+                    <svg class="w-8 h-8 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                </div>
+                <p class="font-heading text-xl font-semibold text-slate-700 mb-2" style="font-family:'Cormorant Garamond',serif">No study groups yet</p>
+                <p class="text-slate-400 text-sm max-w-xs mx-auto">Click <strong>+ New Group</strong> above to create one, or switch to <strong>Join with Code</strong> if a friend invited you.</p>
+            </div>
+
+            <!-- Chavrutas grid -->
+            <div id="chavrutas-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+        </section>
+
+        <!-- ── EXPLORE ── -->
+        <section class="fade-up fd3">
+            <div class="flex items-center gap-3 mb-5">
+                <div class="w-1 h-7 rounded-full" style="background:#c89a35"></div>
+                <h2 class="text-xl font-bold text-slate-800">Explore the Website</h2>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                <a href="study.html" class="explore-card">
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style="background:#eff4ff">
+                        <svg class="w-6 h-6 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-slate-800 text-sm">Weekly Parsha</span>
+                    <span class="text-slate-400 text-xs mt-1 leading-snug">Torah study room</span>
+                </a>
+                <a href="holidays/index.html" class="explore-card">
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style="background:#fdf8ef">
+                        <svg class="w-6 h-6 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <rect x="3" y="5" width="18" height="16" rx="2" ry="2" stroke-width="2"></rect>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3v4M8 3v4M3 11h18"></path>
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-slate-800 text-sm">Holidays</span>
+                    <span class="text-slate-400 text-xs mt-1 leading-snug">Yom Tov guides</span>
+                </a>
+                <a href="prayers.html" class="explore-card">
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style="background:#f0fff4">
+                        <svg class="w-6 h-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3l2.4 4.9L20 9l-4 3.9.9 5.6L12 16l-4.9 2.5.9-5.6L4 9l5.6-1.1L12 3z"></path>
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-slate-800 text-sm">Prayers</span>
+                    <span class="text-slate-400 text-xs mt-1 leading-snug">Daily tefillot</span>
+                </a>
+                <a href="songs.html" class="explore-card">
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style="background:#fef3ff">
+                        <svg class="w-6 h-6 text-fuchsia-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13"></path>
+                            <circle cx="6" cy="18" r="3" stroke-width="2"></circle>
+                            <circle cx="18" cy="16" r="3" stroke-width="2"></circle>
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-slate-800 text-sm">Songs</span>
+                    <span class="text-slate-400 text-xs mt-1 leading-snug">Shabbat and zmirot</span>
+                </a>
+                <a href="about.html" class="explore-card">
+                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-3" style="background:#f0f9ff">
+                        <svg class="w-6 h-6 text-cyan-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <span class="font-semibold text-slate-800 text-sm">About</span>
+                    <span class="text-slate-400 text-xs mt-1 leading-snug">Our mission</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer quote -->
+        <p class="text-center text-slate-400 italic text-sm pb-4 fade-up fd4" style="font-family:'Cormorant Garamond',serif">
+            "When two sit together and words of Torah pass between them, the Divine Presence rests between them." — Pirkei Avot 3:2
+        </p>
+    </div>
+</main>
+
+
+<!-- ═══ CONFIRM MODAL ═══ -->
+<div id="confirm-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-7 text-center">
+        <div class="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+        </div>
+        <h3 id="confirm-title"   class="font-bold text-slate-800 text-lg mb-1"></h3>
+        <p  id="confirm-message" class="text-slate-500 text-sm mb-6"></p>
+        <div class="flex gap-3">
+            <button onclick="closeConfirmModal(false)" class="flex-1 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-semibold text-sm hover:bg-slate-50 transition-all">Cancel</button>
+            <button onclick="closeConfirmModal(true)"  class="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-sm transition-all shadow-md">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<div id="study-room-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-7">
+        <div class="flex items-start justify-between gap-3">
+            <div>
+                <h3 class="font-bold text-slate-900 text-lg">Choose a Study Room</h3>
+                <p class="text-sm text-slate-500 mt-1">You are in multiple chavrutot. Select the one you want to enter.</p>
+            </div>
+            <button type="button" onclick="closeStudyRoomModal()" class="text-slate-400 hover:text-slate-600 text-xl leading-none">&times;</button>
+        </div>
+        <div id="study-room-options" class="mt-5 space-y-2.5"></div>
+        <button type="button" onclick="closeStudyRoomModal()" class="mt-5 w-full py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors">
+            Cancel
+        </button>
+    </div>
+</div>
+
+
+<!-- ═══ SCRIPTS ═══ -->
+<script src="js/daily-inspiration.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script>
+    /* ── Firebase ── */
+    firebase.initializeApp({
+        apiKey:"AIzaSyCpDtcBpKvjLwihnL2bizxBFxXD6Qn8Lb4",
+        authDomain:"letterinthescroll.firebaseapp.com",
+        projectId:"letterinthescroll",
+        storageBucket:"letterinthescroll.firebasestorage.app",
+        messagingSenderId:"625129870318",
+        appId:"1:625129870318:web:a654e97b734faa3b4df4ff",
+        measurementId:"G-LYSXTDEPVG"
+    });
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+
+    /* ── State ── */
+    let currentUser = null, confirmResolve = null;
+    const nameCache = {};
+    let chavUnsubs  = [];
+    let userChavrutas = [];
+    let latestDailyQuote = null;
+    let dailyQuoteToggleInFlight = false;
+
+    /* ════ AUTH ════ */
+    auth.onAuthStateChanged(async user => {
+        if (!user) { window.location.href = 'index.html'; return; }
+        currentUser = user;
+
+        // Display name
+        const rawName    = user.displayName || user.email || '';
+        const firstName  = rawName.split(' ')[0].split('@')[0];
+        document.getElementById('welcome-heading').textContent = 'Shalom, ' + firstName + '!';
+        document.getElementById('user-greeting').textContent   = firstName;
+
+        // URL params
+        const p    = new URLSearchParams(window.location.search);
+        const jId  = p.get('join');
+        const iCode = p.get('invite');
+        if (jId)    { await autoJoin(jId);                 window.history.replaceState({}, '', 'dashboard.html'); }
+        if (iCode)  { try { await joinByCode(iCode.toUpperCase()); showBanner('Joined via invite link!', 'success'); } catch(e){ showBanner(e.message||'Could not join.','error'); } window.history.replaceState({}, '', 'dashboard.html'); }
+
+        loadChavrutas();
+        refreshDailyQuoteBookmarkState();
+    });
+
+    function signOutUser() { auth.signOut().then(() => window.location.href = 'index.html'); }
+
+    /* ════ PANEL TABS ════ */
+    function showPanel(tab) {
+        ['create','join'].forEach(t => {
+            document.getElementById('pp-'+t).classList.toggle('hidden', t!==tab);
+            document.getElementById('ptab-'+t).classList.toggle('active', t===tab);
+        });
+    }
+
+    /* ════ BANNER ════ */
+    function showBanner(msg, type) {
+        const inner = document.getElementById('auto-join-inner');
+        const msgEl = document.getElementById('auto-join-message');
+        const cls = type==='error' ? 'bg-red-50 border border-red-200 text-red-800'
+                  : type==='warning' ? 'bg-yellow-50 border border-yellow-200 text-yellow-800'
+                  : 'bg-green-50 border border-green-200 text-green-800';
+        inner.className = cls + ' rounded-2xl px-5 py-3.5 flex items-center gap-3 shadow-sm';
+        msgEl.textContent = msg;
+        document.getElementById('auto-join-banner').classList.remove('hidden');
+    }
+
+    /* ════ INVITE CODE ════ */
+    function generateCode() {
+        const c = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const v = new Uint8Array(16); crypto.getRandomValues(v);
+        return Array.from(v, x => c[x%c.length]).join('');
+    }
+    function inviteLink(code) { return window.location.origin + '/index.html?invite=' + code; }
+
+    /* ════ LOAD CHAVRUTAS ════ */
+    function loadChavrutas() {
+        chavUnsubs.forEach(u=>u()); chavUnsubs=[];
+        const unsub = db.collection('chavrutas')
+            .where('members','array-contains',currentUser.uid)
+            .onSnapshot(async snap => {
+                const list = snap.docs.map(d=>({id:d.id,...d.data()}));
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('main-content').classList.remove('hidden');
+                await renderChavrutas(list);
+            }, err => {
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('main-content').classList.remove('hidden');
+                renderChavrutas([]);
+            });
+        chavUnsubs.push(unsub);
+    }
+
+    /* ════ RENDER ════ */
+    async function renderChavrutas(list) {
+        userChavrutas = Array.isArray(list) ? list.slice() : [];
+        const grid    = document.getElementById('chavrutas-grid');
+        const empty   = document.getElementById('empty-state');
+        const countEl = document.getElementById('chavruta-count');
+        countEl.textContent = list.length + (list.length===1?' group':' groups');
+
+        if (list.length===0) {
+            grid.innerHTML='';
+            empty.classList.remove('hidden');
+            configureHeroStudyButton();
+            refreshDailyQuoteBookmarkState();
+            return;
+        }
+        empty.classList.add('hidden');
+
+        const uids = new Set(); list.forEach(c=>(c.members||[]).forEach(u=>uids.add(u)));
+        await fetchNames([...uids]);
+
+        configureHeroStudyButton();
+        refreshDailyQuoteBookmarkState();
+
+        grid.innerHTML = list.map(cardHTML).join('');
+    }
+
+    function configureHeroStudyButton() {
+        const heroBtn = document.getElementById('hero-study-btn');
+        if (!heroBtn) {
+            return;
+        }
+
+        if (userChavrutas.length === 1) {
+            heroBtn.href = 'study.html?chavruta=' + userChavrutas[0].id;
+            heroBtn.setAttribute('title', 'Enter your study room');
+            return;
+        }
+
+        if (userChavrutas.length > 1) {
+            heroBtn.href = '#';
+            heroBtn.setAttribute('title', 'Choose a study room');
+            return;
+        }
+
+        heroBtn.href = 'study.html';
+        heroBtn.setAttribute('title', 'Open study room');
+    }
+
+    function openStudyRoomModal() {
+        const modal = document.getElementById('study-room-modal');
+        const options = document.getElementById('study-room-options');
+        if (!modal || !options) {
+            return;
+        }
+
+        if (!userChavrutas.length) {
+            showPanel('create');
+            showBanner('Create or join a study group first.', 'warning');
+            return;
+        }
+
+        options.innerHTML = userChavrutas.map((room) => {
+            const membersCount = (room.members || []).length;
+            const maxMembers = room.maxMembers || 8;
+            return `
+                <a href="study.html?chavruta=${room.id}" class="block w-full rounded-2xl border border-slate-200 bg-slate-50/70 hover:bg-slate-100 transition-colors px-4 py-3">
+                    <div class="text-sm font-bold text-slate-800">${escHTML(room.name || 'Study Room')}</div>
+                    <div class="text-xs text-slate-500 mt-0.5">${membersCount}/${maxMembers} members</div>
+                </a>
+            `;
+        }).join('');
+
+        modal.classList.remove('hidden');
+    }
+
+    function closeStudyRoomModal() {
+        document.getElementById('study-room-modal')?.classList.add('hidden');
+    }
+
+    function cardHTML(c) {
+        const isLeader = c.leader === currentUser.uid;
+        const count = (c.members||[]).length, max = c.maxMembers||8;
+        const code  = c.inviteCode||'', link = inviteLink(code);
+        const cols  = ['#4f86f7','#27a769','#9b59b6','#e67e22','#e74c3c'];
+
+        const avatars = (c.members||[]).slice(0,5).map((u,i)=>{
+            const n = nameCache[u]||'?';
+            return `<div class="av" style="background:${cols[i%5]};${i>0?'margin-left:-6px':''}">${n[0].toUpperCase()}</div>`;
+        }).join('') + (count>5?`<div class="av" style="background:#94a3b8;margin-left:-6px">+${count-5}</div>`:'');
+
+        const memberRows = (c.members||[]).map(uid=>{
+            const n=nameCache[uid]||uid.slice(0,8)+'…', me=uid===currentUser.uid, ldr=uid===c.leader;
+            return `<div class="flex items-center justify-between py-2 px-2.5 rounded-xl ${me?'bg-blue-50/60':'hover:bg-slate-50'} transition-colors">
+                <div class="flex items-center gap-2.5">
+                    <div class="av-ring"><div class="av-inner" style="background:${ldr?'linear-gradient(135deg,#c89a35,#9d7418)':'#94a3b8'}">${n[0].toUpperCase()}</div></div>
+                    <div>
+                        <span class="text-sm font-medium text-slate-700">${escHTML(n)}</span>
+                        <div class="flex items-center gap-1 mt-0.5">
+                            ${ldr?'<span class="text-[10px] bg-amber-100 text-amber-700 font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider">Leader</span>':''}
+                            ${me ?'<span class="text-[10px] text-blue-500 font-medium">(you)</span>':''}
+                        </div>
+                    </div>
+                </div>
+                ${isLeader&&!me?`<button onclick="removeMember('${c.id}','${uid}')" class="text-xs text-red-400 hover:text-red-600 hover:bg-red-50 px-2.5 py-1 rounded-lg transition-colors font-medium">Remove</button>`:''}
+            </div>`;
+        }).join('');
+
+        const transferOpts = (c.members||[]).filter(u=>u!==currentUser.uid)
+            .map(u=>`<option value="${u}">${escHTML(nameCache[u]||u.slice(0,8))}</option>`).join('');
+
+        return `<div class="chavruta-card fade-up">
+            <!-- header band -->
+            <div class="px-5 pt-5 pb-4" style="background:linear-gradient(135deg,#16285e 0%,#2f56ab 100%)">
+                <div class="flex items-start justify-between mb-3">
+                    <h3 class="font-semibold text-white text-base leading-snug pr-2">${escHTML(c.name)}</h3>
+                    <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border shrink-0 ${isLeader?'bg-amber-400/20 text-amber-200 border-amber-400/30':'bg-white/15 text-blue-100 border-white/20'}">${isLeader?'Leader':'Member'}</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <div class="flex">${avatars}</div>
+                    <span class="ml-2 text-blue-200/80 text-xs">${count}/${max} members</span>
+                </div>
+            </div>
+            <!-- body -->
+            <div class="px-5 py-4 space-y-2.5">
+                <a href="study.html?chavruta=${c.id}"
+                   class="flex items-center justify-center gap-2 w-full py-3 rounded-2xl font-bold text-white text-sm shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 transform"
+                   style="background:linear-gradient(135deg,#b7871e,#c89a35)">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    Enter Study Room
+                </a>
+                ${isLeader?`
+                <button onclick="toggleSettings('sp-${c.id}')"
+                    class="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-700 hover:bg-slate-50 border border-slate-200 transition-all">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    Group Settings
+                </button>
+                <div id="sp-${c.id}" class="settings-panel">
+                    <div class="border-t border-slate-100 pt-3 mt-1">
+                        <div class="flex border-b border-slate-100 mb-3">
+                            <button class="stab active" id="stab-i-${c.id}" onclick="switchStab('${c.id}','i')">Share</button>
+                            <button class="stab" id="stab-m-${c.id}" onclick="switchStab('${c.id}','m')">Members</button>
+                            <button class="stab" id="stab-s-${c.id}" onclick="switchStab('${c.id}','s')">Manage</button>
+                        </div>
+                        <!-- Share/Invite -->
+                        <div id="sp-i-${c.id}" class="space-y-2.5">
+                            <div>
+                                <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Invite Code</label>
+                                <div class="flex items-center gap-2 mt-1.5">
+                                    <code class="flex-1 mono-code text-xs font-bold text-blue-900 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200">${escHTML(code)}</code>
+                                    <button onclick="copyText('${escHTML(code)}',this)" class="text-xs font-semibold text-blue-600 hover:text-blue-800 px-2.5 py-2 rounded-lg hover:bg-blue-50 border border-blue-200 transition-colors">Copy</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Invite Link</label>
+                                <div class="flex items-center gap-2 mt-1.5">
+                                    <input readonly value="${escHTML(link)}" class="flex-1 text-[11px] text-slate-500 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 truncate">
+                                    <button onclick="copyText('${escHTML(link)}',this)" class="text-xs font-semibold text-blue-600 hover:text-blue-800 px-2.5 py-2 rounded-lg hover:bg-blue-50 border border-blue-200 transition-colors">Copy</button>
+                                </div>
+                            </div>
+                            <button onclick="regenerateCode('${c.id}')" class="w-full text-xs text-slate-400 hover:text-blue-600 py-1.5 flex items-center justify-center gap-1 transition-colors">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                Regenerate code
+                            </button>
+                        </div>
+                        <!-- Members -->
+                        <div id="sp-m-${c.id}" class="hidden space-y-1">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">${count} / ${max} members</p>
+                            ${memberRows}
+                        </div>
+                        <!-- Manage -->
+                        <div id="sp-s-${c.id}" class="hidden space-y-4">
+                            <div>
+                                <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1.5">Rename Group</label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="ren-${c.id}" value="${escHTML(c.name)}" maxlength="50" class="flex-1 px-3 py-2 border-2 border-slate-200 rounded-xl text-sm focus:border-blue-500 focus:outline-none transition-all text-slate-800">
+                                    <button onclick="renameChavruta('${c.id}')" class="px-4 py-2 text-xs font-bold text-white rounded-xl transition-all" style="background:linear-gradient(135deg,#16285e,#2f56ab)">Save</button>
+                                </div>
+                            </div>
+                            ${transferOpts?`<div>
+                                <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1.5">Transfer Leadership</label>
+                                <select id="trf-${c.id}" class="w-full px-3 py-2 border-2 border-slate-200 rounded-xl text-sm bg-white text-slate-700 focus:border-blue-500 focus:outline-none mb-2">${transferOpts}</select>
+                                <button onclick="transferLeadership('${c.id}','${escHTML(c.name)}')" class="w-full py-2 text-xs font-semibold text-amber-700 hover:text-white hover:bg-amber-500 border border-amber-300 rounded-xl transition-all">Transfer Leadership</button>
+                            </div>`:''}
+                            <div class="border-t border-slate-100 pt-3">
+                                <p class="text-[10px] font-bold uppercase tracking-widest text-red-300 mb-2">Danger Zone</p>
+                                <button onclick="deleteChavruta('${c.id}','${escHTML(c.name)}')" class="w-full py-2 text-xs font-semibold text-red-500 hover:text-white hover:bg-red-500 border border-red-200 rounded-xl transition-all">Delete This Group</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `:`
+                <button onclick="leaveChavruta('${c.id}','${escHTML(c.name)}')" class="w-full py-2 text-xs font-medium text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl border border-slate-200 transition-all">
+                    Leave Group
+                </button>`}
+            </div>
+        </div>`;
+    }
+
+    /* ════ SETTINGS PANEL ════ */
+    function toggleSettings(id) { document.getElementById(id)?.classList.toggle('open'); }
+    function switchStab(cId, tab) {
+        ['i','m','s'].forEach(t => {
+            document.getElementById('sp-'+t+'-'+cId)?.classList.toggle('hidden', t!==tab);
+            document.getElementById('stab-'+t+'-'+cId)?.classList.toggle('active', t===tab);
+        });
+    }
+
+    /* ════ NAMES ════ */
+    async function fetchNames(uids) {
+        await Promise.all(uids.filter(u=>!nameCache[u]).map(async uid => {
+            try {
+                const s = await db.collection('users').doc(uid).get();
+                nameCache[uid] = s.exists ? (s.data().displayName||s.data().firstName||s.data().email||uid.slice(0,8)) : uid.slice(0,8);
+            } catch { nameCache[uid]=uid.slice(0,8); }
+        }));
+    }
+
+    function formatDisplayName(raw) {
+        if (!raw) {
+            return 'A Friend';
+        }
+        const asString = String(raw).trim();
+        if (!asString) {
+            return 'A Friend';
+        }
+        const withoutEmailDomain = asString.includes('@') ? asString.split('@')[0] : asString;
+        const cleaned = withoutEmailDomain.replace(/[._-]+/g, ' ').replace(/\s+/g, ' ').trim();
+        if (!cleaned) {
+            return 'A Friend';
+        }
+        return cleaned.split(' ').map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+    }
+
+    function ensureDailyQuoteCommunityLine() {
+        let line = document.getElementById('daily-quote-community-line');
+        if (line) {
+            return line;
+        }
+        const content = document.querySelector('#daily-inspiration .daily-inspiration-content');
+        if (!content) {
+            return null;
+        }
+        line = document.createElement('p');
+        line.id = 'daily-quote-community-line';
+        line.className = 'text-xs text-slate-500 mt-3';
+        content.appendChild(line);
+        return line;
+    }
+
+    function applyDailyQuoteTint(count) {
+        const content = document.querySelector('#daily-inspiration .daily-inspiration-content');
+        if (!content) {
+            return;
+        }
+        const intensity = count > 0 ? Math.min(count / 6, 1) : 0;
+        if (intensity === 0) {
+            content.style.background = '';
+            content.style.borderColor = '';
+            content.style.boxShadow = '';
+            return;
+        }
+
+        const tintOpacity = (0.08 + (0.22 * intensity)).toFixed(3);
+        content.style.background = `linear-gradient(135deg, rgba(219,234,254,${tintOpacity}) 0%, rgba(239,246,255,${tintOpacity}) 100%)`;
+        content.style.borderColor = `rgba(59,130,246,${Math.min(0.55, 0.25 + intensity * 0.35).toFixed(3)})`;
+        content.style.boxShadow = `0 8px 22px rgba(30,64,175,${Math.min(0.18, 0.08 + intensity * 0.12).toFixed(3)})`;
+    }
+
+    function getCurrentDailyQuotePayload() {
+        const quote = latestDailyQuote || window.currentDailyQuote;
+        const container = document.getElementById('daily-inspiration');
+        const quoteId = quote && (quote.quoteId ?? quote.id);
+
+        if (quote && quoteId != null) {
+            return {
+                quoteId: String(quoteId),
+                id: String(quoteId),
+                hebrew: quote.hebrew || '',
+                translation: quote.translation || '',
+                source: quote.source || '',
+                reflection: quote.reflection || '',
+                displayDate: quote.displayDate || container?.dataset?.quoteDate || null
+            };
+        }
+
+        if (container && container.dataset.quoteId) {
+            return {
+                quoteId: String(container.dataset.quoteId),
+                id: String(container.dataset.quoteId),
+                hebrew: container.querySelector('[data-quote-hebrew]')?.textContent?.trim() || '',
+                translation: container.querySelector('[data-quote-translation]')?.textContent?.trim() || '',
+                source: container.querySelector('[data-quote-source]')?.textContent?.trim() || '',
+                reflection: container.querySelector('[data-quote-reflection]')?.textContent?.trim() || '',
+                displayDate: container.dataset.quoteDate || null
+            };
+        }
+
+        return null;
+    }
+
+    async function getDailyQuoteBookmarkSummary(quoteId) {
+        const snapshot = await db.collectionGroup('dailyQuoteBookmarks')
+            .where('quoteId', '==', String(quoteId))
+            .get();
+
+        const userLatestTime = new Map();
+        snapshot.forEach((docSnap) => {
+            const data = docSnap.data() || {};
+            if (!data.userId) {
+                return;
+            }
+            const stamp = data.timestamp && typeof data.timestamp.toMillis === 'function'
+                ? data.timestamp.toMillis()
+                : 0;
+            if (!userLatestTime.has(data.userId) || stamp > userLatestTime.get(data.userId)) {
+                userLatestTime.set(data.userId, stamp);
+            }
+        });
+
+        const userIds = Array.from(userLatestTime.keys()).sort((a, b) => (userLatestTime.get(b) || 0) - (userLatestTime.get(a) || 0));
+        await fetchNames(userIds);
+        const names = userIds.map((uid) => formatDisplayName(nameCache[uid]));
+
+        return {
+            count: userIds.length,
+            userIds,
+            names
+        };
+    }
+
+    function applyDailyQuoteSummaryUI(summary) {
+        const button = document.querySelector('[data-quote-bookmark]');
+        const badge = document.querySelector('.daily-quote-bookmark-count');
+        const line = ensureDailyQuoteCommunityLine();
+        const isMine = Boolean(currentUser && summary.userIds.includes(currentUser.uid));
+
+        if (button) {
+            button.classList.toggle('is-active', isMine);
+            button.setAttribute('aria-pressed', isMine ? 'true' : 'false');
+            button.setAttribute('aria-label', isMine ? 'Remove this quote bookmark' : 'Bookmark this quote');
+        }
+
+        if (badge) {
+            badge.textContent = summary.count > 0 ? String(summary.count) : '';
+            badge.classList.toggle('has-count', summary.count > 0);
+        }
+
+        if (line) {
+            if (summary.count === 0) {
+                line.textContent = 'No one has bookmarked this teaching yet.';
+            } else {
+                const label = summary.count === 1 ? 'bookmark' : 'bookmarks';
+                line.textContent = `${summary.count} ${label} across your chavrutot: ${summary.names.join(', ')}`;
+            }
+        }
+
+        applyDailyQuoteTint(summary.count);
+    }
+
+    async function refreshDailyQuoteBookmarkState(forcedQuoteId = null) {
+        if (!currentUser) {
+            return;
+        }
+
+        const payload = getCurrentDailyQuotePayload();
+        const quoteId = forcedQuoteId != null
+            ? String(forcedQuoteId)
+            : payload?.quoteId || payload?.id || null;
+
+        if (!quoteId) {
+            return;
+        }
+
+        try {
+            const summary = await getDailyQuoteBookmarkSummary(quoteId);
+            applyDailyQuoteSummaryUI(summary);
+        } catch (error) {
+            console.error('Failed to refresh daily quote bookmarks:', error);
+        }
+    }
+
+    async function toggleDailyQuoteBookmarkUniversal(quotePayload) {
+        if (!currentUser) {
+            window.location.href = 'index.html';
+            return;
+        }
+        if (dailyQuoteToggleInFlight) {
+            return;
+        }
+        if (!userChavrutas.length) {
+            showBanner('Create or join a study group before bookmarking daily quotes.', 'warning');
+            return;
+        }
+
+        const payload = quotePayload || getCurrentDailyQuotePayload();
+        const quoteId = payload && (payload.quoteId ?? payload.id);
+        if (quoteId == null) {
+            return;
+        }
+
+        const normalized = {
+            quoteId: String(quoteId),
+            id: String(quoteId),
+            hebrew: payload.hebrew || '',
+            translation: payload.translation || '',
+            source: payload.source || '',
+            reflection: payload.reflection || '',
+            displayDate: payload.displayDate || null
+        };
+        latestDailyQuote = normalized;
+
+        dailyQuoteToggleInFlight = true;
+        try {
+            const summary = await getDailyQuoteBookmarkSummary(normalized.quoteId);
+            const alreadyBookmarked = summary.userIds.includes(currentUser.uid);
+            const bookmarkDocId = `${currentUser.uid}__dailyQuote__${normalized.quoteId}`;
+
+            if (alreadyBookmarked) {
+                await Promise.all(
+                    userChavrutas.map((room) =>
+                        db.collection('chavrutas')
+                            .doc(room.id)
+                            .collection('dailyQuoteBookmarks')
+                            .doc(bookmarkDocId)
+                            .delete()
+                            .catch(() => null)
+                    )
+                );
+            } else {
+                const bookmarkPayload = {
+                    quoteId: normalized.quoteId,
+                    userId: currentUser.uid,
+                    hebrew: normalized.hebrew,
+                    translation: normalized.translation,
+                    source: normalized.source,
+                    reflection: normalized.reflection,
+                    savedOn: normalized.displayDate || null,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                await Promise.all(
+                    userChavrutas.map((room) =>
+                        db.collection('chavrutas')
+                            .doc(room.id)
+                            .collection('dailyQuoteBookmarks')
+                            .doc(bookmarkDocId)
+                            .set(bookmarkPayload, { merge: true })
+                    )
+                );
+            }
+
+            await refreshDailyQuoteBookmarkState(normalized.quoteId);
+        } catch (error) {
+            console.error('Error toggling daily quote bookmark:', error);
+            showBanner('Could not update quote bookmark right now. Please try again.', 'error');
+        } finally {
+            dailyQuoteToggleInFlight = false;
+        }
+    }
+
+    /* ════ CREATE ════ */
+    async function createChavruta(e) {
+        e.preventDefault();
+        const name=document.getElementById('create-name').value.trim(), max=+document.getElementById('create-max-members').value;
+        const btn=document.getElementById('create-btn'), sEl=document.getElementById('create-success'), eEl=document.getElementById('create-error');
+        if(name.length<2){showEl(eEl,'Name is too short.');return;}
+        btn.disabled=true; btn.textContent='Creating…'; eEl.classList.add('hidden'); sEl.classList.add('hidden');
+        try {
+            const code=generateCode();
+            await db.collection('chavrutas').add({name,leader:currentUser.uid,createdBy:currentUser.uid,members:[currentUser.uid],maxMembers:max,inviteCode:code,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+            document.getElementById('created-invite-code').textContent = code;
+            document.getElementById('created-invite-link').value = inviteLink(code);
+            sEl.classList.remove('hidden'); document.getElementById('create-name').value='';
+        } catch(err){ console.error(err); showEl(eEl,'Failed to create. Please try again.'); }
+        finally { btn.disabled=false; btn.textContent='Create Group'; }
+    }
+
+    /* ════ JOIN ════ */
+    async function joinChavruta(e) {
+        e.preventDefault();
+        const code=document.getElementById('join-code').value.trim().toUpperCase();
+        const btn=document.getElementById('join-btn'), sEl=document.getElementById('join-success'), eEl=document.getElementById('join-error');
+        sEl.classList.add('hidden'); eEl.classList.add('hidden');
+        btn.disabled=true; btn.textContent='Joining…';
+        try { await joinByCode(code); sEl.textContent='Joined! Your group is now showing below.'; sEl.classList.remove('hidden'); document.getElementById('join-code').value=''; }
+        catch(err){ showEl(eEl, err.message||'Failed to join.'); }
+        finally { btn.disabled=false; btn.textContent='Join Group'; }
+    }
+
+    async function joinByCode(code) {
+        const snap=await db.collection('chavrutas').where('inviteCode','==',code).get();
+        if(snap.empty) throw new Error('Code not found. Double-check and try again.');
+        const doc=snap.docs[0], data=doc.data();
+        if((data.members||[]).includes(currentUser.uid)) throw new Error('You are already in this group.');
+        if((data.members||[]).length>=(data.maxMembers||8)) throw new Error('This group is full.');
+        await db.collection('chavrutas').doc(doc.id).update({members:firebase.firestore.FieldValue.arrayUnion(currentUser.uid)});
+    }
+
+    /* ════ AUTO-JOIN ════ */
+    async function autoJoin(id) {
+        try {
+            const doc=await db.collection('chavrutas').doc(id).get();
+            if(!doc.exists){showBanner('Group not found.','error');return;}
+            const d=doc.data();
+            if((d.members||[]).includes(currentUser.uid)){showBanner('You are already in "'+d.name+'".','info');return;}
+            if((d.members||[]).length>=(d.maxMembers||8)){showBanner('"'+d.name+'" is full.','warning');return;}
+            await db.collection('chavrutas').doc(id).update({members:firebase.firestore.FieldValue.arrayUnion(currentUser.uid)});
+            showBanner('Joined "'+d.name+'" successfully!','success');
+        } catch { showBanner('Could not auto-join.','error'); }
+    }
+
+    /* ════ LEAVE / DELETE / REMOVE ════ */
+    async function leaveChavruta(id,name){
+        if(!await showConfirm('Leave Group','Leave "'+name+'"?')) return;
+        try{
+            const doc=await db.collection('chavrutas').doc(id).get(); const d=doc.data();
+            const rem=(d.members||[]).filter(u=>u!==currentUser.uid);
+            if(d.leader===currentUser.uid){
+                if(rem.length===0) await db.collection('chavrutas').doc(id).delete();
+                else await db.collection('chavrutas').doc(id).update({members:firebase.firestore.FieldValue.arrayRemove(currentUser.uid),leader:rem[0]});
+            } else { await db.collection('chavrutas').doc(id).update({members:firebase.firestore.FieldValue.arrayRemove(currentUser.uid)}); }
+        } catch { alert('Failed to leave.'); }
+    }
+    async function deleteChavruta(id,name){
+        if(!await showConfirm('Delete Group','Permanently delete "'+name+'"? All members will lose access.')) return;
+        try{ await db.collection('chavrutas').doc(id).delete(); } catch { alert('Failed to delete.'); }
+    }
+    async function removeMember(id,uid){
+        const n=nameCache[uid]||'this member';
+        if(!await showConfirm('Remove Member','Remove '+n+' from this group?')) return;
+        try{ await db.collection('chavrutas').doc(id).update({members:firebase.firestore.FieldValue.arrayRemove(uid)}); } catch { alert('Failed to remove.'); }
+    }
+
+    /* ════ RENAME / TRANSFER / REGEN ════ */
+    async function renameChavruta(id){
+        const n=document.getElementById('ren-'+id)?.value?.trim();
+        if(!n||n.length<2){alert('Name must be at least 2 characters.');return;}
+        try{ await db.collection('chavrutas').doc(id).update({name:n}); } catch { alert('Failed to rename.'); }
+    }
+    async function transferLeadership(id,name){
+        const uid=document.getElementById('trf-'+id)?.value; if(!uid) return;
+        const n=nameCache[uid]||'the selected member';
+        if(!await showConfirm('Transfer Leadership','Transfer leadership of "'+name+'" to '+n+'?')) return;
+        try{ await db.collection('chavrutas').doc(id).update({leader:uid}); } catch { alert('Failed to transfer.'); }
+    }
+    async function regenerateCode(id){
+        if(!await showConfirm('Regenerate Code','The old code will stop working. Continue?')) return;
+        try{ await db.collection('chavrutas').doc(id).update({inviteCode:generateCode()}); } catch { alert('Failed to regenerate.'); }
+    }
+
+    /* ════ CONFIRM MODAL ════ */
+    function showConfirm(title,msg){
+        return new Promise(res=>{
+            document.getElementById('confirm-title').textContent=title;
+            document.getElementById('confirm-message').textContent=msg;
+            document.getElementById('confirm-modal').classList.remove('hidden');
+            confirmResolve=res;
+        });
+    }
+    function closeConfirmModal(val){
+        document.getElementById('confirm-modal').classList.add('hidden');
+        if(confirmResolve){confirmResolve(val); confirmResolve=null;}
+    }
+
+    function handleStudyEntryClick(event) {
+        if (userChavrutas.length > 1) {
+            event.preventDefault();
+            openStudyRoomModal();
+        } else if (!userChavrutas.length) {
+            event.preventDefault();
+            showPanel('create');
+            showBanner('Create or join a study group first.', 'warning');
+        }
+    }
+
+    const heroStudyBtn = document.getElementById('hero-study-btn');
+    if (heroStudyBtn) {
+        heroStudyBtn.addEventListener('click', handleStudyEntryClick);
+    }
+
+    const headerStudyBtn = document.getElementById('go-to-weekly');
+    if (headerStudyBtn) {
+        headerStudyBtn.addEventListener('click', handleStudyEntryClick);
+    }
+
+    const studyRoomModal = document.getElementById('study-room-modal');
+    if (studyRoomModal) {
+        studyRoomModal.addEventListener('click', (event) => {
+            if (event.target === studyRoomModal) {
+                closeStudyRoomModal();
+            }
+        });
+    }
+
+    document.addEventListener('dailyQuoteRendered', (event) => {
+        latestDailyQuote = event?.detail || window.currentDailyQuote || latestDailyQuote;
+        refreshDailyQuoteBookmarkState();
+    });
+
+    document.addEventListener('dailyQuoteBookmarkToggle', (event) => {
+        if (!event || !event.detail) {
+            return;
+        }
+        latestDailyQuote = event.detail;
+        toggleDailyQuoteBookmarkUniversal(event.detail);
+    });
+
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeStudyRoomModal();
+        }
+    });
+
+    /* ════ UTIL ════ */
+    function copyText(text,btn){
+        navigator.clipboard.writeText(text).then(()=>{
+            const orig=btn.textContent; btn.textContent='Copied!'; btn.classList.add('text-green-600');
+            setTimeout(()=>{btn.textContent=orig;btn.classList.remove('text-green-600');},1500);
+        }).catch(()=>{
+            const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        });
+    }
+    function showEl(el,msg){el.textContent=msg;el.classList.remove('hidden');}
+    function escHTML(s){if(!s)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+</script>
+</body>
+</html>

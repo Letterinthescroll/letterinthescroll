@@ -1,0 +1,63 @@
+shabbat-preview.html:27:                        <span class="header-btn-text">This Week's Parsha</span>
+shabbat-preview.html:30:                        <span class="header-btn-text">Prayers</span>
+shabbat-preview.html:33:                        <span class="header-btn-text">Songs and Poems</span>
+shabbat-preview.html:36:                        <span class="header-btn-text">About</span>
+song-detail.html:49:                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+song-detail.html:51:                        <span class="header-btn-text">This Week's Parsha</span>
+song-detail.html:57:                        <span class="header-btn-text">Prayers</span>
+song-detail.html:65:                        <span class="header-btn-text">Songs and Poems</span>
+song-detail.html:67:                                        <a href="holidays.html" class="header-btn header-btn-secondary" title="Jewish Holidays">
+song-detail.html:69:                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+song-detail.html:71:                        <span class="header-btn-text">Holidays</span>
+song-detail.html:77:                        <span class="header-btn-text">About</span>
+song-detail.html:83:                        <span class="header-btn-text">My Bookmarks</span>
+song-detail.html:89:                        <span class="header-btn-text">Sign Out</span>
+holidays.html:6:    <title>Jewish Holidays — A Letter in the Scroll</title>
+holidays.html:409:                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+holidays.html:411:                        <span class="header-btn-text">This Week's Parsha</span>
+holidays.html:417:                        <span class="header-btn-text">Prayers</span>
+holidays.html:425:                        <span class="header-btn-text">Songs and Poems</span>
+holidays.html:427:                    <a href="holidays.html" aria-current="page" class="header-btn header-btn-secondary" title="Jewish Holidays">
+holidays.html:429:                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+holidays.html:431:                        <span class="header-btn-text">Holidays</span>
+holidays.html:437:                        <span class="header-btn-text">About</span>
+songs.html:40:                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+songs.html:42:                        <span class="header-btn-text">This Week's Parsha</span>
+songs.html:48:                        <span class="header-btn-text">Prayers</span>
+songs.html:56:                        <span class="header-btn-text">Songs and Poems</span>
+songs.html:58:                                        <a href="holidays.html" class="header-btn header-btn-secondary" title="Jewish Holidays">
+songs.html:60:                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+songs.html:62:                        <span class="header-btn-text">Holidays</span>
+songs.html:68:                        <span class="header-btn-text">About</span>
+songs.html:74:                        <span class="header-btn-text">My Bookmarks</span>
+songs.html:80:                        <span class="header-btn-text">Sign Out</span>
+prayers.html:40:                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+prayers.html:42:                        <span class="header-btn-text">This Week's Parsha</span>
+prayers.html:48:                        <span class="header-btn-text">Prayers</span>
+prayers.html:56:                        <span class="header-btn-text">Songs and Poems</span>
+prayers.html:58:                                        <a href="holidays.html" class="header-btn header-btn-secondary" title="Jewish Holidays">
+prayers.html:60:                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+prayers.html:62:                        <span class="header-btn-text">Holidays</span>
+prayers.html:68:                        <span class="header-btn-text">About</span>
+prayers.html:74:                        <span class="header-btn-text">My Bookmarks</span>
+prayers.html:80:                        <span class="header-btn-text">Sign Out</span>
+index.html:171:                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+index.html:173:                        <span class="header-btn-text">This Week's Parsha</span>
+index.html:179:                        <span class="header-btn-text">Prayers</span>
+index.html:187:                        <span class="header-btn-text">Songs and Poems</span>
+index.html:189:                    <a href="holidays.html" class="header-btn header-btn-secondary" title="Jewish Holidays">
+index.html:191:                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+index.html:193:                        <span class="header-btn-text">Holidays</span>
+index.html:199:                        <span class="header-btn-text">About</span>
+index.html:205:                        <span class="header-btn-text">My Bookmarks</span>
+index.html:211:                        <span class="header-btn-text">Sign Out</span>
+about.html:32:                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+about.html:34:                        <span class="header-btn-text">This Week's Parsha</span>
+about.html:40:                        <span class="header-btn-text">Prayers</span>
+about.html:48:                        <span class="header-btn-text">Songs and Poems</span>
+about.html:50:                                        <a href="holidays.html" class="header-btn header-btn-secondary" title="Jewish Holidays">
+about.html:52:                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+about.html:54:                        <span class="header-btn-text">Holidays</span>
+about.html:60:                        <span class="header-btn-text">About</span>
+about.html:66:                        <span class="header-btn-text">My Bookmarks</span>
+about.html:72:                        <span class="header-btn-text">Sign Out</span>

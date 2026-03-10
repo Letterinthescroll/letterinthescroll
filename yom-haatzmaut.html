@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yom Ha'atzmaut — The Complete Guide | A Letter in the Scroll</title>
+    <meta name="description" content="A complete guide to Yom Ha'atzmaut: Israel Independence Day — history, customs, the torch-lighting ceremony, prayers, and the majestic songs of Zion.">
+    <link rel="icon" type="image/png" href="media/images/Icon.png">
+    <link rel="apple-touch-icon" href="media/images/Icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mobile-overrides.css">
+    <style>
+        :root {
+            --yha-navy:   #0d1f3c;
+            --yha-blue:   #1e3a8a;
+            --yha-blue2:  #1e40af;
+            --yha-israel: #0038b8;
+            --yha-sky:    #bfdbfe;
+            --yha-gold:   #c49a2a;
+            --yha-white:  #f8faff;
+            --yha-cream:  #eff6ff;
+            --yha-ink:    #1a2f4b;
+            --yha-muted:  #4b6278;
+            --yha-border: rgba(30, 58, 138, 0.12);
+            --yha-radius: 18px;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body.yha-body {
+            background: linear-gradient(170deg, #f0f5ff 0%, #e8effe 40%, #f5f8ff 100%);
+            min-height: 100vh;
+            color: var(--yha-ink);
+            font-family: 'Manrope', 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* ── TOPBAR ───────────────────────────────────────────────── */
+        .yha-topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: linear-gradient(135deg, #0d1f3c 0%, #1e3a8a 65%, #0038b8 100%);
+            box-shadow: 0 4px 20px rgba(13, 31, 60, 0.45);
+        }
+        .yha-topbar__inner {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0.9rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        .yha-brand {
+            text-decoration: none;
+            font-family: 'Cinzel', 'Playfair Display', serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.01em;
+        }
+        .yha-back {
+            text-decoration: none;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #fff;
+            border: 1.5px solid rgba(255,255,255,0.45);
+            background: rgba(255,255,255,0.1);
+            border-radius: 999px;
+            padding: 0.38rem 0.9rem;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .yha-back:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.82); }
+
+        /* ── HERO ─────────────────────────────────────────────────── */
+        .yha-hero {
+            background: linear-gradient(155deg, #0d1f3c 0%, #1e3a8a 48%, #0038b8 100%);
+            color: #fff;
+            text-align: center;
+            padding: 3.8rem 1.5rem 3.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .yha-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 68% 30%, rgba(255,255,255,0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        /* Diagonal white wedge at bottom like other holiday pages */
+        .yha-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; left: 0; right: 0;
+            height: 46px;
+            background: linear-gradient(to bottom right, transparent 49%, #f0f5ff 50%);
+        }
+        /* Subtle flag-inspired stripe across the top of hero */
+        .yha-hero__stripe {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #0038b8 0%, rgba(255,255,255,0.8) 35%, #0038b8 60%, rgba(255,255,255,0.8) 80%, #0038b8 100%);
+            opacity: 0.22;
+        }
+        .yha-hero__star {
+            position: absolute;
+            font-size: 4rem;
+            opacity: 0.04;
+            user-select: none;
+            pointer-events: none;
+        }
+        .yha-hero__star--1 { top: 10%; left: 6%; }
+        .yha-hero__star--2 { bottom: 18%; right: 5%; }
+        .yha-hero__eyebrow {
+            font-size: 0.73rem;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.58);
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            position: relative;
+        }
+        .yha-hero__hebrew {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 4vw, 2.4rem);
+            font-weight: 700;
+            direction: rtl;
+            color: var(--yha-sky);
+            margin-bottom: 0.4rem;
+            position: relative;
+            letter-spacing: 0.04em;
+        }
+        .yha-hero__title {
+            font-family: 'Cinzel', 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.1;
+            margin: 0 0 1rem;
+            position: relative;
+        }
+        .yha-hero__title span { color: var(--yha-sky); }
+        .yha-hero__subtitle {
+            font-size: 0.98rem;
+            color: rgba(255,255,255,0.72);
+            line-height: 1.68;
+            max-width: 560px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* ── PAGE SHELL ──────────────────────────────────────────── */
+        .yha-shell {
+            max-width: 840px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 5rem;
+        }
+
+        /* ── DATE BADGE ──────────────────────────────────────────── */
+        .yha-date-center {
+            text-align: center;
+            margin-bottom: 1.6rem;
+        }
+        .yha-date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.48rem;
+            background: linear-gradient(135deg, #1e3a8a 0%, #0038b8 100%);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.45rem 1.15rem;
+            border-radius: 999px;
+            box-shadow: 0 4px 14px rgba(0,56,184,0.28);
+            letter-spacing: 0.02em;
+        }
+
+        /* ── QUICK FACTS ─────────────────────────────────────────── */
+        .yha-facts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2.2rem;
+        }
+        .yha-fact {
+            background: #fff;
+            border: 1px solid var(--yha-border);
+            border-radius: 14px;
+            padding: 1rem 1.2rem;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(30,58,138,0.06);
+        }
+        .yha-fact__label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--yha-israel);
+            margin-bottom: 0.3rem;
+        }
+        .yha-fact__value {
+            font-size: 0.97rem;
+            font-weight: 700;
+            color: var(--yha-ink);
+        }
+
+        /* ── INTRO CALLOUT ───────────────────────────────────────── */
+        .yha-intro {
+            background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+            border-left: 4px solid var(--yha-israel);
+            border-radius: 0 14px 14px 0;
+            padding: 1.2rem 1.5rem;
+            margin: 0 0 2rem;
+            color: #1e3a8a;
+            font-size: 0.97rem;
+            line-height: 1.75;
+        }
+
+        /* ── SECTION CARDS ───────────────────────────────────────── */
+        .yha-section {
+            background: #fff;
+            border: 1px solid var(--yha-border);
+            border-radius: var(--yha-radius);
+            padding: 2rem 2.2rem;
+            margin-bottom: 1.8rem;
+            box-shadow: 0 3px 18px rgba(30,58,138,0.06);
+            scroll-margin-top: 72px;
+        }
+        .yha-section--blue {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-color: rgba(0,56,184,0.1);
+        }
+        .yha-section--navy {
+            background: linear-gradient(140deg, #0d1f3c 0%, #1e3a8a 100%);
+            border-color: transparent;
+        }
+        .yha-section--navy .yha-kicker { color: var(--yha-sky); }
+        .yha-section--navy h2           { color: #fff !important; }
+        /* Paragraphs directly in the navy section get white text */
+        .yha-section.yha-section--navy > p { color: rgba(255,255,255,0.85); }
+
+        .yha-kicker {
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--yha-israel);
+            margin-bottom: 0.5rem;
+        }
+        .yha-section h2 {
+            font-family: 'Cinzel', 'Playfair Display', serif;
+            font-size: clamp(1.3rem, 2.8vw, 1.8rem);
+            font-weight: 700;
+            color: var(--yha-ink);
+            margin: 0 0 1rem;
+            line-height: 1.25;
+        }
+        .yha-section h3 {
+            font-family: 'Cinzel', 'Playfair Display', serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--yha-blue);
+            margin: 1.5rem 0 0.5rem;
+        }
+        .yha-section p {
+            font-size: 0.96rem;
+            color: var(--yha-ink);
+            line-height: 1.78;
+            margin: 0 0 0.85rem;
+        }
+        .yha-section p:last-child { margin-bottom: 0; }
+
+        /* ── NUMBERED CUSTOMS LIST ───────────────────────────────── */
+        .yha-customs {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .yha-customs li {
+            display: flex;
+            gap: 1.1rem;
+            align-items: flex-start;
+            padding: 1.1rem 0;
+            border-bottom: 1px solid var(--yha-border);
+        }
+        .yha-customs li:last-child { border-bottom: none; padding-bottom: 0; }
+        .yha-customs__num {
+            flex-shrink: 0;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #1e3a8a, #0038b8);
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.8rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.1rem;
+            box-shadow: 0 2px 8px rgba(0,56,184,0.28);
+        }
+        .yha-customs__body { flex: 1; }
+        .yha-customs__title {
+            font-weight: 700;
+            font-size: 0.96rem;
+            color: var(--yha-ink);
+            margin-bottom: 0.35rem;
+        }
+        .yha-customs__text {
+            font-size: 0.92rem;
+            color: var(--yha-muted);
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* ── PRAYER BLOCK ────────────────────────────────────────── */
+        .yha-prayer-block {
+            background: var(--yha-cream);
+            border: 1px solid var(--yha-border);
+            border-radius: 14px;
+            padding: 1.4rem 1.8rem;
+            margin: 1.2rem 0;
+        }
+        .yha-prayer-label {
+            font-size: 0.66rem;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--yha-israel);
+            margin-bottom: 0.7rem;
+        }
+        .yha-prayer-he {
+            direction: rtl;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.18rem;
+            line-height: 1.85;
+            color: var(--yha-ink);
+            margin-bottom: 0.9rem;
+        }
+        .yha-prayer-tl {
+            font-style: italic;
+            font-size: 0.92rem;
+            color: #1e40af;
+            margin-bottom: 0.8rem;
+            line-height: 1.72;
+        }
+        .yha-prayer-en {
+            font-size: 0.92rem;
+            color: var(--yha-muted);
+            line-height: 1.72;
+            border-top: 1px solid var(--yha-border);
+            padding-top: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        /* ── SONG ACCORDIONS ─────────────────────────────────────── */
+        .yha-song-card {
+            background: linear-gradient(140deg, #0d1f3c 0%, #1a3570 100%);
+            border-radius: var(--yha-radius);
+            margin-bottom: 1.4rem;
+            overflow: hidden;
+            box-shadow: 0 6px 26px rgba(13, 31, 60, 0.28);
+        }
+        .yha-song-header {
+            width: 100%;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 1.4rem 2rem 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            text-align: left;
+        }
+        .yha-song-header:hover { background: rgba(255,255,255,0.04); }
+        .yha-song-number {
+            font-size: 0.64rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--yha-sky);
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+        .yha-song-name {
+            font-family: 'Cinzel', 'Playfair Display', serif;
+            font-size: 1.28rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 0.25rem;
+            line-height: 1.2;
+        }
+        .yha-song-desc {
+            font-size: 0.82rem;
+            color: rgba(191,219,254,0.8);
+            margin: 0;
+            line-height: 1.5;
+            font-style: italic;
+        }
+        .yha-song-toggle {
+            flex-shrink: 0;
+            width: 34px;
+            height: 34px;
+            border: 1.5px solid rgba(255,255,255,0.28);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background: rgba(255,255,255,0.07);
+            margin-top: 0.1rem;
+            transition: transform 0.3s, background 0.2s;
+        }
+        .yha-song-toggle svg { width: 16px; height: 16px; }
+        .yha-song-card.open .yha-song-toggle {
+            transform: rotate(180deg);
+            background: rgba(255,255,255,0.14);
+        }
+        .yha-song-body {
+            display: none;
+            padding: 0 2rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .yha-song-card.open .yha-song-body { display: block; }
+
+        .yha-song-verse {
+            margin: 1.4rem 0;
+            padding-bottom: 1.4rem;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+        .yha-song-verse:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .yha-verse-label {
+            font-size: 0.62rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--yha-sky);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        .yha-verse-he {
+            direction: rtl;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.06rem;
+            line-height: 1.9;
+            color: #fff;
+            margin-bottom: 0.75rem;
+            white-space: pre-line;
+        }
+        .yha-verse-tl {
+            font-style: italic;
+            font-size: 0.88rem;
+            color: #93c5fd;
+            line-height: 1.78;
+            margin-bottom: 0.75rem;
+            white-space: pre-line;
+        }
+        .yha-verse-en {
+            font-size: 0.87rem;
+            color: rgba(255,255,255,0.58);
+            line-height: 1.78;
+            white-space: pre-line;
+        }
+
+        /* ── FAQ ─────────────────────────────────────────────────── */
+        .yha-faq-item { border-bottom: 1px solid var(--yha-border); }
+        .yha-faq-item:last-child { border-bottom: none; }
+        .yha-faq-q {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 1rem 0;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--yha-ink);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        .yha-faq-q:hover { color: var(--yha-israel); }
+        .yha-faq-q__arrow {
+            flex-shrink: 0;
+            width: 18px; height: 18px;
+            color: var(--yha-israel);
+            transition: transform 0.2s;
+        }
+        .yha-faq-item.open .yha-faq-q__arrow { transform: rotate(180deg); }
+        .yha-faq-a {
+            display: none;
+            padding: 0 0 1rem;
+            font-size: 0.93rem;
+            color: var(--yha-muted);
+            line-height: 1.72;
+        }
+        .yha-faq-item.open .yha-faq-a { display: block; }
+
+        /* ── SECTION LABEL DIVIDER ───────────────────────────────── */
+        .yha-section-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--yha-israel);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 2.4rem 0 1rem;
+        }
+        .yha-section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, rgba(0,56,184,0.25), transparent);
+        }
+
+        /* ── FOOTER ──────────────────────────────────────────────── */
+        .yha-footer {
+            text-align: center;
+            padding: 1.4rem 1rem 2.5rem;
+            font-size: 0.82rem;
+            color: var(--yha-muted);
+            border-top: 1px solid var(--yha-border);
+        }
+        .yha-footer a {
+            color: var(--yha-blue);
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 0.8rem;
+        }
+        .yha-footer a:hover { color: var(--yha-israel); }
+
+        /* ── MOBILE ──────────────────────────────────────────────── */
+        @media (max-width: 640px) {
+            .yha-shell     { padding: 1.5rem 1rem 3.5rem; }
+            .yha-section   { padding: 1.4rem 1.2rem; }
+            .yha-song-header { padding: 1.1rem 1.2rem 0.9rem; }
+            .yha-song-body   { padding: 0 1.2rem 1.6rem; }
+            .yha-prayer-block { padding: 1.1rem 1.2rem; }
+        }
+    </style>
+</head>
+<body class="yha-body">
+
+    <!-- Top navigation bar -->
+    <nav class="yha-topbar" aria-label="Site navigation">
+        <div class="yha-topbar__inner">
+            <a class="yha-brand" href="study.html">A Letter in the Scroll</a>
+            <a class="yha-back" href="holidays/">← All Holidays</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="yha-hero" aria-label="Yom Ha'atzmaut">
+        <div class="yha-hero__stripe" aria-hidden="true"></div>
+        <span class="yha-hero__star yha-hero__star--1" aria-hidden="true">✡</span>
+        <span class="yha-hero__star yha-hero__star--2" aria-hidden="true">✡</span>
+        <p class="yha-hero__eyebrow">ב״ה &nbsp;·&nbsp; 5 Iyar, 5786 &nbsp;·&nbsp; April 2026</p>
+        <div class="yha-hero__hebrew">יוֹם הָעַצְמָאוּת</div>
+        <h1 class="yha-hero__title">Yom <span>Ha'atzmaut</span></h1>
+        <p class="yha-hero__subtitle">
+            Israel's Independence Day — celebrating the return of the Jewish people to their ancestral
+            homeland and the miracle of Jewish sovereignty after 2,000 years of exile.
+        </p>
+    </header>
+
+    <!-- Main page content -->
+    <main class="yha-shell">
+
+        <!-- Date badge -->
+        <div class="yha-date-center">
+            <span class="yha-date-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Yom Ha'atzmaut 2026 &nbsp;·&nbsp; Begins evening of Tuesday, April 21
+            </span>
+        </div>
+
+        <!-- Quick facts -->
+        <div class="yha-facts">
+            <div class="yha-fact">
+                <div class="yha-fact__label">Hebrew Date</div>
+                <div class="yha-fact__value">5th of Iyar, 5786</div>
+            </div>
+            <div class="yha-fact">
+                <div class="yha-fact__label">Gregorian Date</div>
+                <div class="yha-fact__value">April 22, 2026</div>
+            </div>
+            <div class="yha-fact">
+                <div class="yha-fact__label">Meaning</div>
+                <div class="yha-fact__value">Day of Independence</div>
+            </div>
+            <div class="yha-fact">
+                <div class="yha-fact__label">Established</div>
+                <div class="yha-fact__value">May 14, 1948</div>
+            </div>
+        </div>
+
+        <!-- Intro callout -->
+        <div class="yha-intro">
+            After 2,000 years of exile, persecution, and the devastating tragedy of the Holocaust, the
+            establishment of a sovereign Jewish state in the biblical Land of Israel is viewed by many
+            as an open miracle — <em>"the first flowering of our redemption."</em>
+        </div>
+
+        <!-- ── What Is Yom Ha'atzmaut ──────────────────────────────── -->
+        <article class="yha-section" id="what-is">
+            <p class="yha-kicker">Overview</p>
+            <h2>What Is Yom Ha'atzmaut?</h2>
+            <p>
+                Yom Ha'atzmaut is the national independence day of Israel, commemorating the formal
+                declaration of the State of Israel by David Ben-Gurion in Tel Aviv on <strong>May 14,
+                1948</strong> — which corresponded to the <strong>5th of Iyar, 5708</strong>.
+            </p>
+            <p>
+                Unlike the ancient, biblically mandated festivals, Yom Ha'atzmaut is a modern addition
+                to the Jewish calendar. However, for the vast majority of world Jewry, it holds immense
+                spiritual and religious significance. After 2,000 years of exile, the establishment of a
+                sovereign Jewish state in the biblical Land of Israel is viewed as an open miracle and a
+                watershed moment in Jewish history.
+            </p>
+            <p>
+                The holiday is immediately preceded by <strong>Yom HaZikaron</strong> — Israel's
+                Memorial Day for fallen soldiers and victims of terrorism — making the transition to
+                independence day one of the most emotionally profound experiences in the Israeli calendar.
+            </p>
+        </article>
+
+        <!-- ── History ─────────────────────────────────────────────── -->
+        <article class="yha-section yha-section--blue" id="history">
+            <p class="yha-kicker">History</p>
+            <h2>The Historical Origins</h2>
+            <h3>The Long Exile and the Zionist Movement</h3>
+            <p>
+                Following the destruction of the Second Temple in 70 CE by the Romans, the Jewish people
+                were scattered across the globe in what became known as the <em>Diaspora</em>. Despite
+                centuries of exile, the daily liturgy and culture remained fiercely tied to the dream of
+                returning to Zion. The thrice-daily prayers for the rebuilding of Jerusalem never faded.
+            </p>
+            <p>
+                In the late 19th century, this ancient spiritual longing transformed into a modern
+                political movement called <strong>Zionism</strong>, spearheaded by figures like
+                <strong>Theodor Herzl</strong>, which sought to establish a legally recognized Jewish
+                home in the Land of Israel (then Palestine under Ottoman and later British rule).
+            </p>
+            <h3>The UN Partition and the Declaration</h3>
+            <p>
+                On November 29, 1947, the United Nations adopted <strong>Resolution 181</strong>,
+                proposing to partition the British Mandate of Palestine into independent Arab and Jewish
+                states. While Jewish leaders accepted the plan, Arab leaders rejected it, leading to the
+                outbreak of the 1947–1949 war.
+            </p>
+            <p>
+                On <strong>May 14, 1948</strong>, hours before the British Mandate was set to expire at
+                midnight, David Ben-Gurion gathered Jewish leaders at the Tel Aviv Museum of Art and
+                read aloud the <em>Israeli Declaration of Independence</em>, establishing the
+                State of Israel. The new state immediately opened its doors to Jewish refugees worldwide.
+                Within minutes, the United States and the Soviet Union extended diplomatic recognition.
+            </p>
+        </article>
+
+        <!-- ── Customs ─────────────────────────────────────────────── -->
+        <article class="yha-section" id="customs">
+            <p class="yha-kicker">Customs &amp; Traditions</p>
+            <h2>How Yom Ha'atzmaut Is Celebrated</h2>
+            <ul class="yha-customs">
+                <li>
+                    <span class="yha-customs__num">1</span>
+                    <div class="yha-customs__body">
+                        <div class="yha-customs__title">The Transition from Yom HaZikaron</div>
+                        <p class="yha-customs__text">
+                            Perhaps the most unique and emotionally jarring aspect of Yom Ha'atzmaut is
+                            how it begins. It is immediately preceded by Yom HaZikaron (Israel's Memorial
+                            Day for Fallen Soldiers). For 24 hours, the country is in deep, collective
+                            mourning. At exactly <strong>8:00 PM</strong>, a dramatic shift occurs: the
+                            national flag is raised from half-mast to the top of the pole, and Israel
+                            erupts in joy. The sudden transition from agonizing grief to ecstatic
+                            celebration reflects a profound Israeli ethos — the joy of independence is
+                            only possible because of the ultimate sacrifices made the day before.
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <span class="yha-customs__num">2</span>
+                    <div class="yha-customs__body">
+                        <div class="yha-customs__title">The Torch-Lighting Ceremony (Tekes Hadlakat Masuot)</div>
+                        <p class="yha-customs__text">
+                            The official start of Yom Ha'atzmaut is marked by a massive, nationally
+                            televised ceremony on <strong>Mount Herzl</strong> in Jerusalem. Twelve
+                            torches are lit by distinguished citizens chosen for outstanding contributions
+                            to Israeli society, representing the Twelve Tribes of Israel. Each torch
+                            lighting is concluded with the proud declaration:
+                            <em>"Le'tiferet Medinat Yisrael!"</em> — "To the glory of the State of Israel!"
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <span class="yha-customs__num">3</span>
+                    <div class="yha-customs__body">
+                        <div class="yha-customs__title">The Mangal (Israeli BBQ)</div>
+                        <p class="yha-customs__text">
+                            The most widespread secular custom on Yom Ha'atzmaut is the <strong>mangal</strong>
+                            — a traditional Israeli barbecue. Millions of Israelis spend the day in
+                            national parks, beaches, and backyards, grilling meats, socializing, and
+                            enjoying the outdoors. The mangal has become the quintessential symbol of
+                            Israeli independence day celebrations.
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <span class="yha-customs__num">4</span>
+                    <div class="yha-customs__body">
+                        <div class="yha-customs__title">The Air Force Flyover (Mataz)</div>
+                        <p class="yha-customs__text">
+                            During the day, the Israeli Air Force performs a nationwide flyover known as
+                            <em>Mataz</em>. Fighter jets, helicopters, and transport planes fly across
+                            the entire country from the northern borders to the southern tip in Eilat,
+                            as citizens gather on rooftops and beaches to watch the aerial acrobatics —
+                            a breathtaking display of the miraculous strength of the modern Jewish state.
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </article>
+
+        <!-- ── Prayers ─────────────────────────────────────────────── -->
+        <article class="yha-section yha-section--navy" id="prayers">
+            <p class="yha-kicker">Blessings &amp; Prayers</p>
+            <h2>Special Prayers of Thanksgiving</h2>
+            <p>
+                Many synagogues incorporate special prayers of thanksgiving on Yom Ha'atzmaut to
+                acknowledge the miraculous nature of Israel's founding. In Religious Zionist
+                congregations, the full <em>Hallel</em> (Psalms 113–118) is recited aloud — just as
+                on Passover and Sukkot — formally thanking G-d for the miracle of the State.
+            </p>
+
+            <!-- Prayer for the State of Israel -->
+            <div class="yha-prayer-block">
+                <div class="yha-prayer-label">Prayer for the State of Israel — Avinu Shebashamayim</div>
+                <div class="yha-prayer-he">
+                    אָבִינוּ שֶׁבַּשָּׁמַיִם, צוּר יִשְׂרָאֵל וְגוֹאֲלוֹ, בָּרֵךְ אֶת מְדִינַת יִשְׂרָאֵל, רֵאשִׁית צְמִיחַת גְּאֻלָּתֵנוּ.
+                </div>
+                <div class="yha-prayer-tl">
+                    Avinu shebashamayim, Tzur Yisrael v'go'alo, bareich et Medinat Yisrael, reishit tz'michat g'ulateinu.
+                </div>
+                <div class="yha-prayer-en">
+                    Our Father in Heaven, Rock and Redeemer of Israel, bless the State of Israel, the first
+                    flourishing of our redemption. Shield it with Your lovingkindness, envelop it in Your
+                    peace, and bestow Your light and truth upon its leaders.
+                </div>
+            </div>
+
+            <p>
+                This majestic prayer was authored by the Chief Rabbinate of Israel shortly after the state
+                was established. It asks for divine protection over the land, its leaders, and its defenders —
+                and is recited in synagogues around the world on Yom Ha'atzmaut and every Shabbat.
+            </p>
+        </article>
+
+        <!-- ── Songs ──────────────────────────────────────────────── -->
+        <p class="yha-section-label">Majestic Songs of Zion</p>
+
+        <!-- Hatikvah -->
+        <div class="yha-song-card" id="hatikvah">
+            <button class="yha-song-header" aria-expanded="false" aria-controls="hatikvah-body">
+                <div>
+                    <div class="yha-song-number">Song 1 of 3 · National Anthem</div>
+                    <div class="yha-song-name">Hatikvah — The Hope</div>
+                    <p class="yha-song-desc">
+                        Written in 1878 by Naftali Herz Imber. The 2,000-year-old yearning of the Jewish soul to return to Zion.
+                    </p>
+                </div>
+                <span class="yha-song-toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </span>
+            </button>
+            <div class="yha-song-body" id="hatikvah-body">
+                <div class="yha-song-verse">
+                    <div class="yha-verse-label">Hebrew</div>
+                    <div class="yha-verse-he">כֹּל עוֹד בַּלֵּבָב פְּנִימָה,
+נֶפֶשׁ יְהוּדִי הוֹמִיָּה,
+וּלְפַאֲתֵי מִזְרָח, קָדִימָה,
+עַיִן לְצִיּוֹן צוֹפִיָּה.
+
+עוֹד לֹא אָבְדָה תִּקְוָתֵנוּ,
+הַתִּקְוָה בַּת שְׁנוֹת אַלְפַּיִם,
+לִהְיוֹת עַם חָפְשִׁי בְּאַרְצֵנוּ,
+אֶרֶץ צִיּוֹן וִירוּשָׁלַיִם.</div>
+                </div>
+                <div class="yha-song-verse">
+                    <div class="yha-verse-label">Transliteration</div>
+                    <div class="yha-verse-tl">Kol od balevav p'nimah,
+Nefesh yehudi homiyah,
+Ul'fa'atei mizrach, kadimah,
+Ayin l'Tziyon tzofiyah.
+
+Od lo avdah tikvateinu,
+Hatikvah bat sh'not alpayim,
+Lihyot am chofshi b'artzeinu,
+Eretz Tziyon v'Yerushalayim.</div>
+                </div>
+                <div class="yha-song-verse">
+                    <div class="yha-verse-label">English Translation</div>
+                    <div class="yha-verse-en">As long as within the heart,
+A Jewish soul still yearns,
+And onward, towards the ends of the East,
+An eye still looks toward Zion —
+
+Our hope is not yet lost,
+The hope of two thousand years,
+To be a free people in our land,
+The land of Zion and Jerusalem.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yerushalayim Shel Zahav -->
+        <div class="yha-song-card" id="yerushalayim">
+            <button class="yha-song-header" aria-expanded="false" aria-controls="yerushalayim-body">
+                <div>
+                    <div class="yha-song-number">Song 2 of 3 · Jerusalem</div>
+                    <div class="yha-song-name">Yerushalayim Shel Zahav</div>
+                    <p class="yha-song-desc">Jerusalem of Gold — Written by Naomi Shemer in 1967. A hauntingly beautiful love letter to the holy city.</p>
+                </div>
+                <span class="yha-song-toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </span>
+            </button>
+            <div class="yha-song-body" id="yerushalayim-body">
+                <!-- Verse 1 -->
+                <div class="yha-song-verse">
+                    <div class="yha-verse-label">Verse 1 — Hebrew</div>
+                    <div class="yha-verse-he">אֲוִיר הָרִים צָלוּל כַּיַּיִן וְרֵיחַ אֳרָנִים
+נִשָּׂא בְּרוּחַ הָעַרְבַּיִם עִם קוֹל פַּעֲמוֹנִים
+וּבְתַרְדֵּמַת אִילָן וָאֶבֶן שְׁבוּיָה בַּחֲלוֹמָהּ
+הָעִיר אֲשֶׁר בָּדָד יוֹשֶׁבֶת וּבְלִבָּהּ חוֹמָה</div>
+                    <div class="yha-verse-tl">Avir harim tzalul kayayin v'rei'ach oranim
+Nisa b'ru'ach ha'arbayim im kol pa'amonim
+Uv'tardemat ilan va'even shvuyah bachalomah
+Ha'ir asher badad yoshevet uv'libah chomah</div>
+                    <div class="yha-verse-en">The mountain air is clear as wine, and the scent of pines
+Is carried on the twilight wind, with the sound of bells.
+And in the slumber of tree and stone, captive in her dream,
+The city that sits solitary, and in its heart is a wall.</div>
+                </div>
+                <!-- Chorus -->
+                <div class="yha-song-verse">
+                    <div class="yha-verse-label">Chorus — Hebrew</div>
+                    <div class="yha-verse-he">יְרוּשָׁלַיִם שֶׁל זָהָב, וְשֶׁל נְחֹשֶׁת וְשֶׁל אוֹר
+הֲלֹא לְכָל שִׁירַיִךְ אֲנִי כִּנּוֹר</div>
+                    <div class="yha-verse-tl">Yerushalayim shel zahav, v'shel n'choshet v'shel or
+Halo l'chol shirayich ani kinor</div>
+                    <div class="yha-verse-en">Jerusalem of gold, and of copper, and of light,
+Behold, I am a violin for all your songs.</div>
+                </div>
+                <!-- Final verse -->
+                <div class="yha-song-verse">
+                    <div class="yha-verse-label">Final Verse (Added post-1967 reunification) — Hebrew</div>
+                    <div class="yha-verse-he">חָזַרְנוּ אֶל בּוֹרוֹת הַמַּיִם, לַשּׁוּק וְלַכִּכָּר
+שׁוֹפָר קוֹרֵא בְּהַר הַבַּיִת בָּעִיר הָעַתִּיקָה
+וּבַמְּעָרוֹת אֲשֶׁר בַּסֶּלַע מְזָרְחוֹת שְׁמָשׁוֹת
+נָשׁוּב נֵרֵד אֶל יָם הַמֶּלַח בְּדֶרֶךְ יְרִיחוֹ</div>
+                    <div class="yha-verse-tl">Chazarnu el borot hamayim, lashuk v'lakikar
+Shofar korei b'Har Habayit ba'ir ha'atikah
+Uvam'arot asher basela m'zarchot shmashot
+Nashuv neireid el Yam Hamelach b'derech Yericho</div>
+                    <div class="yha-verse-en">We have returned to the water cisterns, to the market and to the square,
+A shofar calls out on the Temple Mount in the Old City.
+And in the caves within the rock, suns are shining,
+We will return and descend to the Dead Sea by way of Jericho.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ein Li Eretz Acheret -->
+        <div class="yha-song-card" id="einli">
+            <button class="yha-song-header" aria-expanded="false" aria-controls="einli-body">
+                <div>
+                    <div class="yha-song-number">Song 3 of 3 · Loyalty &amp; Resilience</div>
+                    <div class="yha-song-name">Ein Li Eretz Acheret</div>
+                    <p class="yha-song-desc">I Have No Other Country — Written by Ehud Manor. A powerful vow of loyalty to the land, even through hardship.</p>
+                </div>
+                <span class="yha-song-toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </span>
+            </button>
+            <div class="yha-song-body" id="einli-body">
+                <!-- Verse 1 -->
+                <div class="yha-song-verse">
+                    <div class="yha-verse-label">Verse 1 — Hebrew</div>
+                    <div class="yha-verse-he">אֵין לִי אֶרֶץ אַחֶרֶת
+גַּם אִם אַדְמָתִי בּוֹעֶרֶת
+רַק מִלָּה בְּעִבְרִית חוֹדֶרֶת
+אֶל עוֹרְקַי, אֶל נִשְׁמָתִי
+בְּגוּף כּוֹאֵב, בְּלֵב רָעֵב
+כָּאן הוּא בֵּיתִי.</div>
+                    <div class="yha-verse-tl">Ein li eretz acheret,
+Gam im admati bo'eret.
+Rak milah b'Ivrit choderet,
+El orkai, el nishmati.
+B'guf ko'eiv, b'leiv ra'eiv,
+Kan hu beiti.</div>
+                    <div class="yha-verse-en">I have no other country,
+Even if my land is burning.
+Only a word in Hebrew penetrates
+Into my veins, into my soul.
+With an aching body, with a hungry heart,
+Here is my home.</div>
+                </div>
+                <!-- Verse 2 -->
+                <div class="yha-song-verse">
+                    <div class="yha-verse-label">Verse 2 — Hebrew</div>
+                    <div class="yha-verse-he">לֹא אֶשְׁתֹּק כִּי אַרְצִי
+שִׁנְּתָה אֶת פָּנֶיהָ
+לֹא אֲוַתֵּר לָהּ, לְהַזְכִּיר לָהּ
+וְאָשִׁיר כָּאן בְּאָזְנֶיהָ
+עַד שֶׁתִּפְקַח אֶת עֵינֶיהָ.</div>
+                    <div class="yha-verse-tl">Lo eshtok ki artzi,
+Shintah et paneha.
+Lo avater lah, l'hazkir lah,
+V'ashir kan b'ozneha,
+Ad shetifkach et eineha.</div>
+                    <div class="yha-verse-en">I will not be silent because my country,
+Has changed her face.
+I will not give up on her, I will remind her,
+And I will sing here in her ears,
+Until she opens her eyes.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── FAQ ─────────────────────────────────────────────────── -->
+        <article class="yha-section" id="faq">
+            <p class="yha-kicker">Frequently Asked</p>
+            <h2>Yom Ha'atzmaut FAQ</h2>
+            <div class="yha-faq-item">
+                <button class="yha-faq-q" aria-expanded="false">
+                    What does "Yom Ha'atzmaut" mean?
+                    <svg class="yha-faq-q__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="yha-faq-a">
+                    "Yom Ha'atzmaut" (יוֹם הָעַצְמָאוּת) translates to "Day of Independence" in Hebrew.
+                    It commemorates Israel's declaration of independence on the 5th of Iyar, 5708
+                    (May 14, 1948).
+                </div>
+            </div>
+            <div class="yha-faq-item">
+                <button class="yha-faq-q" aria-expanded="false">
+                    Is Yom Ha'atzmaut a religious holiday?
+                    <svg class="yha-faq-q__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="yha-faq-a">
+                    Yom Ha'atzmaut is primarily a national holiday, but for much of the Jewish world it
+                    carries deep religious significance. Religious Zionist communities recite the full
+                    Hallel (Psalms of Praise) and special prayers, viewing the day as a miraculous
+                    fulfillment of the biblical promise of the return to Zion. Some ultra-Orthodox
+                    communities observe the day with fewer or no religious ceremonies.
+                </div>
+            </div>
+            <div class="yha-faq-item">
+                <button class="yha-faq-q" aria-expanded="false">
+                    What is the connection between Yom Ha'atzmaut and Yom HaZikaron?
+                    <svg class="yha-faq-q__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="yha-faq-a">
+                    Yom HaZikaron (Israel's Memorial Day for Fallen Soldiers and Victims of Terrorism)
+                    immediately precedes Yom Ha'atzmaut. The deliberate juxtaposition carries a profound
+                    message: the independence and joy of the Jewish state were purchased at great cost.
+                    The transition — from a siren-filled day of mourning to a night of fireworks and
+                    celebration — is one of the most striking cultural moments in Israeli life.
+                </div>
+            </div>
+            <div class="yha-faq-item">
+                <button class="yha-faq-q" aria-expanded="false">
+                    What is Hatikvah and why is it sung on Yom Ha'atzmaut?
+                    <svg class="yha-faq-q__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="yha-faq-a">
+                    Hatikvah ("The Hope") is the national anthem of Israel. Originally written as a poem
+                    in 1878 by Naftali Herz Imber, it expresses the 2,000-year-old yearning of the
+                    Jewish people to return to their ancestral homeland and live as a free nation in the
+                    Land of Israel. It is the most powerful symbol of Zionist aspiration and is sung
+                    at virtually every official ceremony on Yom Ha'atzmaut.
+                </div>
+            </div>
+            <div class="yha-faq-item">
+                <button class="yha-faq-q" aria-expanded="false">
+                    Upcoming Yom Ha'atzmaut dates
+                    <svg class="yha-faq-q__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="yha-faq-a" style="color: var(--yha-ink);">
+                    <div style="display:grid; grid-template-columns: auto 1fr; gap: 0.4rem 1.4rem; font-size: 0.92rem;">
+                        <strong>2026</strong> <span>April 22 &nbsp;·&nbsp; Begins evening of April 21</span>
+                        <strong>2027</strong> <span>May 12 &nbsp;·&nbsp; Begins evening of May 11</span>
+                        <strong>2028</strong> <span>May 1 &nbsp;·&nbsp; Begins evening of April 30</span>
+                        <strong>2029</strong> <span>April 19 &nbsp;·&nbsp; Begins evening of April 18</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <footer class="yha-footer">
+        <a href="holidays/">← All Holidays</a>
+        <a href="study.html">Home</a>
+    </footer>
+
+    <script>
+        // Song accordions
+        document.querySelectorAll('.yha-song-card').forEach(card => {
+            const btn  = card.querySelector('.yha-song-header');
+            const body = card.querySelector('.yha-song-body');
+            btn.addEventListener('click', () => {
+                const isOpen = card.classList.contains('open');
+                card.classList.toggle('open', !isOpen);
+                btn.setAttribute('aria-expanded', String(!isOpen));
+            });
+        });
+
+        // FAQ accordions
+        document.querySelectorAll('.yha-faq-q').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.closest('.yha-faq-item');
+                const wasOpen = item.classList.contains('open');
+                document.querySelectorAll('.yha-faq-item.open').forEach(i => {
+                    i.classList.remove('open');
+                    i.querySelector('.yha-faq-q').setAttribute('aria-expanded', 'false');
+                });
+                if (!wasOpen) {
+                    item.classList.add('open');
+                    btn.setAttribute('aria-expanded', 'true');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

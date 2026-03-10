@@ -1,0 +1,607 @@
+  {
+    id: 1,
+    hebrew: "אֵיזֶהוּ חָכָם? הַלּוֹמֵד מִכָּל אָדָם",
+    translation: "Who is wise? The one who learns from every person.",
+    source: "Pirkei Avot 4:1",
+    reflection: "Spoken by Ben Zoma, this teaching redefines wisdom not as an accumulation of facts, but as a character trait of openness. True wisdom is realizing that everyone you meet—regardless of their status or education—has something unique to teach you."
+  },
+  {
+    id: 2,
+    hebrew: "אֵיזֶהוּ גִבּוֹר? הַכּוֹבֵשׁ אֶת יִצְרוֹ",
+    translation: "Who is mighty? The one who subdues their own impulses.",
+    source: "Pirkei Avot 4:1",
+    reflection: "In a world that often equates strength with physical power or dominance over others, Ben Zoma argues that the true warrior is the one who fights the internal battle. Real strength is the internal discipline to control your own anger, ego, and desires."
+  },
+  {
+    id: 3,
+    hebrew: "אֵיזֶהוּ עָשִׁיר? הַשָּׂמֵחַ בְּחֶלְקוֹ",
+    translation: "Who is rich? The one who rejoices in their portion.",
+    source: "Pirkei Avot 4:1",
+    reflection: "Ben Zoma counters the human tendency to constantly desire what we do not have. Wealth is a state of mind; it isn't found in accumulating more things, but in cultivating gratitude for what you already have."
+  },
+  {
+    id: 4,
+    hebrew: "אֵיזֶהוּ מְכֻבָּד? הַמְכַבֵּד אֶת הַבְּרִיּוֹת",
+    translation: "Who is honored? The one who honors others.",
+    source: "Pirkei Avot 4:1",
+    reflection: "Using the term 'Briyot' (creations), this teaching implies that honoring people is honoring the Creator who made them. Respect is a boomerang; you earn it by giving it away. When you treat every human being with dignity, you elevate your own dignity."
+  },
+  {
+    id: 5,
+    hebrew: "כִּ֤י שֶׁ֨בַע יִפּ֣וֹל צַדִּ֣יק וָקָ֑ם",
+    translation: "For a righteous person falls seven times, and rises again.",
+    source: "Proverbs 24:16",
+    reflection: "Attributed to King Solomon, this proverb observes that righteousness is not about perfection, but about persistence. Failure is not the opposite of success; it is part of success. A righteous person isn't someone who never fails, but someone who refuses to stay down."
+  },
+  {
+    id: 6,
+    hebrew: "חֲזַ֣ק וֶאֱמָ֔ץ אַֽל־תַּעֲרֹ֖ץ וְאַל־תֵּחָ֑ת",
+    translation: "Be strong and courageous; do not be terrified or dismayed.",
+    source: "Joshua 1:9",
+    reflection: "God spoke these words to Joshua after Moses died, when Joshua was tasked with the daunting mission of leading the people into Israel. Courage doesn't mean you aren't afraid; it means you move forward despite your fear, trusting that you are not alone."
+  },
+  {
+    id: 7,
+    hebrew: "נֵ֣ר יְ֭הוָה נִשְׁמַ֣ת אָדָ֑ם",
+    translation: "The soul of man is the candle of God.",
+    source: "Proverbs 20:27",
+    reflection: "King Solomon uses the metaphor of light, as candles were the primary tools to search hidden places in the ancient world. You carry a divine spark within you, and your purpose is to let that light shine, illuminating the darkness in your own unique way."
+  },
+  {
+    id: 8,
+    hebrew: "רַחֲמָנָא לִבָּא בָּעֵי",
+    translation: "The Compassionate One desires the heart.",
+    source: "Sanhedrin 106b / Zohar",
+    reflection: "This concept from the Sages and Jewish Mysticism emphasizes that God looks past external rituals to the internal intent (kavanah). It’s not just about your actions on the outside, but your intention on the inside; sincerity and passion matter more than robotic perfection."
+  },
+  {
+    id: 9,
+    hebrew: "וְהַצְנֵ֥עַ לֶ֖כֶת עִם־אֱלֹהֶֽיךָ",
+    translation: "Walk humbly with your God.",
+    source: "Micah 6:8",
+    reflection: "The Prophet Micah summed up the entire Torah into three requirements: Justice, Kindness, and Humility, speaking to a generation obsessed with grand public sacrifices. True greatness is quiet; you don't need to broadcast your virtues, as living them with modesty and integrity is enough."
+  },
+  {
+    id: 10,
+    hebrew: "בְּצֶ֥לֶם אֱלֹהִ֖ים בָּרָ֣א אֹת֑וֹ",
+    translation: "In the image of God He created him.",
+    source: "Genesis 1:27",
+    reflection: "This fundamental definition of humanity from the Creation narrative establishes our inherent worth. Never forget your infinite value; you are a reflection of the Divine, as is every person you meet."
+  },
+
+  // --- Part II: Kindness & Relationships ---
+  {
+    id: 11,
+    hebrew: "וְאָהַבְתָּ֥ לְרֵעֲךָ֖ כָּמ֑וֹךָ",
+    translation: "Love your neighbor as yourself.",
+    source: "Leviticus 19:18",
+    reflection: "Part of the Holiness Code, Rabbi Akiva called this the 'Great Principle of the Torah.' It teaches that we are all connected, and treating others with love is the ultimate expression of our humanity."
+  },
+  {
+    id: 12,
+    hebrew: "מָ֣וֶת וְ֭חַיִּים בְּיַד־לָשׁ֑וֹן",
+    translation: "Death and life are in the power of the tongue.",
+    source: "Proverbs 18:21",
+    reflection: "King Solomon warns that while words in a royal court could literally lead to execution, metaphorically they can kill spirits. Your words create reality; you have the power to build someone up or tear them down in a single sentence, so choose to speak life."
+  },
+  {
+    id: 13,
+    hebrew: "בַּקֵּ֖שׁ שָׁל֣וֹם וְרׇדְפֵֽהוּ",
+    translation: "Seek peace and pursue it.",
+    source: "Psalm 34:15",
+    reflection: "Written by King David while fleeing for his life, this verse teaches that peace requires active pursuit. Peace doesn't just happen; you have to chase after it, actively working to reconcile differences and create harmony."
+  },
+  {
+    id: 14,
+    hebrew: "יְהִי בֵיתְךָ פָתוּחַ לִרְוָחָה",
+    translation: "Let your house be open wide.",
+    source: "Pirkei Avot 1:5",
+    reflection: "Yossi ben Yochanan lived during a time of social stratification and emphasized the home as a center of kindness, modeled after Abraham’s tent. An open home leads to an open heart; sharing your space and resources creates a community of kindness."
+  },
+  {
+    id: 15,
+    hebrew: "הֱוֵי דָן אֶת כָּל הָאָדָם לְכַף זְכוּת",
+    translation: "Judge every person favorably.",
+    source: "Pirkei Avot 1:6",
+    reflection: "Yehoshua ben Perachiah, a leader during a time of political polarization, urged people to interpret ambiguity in others' actions positively. Give people the benefit of the doubt; when you look for the good in others, you often bring out the best in them."
+  },
+  {
+    id: 16,
+    hebrew: "וּקְנֵה לְךָ חָבֵר",
+    translation: "Acquire for yourself a friend.",
+    source: "Pirkei Avot 1:6",
+    reflection: "The use of the word 'acquire' implies that friendship requires an investment, much like a purchase. Friends are not just found; they are earned through effort, investment, and loyalty. A true friend is a partner in your growth."
+  },
+  {
+    id: 17,
+    hebrew: "כַּ֭מַּיִם הַפָּנִ֣ים לַפָּנִ֑ים כֵּ֤ן לֵֽב־הָ֝אָדָ֗ם לָאָדָֽם",
+    translation: "As water reflects the face, so one heart reflects another.",
+    source: "Proverbs 27:19",
+    reflection: "Before mirrors, water was the only reflection; just as water smiles back if you smile, King Solomon observed this psychological mirroring in relationships. The energy you put out is the energy you get back—show love, and you will find it reflected in the hearts of others."
+  },
+  {
+    id: 18,
+    hebrew: "הִנֵּ֣ה מַה־טּ֭וֹב וּמַה־נָּעִ֑ים שֶׁ֖בֶת אַחִ֣ים גַּם־יָֽחַד",
+    translation: "Behold, how good and how pleasant it is for brothers to dwell together in unity.",
+    source: "Psalm 133:1",
+    reflection: "This Song of Ascents was sung by pilgrims traveling to Jerusalem, celebrating the rare moments when all tribes stood together. There is a unique spiritual power when people set aside their differences and live in harmony; unity is a vessel for blessing."
+  },
+  {
+    id: 19,
+    hebrew: "שַׁלַּ֥ח לַחְמְךָ֖ עַל־פְּנֵ֣י הַמָּ֑יִם",
+    translation: "Cast your bread upon the waters.",
+    source: "Ecclesiastes 11:1",
+    reflection: "King Solomon suggests taking risks in generosity, even when the return isn't immediately visible. Do good without expecting an immediate reward; kindness has a ripple effect, and eventually, the good you put into the world will return to you."
+  },
+  {
+    id: 20,
+    hebrew: "כָּל יִשְׂרָאֵל עֲרֵבִים זֶה בָּזֶה",
+    translation: "All of Israel are responsible for one another.",
+    source: "Talmud Shavuot 39a",
+    reflection: "The Sages discussed communal liability using the word 'arevim' (guarantors). We are not isolated individuals; we are part of a greater whole. When one person falls, we all feel it, and when one rises, we all rise."
+  },
+
+  // --- Part III: Action & Purpose ---
+  {
+    id: 21,
+    hebrew: "אִם אֵין אֲנִי לִי, מִי לִי?",
+    translation: "If I am not for myself, who will be for me?",
+    source: "Pirkei Avot 1:14",
+    reflection: "Hillel the Elder taught personal responsibility as the first step in ethical living. You must take ownership of your own life and well-being; no one else can do your work for you."
+  },
+  {
+    id: 22,
+    hebrew: "וּכְשֶׁאֲנִי לְעַצְמִי, מָה אֲנִי?",
+    translation: "And if I am only for myself, what am I?",
+    source: "Pirkei Avot 1:14",
+    reflection: "Hillel balances his previous statement by warning that self-care without care for others leads to an empty existence. Self-care is necessary, but selfishness is empty; a meaningful life is one lived in service to others."
+  },
+  {
+    id: 23,
+    hebrew: "וְאִם לֹא עַכְשָׁיו, אֵימָתַי?",
+    translation: "And if not now, when?",
+    source: "Pirkei Avot 1:14",
+    reflection: "Hillel concludes his famous trio of questions by warning against procrastination in spiritual matters. Stop waiting for the 'perfect time'; the only moment you truly have to make a change is this one."
+  },
+  {
+    id: 24,
+    hebrew: "לֹא עָלֶיךָ הַמְּלָאכָה לִגְמֹר, וְלֹא אַתָּה בֶן חוֹרִין לִבָּטֵל מִמֶּנָּה",
+    translation: "It is not your duty to finish the work, but neither are you free to neglect it.",
+    source: "Pirkei Avot 2:16",
+    reflection: "Rabbi Tarfon lived through the destruction of the Temple and saw the massive task of rebuilding society. He encourages us not to be paralyzed by the size of the world's problems; you don't have to fix everything, but you must do something."
+  },
+  {
+    id: 25,
+    hebrew: "לְפוּם צַעֲרָא אַגְרָא",
+    translation: "According to the effort is the reward.",
+    source: "Pirkei Avot 5:23",
+    reflection: "Ben Hei Hei emphasizes that the struggle itself gives value to the achievement. The harder the struggle, the greater the spiritual growth; the value of an achievement is measured by the difficulty you overcame to reach it."
+  },
+  {
+    id: 26,
+    hebrew: "וּבָחַרְתָּ֙ בַּחַיִּ֔ים",
+    translation: "Therefore, choose life.",
+    source: "Deuteronomy 30:19",
+    reflection: "In his final address, Moses frames free will as a binary choice between life/good and death/evil. Every day we are faced with choices that lead toward vitality and meaning or toward negativity; actively choose the path that brings life."
+  },
+  {
+    id: 27,
+    hebrew: "אֱמֹר מְעַט וַעֲשֵׂה הַרְבֵּה",
+    translation: "Say little and do much.",
+    source: "Pirkei Avot 1:15",
+    reflection: "Shammai, often seen as strict, emphasized integrity by teaching that over-promising leads to disappointment. Promises are cheap, but action is everything; let your character be defined by what you do, not just by what you say."
+  },
+  {
+    id: 28,
+    hebrew: "כֹּ֠ל אֲשֶׁ֨ר תִּמְצָ֧א יָֽדְךָ֛ לַעֲשֹׂ֥ות בְּכֹחֲךָ֖ עֲשֵׂ֑ה",
+    translation: "Whatever your hand finds to do, do it with all your might.",
+    source: "Ecclesiastes 9:10",
+    reflection: "Reflecting on the fleeting nature of life, King Solomon urges us to engage fully with the present task. Don't live life halfway; whatever task is in front of you, give it your full passion and energy."
+  },
+  {
+    id: 29,
+    hebrew: "צֶ֥דֶק צֶ֖דֶק תִּרְדֹּ֑ף",
+    translation: "Justice, justice shall you pursue.",
+    source: "Deuteronomy 16:20",
+    reflection: "The repetition of the word 'Justice' teaches that the means used to get justice must also be just. We must not just wait for justice to happen; we must actively chase it with integrity."
+  },
+  {
+    id: 30,
+    hebrew: "עֵ֥ת לִבְכּ֖וֹת וְעֵ֣ת לִשְׂח֑וֹק",
+    translation: "A time to weep and a time to laugh.",
+    source: "Ecclesiastes 3:4",
+    reflection: "King Solomon acknowledges that the human experience requires a full range of emotions. Life is a cycle; it is healthy to embrace sadness when it comes, just as it is vital to embrace joy. Wisdom is knowing which season you are in."
+  },
+
+  // --- Part IV: Hope & Faith ---
+  {
+    id: 31,
+    hebrew: "גַּם֩ כִּֽי־אֵלֵ֜ךְ בְּגֵ֣יא צַלְמָ֗וֶת לֹא־אִ֘ירָ֤א רָ֗ע כִּי־אַתָּ֥ה עִמָּדִ֑י",
+    translation: "Though I walk through the valley of the shadow of death, I will fear no evil, for You are with me.",
+    source: "Psalm 23:4",
+    reflection: "King David often wrote from caves or deserts while fleeing enemies, visualizing God not as a distant observer, but as a walking companion in the dark. Even in your darkest moments, you are never truly alone; faith provides the comfort that a Presence walks beside you."
+  },
+  {
+    id: 32,
+    hebrew: "כִּי֩ אָנֹכִ֨י יָדַ֜עְתִּי אֶת־הַמַּחֲשָׁבֹ֗ת... לָתֵ֥ת לָכֶ֖ם אַחֲרִ֥ית וְתִקְוָֽה",
+    translation: "To give you a future and a hope.",
+    source: "Jeremiah 29:11",
+    reflection: "The Prophet Jeremiah wrote this to Jews recently exiled to Babylon who thought their world had ended, assuring them of a plan for restoration. No matter how difficult the present looks, there is a plan for a brighter future; never lose hope in what tomorrow can bring."
+  },
+  {
+    id: 33,
+    hebrew: "וְקוֹיֵ֤ יְהוָה֙ יַחֲלִ֣יפוּ כֹ֔חַ",
+    translation: "Those who hope in the Lord will renew their strength.",
+    source: "Isaiah 40:31",
+    reflection: "Isaiah compares those who trust in God to eagles who soar without growing weary. Hope is a source of energy; when you are exhausted, connecting to something greater than yourself can recharge your spirit."
+  },
+  {
+    id: 34,
+    hebrew: "קָר֣וֹב יְ֭הוָה לְנִשְׁבְּרֵי־לֵ֑ב",
+    translation: "The Lord is close to the brokenhearted.",
+    source: "Psalm 34:19",
+    reflection: "After escaping the Philistine king Abimelech, King David realized that while humans avoid broken things, God cherishes them. Heartbreak does not mean you are abandoned; on the contrary, vulnerability creates a unique opening for spiritual closeness."
+  },
+  {
+    id: 35,
+    hebrew: "זֶה־הַ֭יּוֹם עָשָׂ֣ה יְהוָ֑ה נָגִ֖ילָה וְנִשְׂמְחָ֣ה בֽוֹ",
+    translation: "This is the day the Lord has made; let us rejoice and be glad in it.",
+    source: "Psalm 118:24",
+    reflection: "This declaration of joy from the Hallel service is made despite difficulties, thanking God for the gift of the present moment. Happiness is a choice we make in the present; don't wait for a special occasion, but find the joy in this specific day."
+  },
+  {
+    id: 36,
+    hebrew: "הִנֵּ֣ה לֹֽא־יָ֭נוּם וְלֹ֣א יִישָׁ֑ן שׁ֝וֹמֵ֗ר יִשְׂרָאֵֽל",
+    translation: "Behold, the Guardian of Israel neither slumbers nor sleeps.",
+    source: "Psalm 121:4",
+    reflection: "Travelers sleeping on dangerous roads to Jerusalem would recite this for comfort, knowing a Higher Power was watching. There is a constant, watchful force of protection over us; you can rest, knowing that the Universe does not."
+  },
+  {
+    id: 37,
+    hebrew: "וְאַהֲבַ֤ת עוֹלָם֙ אֲהַבְתִּ֔יךְ",
+    translation: "I have loved you with an everlasting love.",
+    source: "Jeremiah 31:2",
+    reflection: "The Prophet Jeremiah describes God’s love for the people even during their exile and failures. You are loved unconditionally and eternally, and this love is the foundation of your existence."
+  },
+  {
+    id: 38,
+    hebrew: "קוּמִי אוֹרִי כִּי בָא אוֹרֵךְ",
+    translation: "Arise, shine, for your light has come.",
+    source: "Isaiah 60:1",
+    reflection: "Isaiah addressed a Jerusalem in ruins, prophesying a time when it would be a beacon of light. Wake up to your potential; the light you have been waiting for is already here, you just need to stand up and reflect it."
+  },
+  {
+    id: 39,
+    hebrew: "הַזֹּרְעִ֥ים בְּדִמְעָh בְּרִנָּ֥ה יִקְצֹֽרוּ",
+    translation: "Those who sow in tears will reap in joy.",
+    source: "Psalm 126:5",
+    reflection: "Regarding the return from exile, this Psalm acknowledges that the rebuilding process is painful (tears) but promises a harvest of happiness. Pain is often the seed of future growth; the struggles you endure today are planting the fields for tomorrow's happiness."
+  },
+  {
+    id: 40,
+    hebrew: "בְּטַ֣ח אֶל־יְ֭הוָה בְּכָל־לִבֶּ֑ךָ",
+    translation: "Trust in the Lord with all your heart.",
+    source: "Proverbs 3:5",
+    reflection: "King Solomon advises against relying solely on human intellect, suggesting that intuition and faith are higher forms of knowing. Sometimes you have to let go of your need to control everything and simply trust that you are being guided in the right direction."
+  },
+
+  // --- Part V: Wisdom & Learning ---
+  {
+    id: 41,
+    hebrew: "רֵאשִׁית חָכְמָה יִרְאַת יְהוָה",
+    translation: "The beginning of wisdom is awe of the Lord.",
+    source: "Psalm 111:10",
+    reflection: "The word 'Yirah' means both fear and awe. Wisdom isn't just data; it starts with the humility of realizing there is something vast and mysterious beyond us. True intelligence starts with the realization that the universe is bigger than your comprehension."
+  },
+  {
+    id: 42,
+    hebrew: "אוֹ חַבְרוּתָא אוֹ מִיתוּתָא",
+    translation: "Either friendship or death.",
+    source: "Taanit 23a",
+    reflection: "The Talmud tells the story of a man who died of loneliness because he had no one to learn with. We are social beings who need connection to survive; learning and living are best done with a partner (chavruta) who challenges and supports us."
+  },
+  {
+    id: 43,
+    hebrew: "סְיָג לַחָכְמָה שְׁתִיקָה",
+    translation: "A fence for wisdom is silence.",
+    source: "Pirkei Avot 3:13",
+    reflection: "Rabbi Akiva taught that just as a fence protects a garden, silence protects wisdom by preventing foolish speech. Sometimes the smartest thing you can say is nothing at all; silence allows you to listen, observe, and learn before you speak."
+  },
+  {
+    id: 44,
+    hebrew: "דִּבְרֵ֣י חֲכָמִ֔ים בְּנַ֖חַת נִשְׁמָעִ֑ים",
+    translation: "The words of the wise are heard when spoken softly.",
+    source: "Ecclesiastes 9:17",
+    reflection: "King Solomon observed that shouting indicates insecurity, while quiet confidence commands attention. You don't need to shout to be heard; truth has its own quiet power that penetrates the heart more effectively than noise."
+  },
+  {
+    id: 45,
+    hebrew: "לֹא הַבַּיְשָׁן לָמֵד, וְלֹא הַקַּפְּדָן מְלַמֵּד",
+    translation: "The bashful cannot learn, and the impatient cannot teach.",
+    source: "Pirkei Avot 2:5",
+    reflection: "Hillel the Elder was known for his extreme patience with students. Growth requires vulnerability (to ask questions) and patience (to explain answers); both student and teacher must be open."
+  },
+  {
+    id: 46,
+    hebrew: "בַּרְזֶ֣ל בְּבַרְזֶ֣ל יָ֑חַד וְ֝אִ֗ישׁ יַ֣חַד פְּנֵֽי־רֵעֵֽהוּ",
+    translation: "As iron sharpens iron, so one person sharpens another.",
+    source: "Proverbs 27:17",
+    reflection: "King Solomon noted that a knife cannot sharpen itself; it needs friction against another stone or metal. We improve through friction and debate; surround yourself with people who challenge you to be sharper and better."
+  },
+  {
+    id: 47,
+    hebrew: "חוֹתָמוֹ שֶׁל הַקָּדוֹשׁ בָּרוּךְ הוּא אֱמֶת",
+    translation: "The seal of the Holy One, Blessed be He, is Truth.",
+    source: "Shabbat 55a",
+    reflection: "Rabbi Chanina taught that just as a seal authenticates a document, Truth is the signature of God on reality. Living authentically and truthfully is the ultimate way to align yourself with the Divine."
+  },
+  {
+    id: 48,
+    hebrew: "טֽוֹבָה־חָכְמָ֥ה מִפְּנִינִ֑ים",
+    translation: "Wisdom is better than pearls.",
+    source: "Proverbs 8:11",
+    reflection: "Though King Solomon possessed vast wealth, he consistently wrote that wisdom was the only asset with intrinsic, eternal value. Material possessions can be lost or stolen, but the wisdom you acquire becomes part of who you are forever."
+  },
+  {
+    id: 49,
+    hebrew: "אַל תִּסְתַּכֵּל בְּקַנְקַן, אֶלָּא בְמַה שֶּׁיֵּשׁ בּוֹ",
+    translation: "Do not look at the flask, but at what is inside.",
+    source: "Pirkei Avot 4:20",
+    reflection: "Rabbi Meir explained that a new flask can hold old, valuable wine, and an old flask can be empty. Don't judge people or situations by their external appearance; true value is found in the content of the character, not the packaging."
+  },
+  {
+    id: 50,
+    hebrew: "הֲשִׁיבֵ֨נוּ יְהוָ֤ה ׀ אֵלֶ֙יךָ֙ וְֽנָשׁ֔וּבָה",
+    translation: "Turn us back to You, O Lord, and we shall return.",
+    source: "Lamentations 5:21",
+    reflection: "Written by Jeremiah after the Temple's destruction, this is the penultimate verse of Lamentations, recited to end on a note of hope. It is never too late to fix a relationship or start over; the door to return (Teshuvah) is always open."
+  },
+
+  // --- Part VI: World & Society ---
+  {
+    id: 51,
+    hebrew: "כָּל הַמְקַיֵּם נֶפֶשׁ אַחַת, כְּאִלּוּ קִיֵּם עוֹלָם מָלֵא",
+    translation: "Whoever saves one life, it is as if he saved an entire world.",
+    source: "Mishnah Sanhedrin 4:5",
+    reflection: "The Mishnah warns that executing an innocent man destroys all his potential descendants—an entire world. Never underestimate the impact of helping a single person; to that person, and to their future generations, your act is everything."
+  },
+  {
+    id: 52,
+    hebrew: "וְכִתְּת֨וּ חַרְבוֹתָ֜ם לְאִתִּ֗ים",
+    translation: "They shall beat their swords into plowshares.",
+    source: "Isaiah 2:4",
+    reflection: "Prophet Isaiah's messianic vision envisions a time when nations will no longer study war. The ultimate Jewish vision is a world where energy spent on conflict is transformed into energy for creation and growth."
+  },
+  {
+    id: 53,
+    hebrew: "עַל שְׁלֹשָׁה דְבָרִים הָעוֹלָם עוֹמֵד: עַל הַתּוֹרָה וְעַל הָעֲבוֹדָה וְעַל גְּמִילוּת חֲסָדִים",
+    translation: "The world stands on three things: On Torah, on Service, and on Acts of Lovingkindness.",
+    source: "Pirkei Avot 1:2",
+    reflection: "Shimon HaTzaddik defined the spiritual ecosystem of the universe. A stable world requires a balance of wisdom (head/Torah), spirituality (heart/Service), and action (hands/Kindness)."
+  },
+  {
+    id: 54,
+    hebrew: "וְיִגַּ֥ל כַּמַּ֖יִם מִשְׁפָּ֑ט",
+    translation: "Let justice roll down like waters.",
+    source: "Amos 5:24",
+    reflection: "The Prophet Amos railed against the corruption of the wealthy elite, telling them God hated their festivals if they didn't treat the poor fairly. Justice shouldn't be a trickle; it should be a powerful, unstoppable force that cleanses and refreshes society."
+  },
+  {
+    id: 55,
+    hebrew: "וְאָהַבְתֶּ֖ם אֶת־הַגֵּ֑ר כִּי־גֵרִ֥ים הֱיִיתֶ֖ם",
+    translation: "You shall love the stranger, for you were strangers.",
+    source: "Deuteronomy 10:19",
+    reflection: "The command to love the stranger appears 36 times in the Torah. Use your own history of suffering to build empathy for others; because you know what it feels like to be an outsider, ensure no one else feels that way."
+  },
+  {
+    id: 56,
+    hebrew: "לֹ֤א בְחַ֙יִל֙ וְלֹ֣א בְכֹ֔חַ כִּ֣י אִם־בְּרוּחִ֔י",
+    translation: "Not by might, nor by power, but by My Spirit.",
+    source: "Zechariah 4:6",
+    reflection: "Prophet Zechariah spoke these words regarding the rebuilding of the Temple, indicating it would be built not by armies, but by divine spirit. True victories are won not by physical domination, but by spiritual integrity and resilience."
+  },
+  {
+    id: 57,
+    hebrew: "עֹז־וְהָדָ֥ר לְבוּשָׁ֑הּ וַ֝תִּשְׂחַ֗ק לְי֣וֹם אַחֲרֽוֹן",
+    translation: "Strength and dignity are her clothing, and she laughs at the future.",
+    source: "Proverbs 31:25",
+    reflection: "Describing the Woman of Valor, this is also a lesson for the soul. When you clothe yourself in integrity and strength, you can face the unknown future with joy rather than fear."
+  },
+  {
+    id: 58,
+    hebrew: "לַכֹּ֖ל זְמָ֑ן וְעֵ֥ת לְכׇל־חֵ֖פֶץ",
+    translation: "To everything there is a season, and a time to every purpose.",
+    source: "Ecclesiastes 3:1",
+    reflection: "King Solomon meditates on the temporary nature of all situations. Patience is key; trust the timing of your life, knowing that what is happening now is just one season in a larger journey."
+  },
+  {
+    id: 59,
+    hebrew: "עַל הַדִּין וְעַל הָאֱמֶת וְעַל הַשָּׁלוֹם",
+    translation: "...on Justice, on Truth, and on Peace.",
+    source: "Pirkei Avot 1:18",
+    reflection: "Rabban Shimon ben Gamliel taught that society survives through Justice, Truth, and Peace. These are the three ingredients necessary for a civilized society; without truth, there is no justice, and without justice, there is no peace."
+  },
+  {
+    id: 60,
+    hebrew: "שְׁמַ֖ע יִשְׂרָאֵ֑ל יְהוָ֥ה אֱלֹהֵ֖ינוּ יְהוָ֥ה ׀ אֶחָֽד",
+    translation: "Hear O Israel, the Lord is our God, the Lord is One.",
+    source: "Deuteronomy 6:4",
+    reflection: "The central declaration of Jewish faith, recited morning and night. It is the ultimate Jewish affirmation: beneath the surface fragmentation of the world, there is a fundamental Unity connecting us all."
+  },
+
+  // --- Part VII: Additional Inspiration (New 25 Quotes) ---
+  {
+    id: 61,
+    hebrew: "אָכֵן יֵשׁ יְהוָה בַּמָּקוֹם הַזֶּה וְאָנֹכִי לֹא יָדָעְתִּי",
+    translation: "Surely the Lord is in this place, and I did not know it.",
+    source: "Genesis 28:16",
+    reflection: "Jacob wakes from his dream of the ladder and realizes God's presence is not limited to holy sites. Often, the divine is right in front of us in our daily lives, but we are too distracted to notice it."
+  },
+  {
+    id: 62,
+    hebrew: "יְהוָה יִלָּחֵם לָכֶם וְאַתֶּם תַּחֲרִשׁוּן",
+    translation: "The Lord will fight for you, and you shall remain silent.",
+    source: "Exodus 14:14",
+    reflection: "Spoken by Moses at the Red Sea when the people were panicking. Sometimes the right action is not to panic or strategize, but to stand still and let faith carry you through the crisis."
+  },
+  {
+    id: 63,
+    hebrew: "וּבִקַּשְׁתֶּם מִשָּׁם אֶת־יְהוָה אֱלֹהֶיךָ וּמָצָאתָ",
+    translation: "And from there you will seek the Lord your God, and you will find Him.",
+    source: "Deuteronomy 4:29",
+    reflection: "The Torah promises that spiritual connection is always accessible. If you search with genuine intent—'with all your heart and soul'—the connection is guaranteed."
+  },
+  {
+    id: 64,
+    hebrew: "לֹא עַל־הַלֶּחֶם לְבַדּוֹ יִחְיֶה הָאָדָם",
+    translation: "Man does not live by bread alone.",
+    source: "Deuteronomy 8:3",
+    reflection: "Physical sustenance is necessary for survival, but it is not enough for a life of meaning. The human spirit requires purpose, wisdom, and spiritual connection to truly be 'alive'."
+  },
+  {
+    id: 65,
+    hebrew: "כִּי הָאָדָם יִרְאֶה לַעֵינַיִם וַיהוָה יִרְאֶה לַלֵּב",
+    translation: "For man looks at the outward appearance, but the Lord looks at the heart.",
+    source: "1 Samuel 16:7",
+    reflection: "When Prophet Samuel went to anoint a new king, he was impressed by physical stature. God corrected him, teaching that external looks are deceiving; true leadership and worth come from internal character."
+  },
+  {
+    id: 66,
+    hebrew: "קוֹל דְּמָמָה דַקָּה",
+    translation: "A still small voice.",
+    source: "1 Kings 19:12",
+    reflection: "Elijah the Prophet sought God in the wind, earthquake, and fire, but God was in none of them. The Divine presence is often found not in the loud and spectacular, but in silence and subtlety."
+  },
+  {
+    id: 67,
+    hebrew: "כִּי־תַעֲבֹר בַּמַּיִם אִתְּךָ־אָנִי",
+    translation: "When you pass through the waters, I will be with you.",
+    source: "Isaiah 43:2",
+    reflection: "Life will inevitably involve passing through 'waters'—overwhelming emotions or situations. The promise isn't that you won't get wet, but that you won't drown because you are supported by a higher power."
+  },
+  {
+    id: 68,
+    hebrew: "כִּי־הֶהָרִים יָמוּשׁוּ... וְחַסְדִּי מֵאִתֵּךְ לֹא־יָמוּשׁ",
+    translation: "For the mountains may move... but My kindness shall not move from you.",
+    source: "Isaiah 54:10",
+    reflection: "Nature itself may change, but God's covenant of love is more permanent than the physical world. This offers profound stability in an ever-changing world."
+  },
+  {
+    id: 69,
+    hebrew: "בְּטֶרֶם אֶצָּרְךָ בַבֶּטֶן יְדַעְתִּיךָ",
+    translation: "Before I formed you in the womb, I knew you.",
+    source: "Jeremiah 1:5",
+    reflection: "You are not an accident. Your existence was intended and 'known' before you were even born, implying that you have a specific purpose that only you can fulfill."
+  },
+  {
+    id: 70,
+    hebrew: "כִּי חֶסֶד חָפַצְתִּי וְלֹא־זָבַח",
+    translation: "For I desire kindness, and not sacrifice.",
+    source: "Hosea 6:6",
+    reflection: "Religious ritual without ethical behavior is empty. God prefers a heart full of kindness towards others over technical observance of rituals performed without love."
+  },
+  {
+    id: 71,
+    hebrew: "אַל־תִּשְׂמְחִי אֹיַבְתִּי לִי כִּי נָפַלְתִּי קָמְתִּי",
+    translation: "Do not rejoice over me, my enemy; though I have fallen, I will rise.",
+    source: "Micah 7:8",
+    reflection: "Resilience is the ultimate answer to adversity. By framing a fall as merely a prelude to rising, you take away the power of any enemy or obstacle to defeat you."
+  },
+  {
+    id: 72,
+    hebrew: "אֱמֶת וּמִשְׁפַּט שָׁלוֹם שִׁפְטוּ בְּשַׁעֲרֵיכֶם",
+    translation: "Execute the judgment of truth and peace in your gates.",
+    source: "Zechariah 8:16",
+    reflection: "Truth and peace are often seen as opposites (telling the truth can cause conflict), but the prophet urges us to find the 'judgment' that fuses them—integrity that leads to harmony."
+  },
+  {
+    id: 73,
+    hebrew: "הַשָּׁמַיִם מְסַפְּרִים כְּבוֹד־אֵל",
+    translation: "The heavens declare the glory of God.",
+    source: "Psalm 19:1",
+    reflection: "Nature is a window into the Divine. Looking at the vastness of the sky or the complexity of the universe can instill a sense of awe and spiritual perspective."
+  },
+  {
+    id: 74,
+    hebrew: "יְהוָה אוֹרִי וְיִשְׁעִי מִמִּי אִירָא",
+    translation: "The Lord is my light and my salvation; whom shall I fear?",
+    source: "Psalm 27:1",
+    reflection: "Fear is often a result of feeling alone in the dark. When you perceive the Divine as your personal 'light,' fear dissipates because you can see your path clearly."
+  },
+  {
+    id: 75,
+    hebrew: "לֵב טָהוֹר בְּרָא־לִי אֱלֹהִים",
+    translation: "Create in me a pure heart, O God.",
+    source: "Psalm 51:12",
+    reflection: "King David, after his moral failure, does not ask for riches or victory, but for a spiritual reset. We always have the ability to ask for a fresh start and a cleansed conscience."
+  },
+  {
+    id: 76,
+    hebrew: "לִמְנוֹת יָמֵינוּ כֵּן הוֹדַע",
+    translation: "Teach us to number our days.",
+    source: "Psalm 90:12",
+    reflection: "Awareness of mortality is not meant to be morbid, but motivating. Realizing our time is limited forces us to prioritize what truly matters and not waste days on trivialities."
+  },
+  {
+    id: 77,
+    hebrew: "אוֹדְךָ עַל כִּי נוֹרָאוֹת נִפְלֵיתִי",
+    translation: "I will praise You, for I am fearfully and wonderfully made.",
+    source: "Psalm 139:14",
+    reflection: "Self-love is a form of gratitude to the Creator. Acknowledging the complexity and wonder of your own body and soul is an act of praise."
+  },
+  {
+    id: 78,
+    hebrew: "שִׂנְאָה תְּעוֹרֵר מְדָנִים וְעַל כָּל־פְּשָׁעִים תְּכַסֶּה אַהֲבָה",
+    translation: "Hatred stirs up strife, but love covers all offenses.",
+    source: "Proverbs 10:12",
+    reflection: "Focusing on hatred only fuels conflict. Love doesn't necessarily ignore problems, but it provides a covering—a context of safety—within which problems can be solved without destroying relationships."
+  },
+  {
+    id: 79,
+    hebrew: "מַעֲנֶה־רַּךְ יָשִׁיב חֵמָה",
+    translation: "A soft answer turns away wrath.",
+    source: "Proverbs 15:1",
+    reflection: "When faced with anger, the natural instinct is to fight back. Wisdom is knowing that lowering your volume and softening your tone is actually the most powerful weapon to diffuse a fight."
+  },
+  {
+    id: 80,
+    hebrew: "חֲנֹךְ לַנַּעַר עַל־פִּי דַרְכּוֹ",
+    translation: "Train a child according to his way.",
+    source: "Proverbs 22:6",
+    reflection: "Education is not one-size-fits-all. To truly teach someone, you must understand their unique nature ('his way') and tailor your guidance to their specific strengths and weaknesses."
+  },
+  {
+    id: 81,
+    hebrew: "טוֹב שֵׁם מִשֶּׁמֶן טוֹב",
+    translation: "A good name is better than fine oil.",
+    source: "Ecclesiastes 7:1",
+    reflection: "Fine oil was a luxury item of the ancient world. King Solomon teaches that your reputation—the integrity associated with your name—is more valuable than any luxury status symbol."
+  },
+  {
+    id: 82,
+    hebrew: "אַל תִּפְרוֹשׁ מִן הַצִּבּוּר",
+    translation: "Do not separate yourself from the community.",
+    source: "Pirkei Avot 2:5",
+    reflection: "Hillel warns against isolation. Even if the community is flawed, remaining connected ensures you stay grounded, supported, and able to contribute to the greater good."
+  },
+  {
+    id: 83,
+    hebrew: "הֱוֵי עַז כַּנָּמֵר",
+    translation: "Be bold as a leopard.",
+    source: "Pirkei Avot 5:20",
+    reflection: "Religious or ethical living requires boldness. You shouldn't be embarrassed to do the right thing, even if it is unpopular. Have the 'audacity' of a leopard when it comes to serving your values."
+  },
+  {
+    id: 84,
+    hebrew: "מִצְוָה גּוֹרֶרֶת מִצְוָה",
+    translation: "One good deed leads to another good deed.",
+    source: "Pirkei Avot 4:2",
+    reflection: "Don't worry about doing something huge; just do one small good thing. The momentum of that single act will naturally propel you toward the next one, creating a positive chain reaction."
+  },
+  {
+    id: 85,
+    hebrew: "דַּע מֵאַיִן בָּאתָ וּלְאָן אַתָּה הוֹלֵךְ",
+    translation: "Know from where you came and to where you are going.",
+    source: "Pirkei Avot 3:1",
+    reflection: "Akavya ben Mahalalel gives the formula for humility and purpose. Remembering your origin keeps you humble; remembering your ultimate destination keeps you focused on what truly matters in life."
+  }

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shabbat Mode Preview</title>
+    <link rel="icon" type="image/png" href="media/images/Icon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/shabbat.css">
+    <link rel="stylesheet" href="css/mobile-overrides.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen shabbat-mode" data-shabbat-preview="true">
+    <header class="header-main relative z-30">
+        <div class="header-container">
+            <div class="header-branding-section">
+                <button id="home-branding" type="button" class="header-branding-button">
+                    <div class="header-text">
+                        <h1 class="header-title">A Letter in the Scroll</h1>
+                        <p class="header-subtitle">Interactive Weekly Portion Study & Discussion</p>
+                    </div>
+                </button>
+            </div>
+            <div class="header-actions-wrapper">
+                <div class="header-actions">
+                    <button class="header-btn header-btn-primary">
+                        <span class="header-btn-text">This Week's Parsha</span>
+                    </button>
+                    <a href="#" class="header-btn header-btn-secondary">
+                        <span class="header-btn-text">Prayers</span>
+                    </a>
+                    <a href="#" class="header-btn header-btn-secondary">
+                        <span class="header-btn-text">Songs and Poems</span>
+                    </a>
+                    <a href="#" class="header-btn header-btn-secondary">
+                        <span class="header-btn-text">About</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="daily-inspiration" class="daily-inspiration-header-section">
+            <div class="container mx-auto px-4 py-1">
+                <div class="daily-inspiration-card">
+                    <div class="daily-inspiration-content">
+                        <div class="daily-inspiration-main">
+                            <div class="daily-inspiration-quotes">
+                                <span class="quote-mark quote-mark-start">"</span>
+                                <span class="daily-inspiration-hebrew">בְּרֵאשִׁית בָּרָא אֱלֹהִים אֵת הַשָּׁמַיִם וְאֵת הָאָרֶץ</span>
+                                <span class="quote-mark quote-mark-end">"</span>
+                                <span class="daily-inspiration-translation">In the beginning God created the heavens and the earth.</span>
+                                <span class="daily-inspiration-source">Genesis 1:1</span>
+                            </div>
+                        </div>
+                        <div class="daily-inspiration-explanation-section">
+                            <span class="daily-inspiration-explanation-label">Explanation:</span>
+                            <p class="daily-inspiration-reflection">The opening verse of Torah reminds us that each week can begin again with light, purpose, and peace.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 border border-gray-200">
+            <h2 class="text-2xl md:text-3xl font-bold mb-2 text-blue-900">Shabbat Mode Preview</h2>
+            <p class="text-gray-700 mt-4">This page forces Shabbat mode at all times so you can review the sunset header, floating symbols, and the calm Shalom Aleichem lyric transitions.</p>
+            <p class="text-gray-600 mt-2 text-sm">On the main site, the same design activates automatically each week starting Friday at 8:00 AM (local browser time) and remains active through Saturday.</p>
+        </div>
+    </main>
+
+    <footer class="bg-blue-900 text-white py-6 mt-12 border-t-4 border-blue-700">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm">Torah text provided by <a href="https://www.sefaria.org" target="_blank" class="underline hover:text-blue-300">Sefaria.org</a></p>
+            <p class="text-xs text-blue-300 mt-2">May your study be meaningful</p>
+        </div>
+    </footer>
+
+    <script src="js/shabbat.js"></script>
+</body>
+</html>

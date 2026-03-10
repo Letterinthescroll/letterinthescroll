@@ -1,0 +1,162 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ═══════════════════════════════════════════════════════
+    // HELPER FUNCTIONS
+    // ═══════════════════════════════════════════════════════
+
+    // Check if user is authenticated
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // Check if user is a member of a chavruta
+    function isChavrutaMember(chavrutaId) {
+      return isAuth() &&
+        request.auth.uid in get(/databases/$(database)/documents/chavrutas/$(chavrutaId)).data.members;
+    }
+
+    // Check if user is the leader of a chavruta
+    function isChavrutaLeader(chavrutaId) {
+      return isAuth() &&
+        request.auth.uid == get(/databases/$(database)/documents/chavrutas/$(chavrutaId)).data.leader;
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // USER PROFILES
+    // ═══════════════════════════════════════════════════════
+    match /users/{userId} {
+      // Anyone authenticated can read user profiles (for member lists)
+      allow read: if isAuth();
+
+      // Users can only create/update their own profile
+      allow create: if isAuth() && request.auth.uid == userId;
+      allow update: if isAuth() && request.auth.uid == userId;
+
+      // Users cannot delete their profile
+      allow delete: if false;
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // CHAVRUTAS (Study Groups)
+    // ═══════════════════════════════════════════════════════
+    match /chavrutas/{chavrutaId} {
+      // Only members can read chavruta data
+      allow read: if isAuth() &&
+        (request.auth.uid in resource.data.members ||
+         // Allow reading for join-by-code queries (checking inviteCode)
+         true);
+
+      // Note: We allow read broadly so the join-by-code query works.
+      // Sensitive data (comments, reactions, etc.) is in subcollections
+      // which ARE restricted to members only.
+
+      // Any authenticated user can create a chavruta
+      allow create: if isAuth() &&
+        request.resource.data.createdBy == request.auth.uid &&
+        request.resource.data.leader == request.auth.uid &&
+        request.auth.uid in request.resource.data.members &&
+        request.resource.data.members.size() == 1 &&
+        request.resource.data.name.size() >= 2 &&
+        request.resource.data.name.size() <= 50 &&
+        request.resource.data.maxMembers <= 12;
+
+      // Members can update (join/leave), leader has full update
+      allow update: if isAuth() &&
+        (request.auth.uid in resource.data.members ||
+         // Allow joining (user adding themselves via invite code)
+         request.auth.uid in request.resource.data.members);
+
+      // Only leader can delete
+      allow delete: if isAuth() &&
+        resource.data.leader == request.auth.uid;
+
+      // ─── COMMENTS (scoped to chavruta) ───
+      match /comments/{commentId} {
+        allow read: if isChavrutaMember(chavrutaId);
+
+        allow create: if isChavrutaMember(chavrutaId) &&
+          request.resource.data.userId == request.auth.uid &&
+          request.resource.data.text.size() >= 1 &&
+          request.resource.data.text.size() <= 2000;
+
+        // Only comment author can delete
+        allow delete: if isChavrutaMember(chavrutaId) &&
+          resource.data.userId == request.auth.uid;
+
+        allow update: if false; // Comments are immutable
+      }
+
+      // ─── REACTIONS (scoped to chavruta) ───
+      match /reactions/{reactionId} {
+        allow read: if isChavrutaMember(chavrutaId);
+
+        allow create: if isChavrutaMember(chavrutaId) &&
+          request.resource.data.userId == request.auth.uid &&
+          request.resource.data.reactionType in ['heart', 'emphasize'];
+
+        // Only reaction author can remove
+        allow delete: if isChavrutaMember(chavrutaId) &&
+          resource.data.userId == request.auth.uid;
+
+        allow update: if false; // Reactions are immutable
+      }
+
+      // ─── BOOKMARKS (scoped to chavruta) ───
+      match /bookmarks/{bookmarkId} {
+        allow read: if isChavrutaMember(chavrutaId);
+
+        allow create: if isChavrutaMember(chavrutaId) &&
+          request.resource.data.userId == request.auth.uid;
+
+        // Only bookmark author can remove
+        allow delete: if isChavrutaMember(chavrutaId) &&
+          resource.data.userId == request.auth.uid;
+
+        allow update: if false; // Bookmarks are immutable
+      }
+
+      // ─── PRESENCE (scoped to chavruta) ───
+      match /presence/{userId} {
+        allow read: if isChavrutaMember(chavrutaId);
+
+        // Users can only write their own presence
+        allow write: if isChavrutaMember(chavrutaId) &&
+          request.auth.uid == userId;
+      }
+
+      // ─── DAILY QUOTE BOOKMARKS (scoped to chavruta) ───
+      match /dailyQuoteBookmarks/{bookmarkId} {
+        allow read: if isChavrutaMember(chavrutaId);
+
+        allow create: if isChavrutaMember(chavrutaId) &&
+          request.resource.data.userId == request.auth.uid;
+
+        allow delete: if isChavrutaMember(chavrutaId) &&
+          resource.data.userId == request.auth.uid;
+
+        allow update: if false;
+      }
+
+      // ─── MITZVAH DATA (scoped to chavruta) ───
+      match /mitzvah-data/{docId} {
+        allow read: if isChavrutaMember(chavrutaId);
+
+        allow create: if isChavrutaMember(chavrutaId) &&
+          request.resource.data.userId == request.auth.uid;
+
+        allow update: if isChavrutaMember(chavrutaId);
+
+        allow delete: if false;
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // DENY ALL OTHER ACCESS
+    // ═══════════════════════════════════════════════════════
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

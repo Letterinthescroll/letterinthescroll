@@ -1,0 +1,850 @@
+/* ============================================
+   SHABBAT MODE - Friday 8:00 AM through Saturday night
+   Active only when <body> has class "shabbat-mode"
+   ============================================ */
+
+#shabbat-banner {
+    display: none;
+}
+
+/* =============================================
+   1. UNIFIED SUNRISE GRADIENT ON BODY
+   Soft, radiant morning sunrise — airy blues
+   melting into gentle peach, soft gold, warm white.
+   background-attachment: fixed so the gradient
+   stays continuous across all transparent sections.
+   ============================================= */
+body.shabbat-mode {
+    background:
+        /* subtle warm glow top-left */
+        radial-gradient(ellipse 100% 70% at 8% 6%, rgba(255, 228, 196, 0.22) 0%, transparent 55%),
+        /* faint peach kiss top-right */
+        radial-gradient(ellipse 90% 60% at 85% 12%, rgba(255, 210, 170, 0.16) 0%, transparent 50%),
+        /* very faint depth at bottom */
+        radial-gradient(ellipse 140% 60% at 50% 100%, rgba(160, 195, 225, 0.12) 0%, transparent 55%),
+        /* main sunrise gradient — light and airy */
+        linear-gradient(
+            168deg,
+            #7da4c4  0%,
+            #9ebdd8  10%,
+            #bdd5e8  20%,
+            #d4e3f0  30%,
+            #e8d8ca  42%,
+            #f2d4b8  52%,
+            #f5dcc4  60%,
+            #f8e6d2  70%,
+            #fbefe2  80%,
+            #fdf5ee  90%,
+            #fff9f4 100%
+        ) !important;
+    background-attachment: fixed !important;
+}
+
+/* =============================================
+   2. NUCLEAR TRANSPARENCY RESET
+   Every element between the status bar and the
+   nav must be a perfectly clear pane of glass.
+   No backgrounds, no borders, no shadows, no
+   outlines, no margin/overlap hacks.
+   ============================================= */
+body.shabbat-mode #community-status-bar,
+body.shabbat-mode .header-main,
+body.shabbat-mode #shabbat-banner,
+body.shabbat-mode .daily-inspiration-header-section,
+body.shabbat-mode #daily-inspiration,
+body.shabbat-mode .daily-inspiration-card,
+body.shabbat-mode .daily-inspiration-content,
+body.shabbat-mode nav {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    border-width: 0 !important;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* =============================================
+   3. REMOVE ALL MARGIN OVERLAP HACKS
+   These were the primary culprit — overlapping
+   transparent layers with pseudo-element glows
+   stack opacities at the seam = visible 1px line.
+   ============================================= */
+body.shabbat-mode .header-main {
+    position: relative;
+    overflow-x: clip;
+    overflow-y: visible;          /* keep vertical overflow effects */
+    margin-top: 0;              /* was -1px — caused overlap line */
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+body.shabbat-mode #community-status-bar {
+    margin-top: 0;
+    margin-bottom: 0;           /* was -1px */
+}
+
+body.shabbat-mode nav {
+    position: static;
+    z-index: 10;
+    overflow-x: clip;
+    overflow-y: visible;
+    margin-top: 0;              /* was -1px */
+    margin-bottom: 0;
+}
+
+/* =============================================
+   4. FORCE-KILL TAILWIND CDN CLASSES
+   Tailwind CDN <script> injects utilities AFTER
+   our stylesheet. Target the exact utility classes
+   on the exact elements with maximum specificity.
+   ============================================= */
+
+/* nav has: bg-white shadow-md border-b-2 border-gray-200 */
+body.shabbat-mode nav[class*="bg-white"],
+body.shabbat-mode nav[class*="shadow-md"],
+body.shabbat-mode nav[class*="border-b"],
+body.shabbat-mode nav[class*="border-gray"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    border-width: 0 !important;
+    border-style: none !important;
+    border-color: transparent !important;
+}
+
+/* community-status-bar has: border-b border-blue-200 bg-gradient-to-r */
+body.shabbat-mode #community-status-bar[class*="border-b"],
+body.shabbat-mode #community-status-bar[class*="bg-gradient"],
+body.shabbat-mode #community-status-bar[class*="border-blue"] {
+    background: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    border-width: 0 !important;
+    border-style: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* =============================================
+   5. STICKY NAV — SCROLL EDGE CASE
+   When fully transparent & sticky, the white
+   #content-area slides under it on scroll, which
+   creates a jarring bright edge.  Solution: a
+   subtle warm frosted-glass that blends with
+   the sunrise palette. It appears naturally
+   because the nav is already sitting over the
+   gradient; it just prevents bleed-through.
+   ============================================= */
+body.shabbat-mode nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(
+        180deg,
+        rgba(245, 230, 215, 0.65) 0%,
+        rgba(245, 230, 215, 0.45) 100%
+    );
+    backdrop-filter: blur(12px) saturate(1.2);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Kick in the frosted glass only once the user
+   has scrolled past the header (JS-free approach:
+   use a tiny box-shadow on the bottom as a soft
+   divider that only shows when content is behind) */
+
+/* =============================================
+   6. HEADER PSEUDO-ELEMENT DECORATIONS
+   Gentle glow + sparkle layers inside .header-main.
+   With overflow: visible these now bleed softly
+   past the container edges instead of clipping.
+   ============================================= */
+
+/* Soft drifting glow layer */
+body.shabbat-mode .header-main::before {
+    content: '';
+    position: absolute;
+    inset: -10px;               /* bleed past edges to avoid hard clip */
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    filter: none;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 20% 25%, rgba(255, 225, 176, 0.12) 0%, transparent 34%),
+        radial-gradient(circle at 78% 22%, rgba(248, 179, 121, 0.10) 0%, transparent 30%),
+        radial-gradient(circle at 50% 82%, rgba(160, 195, 225, 0.08) 0%, transparent 42%);
+    animation: shabbat-lantern-glow 10s ease-in-out infinite alternate;
+    z-index: 0;
+}
+
+@keyframes shabbat-lantern-glow {
+    0%   { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* Tiny sparkles */
+body.shabbat-mode .header-main::after {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    filter: none;
+    pointer-events: none;
+    background-image:
+        radial-gradient(1.4px 1.4px at 12% 20%, rgba(255, 246, 227, 0.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 34% 72%, rgba(255, 240, 213, 0.65) 0%, transparent 100%),
+        radial-gradient(1.3px 1.3px at 56% 28%, rgba(255, 232, 188, 0.65) 0%, transparent 100%),
+        radial-gradient(1px 1px at 78% 64%, rgba(255, 246, 228, 0.6) 0%, transparent 100%),
+        radial-gradient(1.2px 1.2px at 90% 30%, rgba(255, 238, 203, 0.63) 0%, transparent 100%);
+    animation: shabbat-sparkle 6.4s ease-in-out infinite alternate;
+    z-index: 1;
+}
+
+@keyframes shabbat-sparkle {
+    0%   { opacity: 0.45; }
+    100% { opacity: 0.85; }
+}
+
+/* Header content above the glow layers */
+body.shabbat-mode .header-container {
+    position: relative;
+    z-index: 2;
+    padding-bottom: 0.2rem;
+}
+
+/* Kill the bridge hack pseudo-element */
+body.shabbat-mode .header-container::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* =============================================
+   7. TEXT COLORS — readable against light sunrise
+   Darker warm tones for high contrast on the
+   lighter gradient.
+   ============================================= */
+body.shabbat-mode .header-title {
+    color: #3d2815;
+    text-shadow:
+        0 1px 4px rgba(255, 240, 220, 0.5),
+        0 0 16px rgba(255, 212, 152, 0.25);
+}
+
+body.shabbat-mode .header-subtitle {
+    color: rgba(70, 45, 25, 0.85);
+    text-shadow: 0 1px 3px rgba(255, 240, 220, 0.3);
+}
+
+/* =============================================
+   8. HEADER BUTTONS — warm, glassy style
+   ============================================= */
+body.shabbat-mode .header-btn-primary {
+    color: #6b3a18;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 245, 230, 0.8) 100%) !important;
+    border: 1.5px solid rgba(180, 120, 70, 0.3) !important;
+    box-shadow:
+        0 8px 18px -5px rgba(120, 70, 30, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+body.shabbat-mode .header-btn-primary:hover {
+    border-color: rgba(180, 120, 70, 0.5) !important;
+    box-shadow:
+        0 14px 26px -6px rgba(120, 70, 30, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+}
+
+body.shabbat-mode .header-btn-secondary {
+    color: #4a2d12;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 235, 210, 0.4) 100%) !important;
+    border: 1.5px solid rgba(180, 130, 80, 0.35) !important;
+    box-shadow:
+        0 6px 14px -4px rgba(100, 60, 25, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+
+body.shabbat-mode .header-btn-secondary:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 240, 215, 0.55) 100%) !important;
+    border-color: rgba(180, 130, 80, 0.55) !important;
+}
+
+/* =============================================
+   9. SHABBAT BANNER
+   ============================================= */
+body.shabbat-mode #shabbat-banner {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    margin: 0;                  /* no negative margins */
+    padding: 1.72rem 1rem 1.75rem;
+    z-index: 2;
+}
+
+body.shabbat-mode #shabbat-banner::before {
+    content: '';
+    position: absolute;
+    inset: -26% -12% auto;
+    height: 290px;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, rgba(255, 229, 186, 0.1) 0%, transparent 76%);
+    z-index: 0;
+}
+
+/* =============================================
+   10. COMMUNITY STATUS BAR TEXT COLORS
+   ============================================= */
+body.shabbat-mode #community-status-bar .text-gray-700,
+body.shabbat-mode #community-status-bar .text-gray-600,
+body.shabbat-mode #community-status-bar .text-gray-800,
+body.shabbat-mode #community-status-bar #header-your-login-time,
+body.shabbat-mode #community-status-bar #header-your-username {
+    color: #3d2815 !important;
+}
+
+body.shabbat-mode #community-status-bar .text-gray-400 {
+    color: rgba(80, 55, 30, 0.55) !important;
+}
+
+/* Override white pill background on "Username • just now" badge */
+body.shabbat-mode #community-status-bar #header-your-status {
+    background: rgba(255, 255, 255, 0.35) !important;
+    border: 1px solid rgba(180, 130, 80, 0.2) !important;
+}
+
+body.shabbat-mode #community-status-bar #header-your-status span {
+    color: #3d2815 !important;
+}
+
+/* Override the username badge background */
+body.shabbat-mode #community-status-bar #header-your-username {
+    background: transparent !important;
+    border-color: transparent !important;
+    color: #3d2815 !important;
+}
+
+body.shabbat-mode #community-status-bar #community-status-content {
+    border: 0 !important;
+    border-width: 0 !important;
+}
+
+body.shabbat-mode #community-status-bar .status-badge {
+    background: rgba(255, 255, 255, 0.4);
+    border-color: rgba(180, 130, 80, 0.2);
+    color: #3d2815;
+}
+
+body.shabbat-mode #community-status-bar .status-badge--green {
+    background: linear-gradient(135deg, rgba(240, 253, 244, 0.45) 0%, rgba(187, 247, 208, 0.35) 100%);
+}
+
+body.shabbat-mode #community-status-bar .status-badge--yellow {
+    background: linear-gradient(135deg, rgba(255, 251, 235, 0.45) 0%, rgba(253, 224, 71, 0.3) 100%);
+}
+
+body.shabbat-mode #community-status-bar .status-badge--gray {
+    background: linear-gradient(135deg, rgba(248, 250, 252, 0.4) 0%, rgba(226, 232, 240, 0.3) 100%);
+}
+
+/* =============================================
+   11. FLOATING SHABBAT ICONS
+   ============================================= */
+.shabbat-floating-icons {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.shabbat-icon {
+    position: absolute;
+    opacity: 0;
+    filter: drop-shadow(0 4px 10px rgba(73, 38, 21, 0.28));
+    animation: shabbat-icon-drift 18s ease-in-out infinite;
+}
+
+.shabbat-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.shabbat-icon--challah-1 {
+    width: 58px;  height: 58px;
+    left: 6%;     top: 16%;
+    animation-delay: 0s;
+    animation-duration: 20s;
+}
+
+.shabbat-icon--challah-2 {
+    width: 44px;  height: 44px;
+    right: 9%;    top: 58%;
+    animation-delay: 5s;
+    animation-duration: 22s;
+}
+
+.shabbat-icon--candle-1 {
+    width: 47px;  height: 47px;
+    left: 12%;    bottom: 14%;
+    animation-delay: 2s;
+    animation-duration: 19s;
+}
+
+.shabbat-icon--candle-2 {
+    width: 38px;  height: 38px;
+    right: 16%;   top: 12%;
+    animation-delay: 7s;
+    animation-duration: 21s;
+}
+
+.shabbat-icon--note-1 {
+    width: 30px;  height: 30px;
+    left: 26%;    top: 9%;
+    animation-delay: 3s;
+    animation-duration: 17s;
+}
+
+.shabbat-icon--note-2 {
+    width: 26px;  height: 26px;
+    right: 26%;   bottom: 11%;
+    animation-delay: 8s;
+    animation-duration: 18s;
+}
+
+.shabbat-icon--note-3 {
+    width: 29px;  height: 29px;
+    left: 70%;    top: 33%;
+    animation-delay: 11s;
+    animation-duration: 16s;
+}
+
+.shabbat-icon--note-4 {
+    width: 33px;  height: 33px;
+    right: 38%;   top: 16%;
+    animation-delay: 13s;
+    animation-duration: 23s;
+}
+
+@keyframes shabbat-icon-drift {
+    0%   { opacity: 0;    transform: translateY(10px) rotate(-4deg) scale(0.9); }
+    16%  { opacity: 0.6; }
+    52%  { opacity: 0.42; transform: translateY(-16px) rotate(4deg) scale(1); }
+    86%  { opacity: 0.55; }
+    100% { opacity: 0;    transform: translateY(10px) rotate(-4deg) scale(0.9); }
+}
+
+/* =============================================
+   12. SHABBAT GREETING & LYRICS
+   Dark warm text for readability against
+   the light sunrise gradient.
+   ============================================= */
+.shabbat-greeting {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 0;
+    font-family: 'Frank Ruhl Libre', 'David', 'Noto Serif Hebrew', serif;
+    font-size: clamp(2rem, 5.2vw, 2.75rem);
+    font-weight: 800;
+    color: #3d2210;
+    letter-spacing: 0.06em;
+    text-shadow:
+        0 0 18px rgba(255, 228, 180, 0.35),
+        0 1px 4px rgba(255, 240, 220, 0.4);
+    animation: shabbat-title-glow 4.2s ease-in-out infinite alternate;
+}
+
+.shabbat-greeting-row {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 0.32rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.52rem;
+    direction: ltr;
+    max-width: min(92vw, 680px);
+}
+
+.shabbat-audio-shell {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0.22rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow:
+        0 8px 16px -12px rgba(24, 24, 27, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition:
+        background-color 0.22s ease,
+        border-color 0.22s ease,
+        box-shadow 0.22s ease;
+}
+
+.shabbat-audio-toggle {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(255, 255, 255, 0.58);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.22);
+    box-shadow:
+        0 6px 14px -12px rgba(24, 24, 27, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.52);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease,
+        border-color 0.22s ease,
+        background-color 0.22s ease;
+}
+
+.shabbat-audio-toggle::after {
+    display: none;
+}
+
+.shabbat-audio-shell:hover {
+    background: rgba(255, 255, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.45);
+    box-shadow:
+        0 12px 22px -16px rgba(24, 24, 27, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.shabbat-audio-toggle:hover {
+    transform: scale(1.04);
+    border-color: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.32);
+    box-shadow:
+        0 10px 18px -14px rgba(24, 24, 27, 0.62),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.shabbat-audio-toggle:active {
+    transform: scale(0.96);
+}
+
+.shabbat-audio-toggle:focus-visible {
+    outline: none;
+    box-shadow:
+        0 0 0 3px rgba(255, 255, 255, 0.45),
+        0 10px 18px -14px rgba(24, 24, 27, 0.62),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.shabbat-audio-icon {
+    width: 18px;
+    height: 18px;
+    fill: #ffffff;
+    filter: drop-shadow(0 1px 2px rgba(58, 37, 21, 0.48));
+    transition: fill 0.2s ease, transform 0.2s ease;
+}
+
+.shabbat-audio-toggle.is-playing .shabbat-audio-icon {
+    fill: #ffffff;
+    transform: scale(0.95);
+}
+
+@keyframes shabbat-title-glow {
+    0% {
+        text-shadow:
+            0 0 14px rgba(255, 228, 180, 0.25),
+            0 1px 4px rgba(255, 240, 220, 0.3);
+    }
+    100% {
+        text-shadow:
+            0 0 24px rgba(255, 228, 180, 0.5),
+            0 1px 4px rgba(255, 240, 220, 0.45);
+    }
+}
+
+.shabbat-greeting-sub {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 1rem;
+    color: rgba(70, 40, 18, 0.82);
+    font-size: clamp(0.92rem, 2.8vw, 1.05rem);
+    font-style: italic;
+    text-shadow: 0 1px 3px rgba(255, 240, 220, 0.25);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    text-align: center;
+    min-height: 1.9rem;
+    padding: 0 0.5rem;
+}
+
+.shabbat-greeting-sub-prefix {
+    white-space: nowrap;
+    opacity: 0.92;
+}
+
+.shabbat-blessing-text {
+    display: inline-block;
+    max-width: min(92vw, 640px);
+    transition:
+        opacity 1.4s ease,
+        transform 1.4s ease,
+        filter 1.4s ease;
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+.shabbat-blessing-text.is-exiting {
+    opacity: 0;
+    transform: translateY(-8px);
+    filter: blur(1px);
+}
+
+.shabbat-blessing-text.is-entering {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(1px);
+}
+
+.shabbat-lyrics-container {
+    position: relative;
+    z-index: 2;
+    min-height: 128px;
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.65rem;
+}
+
+.shabbat-lyric-line {
+    position: absolute;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+    filter: blur(1px);
+    transition:
+        opacity 1.8s ease,
+        transform 1.8s ease,
+        filter 1.8s ease;
+    text-align: center;
+    direction: rtl;
+    font-family: 'Frank Ruhl Libre', 'David', 'Noto Serif Hebrew', serif;
+    font-size: clamp(1.08rem, 3.4vw, 1.42rem);
+    line-height: 1.78;
+    font-weight: 560;
+    color: rgba(60, 35, 15, 0.92);
+    text-shadow: 0 0 12px rgba(255, 230, 190, 0.25);
+}
+
+.shabbat-lyric-line.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+}
+
+.shabbat-lyric-line.exiting {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.995);
+    filter: blur(1.2px);
+}
+
+.shabbat-divider {
+    display: none;
+}
+
+/* =============================================
+   13. DAILY INSPIRATION — SHABBAT MODE
+   ============================================= */
+body.shabbat-mode .daily-inspiration-header-section {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 0;
+    padding-bottom: 0.5rem;
+}
+
+body.shabbat-mode .daily-inspiration-hebrew {
+    color: #3d2815;
+    text-shadow: 0 1px 4px rgba(255, 240, 220, 0.35);
+}
+
+body.shabbat-mode .daily-inspiration-translation,
+body.shabbat-mode .daily-inspiration-reflection,
+body.shabbat-mode .daily-inspiration-source,
+body.shabbat-mode .daily-inspiration-explanation-label {
+    color: rgba(65, 40, 18, 0.88);
+    text-shadow: 0 1px 3px rgba(255, 240, 220, 0.2);
+}
+
+body.shabbat-mode .quote-mark {
+    color: rgba(180, 130, 70, 0.35);
+}
+
+/* Bookmark button warm styling */
+body.shabbat-mode .daily-quote-bookmark-btn {
+    background: rgba(255, 255, 255, 0.35) !important;
+    border-color: rgba(180, 130, 80, 0.3) !important;
+    color: #5a3518 !important;
+}
+
+body.shabbat-mode .daily-quote-bookmark-btn:hover {
+    background: rgba(255, 255, 255, 0.5) !important;
+    border-color: rgba(180, 130, 80, 0.5) !important;
+    box-shadow: 0 2px 8px rgba(200, 150, 80, 0.15) !important;
+}
+
+body.shabbat-mode .daily-quote-bookmark-btn.is-active {
+    background: rgba(255, 210, 120, 0.4) !important;
+    color: #4a2a10 !important;
+    border-color: rgba(200, 150, 70, 0.5) !important;
+    box-shadow: 0 2px 8px rgba(200, 150, 80, 0.2) !important;
+}
+
+/* =============================================
+   14. NAV LABELS & CONTROLS
+   ============================================= */
+body.shabbat-mode nav label,
+body.shabbat-mode nav .font-semibold {
+    color: #3d2815 !important;
+}
+
+body.shabbat-mode .text-size-toggle {
+    background: rgba(255, 255, 255, 0.35) !important;
+    border-color: rgba(180, 130, 80, 0.3) !important;
+    color: #4a2d12 !important;
+}
+
+body.shabbat-mode .text-size-toggle:hover,
+body.shabbat-mode .text-size-toggle:focus-visible {
+    background: rgba(255, 255, 255, 0.5) !important;
+    border-color: rgba(180, 130, 80, 0.5) !important;
+    color: #3d2210 !important;
+}
+
+/* =============================================
+   15. RESPONSIVE TUNING
+   ============================================= */
+@media (max-width: 768px) {
+    body.shabbat-mode {
+        /* iOS/Safari can repaint fixed gradients darker after initial render,
+           so we use scroll instead of fixed.  But scroll causes the gradient to
+           stretch as the page grows (JS injects the banner, content loads…),
+           shifting the header into the darker blue end.
+           Fix: lock each background layer to exactly one viewport-height so
+           the gradient proportions stay constant regardless of document length. */
+        background-attachment: scroll !important;
+        background-size: 100% 100vh !important;
+        background-repeat: no-repeat !important;
+    }
+
+    body.shabbat-mode #shabbat-banner {
+        padding: 1.4rem 0.75rem 1.45rem;
+    }
+
+    body.shabbat-mode .header-main::before,
+    body.shabbat-mode .header-main::after {
+        /* Keep mobile header color stable (no post-load darkening pulse) */
+        animation: none !important;
+    }
+
+    body.shabbat-mode .header-main::before {
+        opacity: 0.7;
+    }
+
+    body.shabbat-mode .header-main::after {
+        opacity: 0.45;
+    }
+
+    .shabbat-greeting-row {
+        gap: 0.4rem;
+    }
+
+    .shabbat-audio-shell {
+        padding: 0.18rem;
+    }
+
+    .shabbat-audio-toggle {
+        width: 32px;
+        height: 32px;
+    }
+
+    .shabbat-audio-icon {
+        width: 17px;
+        height: 17px;
+    }
+
+    .shabbat-lyrics-container {
+        min-height: 142px;
+    }
+
+    .shabbat-icon--challah-1,
+    .shabbat-icon--candle-1 {
+        left: 3%;
+    }
+
+    .shabbat-icon--challah-1 {
+        top: 14%;
+    }
+
+    .shabbat-icon--challah-2,
+    .shabbat-icon--candle-2 {
+        right: 4%;
+    }
+
+    .shabbat-icon--note-1,
+    .shabbat-icon--note-2,
+    .shabbat-icon--note-3,
+    .shabbat-icon--note-4 {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.shabbat-mode .header-main,
+    body.shabbat-mode .header-main::before,
+    body.shabbat-mode .header-main::after,
+    .shabbat-icon,
+    .shabbat-greeting {
+        animation: none !important;
+    }
+
+    .shabbat-lyric-line {
+        transition: opacity 0.4s ease !important;
+        transform: none !important;
+        filter: none !important;
+    }
+
+    .shabbat-audio-shell,
+    .shabbat-audio-toggle,
+    .shabbat-audio-icon,
+    .shabbat-blessing-text {
+        transition: none !important;
+    }
+
+    .shabbat-blessing-text {
+        transform: none !important;
+        filter: none !important;
+    }
+}

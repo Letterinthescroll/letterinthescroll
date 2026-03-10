@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Letter in the Scroll</title>
+    <link rel="icon" type="image/png" href="media/images/Icon.png">
+    <link rel="apple-touch-icon" href="media/images/Icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="A Letter in the Scroll">
+    <meta property="og:title" content="A Letter in the Scroll">
+    <meta property="og:description" content="Interactive Torah Study with Friends. Explore the Parsha with commentary, insights, and community.">
+    <meta property="og:image" content="https://sillybob123.github.io/39839/Icon.png">
+    <meta property="og:url" content="https://sillybob123.github.io/39839/">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.7;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(58, 99, 190, 0.16), transparent 40%),
+                radial-gradient(circle at 90% 20%, rgba(212, 168, 67, 0.14), transparent 42%),
+                linear-gradient(180deg, #f8fbff 0%, #f2f6fc 100%);
+            color: #1f2a44;
+        }
+        .font-heading {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .gradient-header {
+            background: linear-gradient(138deg, #16285e 0%, #23408f 45%, #2f56ab 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .gold-accent { color: #b88b26; }
+        .gold-border { border-color: #c9a03f; }
+        .btn-gold {
+            background: linear-gradient(135deg, #c89a35, #b7871e);
+        }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #b7871e, #9d7418);
+        }
+        .tab-active {
+            border-bottom: 3px solid #c89a35;
+            color: #172a5f;
+            font-weight: 600;
+        }
+        .tab-inactive {
+            border-bottom: 3px solid transparent;
+            color: #6b7280;
+        }
+        .tab-inactive:hover {
+            color: #2563eb;
+            border-bottom-color: #dbeafe;
+        }
+        .input-field {
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-field:focus {
+            border-color: #274ea8;
+            box-shadow: 0 0 0 3px rgba(39, 78, 168, 0.15);
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .decorative-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #c89a35, transparent);
+        }
+        .mission-card {
+            position: relative;
+            border: 1px solid rgba(25, 52, 122, 0.13);
+            background:
+                radial-gradient(circle at 85% 15%, rgba(212, 168, 67, 0.2), transparent 35%),
+                linear-gradient(170deg, rgba(255, 255, 255, 0.95), rgba(245, 250, 255, 0.97));
+            box-shadow: 0 24px 60px rgba(23, 42, 95, 0.14);
+        }
+        .auth-card {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(7px);
+            border: 1px solid rgba(19, 43, 102, 0.1);
+            box-shadow: 0 22px 58px rgba(28, 48, 103, 0.16);
+        }
+        .mission-point {
+            border: 1px solid rgba(37, 78, 168, 0.13);
+            background: rgba(255, 255, 255, 0.72);
+        }
+        .story-quote {
+            border-left: 3px solid #c89a35;
+            background: rgba(255, 251, 242, 0.8);
+        }
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+        /* Subtle pattern overlay */
+        .pattern-overlay {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        /* Google button */
+        .google-btn {
+            background: white;
+            border: 2px solid #e5e7eb;
+            transition: all 0.2s ease;
+        }
+        .google-btn:hover {
+            border-color: #d1d5db;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        /* Divider */
+        .or-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .or-divider::before, .or-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e5e7eb;
+        }
+        @media (max-width: 1023px) {
+            .mission-card {
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+    <!-- Invite Banner (hidden by default) -->
+    <div id="invite-banner" class="hidden bg-gradient-to-r from-amber-50 to-yellow-50 border-b border-amber-200 px-4 py-3 text-center">
+        <p class="text-sm font-medium text-amber-900">
+            <svg class="inline-block w-5 h-5 mr-1 -mt-0.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            You've been invited to join a study group!
+        </p>
+    </div>
+
+    <!-- Header -->
+    <header class="gradient-header py-6 shadow-lg relative overflow-hidden">
+        <div class="pattern-overlay absolute inset-0"></div>
+        <div class="relative max-w-7xl mx-auto px-4 text-center">
+            <h1 class="font-heading text-white text-2xl sm:text-3xl font-bold tracking-wide">A Letter in the Scroll</h1>
+            <p class="text-blue-200 text-sm mt-1">Interactive Torah Study with Friends</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-4 py-8 sm:py-12 lg:py-16">
+        <div class="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-10 items-start">
+
+            <!-- Mission Panel -->
+            <section class="mission-card rounded-3xl p-7 sm:p-8 lg:p-10 overflow-hidden">
+                <div class="absolute -top-8 -right-8 w-28 h-28 bg-amber-200/40 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-200/35 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="relative">
+                    <p class="text-xs tracking-[0.25em] uppercase text-blue-700/80 font-semibold mb-2">The Mission</p>
+                    <h2 class="font-heading text-4xl sm:text-5xl text-slate-900 font-semibold leading-tight mb-5">
+                        Every Jew Is a Letter in One Living Torah
+                    </h2>
+                    <p class="text-slate-700 text-base mb-4">
+                        <strong>A Letter in the Scroll</strong> is a place to study Torah with heart, clarity, and community. We believe no one learns alone, and no voice is too small to matter.
+                    </p>
+                    <p class="text-slate-700 text-base mb-6">
+                        Our mission is to help friends build holy learning circles, ask deeper questions, and turn insights into action for everyday life.
+                    </p>
+
+                    <div class="space-y-3 mb-6">
+                        <div class="mission-point rounded-2xl px-4 py-3">
+                            <p class="text-sm text-slate-800"><span class="font-semibold text-blue-900">Home Dashboard:</span> After sign in, manage rooms, people, and account settings in one place.</p>
+                        </div>
+                        <div class="mission-point rounded-2xl px-4 py-3">
+                            <p class="text-sm text-slate-800"><span class="font-semibold text-blue-900">Easy Navigation:</span> From dashboard home, jump to study room, holidays, prayers, and songs.</p>
+                        </div>
+                        <div class="mission-point rounded-2xl px-4 py-3">
+                            <p class="text-sm text-slate-800"><span class="font-semibold text-blue-900">Lead Together:</span> Share responsibility with co-leaders so each room becomes a source of light.</p>
+                        </div>
+                    </div>
+
+                    <div class="story-quote rounded-2xl p-4">
+                        <p class="font-heading text-lg text-slate-900 italic leading-relaxed">
+                            "When one letter is missing, the scroll is incomplete. When one person is missing, the people are incomplete."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="w-full max-w-xl mx-auto lg:max-w-none space-y-6">
+
+                <!-- Auth Card -->
+                <div class="auth-card rounded-3xl overflow-hidden">
+
+                    <!-- Card Header with Logo -->
+                    <div class="text-center pt-8 pb-4 px-6">
+                        <img src="media/images/Icon.png" alt="A Letter in the Scroll" class="w-20 h-20 mx-auto rounded-xl shadow-md mb-4">
+                        <h2 class="font-heading text-3xl font-semibold text-slate-900">Welcome Back</h2>
+                        <p class="text-slate-600 text-sm mt-1">Sign in, then land on your dashboard home to manage rooms and enter study.</p>
+                        <div class="decorative-line mt-4 mx-auto w-36"></div>
+                    </div>
+
+                    <!-- Google Sign-In -->
+                    <div class="px-6 pt-4">
+                        <button id="google-signin-btn" onclick="handleGoogleSignIn()" class="google-btn w-full py-3 rounded-xl font-medium text-sm text-gray-700 flex items-center justify-center gap-3">
+                            <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
+                                <path d="M9.003 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009.003 18z" fill="#34A853"/>
+                                <path d="M3.964 10.712A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.712V4.956H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.046l3.007-2.334z" fill="#FBBC05"/>
+                                <path d="M9.003 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.464.891 11.428 0 9.002 0A8.997 8.997 0 00.957 4.958L3.964 7.29c.708-2.127 2.692-3.71 5.036-3.71z" fill="#EA4335"/>
+                            </svg>
+                            Continue with Google
+                        </button>
+
+                        <div class="or-divider my-4 text-xs text-gray-400 font-medium">or</div>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="flex border-b border-gray-200 px-6">
+                        <button id="tab-signin" class="flex-1 py-3 text-center text-sm font-medium transition-all tab-active" onclick="switchTab('signin')">
+                            Sign In
+                        </button>
+                        <button id="tab-create" class="flex-1 py-3 text-center text-sm font-medium transition-all tab-inactive" onclick="switchTab('create')">
+                            Create Account
+                        </button>
+                    </div>
+
+                    <!-- Message Areas -->
+                    <div id="auth-error" class="hidden mx-6 mt-4 bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-lg text-sm"></div>
+                    <div id="auth-success" class="hidden mx-6 mt-4 bg-green-50 border border-green-300 text-green-700 px-4 py-3 rounded-lg text-sm"></div>
+
+                    <!-- Sign In Form -->
+                    <div id="form-signin" class="p-6 space-y-4 fade-in">
+                        <div>
+                            <label for="signin-email" class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
+                            <input
+                                type="email"
+                                id="signin-email"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                                autocapitalize="none"
+                                spellcheck="false"
+                                class="input-field w-full px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900"
+                            />
+                        </div>
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label for="signin-password" class="block text-sm font-semibold text-gray-700">Password</label>
+                                <button type="button" id="forgot-password-link" class="text-xs text-blue-600 hover:text-blue-800 font-medium" onclick="openResetModal()">
+                                    Forgot password?
+                                </button>
+                            </div>
+                            <input
+                                type="password"
+                                id="signin-password"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                class="input-field w-full px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900"
+                            />
+                        </div>
+                        <button id="signin-btn" onclick="handleSignIn()" class="w-full py-3 bg-gradient-to-r from-blue-800 to-blue-600 text-white rounded-xl hover:from-blue-900 hover:to-blue-700 transition-all font-semibold shadow-md hover:shadow-lg text-sm">
+                            Sign In
+                        </button>
+                    </div>
+
+                    <!-- Create Account Form -->
+                    <div id="form-create" class="p-6 space-y-4 fade-in hidden">
+                        <div>
+                            <label for="create-display-name" class="block text-sm font-semibold text-gray-700 mb-1.5">Your Name</label>
+                            <input
+                                type="text"
+                                id="create-display-name"
+                                minlength="2"
+                                maxlength="50"
+                                placeholder="e.g., Yair Ben-Dor"
+                                autocomplete="name"
+                                class="input-field w-full px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900"
+                            />
+                            <p class="text-xs text-gray-400 mt-1">We will greet you by first name (for example: "Shalom, Yair").</p>
+                        </div>
+                        <div>
+                            <label for="create-email" class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
+                            <input
+                                type="email"
+                                id="create-email"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                                autocapitalize="none"
+                                spellcheck="false"
+                                class="input-field w-full px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900"
+                            />
+                        </div>
+                        <div>
+                            <label for="create-password" class="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
+                            <input
+                                type="password"
+                                id="create-password"
+                                placeholder="At least 6 characters"
+                                autocomplete="new-password"
+                                class="input-field w-full px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900"
+                            />
+                        </div>
+                        <div>
+                            <label for="create-confirm" class="block text-sm font-semibold text-gray-700 mb-1.5">Confirm Password</label>
+                            <input
+                                type="password"
+                                id="create-confirm"
+                                placeholder="Re-enter your password"
+                                autocomplete="new-password"
+                                class="input-field w-full px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900"
+                            />
+                        </div>
+                        <button id="create-account-btn" onclick="handleCreateAccount()" class="w-full py-3 btn-gold text-white rounded-xl transition-all font-semibold shadow-md hover:shadow-lg text-sm">
+                            Create Account
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Join a Chavruta Section -->
+                <div class="auth-card rounded-3xl overflow-hidden">
+                    <div class="p-6">
+                        <div class="text-center mb-4">
+                            <h3 class="font-heading text-2xl font-semibold text-gray-900">Join a Chavruta</h3>
+                            <p class="text-gray-500 text-xs mt-1">Have an invite code? Enter the 16-character code below.</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <input
+                                type="text"
+                                id="invite-code-input"
+                                placeholder="16-character invite code"
+                                maxlength="16"
+                                minlength="16"
+                                class="input-field flex-1 px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900 text-sm font-mono tracking-wider uppercase"
+                                oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '')"
+                            />
+                            <button id="join-btn" onclick="handleJoinChavruta()" class="px-6 py-2.5 bg-gradient-to-r from-blue-800 to-blue-600 text-white rounded-xl hover:from-blue-900 hover:to-blue-700 transition-all font-semibold shadow-md hover:shadow-lg text-sm whitespace-nowrap">
+                                Join
+                            </button>
+                        </div>
+                        <div id="join-error" class="hidden mt-3 bg-red-50 border border-red-300 text-red-700 px-3 py-2 rounded-lg text-sm"></div>
+                        <div id="join-success" class="hidden mt-3 bg-green-50 border border-green-300 text-green-700 px-3 py-2 rounded-lg text-sm"></div>
+                    </div>
+                </div>
+
+                <p class="text-center text-gray-500 text-xs mb-2 italic font-heading">
+                    Each of us is a letter in the scroll of Torah.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Password Reset Modal -->
+    <div id="reset-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="modal-overlay absolute inset-0" onclick="closeResetModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden fade-in">
+            <div class="gradient-header px-6 py-6 relative overflow-hidden">
+                <div class="pattern-overlay absolute inset-0"></div>
+                <div class="relative flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-white font-heading">Reset Password</h2>
+                    <button onclick="closeResetModal()" class="text-white/70 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <p class="relative text-blue-200 text-sm mt-1">Enter your email and we'll send you a reset link.</p>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label for="reset-email" class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
+                    <input
+                        type="email"
+                        id="reset-email"
+                        placeholder="you@example.com"
+                        autocomplete="email"
+                        autocapitalize="none"
+                        spellcheck="false"
+                        class="input-field w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900"
+                    />
+                </div>
+                <div id="reset-error" class="hidden bg-red-50 border border-red-300 text-red-700 px-3 py-2 rounded-lg text-sm"></div>
+                <div id="reset-success" class="hidden bg-green-50 border border-green-300 text-green-700 px-3 py-2 rounded-lg text-sm"></div>
+                <div class="flex gap-3">
+                    <button onclick="closeResetModal()" class="flex-1 py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all font-medium text-sm">
+                        Cancel
+                    </button>
+                    <button id="reset-btn" onclick="handlePasswordReset()" class="flex-1 py-2.5 bg-gradient-to-r from-blue-800 to-blue-600 text-white rounded-lg hover:from-blue-900 hover:to-blue-700 transition-all font-semibold shadow-md hover:shadow-lg text-sm">
+                        Send Reset Link
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        const INVITE_CODE_LENGTH = 16;
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCpDtcBpKvjLwihnL2bizxBFxXD6Qn8Lb4",
+            authDomain: "letterinthescroll.firebaseapp.com",
+            projectId: "letterinthescroll",
+            storageBucket: "letterinthescroll.firebasestorage.app",
+            messagingSenderId: "625129870318",
+            appId: "1:625129870318:web:a654e97b734faa3b4df4ff",
+            measurementId: "G-LYSXTDEPVG"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+        let authFlowInProgress = false;
+
+        function sanitizeInviteCode(rawValue) {
+            if (typeof rawValue !== 'string') {
+                return '';
+            }
+            return rawValue.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, INVITE_CODE_LENGTH);
+        }
+
+        function toTitleWord(word) {
+            return word
+                .split("'")
+                .map(function(part) {
+                    return part ? part.charAt(0).toUpperCase() + part.slice(1).toLowerCase() : '';
+                })
+                .join("'");
+        }
+
+        function normalizeDisplayName(rawName) {
+            if (!rawName || typeof rawName !== 'string') {
+                return '';
+            }
+            const compact = rawName.trim().replace(/\s+/g, ' ');
+            if (!compact) {
+                return '';
+            }
+            return compact
+                .split(' ')
+                .map(function(segment) {
+                    return segment
+                        .split('-')
+                        .map(function(word) { return toTitleWord(word); })
+                        .join('-');
+                })
+                .join(' ');
+        }
+
+        function fallbackNameFromEmail(email) {
+            if (!email || typeof email !== 'string' || email.indexOf('@') === -1) {
+                return 'Friend';
+            }
+            const local = email.split('@')[0].replace(/\d+$/g, '');
+            const normalized = local.replace(/[._-]+/g, ' ').trim();
+            return normalizeDisplayName(normalized) || 'Friend';
+        }
+
+        function extractFirstName(name, email) {
+            const normalized = normalizeDisplayName(name);
+            if (normalized) {
+                return normalized.split(' ')[0];
+            }
+            const fallback = fallbackNameFromEmail(email);
+            return fallback.split(' ')[0];
+        }
+
+        async function syncUserProfile(user, preferredDisplayName, includeCreatedAt) {
+            if (!user || !user.uid) {
+                return;
+            }
+
+            let existing = {};
+            let profileExists = false;
+            try {
+                const existingSnap = await db.collection('users').doc(user.uid).get();
+                if (existingSnap.exists) {
+                    existing = existingSnap.data() || {};
+                    profileExists = true;
+                }
+            } catch (e) {
+                console.warn('Could not load existing profile before sync:', e);
+            }
+
+            const normalizedName = normalizeDisplayName(
+                preferredDisplayName ||
+                existing.displayName ||
+                existing.name ||
+                user.displayName ||
+                fallbackNameFromEmail(user.email)
+            );
+            const firstName = extractFirstName(existing.firstName || normalizedName, user.email);
+            const payload = {
+                email: user.email || existing.email || '',
+                emailLower: (user.email || existing.email || '').toLowerCase(),
+                displayName: normalizedName || fallbackNameFromEmail(user.email),
+                firstName: firstName || 'Friend',
+                photoURL: user.photoURL || null,
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            if (includeCreatedAt && !profileExists) {
+                payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+            }
+
+            await db.collection('users').doc(user.uid).set(payload, { merge: true });
+
+            if (payload.displayName && user.displayName !== payload.displayName) {
+                try {
+                    await user.updateProfile({ displayName: payload.displayName });
+                } catch (e) {
+                    console.warn('Could not sync auth display name:', e);
+                }
+            }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const inviteCodeFromUrl = sanitizeInviteCode(urlParams.get('invite') || '');
+
+        if (urlParams.get('invite')) {
+            const banner = document.getElementById('invite-banner');
+            const bannerText = banner.querySelector('p');
+            banner.classList.remove('hidden');
+
+            if (inviteCodeFromUrl.length === INVITE_CODE_LENGTH) {
+                document.getElementById('invite-code-input').value = inviteCodeFromUrl;
+            } else {
+                bannerText.textContent = 'This invite link looks invalid. Ask your chavruta leader for a new 16-character code.';
+                banner.classList.remove('from-amber-50', 'to-yellow-50', 'border-amber-200');
+                banner.classList.add('from-red-50', 'to-rose-50', 'border-red-200');
+                bannerText.className = 'text-sm font-medium text-red-900';
+            }
+        }
+
+        auth.onAuthStateChanged(function(user) {
+            if (!user || authFlowInProgress) {
+                return;
+            }
+
+            syncUserProfile(user).finally(function() {
+                if (inviteCodeFromUrl.length === INVITE_CODE_LENGTH) {
+                    processInviteCode(inviteCodeFromUrl, user)
+                        .then(function(found) {
+                            if (!found) {
+                                window.location.href = 'dashboard.html';
+                            }
+                        })
+                        .catch(function() {
+                            window.location.href = 'dashboard.html';
+                        });
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
+            });
+        });
+
+        async function handleGoogleSignIn() {
+            clearMessages();
+            const btn = document.getElementById('google-signin-btn');
+            btn.disabled = true;
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+            authFlowInProgress = true;
+
+            try {
+                const result = await auth.signInWithPopup(googleProvider);
+                const user = result.user;
+                await syncUserProfile(user, user.displayName, false);
+                showSuccess('Signed in with Google. Redirecting...');
+
+                const code = sanitizeInviteCode(document.getElementById('invite-code-input').value);
+                if (code.length === INVITE_CODE_LENGTH) {
+                    const found = await processInviteCode(code, user);
+                    if (!found) {
+                        window.location.href = 'dashboard.html';
+                    }
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
+            } catch (error) {
+                if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                    authFlowInProgress = false;
+                    return;
+                }
+                if (auth.currentUser) {
+                    window.location.href = 'dashboard.html';
+                    return;
+                }
+                showError(friendlyError(error.code));
+                btn.disabled = false;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                authFlowInProgress = false;
+            }
+        }
+
+        function switchTab(tab) {
+            const signinTab = document.getElementById('tab-signin');
+            const createTab = document.getElementById('tab-create');
+            const signinForm = document.getElementById('form-signin');
+            const createForm = document.getElementById('form-create');
+
+            clearMessages();
+
+            if (tab === 'signin') {
+                signinTab.className = 'flex-1 py-3 text-center text-sm font-medium transition-all tab-active';
+                createTab.className = 'flex-1 py-3 text-center text-sm font-medium transition-all tab-inactive';
+                signinForm.classList.remove('hidden');
+                createForm.classList.add('hidden');
+            } else {
+                createTab.className = 'flex-1 py-3 text-center text-sm font-medium transition-all tab-active';
+                signinTab.className = 'flex-1 py-3 text-center text-sm font-medium transition-all tab-inactive';
+                createForm.classList.remove('hidden');
+                signinForm.classList.add('hidden');
+            }
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('auth-error');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+            document.getElementById('auth-success').classList.add('hidden');
+        }
+
+        function showSuccess(msg) {
+            const el = document.getElementById('auth-success');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+            document.getElementById('auth-error').classList.add('hidden');
+        }
+
+        function clearMessages() {
+            document.getElementById('auth-error').classList.add('hidden');
+            document.getElementById('auth-success').classList.add('hidden');
+        }
+
+        function setLoading(btnId, loading) {
+            const btn = document.getElementById(btnId);
+            if (loading) {
+                btn.disabled = true;
+                btn.dataset.originalText = btn.textContent;
+                btn.innerHTML = '<span class="spinner"></span>';
+                btn.classList.add('opacity-75', 'cursor-not-allowed');
+            } else {
+                btn.disabled = false;
+                btn.textContent = btn.dataset.originalText || 'Submit';
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+        }
+
+        function friendlyError(code) {
+            switch (code) {
+                case 'auth/user-not-found':
+                    return 'No account found with that email address.';
+                case 'auth/wrong-password':
+                case 'auth/invalid-credential':
+                case 'auth/invalid-login-credentials':
+                    return 'Incorrect password. Please try again.';
+                case 'auth/invalid-email':
+                    return 'Please enter a valid email address.';
+                case 'auth/email-already-in-use':
+                    return 'An account with that email already exists. Try signing in instead.';
+                case 'auth/weak-password':
+                    return 'Password must be at least 6 characters.';
+                case 'auth/too-many-requests':
+                    return 'Too many attempts. Please wait a moment and try again.';
+                case 'auth/network-request-failed':
+                    return 'Network error. Please check your connection.';
+                case 'auth/account-exists-with-different-credential':
+                    return 'An account already exists with this email. Try signing in with email/password instead.';
+                default:
+                    return 'Something went wrong. Please try again.';
+            }
+        }
+
+        async function handleSignIn() {
+            clearMessages();
+            const email = document.getElementById('signin-email').value.trim();
+            const password = document.getElementById('signin-password').value;
+            const inviteCode = sanitizeInviteCode(document.getElementById('invite-code-input').value);
+
+            if (!email) {
+                showError('Please enter your email address.');
+                return;
+            }
+            if (!password) {
+                showError('Please enter your password.');
+                return;
+            }
+            if (inviteCode && inviteCode.length !== INVITE_CODE_LENGTH) {
+                showError('Invite codes must be exactly 16 letters/numbers.');
+                return;
+            }
+
+            setLoading('signin-btn', true);
+            authFlowInProgress = true;
+
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                await syncUserProfile(userCredential.user);
+                showSuccess('Signed in successfully. Redirecting...');
+
+                if (inviteCode.length === INVITE_CODE_LENGTH) {
+                    const found = await processInviteCode(inviteCode, userCredential.user);
+                    if (!found) {
+                        window.location.href = 'dashboard.html';
+                    }
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
+            } catch (error) {
+                if (auth.currentUser) {
+                    window.location.href = 'dashboard.html';
+                    return;
+                }
+                setLoading('signin-btn', false);
+                authFlowInProgress = false;
+                showError(friendlyError(error.code));
+            }
+        }
+
+        async function handleCreateAccount() {
+            clearMessages();
+            const rawName = document.getElementById('create-display-name').value;
+            const email = document.getElementById('create-email').value.trim();
+            const password = document.getElementById('create-password').value;
+            const confirm = document.getElementById('create-confirm').value;
+            const inviteCode = sanitizeInviteCode(document.getElementById('invite-code-input').value);
+            const displayName = normalizeDisplayName(rawName);
+
+            if (!displayName) {
+                showError('Please enter your name.');
+                return;
+            }
+            if (displayName.length < 2 || displayName.length > 50) {
+                showError('Your name must be between 2 and 50 characters.');
+                return;
+            }
+            if (!email) {
+                showError('Please enter your email address.');
+                return;
+            }
+            if (!password) {
+                showError('Please enter a password.');
+                return;
+            }
+            if (password.length < 6) {
+                showError('Password must be at least 6 characters.');
+                return;
+            }
+            if (password !== confirm) {
+                showError('Passwords do not match.');
+                return;
+            }
+            if (inviteCode && inviteCode.length !== INVITE_CODE_LENGTH) {
+                showError('Invite codes must be exactly 16 letters/numbers.');
+                return;
+            }
+
+            setLoading('create-account-btn', true);
+            authFlowInProgress = true;
+
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                await user.updateProfile({ displayName: displayName });
+                await syncUserProfile(user, displayName, true);
+                showSuccess('Account created successfully. Redirecting...');
+
+                if (inviteCode.length === INVITE_CODE_LENGTH) {
+                    const found = await processInviteCode(inviteCode, user);
+                    if (!found) {
+                        window.location.href = 'dashboard.html';
+                    }
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
+            } catch (error) {
+                if (auth.currentUser) {
+                    window.location.href = 'dashboard.html';
+                    return;
+                }
+                setLoading('create-account-btn', false);
+                authFlowInProgress = false;
+                showError(friendlyError(error.code));
+            }
+        }
+
+        function openResetModal() {
+            document.getElementById('reset-modal').classList.remove('hidden');
+            document.getElementById('reset-error').classList.add('hidden');
+            document.getElementById('reset-success').classList.add('hidden');
+            document.getElementById('reset-email').value = document.getElementById('signin-email').value || '';
+            document.getElementById('reset-email').focus();
+        }
+
+        function closeResetModal() {
+            document.getElementById('reset-modal').classList.add('hidden');
+        }
+
+        function handlePasswordReset() {
+            const resetError = document.getElementById('reset-error');
+            const resetSuccess = document.getElementById('reset-success');
+            resetError.classList.add('hidden');
+            resetSuccess.classList.add('hidden');
+
+            const email = document.getElementById('reset-email').value.trim();
+            if (!email) {
+                resetError.textContent = 'Please enter your email address.';
+                resetError.classList.remove('hidden');
+                return;
+            }
+
+            setLoading('reset-btn', true);
+
+            auth.sendPasswordResetEmail(email)
+                .then(function() {
+                    setLoading('reset-btn', false);
+                    resetSuccess.textContent = 'Password reset email sent. Check your inbox.';
+                    resetSuccess.classList.remove('hidden');
+                })
+                .catch(function(error) {
+                    setLoading('reset-btn', false);
+                    if (error.code === 'auth/user-not-found') {
+                        resetError.textContent = 'No account found with that email.';
+                    } else if (error.code === 'auth/invalid-email') {
+                        resetError.textContent = 'Please enter a valid email address.';
+                    } else {
+                        resetError.textContent = 'Something went wrong. Please try again.';
+                    }
+                    resetError.classList.remove('hidden');
+                });
+        }
+
+        async function handleJoinChavruta() {
+            const joinError = document.getElementById('join-error');
+            const joinSuccess = document.getElementById('join-success');
+            joinError.classList.add('hidden');
+            joinSuccess.classList.add('hidden');
+
+            const code = sanitizeInviteCode(document.getElementById('invite-code-input').value);
+            if (!code) {
+                joinError.textContent = 'Please enter an invite code.';
+                joinError.classList.remove('hidden');
+                return;
+            }
+            if (code.length !== INVITE_CODE_LENGTH) {
+                joinError.textContent = 'Invite codes must be exactly 16 letters/numbers.';
+                joinError.classList.remove('hidden');
+                return;
+            }
+
+            const user = auth.currentUser;
+            if (!user) {
+                joinError.textContent = 'Please sign in first before joining a study group.';
+                joinError.classList.remove('hidden');
+                return;
+            }
+
+            setLoading('join-btn', true);
+
+            try {
+                const found = await processInviteCode(code, user);
+                setLoading('join-btn', false);
+                if (found) {
+                    joinSuccess.textContent = 'Joined successfully! Redirecting...';
+                    joinSuccess.classList.remove('hidden');
+                } else {
+                    joinError.textContent = 'Invite code not found. Please check and try again.';
+                    joinError.classList.remove('hidden');
+                }
+            } catch (error) {
+                setLoading('join-btn', false);
+                joinError.textContent = 'Something went wrong. Please try again.';
+                joinError.classList.remove('hidden');
+            }
+        }
+
+        function processInviteCode(code) {
+            const normalizedCode = sanitizeInviteCode(code);
+            if (normalizedCode.length !== INVITE_CODE_LENGTH) {
+                return Promise.resolve(false);
+            }
+
+            return db.collection('chavrutas')
+                .where('inviteCode', '==', normalizedCode)
+                .limit(1)
+                .get()
+                .then(function(snapshot) {
+                    if (!snapshot.empty) {
+                        const chavrutaId = snapshot.docs[0].id;
+                        sessionStorage.setItem('activeChavrutaId', chavrutaId);
+                        window.location.href = 'dashboard.html?join=' + encodeURIComponent(chavrutaId);
+                        return true;
+                    }
+                    return false;
+                });
+        }
+
+        document.getElementById('signin-email').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('signin-password').focus();
+        });
+        document.getElementById('signin-password').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') handleSignIn();
+        });
+        document.getElementById('create-display-name').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('create-email').focus();
+        });
+        document.getElementById('create-email').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('create-password').focus();
+        });
+        document.getElementById('create-password').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('create-confirm').focus();
+        });
+        document.getElementById('create-confirm').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') handleCreateAccount();
+        });
+        document.getElementById('invite-code-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') handleJoinChavruta();
+        });
+        document.getElementById('reset-email').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') handlePasswordReset();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeResetModal();
+        });
+    </script>
+</body>
+</html>

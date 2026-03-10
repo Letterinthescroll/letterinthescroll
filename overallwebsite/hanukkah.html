@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanukkah — The Complete Guide | A Letter in the Scroll</title>
+    <meta name="description" content="A complete guide to Hanukkah: the Festival of Lights — history, the Maccabean revolt, blessings, menorah lighting, and songs.">
+    <link rel="icon" type="image/png" href="media/images/Icon.png">
+    <link rel="apple-touch-icon" href="media/images/Icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mobile-overrides.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --p-navy:   #1e3a5f;
+            --p-blue:   #1e3a8a;
+            --p-blue2:  #1e40af;
+            --p-blue3:  #2563eb;
+            --p-gold:   #b7791f;
+            --p-amber:  #f59e0b;
+            --p-border: rgba(30, 58, 138, 0.11);
+            --p-muted:  #4b6278;
+            --p-radius: 16px;
+        }
+        html { scroll-behavior: smooth; }
+        body.haggadah-body {
+            background: linear-gradient(170deg, #f0f5ff 0%, #e8effe 40%, #f5f8ff 100%);
+            min-height: 100vh; color: #1a3147; overflow-x: hidden;
+        }
+        .hag-page { position: relative; z-index: 2; }
+
+        .hag-hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 55%, #2563eb 100%);
+            color: #fff; text-align: center;
+            padding: 3.8rem 1.5rem 3.6rem;
+            position: relative; overflow: hidden;
+        }
+        .hag-hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 72% 35%, rgba(255,255,255,0.09) 0%, transparent 62%);
+            pointer-events: none;
+        }
+        .hag-hero::after {
+            content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+            height: 46px;
+            background: linear-gradient(to bottom right, transparent 49%, #f0f5ff 50%);
+        }
+        .hag-hero__eyebrow { font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(255,255,255,0.58); font-weight: 600; margin-bottom: 0.5rem; position: relative; }
+        .hag-hero__hebrew { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 700; direction: rtl; color: #bfdbfe; margin-bottom: 0.35rem; position: relative; }
+        .hag-hero__title { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 5.5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1rem; position: relative; }
+        .hag-hero__title span { color: #fde68a; }
+        .hag-hero__subtitle { font-size: 0.96rem; color: rgba(255,255,255,0.7); line-height: 1.68; max-width: 560px; margin: 0 auto 1.6rem; position: relative; }
+        .hag-hero__actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.65rem; position: relative; }
+        .hag-hero__btn { display: inline-flex; align-items: center; text-decoration: none; border-radius: 999px; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.88rem; transition: opacity 0.18s, transform 0.15s; }
+        .hag-hero__btn:hover { opacity: 0.88; transform: translateY(-1px); }
+        .hag-hero__btn--primary { background: rgba(255,255,255,0.2); color: #fff; border: 1.5px solid rgba(255,255,255,0.48); backdrop-filter: blur(6px); }
+        .hag-hero__btn--secondary { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.22); }
+
+        .haggadah-shell { max-width: 1040px; margin: 0 auto; padding: 0 1.25rem 4.4rem; }
+
+        .hag-section-label { margin: 2rem 0 0.75rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--p-blue3); display: flex; align-items: center; gap: 0.7rem; }
+        .hag-section-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(37,99,235,0.28), transparent); }
+
+        .seder-section { margin-top: 1.55rem; background: #fff; border: 1px solid rgba(30,58,138,0.09); border-radius: 18px; padding: 1.6rem 1.65rem 1.5rem; box-shadow: 0 2px 20px rgba(30,58,138,0.07); scroll-margin-top: 82px; }
+        .section-kicker-wrap { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+        .section-kicker { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--p-blue3); margin: 0; }
+        .section-title { margin: 0; font-family: 'Playfair Display', serif; font-size: clamp(1.35rem, 2.8vw, 2.05rem); color: #1e3a5f; line-height: 1.15; }
+        .section-hebrew { margin: 0.25rem 0 0.8rem; direction: rtl; color: var(--p-blue2); font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2.2vw, 1.3rem); opacity: 0.72; }
+        .section-subtitle { margin: 0.12rem 0 0; color: var(--p-muted); line-height: 1.74; font-size: 0.94rem; }
+
+        .step-callout { margin-top: 1.08rem; background: #eff6ff; border: 1px solid rgba(37,99,235,0.23); border-radius: 10px; padding: 0.86rem 1.05rem; color: #1e3a8a; font-size: 0.9rem; line-height: 1.74; }
+        .step-callout strong { color: #1e3a5f; }
+
+        .blessing-card { margin-top: 1.1rem; background: #fff; border: 1px solid rgba(183,121,31,0.25); border-radius: 14px; padding: 1.02rem 1.08rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.72rem 0.82rem; }
+        .blessing-card h4 { margin: 0 0 0.12rem; color: #7a4e11; font-size: 0.95rem; font-weight: 700; grid-column: 1 / -1; }
+        .blessing-meta { margin: 0.3rem 0 0; color: #5a6d80; font-size: 0.86rem; line-height: 1.66; grid-column: 1 / -1; }
+        .blessing-hebrew { margin: 0; direction: rtl; text-align: right; font-family: 'Playfair Display', serif; font-size: 1.12rem; line-height: 1.92; color: #7c2d12; background: #fffbf2; border: 1px solid rgba(183,121,31,0.17); border-radius: 10px; padding: 0.62rem 0.82rem; grid-column: 1; min-width: 0; }
+        .blessing-translit, .blessing-english { margin: 0; font-size: 0.89rem; line-height: 1.74; color: #334e67; background: #f8fbff; border: 1px solid rgba(30,58,138,0.12); border-radius: 10px; padding: 0.62rem 0.82rem; min-width: 0; }
+        .blessing-translit { grid-column: 2; font-style: italic; }
+        .blessing-english  { grid-column: 3; }
+
+        .mini-heading { margin: 1.35rem 0 0.56rem; color: var(--p-blue); font-size: 0.78rem; letter-spacing: 0.11em; text-transform: uppercase; font-weight: 800; }
+
+        .note-panel { background: #f8fbff; border: 1px solid rgba(30,58,138,0.12); border-radius: 12px; padding: 0.85rem 0.95rem; margin-top: 1rem; }
+        .note-panel h4 { margin: 0; color: var(--p-blue); font-size: 0.9rem; font-weight: 700; }
+        .note-panel p, .note-panel li { margin: 0.38rem 0 0; color: #355671; font-size: 0.87rem; line-height: 1.72; }
+        .note-panel ul { margin: 0.32rem 0 0; padding-left: 1rem; }
+
+        .quote-block { margin-top: 1rem; background: #fff8eb; border-left: 4px solid var(--p-amber); border-radius: 0 12px 12px 0; padding: 0.9rem 1.1rem; }
+        .quote-block__text { font-family: 'Playfair Display', serif; font-size: 1.02rem; color: #7a4e11; line-height: 1.7; margin: 0 0 0.4rem; font-style: italic; }
+        .quote-block__cite { font-size: 0.82rem; color: #8a6240; margin: 0; }
+
+        /* Song lyrics */
+        .song-card { margin-top: 1.2rem; background: #f8fbff; border: 1px solid rgba(30,58,138,0.12); border-radius: 14px; padding: 1rem 1.1rem; }
+        .song-card h4 { margin: 0 0 0.2rem; color: #1e3a5f; font-size: 0.97rem; font-weight: 700; }
+        .song-card .song-hebrew { font-family: 'Playfair Display', serif; direction: rtl; text-align: right; font-size: 1rem; color: #7c2d12; background: #fffbf2; border: 1px solid rgba(183,121,31,0.15); border-radius: 8px; padding: 0.55rem 0.75rem; margin: 0.5rem 0; line-height: 1.9; }
+        .song-card .song-translit { font-style: italic; color: #2d4a6f; font-size: 0.88rem; line-height: 1.78; margin: 0.4rem 0; }
+        .song-card .song-english { color: #334e67; font-size: 0.88rem; line-height: 1.78; margin: 0.4rem 0; }
+        .song-stanza { margin-bottom: 1rem; }
+        .song-stanza + .song-stanza { border-top: 1px solid rgba(30,58,138,0.08); padding-top: 0.9rem; }
+
+        .ending-banner { margin-top: 1.3rem; text-align: center; background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 55%, #2563eb 100%); border-radius: 20px; padding: 2.2rem 1.5rem; position: relative; overflow: hidden; }
+        .ending-banner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 60% 40%, rgba(255,255,255,0.09) 0%, transparent 65%); pointer-events: none; }
+        .ending-banner h3 { margin: 0; direction: rtl; color: #bfdbfe; font-family: 'Playfair Display', serif; font-size: clamp(1.9rem, 4.5vw, 2.8rem); line-height: 1.2; position: relative; }
+        .ending-banner p { margin: 0.55rem 0 0; color: rgba(255,255,255,0.76); font-size: 1.05rem; position: relative; }
+        .page-footer { margin: 1.8rem 0 0; color: rgba(30,58,138,0.38); text-align: center; font-size: 0.79rem; }
+
+        .anchor-menu { position: fixed; right: 0; top: 116px; z-index: 60; width: 92px; max-height: 72vh; overflow-y: auto; overflow-x: hidden; background: rgba(255,255,255,0.74); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); border: 1px solid rgba(30,58,138,0.14); border-right: none; border-radius: 10px 0 0 10px; box-shadow: -4px 6px 28px rgba(30,58,138,0.1), inset 0 1px 0 rgba(255,255,255,0.6); padding: 0.42rem 0.32rem; }
+        .anchor-menu__title { margin: 0 0 0.32rem; padding: 0 0.28rem 0.3rem; font-size: 0.58rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--p-blue3); border-bottom: 1px solid rgba(37,99,235,0.15); }
+        .anchor-link { display: block; text-decoration: none; color: #3b5270; font-size: 0.65rem; font-weight: 600; line-height: 1.3; padding: 0.24rem 0.3rem; border-radius: 7px; transition: background 0.14s, color 0.14s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .anchor-link:hover { background: rgba(37,99,235,0.09); color: var(--p-blue); }
+        .anchor-link.active { background: rgba(37,99,235,0.13); color: var(--p-blue); font-weight: 700; }
+
+        @media (max-width: 1120px) { .anchor-menu { display: none; } .blessing-card { grid-template-columns: 1fr; } }
+        @media (max-width: 860px) { .hag-hero { padding: 2.8rem 1rem 3rem; } }
+    </style>
+</head>
+<body class="haggadah-body" data-enable-text-size="true" data-header-fallback="true">
+
+    <header class="header-main relative z-30">
+        <div class="header-container">
+            <div class="header-branding-section">
+                <button id="home-branding" type="button" aria-label="Return to home" class="header-branding-button">
+                    <div class="header-text">
+                        <h1 class="header-title">A Letter in the Scroll</h1>
+                        <p class="header-subtitle">Interactive Weekly Portion Study &amp; Discussion</p>
+                    </div>
+                </button>
+            </div>
+            <div class="header-actions-wrapper">
+                <div id="header-actions" class="header-actions">
+                    <button id="go-to-weekly" class="header-btn header-btn-primary" title="Go to this week's parsha">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        <span class="header-btn-text">This Week's Parsha</span>
+                    </button>
+                    <a href="prayers.html" class="header-btn header-btn-secondary">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        <span class="header-btn-text">Prayers</span>
+                    </a>
+                    <a href="songs.html" class="header-btn header-btn-secondary">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13"/><circle cx="6" cy="18" r="3" stroke-width="2"/><circle cx="18" cy="16" r="3" stroke-width="2"/></svg>
+                        <span class="header-btn-text">Songs and Poems</span>
+                    </a>
+                    <a href="holidays/" class="header-btn header-btn-secondary">
+                        <img src="media/images/party.png" class="header-btn-icon" alt="" style="width:22px;height:22px;object-fit:contain;">
+                        <span class="header-btn-text">Holidays</span>
+                    </a>
+                    <a href="about.html" class="header-btn header-btn-secondary">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span class="header-btn-text">About</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="anchor-menu" aria-label="Hanukkah section links">
+        <p class="anchor-menu__title">Hanukkah</p>
+        <a class="anchor-link" href="#hero">Top</a>
+        <a class="anchor-link" href="#overview">Overview</a>
+        <a class="anchor-link" href="#history">History</a>
+        <a class="anchor-link" href="#customs">Customs</a>
+        <a class="anchor-link" href="#blessings">Blessings</a>
+        <a class="anchor-link" href="#songs">Songs</a>
+    </nav>
+
+    <div class="hag-page">
+    <section id="hero" class="hag-hero" aria-labelledby="hanukkah-title">
+        <p class="hag-hero__eyebrow">Complete Holiday Guide &middot; Hanukkah</p>
+        <p class="hag-hero__hebrew">חֲנֻכָּה</p>
+        <h1 id="hanukkah-title" class="hag-hero__title">The Festival of <span>Lights</span></h1>
+        <p class="hag-hero__subtitle">
+            Eight nights of candles, ancient miracles, and the courage of the Maccabees —
+            celebrating the rededication of the Holy Temple and the eternal light of Jewish identity.
+        </p>
+        <div class="hag-hero__actions">
+            <a class="hag-hero__btn hag-hero__btn--primary" href="holidays/">All Holidays</a>
+            <a class="hag-hero__btn hag-hero__btn--secondary" href="index.html">Home</a>
+        </div>
+    </section>
+
+    <main class="haggadah-shell">
+
+        <!-- Overview -->
+        <div class="hag-section-label">About the Holiday</div>
+        <section id="overview" class="seder-section" aria-labelledby="hanukkah-overview">
+            <div class="section-kicker-wrap"><p class="section-kicker">Introduction</p></div>
+            <h2 id="hanukkah-overview" class="section-title">What is Hanukkah?</h2>
+            <p class="section-hebrew">מהי חנוכה</p>
+            <div style="display:grid;gap:0.85rem;grid-template-columns:1fr 1fr;margin-top:0.5rem;">
+                <div>
+                    <p style="margin:0;color:var(--p-muted);font-size:0.93rem;line-height:1.72;"><strong style="color:#1e3a5f;">Date:</strong> 25 Kislev &mdash; lasts eight days</p>
+                    <p style="margin:0.4rem 0 0;color:var(--p-muted);font-size:0.93rem;line-height:1.72;"><strong style="color:#1e3a5f;">Meaning:</strong> "Dedication" &mdash; referring to the rededication of the Holy Temple</p>
+                </div>
+                <div>
+                    <p style="margin:0;color:var(--p-muted);font-size:0.93rem;line-height:1.72;"><strong style="color:#1e3a5f;">Also Known As:</strong> Chag HaUrim &mdash; the Festival of Lights</p>
+                    <p style="margin:0.4rem 0 0;color:var(--p-muted);font-size:0.93rem;line-height:1.72;"><strong style="color:#1e3a5f;">Type:</strong> Rabbinic holiday (not Biblical); work is permitted</p>
+                </div>
+            </div>
+            <div class="step-callout" style="margin-top:1rem;">
+                Hanukkah commemorates two interwoven miracles: the military victory of a small, faithful band of Jewish fighters against the vastly more powerful Greek-Syrian army, and the miraculous burning of a single cruse of pure olive oil for eight days in the rededicated Temple. It is observed by lighting the Hanukkiah (an eight-branched menorah), reciting blessings, singing songs, playing dreidel, and eating oil-fried foods.
+            </div>
+        </section>
+
+        <!-- History -->
+        <div class="hag-section-label">The Story</div>
+        <section id="history" class="seder-section" aria-labelledby="history-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Historical Events</p></div>
+            <h2 id="history-title" class="section-title">The Maccabean Revolt &amp; the Miracle of the Oil</h2>
+            <p class="section-hebrew">מַעֲשֵׂה חֲנֻכָּה</p>
+
+            <p class="mini-heading">Greek Oppression — Antiochus IV</p>
+            <p style="color:var(--p-muted);font-size:0.94rem;line-height:1.74;">In 167 BCE, the Greek-Syrian king Antiochus IV Epiphanes ("God Manifest") launched a fierce campaign to erase Jewish identity and assimilate the Jews into Hellenistic culture. He outlawed the observance of Shabbat, Torah study, circumcision, and the Jewish calendar. He desecrated the Holy Temple in Jerusalem — installing an altar to Zeus in the Temple courtyard and sacrificing pigs on the altar. Those who refused to submit faced execution.</p>
+
+            <p class="mini-heading">The Maccabean Revolt</p>
+            <p style="color:var(--p-muted);font-size:0.94rem;line-height:1.74;">In the town of Modi'in, an elderly priest named Mattathias of the Hasmonean family refused the royal decree. When a Hellenized Jew stepped forward to offer a pagan sacrifice, Mattathias killed him and the king's officer. He and his five sons fled to the Judean hills, where they launched a guerrilla campaign. After Mattathias's death, his son Judah — nicknamed "HaMaccabee" (the Hammer) — took command. Against all military odds, the Maccabees defeated the powerful Greek-Syrian army through faith, strategy, and fierce devotion to God.</p>
+
+            <div class="quote-block">
+                <p class="quote-block__text">"Mi LaHashem Elai!" — "Whoever is for God, come to me!"</p>
+                <p class="quote-block__cite">— Mattathias's rallying cry to the Jewish people (I Maccabees 2:27)</p>
+            </div>
+
+            <p class="mini-heading">The Miracle of the Oil</p>
+            <p style="color:var(--p-muted);font-size:0.94rem;line-height:1.74;">When the Maccabees entered the liberated Temple in 165 BCE, they found it in a state of deep desecration. They immediately set about cleansing and rededicating it. For the Temple's great Menorah (the seven-branched candelabra) to be lit, the oil had to be ritually pure and sealed with the High Priest's stamp. They searched the entire Temple and found only one small cruse of undefiled oil &mdash; enough to last a single day. Miraculously, this oil burned for eight full days &mdash; precisely the time needed to prepare a fresh supply of pure oil. The Talmud (Shabbat 21b) records this miracle and states: "The rabbis taught: On the 25th of Kislev, eight days of Hanukkah begin, on which one may not eulogize or fast. When the Greeks entered the Temple, they defiled all the oils there, and when the Hasmonean dynasty prevailed and defeated them, they searched and found only one flask of oil sealed with the stamp of the High Priest. It contained only enough oil to burn for one day. A miracle was performed with it and it burned for eight days."</p>
+
+            <div class="note-panel">
+                <h4>Why Eight Days?</h4>
+                <p>The miracle lasted eight days because it takes seven days to press fresh olive oil and one additional day to carry it to Jerusalem — eight days total. During those eight days, the small jar of oil that should have lasted only one day continued to burn, allowing the Temple service to be restored fully. The eight days of Hanukkah commemorate and celebrate this miracle.</p>
+            </div>
+        </section>
+
+        <!-- Customs -->
+        <div class="hag-section-label">How We Observe</div>
+        <section id="customs" class="seder-section" aria-labelledby="customs-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Traditions</p></div>
+            <h2 id="customs-title" class="section-title">Customs &amp; Traditions</h2>
+            <p class="section-hebrew">מִנְהָגֵי חֲנֻכָּה</p>
+
+            <p class="mini-heading">1. Lighting the Hanukkiah</p>
+            <p style="color:var(--p-muted);font-size:0.93rem;line-height:1.74;">The central mitzvah of Hanukkah is lighting the Hanukkiah (also called the Hanukkah menorah), a special candelabra with eight branches plus a ninth branch for the shamash (helper candle). Each night, one additional light is added from right to left, but lit from left to right (so the newest night is honored first). The Hanukkiah is traditionally placed in a window or doorway to publicize the miracle — <em>pirsumei nissa</em> — so that all who pass by can see it.</p>
+            <div class="step-callout">The lights of the Hanukkiah are holy and may not be used for any practical purpose (reading, working, etc.) — they exist solely to proclaim the miracle. The shamash candle is lit first and serves as the "working" light so that the holy Hanukkah lights remain untouched for their sacred purpose.</div>
+
+            <p class="mini-heading">2. Eating Oil-Fried Foods</p>
+            <p style="color:var(--p-muted);font-size:0.93rem;line-height:1.74;">In commemoration of the miracle of the oil, it is customary to eat foods fried in oil. The most iconic Hanukkah foods are <em>latkes</em> (potato pancakes) in Ashkenazi tradition, and <em>sufganiyot</em> (jelly-filled doughnuts) which have become popular across all communities. Dairy foods are also eaten in Sephardic communities, in honor of Judith's bravery.</p>
+
+            <p class="mini-heading">3. Playing Dreidel</p>
+            <p style="color:var(--p-muted);font-size:0.93rem;line-height:1.74;">A dreidel (Yiddish: <em>dreydl</em>; Hebrew: <em>sevivon</em>) is a four-sided spinning top with Hebrew letters: Nun (נ), Gimel (ג), Hey (ה), Shin (ש) — standing for <em>Nes Gadol Hayah Sham</em>, "A Great Miracle Happened There." In Israel, the Shin is replaced with a Peh (פ) for <em>Poh</em>, "Here." According to legend, when the Greeks forbade Torah study, Jews would gather secretly to study — and when soldiers approached, they would hide their books and pretend to be playing with spinning tops.</p>
+
+            <p class="mini-heading">4. Hanukkah Gelt</p>
+            <p style="color:var(--p-muted);font-size:0.93rem;line-height:1.74;">It became customary to give children <em>gelt</em> (money; Yiddish for "gold") on Hanukkah, both real coins and chocolate coins wrapped in gold foil. This tradition honors the newly independent Hasmonean state, which began minting its own coins — a symbol of Jewish sovereignty and freedom. Today, giving gifts has also become associated with Hanukkah.</p>
+        </section>
+
+        <!-- Blessings -->
+        <div class="hag-section-label">Prayers &amp; Blessings</div>
+        <section id="blessings" class="seder-section" aria-labelledby="blessings-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Liturgy</p></div>
+            <h2 id="blessings-title" class="section-title">Hanukkah Blessings</h2>
+            <p class="section-hebrew">בְּרָכוֹת חֲנֻכָּה</p>
+            <p class="section-subtitle">Before lighting the Hanukkiah each night, three blessings are recited on the first night, and two blessings on all subsequent nights (Shehecheyanu is omitted after the first night).</p>
+
+            <p class="mini-heading">1. L'hadlik Ner — To Kindle the Light</p>
+            <div class="blessing-card">
+                <h4>Blessing for Lighting the Hanukkah Candles</h4>
+                <p class="blessing-meta">Recited each night before lighting. This is the primary mitzvah blessing for kindling the Hanukkah lights.</p>
+                <p class="blessing-hebrew">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו וְצִוָּנוּ לְהַדְלִיק נֵר שֶׁל חֲנֻכָּה.</p>
+                <p class="blessing-translit">Baruch atah, Adonai Eloheinu, Melech haolam, asher kid'shanu b'mitzvotav v'tzivanu l'hadlik ner shel Hanukkah.</p>
+                <p class="blessing-english">Blessed are You, Adonai our God, Sovereign of all, who has sanctified us with Your commandments and commanded us to kindle the Hanukkah light.</p>
+            </div>
+
+            <p class="mini-heading">2. She'asah Nisim — Who Performed Miracles</p>
+            <div class="blessing-card">
+                <h4>Blessing of Gratitude for the Miracles</h4>
+                <p class="blessing-meta">Recited each night, thanking God for the miracles performed for our ancestors in those days.</p>
+                <p class="blessing-hebrew">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, שֶׁעָשָׂה נִסִּים לַאֲבוֹתֵינוּ בַּיָּמִים הָהֵם בַּזְּמַן הַזֶּה.</p>
+                <p class="blessing-translit">Baruch atah, Adonai Eloheinu, Melech haolam, she'asah nisim la'avoteinu bayamim hahem baz'man hazeh.</p>
+                <p class="blessing-english">Blessed are You, Adonai our God, Sovereign of all, who performed miracles for our ancestors in those days at this season.</p>
+            </div>
+
+            <p class="mini-heading">3. Shehecheyanu — Blessing of Firsts (First Night Only)</p>
+            <div class="blessing-card">
+                <h4>Shehecheyanu</h4>
+                <p class="blessing-meta">Recited only on the first night, thanking God for sustaining us to reach this joyful season once again.</p>
+                <p class="blessing-hebrew">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, שֶׁהֶחֱיָנוּ וְקִיְּמָנוּ וְהִגִּיעָנוּ לַזְּמַן הַזֶּה.</p>
+                <p class="blessing-translit">Baruch atah, Adonai Eloheinu, Melech haolam, shehecheyanu v'kiy'manu v'higiyanu laz'man hazeh.</p>
+                <p class="blessing-english">Blessed are You, Adonai our God, Sovereign of all, who has kept us alive, sustained us, and brought us to this season.</p>
+            </div>
+
+            <p class="mini-heading">Haneirot Halalu — After Lighting</p>
+            <div class="blessing-card">
+                <h4>Haneirot Halalu</h4>
+                <p class="blessing-meta">Recited or sung immediately after lighting the candles, declaring the sacred purpose of the Hanukkah lights.</p>
+                <p class="blessing-hebrew">הַנֵּרוֹת הַלָּלוּ אֲנַחְנוּ מַדְלִיקִין עַל הַנִּסִּים וְעַל הַנִּפְלָאוֹת וְעַל הַתְּשׁוּעוֹת וְעַל הַמִּלְחָמוֹת שֶׁעָשִׂיתָ לַאֲבוֹתֵינוּ בַּיָּמִים הָהֵם בַּזְּמַן הַזֶּה, עַל יְדֵי כֹּהֲנֶיךָ הַקְּדוֹשִׁים. וְכָל שְׁמוֹנַת יְמֵי חֲנֻכָּה הַנֵּרוֹת הַלָּלוּ קֹדֶשׁ הֵם, וְאֵין לָנוּ רְשׁוּת לְהִשְׁתַּמֵּשׁ בָּהֶם אֶלָּא לִרְאוֹתָם בִּלְבָד, כְּדֵי לְהוֹדוֹת וּלְהַלֵּל לְשִׁמְךָ הַגָּדוֹל עַל נִסֶּיךָ וְעַל נִפְלְאוֹתֶיךָ וְעַל יְשׁוּעָתֶךָ.</p>
+                <p class="blessing-translit">Haneirot halalu anachnu madlikin al hanisim v'al haniflaot v'al hat'shuot v'al hamilchamot she'asita la'avoteinu bayamim hahem baz'man hazeh al y'dei Kohanecha haK'doshim. V'chol sh'monat y'mei Hanukkah haneirot halalu kodesh hem, v'ein lanu r'shut l'hishtameish bahem ela lir'otam bilvad, k'dei l'hodot ul'hallel l'shimcha hagadol al nisecha v'al niflaotecha v'al y'shuatecha.</p>
+                <p class="blessing-english">We kindle these lights for the miracles and the wonders, for the redemption and the battles that You performed for our forefathers in those days at this season through Your holy priests. During all eight days of Hanukkah these lights are sacred, and we are not permitted to make use of them, but only to look at them, in order to express thanks and praise to Your great Name for Your miracles, Your wonders, and Your salvations.</p>
+            </div>
+        </section>
+
+        <!-- Songs -->
+        <div class="hag-section-label">Songs &amp; Music</div>
+        <section id="songs" class="seder-section" aria-labelledby="songs-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Hanukkah Songs</p></div>
+            <h2 id="songs-title" class="section-title">Songs of Hanukkah</h2>
+            <p class="section-hebrew">שִׁירֵי חֲנֻכָּה</p>
+            <p class="section-subtitle">These beloved songs are sung around the Hanukkiah — celebrating the miracle, the Maccabees, and the enduring light of the Jewish people.</p>
+
+            <!-- Maoz Tzur -->
+            <div class="song-card">
+                <h4>Maoz Tzur — Rock of Ages</h4>
+                <p style="color:var(--p-muted);font-size:0.86rem;margin:0.2rem 0 0.7rem;">A 13th-century piyyut (liturgical poem) sung after lighting the Hanukkiah. Six stanzas describe the Temple's rededication and various national redemptions. In Ashkenazi communities the first stanza is most commonly sung.</p>
+
+                <div class="song-stanza">
+                    <p style="font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--p-blue3);margin:0 0 0.4rem;">Stanza 1 — Intro / Temple Dedication</p>
+                    <p class="song-hebrew">מָעוֹז צוּר יְשׁוּעָתִי, לְךָ נָאֶה לְשַׁבֵּחַ,<br>תִּכּוֹן בֵּית תְּפִלָּתִי, וְשָׁם תּוֹדָה נְזַבֵּחַ.<br>לְעֵת תָּכִין מַטְבֵּחַ, מִצָּר הַמְנַבֵּחַ,<br>אָז אֶגְמוֹר בְּשִׁיר מִזְמוֹר חֲנֻכַּת הַמִּזְבֵּחַ.</p>
+                    <p class="song-translit">Maoz tzur y'shuati, l'cha na'eh l'shabeiach,<br>Tikon beit t'filati, v'sham todah n'zabeach.<br>L'eit tachin matbeach, mitzar hamnabeach,<br>Az egmor b'shir mizmor chanukat hamizbeach.</p>
+                    <p class="song-english">O mighty stronghold of my salvation, to praise You is a delight.<br>Restore my House of Prayer and there we will bring a thanksgiving offering.<br>When You will have prepared the slaughter for the blaspheming foe,<br>Then I shall complete with a song of hymn the dedication of the altar.</p>
+                </div>
+
+                <div class="song-stanza">
+                    <p style="font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--p-blue3);margin:0 0 0.4rem;">Stanza 2 — Egyptian Exile</p>
+                    <p class="song-hebrew">רָעוֹת שָׂבְעָה נַפְשִׁי, בְּיָגוֹן כֹּחִי כָּלָה,<br>חַיַּי מֵרְרוּ בְּקֹשִׁי, בְּשִׁעְבּוּד מַלְכוּת עֶגְלָה.<br>וּבְיָדוֹ הַגְּדוֹלָה הוֹצִיא אֶת הַסְּגֻלָּה,<br>חֵיל פַּרְעֹה וְכָל זַרְעוֹ יָרְדוּ כְּאֶבֶן בִּמְצוּלָה.</p>
+                    <p class="song-translit">Ra'ot sav'ah nafshi, b'yagon kochi kalah,<br>Chayai mer'ru v'koshi, b'shiv'ud malchut eglah.<br>Uv'yado hag'dolah hotzi et has'gulah,<br>Cheil Par'oh v'chol zar'o yar'du k'even bim'tzulah.</p>
+                    <p class="song-english">My soul was sated with troubles, my strength was spent in grief,<br>My life had grown bitter through toil in slavery under Egypt's reign.<br>But with His great power He brought out His treasured people,<br>While Pharaoh's army and all his descendants sank like a stone in the deep.</p>
+                </div>
+
+                <div class="song-stanza">
+                    <p style="font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--p-blue3);margin:0 0 0.4rem;">Stanza 3 — Babylonian Exile</p>
+                    <p class="song-hebrew">דְּבִיר קָדְשׁוֹ הֱבִיאַנִי, וְגַם שָׁם לֹא שָׁקַטְתִּי,<br>וּבָא נוֹגֵשׂ וְהִגְלַנִי, כִּי זָרִים עָבַדְתִּי.<br>וְיֵין רַעַל מָסַכְתִּי כִּמְעַט שֶׁעָבַרְתִּי,<br>קֵץ בָּבֶל זְרֻבָּבֶל לְקֵץ שִׁבְעִים נוֹשַׁעְתִּי.</p>
+                    <p class="song-translit">D'vir kodsho hevianni, v'gam sham lo shakateti,<br>Uva noges v'higlani, ki zarim avadeti.<br>V'yein ra'al masacheti kim'at she'avaret,<br>Keitz Bavel Z'rubavel l'keitz shiv'im noshaveti.</p>
+                    <p class="song-english">He brought me to His holy sanctuary, but even there I found no rest,<br>An oppressor came and exiled me for I had served foreign gods.<br>I had drunk poisonous wine; I had nearly perished,<br>But at the end of seventy years, Zerubbabel came and Babylon's end brought my salvation.</p>
+                </div>
+
+                <div class="song-stanza">
+                    <p style="font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--p-blue3);margin:0 0 0.4rem;">Stanza 4 — Persian Exile / Haman</p>
+                    <p class="song-hebrew">כְּרוֹת קוֹמַת בְּרוֹשׁ בִּקֵּשׁ, אֲגָגִי בֶּן הַמְּדָתָא,<br>וְנִהְיָתָה לוֹ לְפַח וּלְמוֹקֵשׁ, וְגַאֲוָתוֹ נִשְׁבָּתָה.<br>רֹאשׁ יְמִינִי נִשֵּׂאתָ, וְאוֹיֵב שְׁמוֹ מָחִיתָ,<br>רֹב בָּנָיו וְקִנְיָנָיו עַל הָעֵץ תָּלִיתָ.</p>
+                    <p class="song-translit">K'rot komat b'rosh bikeish, Agagi ben Hamedatah,<br>V'nihy'tah lo l'fach ulmokeish, v'ga'avato nishbatah.<br>Rosh Yemini nise'ata, v'oyev sh'mo machita,<br>Rov banav v'kinyanov al ha'eitz talita.</p>
+                    <p class="song-english">The Agagite Haman, son of Hammedatha, sought to cut down the tallest cedar,<br>But it became a trap and snare to him and his arrogance was silenced.<br>You lifted the head of the Benjaminite [Mordechai], and erased the enemy's name,<br>And his many sons and possessions You hanged upon the gallows.</p>
+                </div>
+
+                <div class="song-stanza">
+                    <p style="font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--p-blue3);margin:0 0 0.4rem;">Stanza 5 — Greek Oppression / Hanukkah</p>
+                    <p class="song-hebrew">יְוָנִים נִקְבְּצוּ עָלַי, אֲזַי בִּימֵי חַשְׁמַנִּים,<br>וּפָרְצוּ חוֹמוֹת מִגְדָּלַי, וְטִמְּאוּ כָּל הַשְּׁמָנִים.<br>וּמִנּוֹתַר קַנְקַנִּים, נַעֲשָׂה נֵס לַשּׁוֹשַׁנִּים,<br>בְּנֵי בִינָה יְמֵי שְׁמוֹנָה קָבְעוּ שִׁיר וּרְנָנִים.</p>
+                    <p class="song-translit">Y'vanim nikb'tzu alai, azai bimei Chashmanim,<br>Ufartz'u chomot migdalai, v'tim'u kol hash'manim.<br>Uminotar kankanim, na'asah nes lashoashanim,<br>B'nei vinah y'mei sh'monah kav'u shir ur'nanim.</p>
+                    <p class="song-english">Greeks gathered against me in the days of the Hasmoneans,<br>They breached the walls of my towers and defiled all the oils.<br>But from the remaining flasks a miracle was wrought for the roses [Israel],<br>And the sages of insight established eight days of song and jubilation.</p>
+                </div>
+
+                <div class="song-stanza">
+                    <p style="font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--p-blue3);margin:0 0 0.4rem;">Stanza 6 — Prayer for Future Redemption</p>
+                    <p class="song-hebrew">חֲשׂוֹף זְרוֹעַ קָדְשֶׁךָ, וְקָרֵב קֵץ הַיְשׁוּעָה,<br>נְקוֹם נִקְמַת עֲבָדֶיךָ, מֵאֻמָּה הָרְשָׁעָה.<br>כִּי אָרְכָה הַיָּשׁוּעָה, וְאֵין קֵץ לִימֵי הָרָעָה,<br>דְּחֵה אַדְמוֹן בְּצֵל צַלְמוֹן, הָקֵם לָנוּ רוֹעִים שִׁבְעָה.</p>
+                    <p class="song-translit">Chasof z'roa kodsh'cha, v'karev keitz hay'shuah,<br>N'kom nikmat avadecha, me'umah harsha'ah.<br>Ki ar'chah hay'shuah, v'ein keitz liyimei hara'ah,<br>D'chei Admon b'tzel tzalmon, hakem lanu ro'im shiv'ah.</p>
+                    <p class="song-english">Bare Your holy arm and hasten the time of salvation,<br>Avenge the vengeance of Your servants from the wicked nation.<br>For salvation has been long in coming and there is no end to days of evil,<br>Repel the Red One [Edom/Rome] in the shadow of the cross, raise up for us seven shepherds.</p>
+                </div>
+            </div>
+
+            <!-- Mi Yemalel -->
+            <div class="song-card">
+                <h4>Mi Yemalel — Who Can Retell</h4>
+                <p style="color:var(--p-muted);font-size:0.86rem;margin:0.2rem 0 0.7rem;">A rousing Hanukkah song celebrating the bravery of the Maccabees and the endurance of the Jewish people through the ages.</p>
+                <div class="song-stanza">
+                    <p class="song-hebrew">מִי יְמַלֵּל גְּבוּרוֹת יִשְׂרָאֵל,<br>אוֹתָן מִי יִמְנֶה?<br>הֵן בְּכָל דּוֹר יָקוּם הַגִּבּוֹר,<br>גּוֹאֵל הָעָם!</p>
+                    <p class="song-translit">Mi y'mallel g'vurot Yisrael,<br>Otan mi yimneh?<br>Hein b'chol dor yakum hagibor,<br>Go'el ha'am!</p>
+                    <p class="song-english">Who can retell the mighty deeds of Israel,<br>Who can count them?<br>In every generation a hero arises<br>To redeem the people!</p>
+                </div>
+                <div class="song-stanza">
+                    <p class="song-hebrew">שְׁמַע! בַּיָּמִים הָהֵם בַּזְּמַן הַזֶּה,<br>מַכַּבִּי מוֹשִׁיעַ וּפוֹדֶה,<br>וּבְיָמֵינוּ כָּל עַם יִשְׂרָאֵל,<br>יִתְאַחֵד, יָקוּם וְיִגָּאֵל!</p>
+                    <p class="song-translit">Sh'ma! Bayamim hahem baz'man hazeh,<br>Makabi moshia ufo'deh,<br>Uv'yameinu kol am Yisrael,<br>Yit'ached, yakum v'yiga'el!</p>
+                    <p class="song-english">Hear! In those days at this season,<br>The Maccabee saves and redeems,<br>And in our own days all of Israel,<br>Will unite, rise, and be redeemed!</p>
+                </div>
+            </div>
+
+            <!-- Yemei HaHanukkah -->
+            <div class="song-card">
+                <h4>Yemei HaHanukkah — Days of Hanukkah</h4>
+                <p style="color:var(--p-muted);font-size:0.86rem;margin:0.2rem 0 0.7rem;">A joyful, festive song describing the eight days of Hanukkah celebrations.</p>
+                <div class="song-stanza">
+                    <p class="song-hebrew">יְמֵי הַחֲנֻכָּה חֲנֻכַּת מִקְדָּשֵׁנוּ,<br>בְּגִיל וּבְשִׂמְחָה מְמַלְאִים אֶת לִבֵּנוּ.<br>לַיְלָה וָיוֹם סְבִיבוֹנֵנוּ יִסּוֹב,<br>סְבִיבוֹן סוֹב סוֹב סוֹב!</p>
+                    <p class="song-translit">Y'mei HaHanukkah Chanukat Mikdasheinu,<br>B'gil uv'simchah m'malim et libeinu.<br>Lailah vayom s'vivoneinu yisov,<br>S'vivon, sov, sov, sov!</p>
+                    <p class="song-english">The days of Hanukkah, the dedication of our Temple,<br>Fill our hearts with joy and gladness.<br>Night and day our dreidel will spin,<br>Dreidel, spin, spin, spin!</p>
+                </div>
+                <div class="song-stanza">
+                    <p class="song-hebrew">חַנֻּכִּיָּה לִי יֵשׁ, נֵרוֹת לָהּ אֲדַלֵּק,<br>בְּרָכוֹת עָלֶיהָ אֲנִי גַּם אוֹמֵר,<br>לָכֶם סוּפְגָנִיּוֹת, לְבִיבוֹת, אֲדַלֵּק,<br>חֲנֻכָּה, חֲנֻכָּה, חַג יָפֶה כָּל כָּךְ!</p>
+                    <p class="song-translit">Chanukiyah li yeish, neirot lah adalek,<br>B'rachot aleha ani gam omer,<br>Lachem sufganiyot, l'vivot, adalek,<br>Hanukkah, Hanukkah, chag yafeh kol kach!</p>
+                    <p class="song-english">I have a Hanukkiah, I will light its candles,<br>And I will also say the blessings over it,<br>For you: doughnuts, latkes, all lit up,<br>Hanukkah, Hanukkah, such a beautiful holiday!</p>
+                </div>
+            </div>
+
+            <!-- Sevivon -->
+            <div class="song-card">
+                <h4>Sevivon Sov Sov Sov — Dreidel, Spin Spin Spin</h4>
+                <p style="color:var(--p-muted);font-size:0.86rem;margin:0.2rem 0 0.7rem;">A children's Hanukkah song about the spinning dreidel, symbolizing the miracle of Hanukkah.</p>
+                <div class="song-stanza">
+                    <p class="song-hebrew">סְבִיבוֹן, סוֹב, סוֹב, סוֹב,<br>חֲנֻכָּה הוּא חַג טוֹב!<br>חֲנֻכָּה הוּא חַג טוֹב,<br>סְבִיבוֹן, סוֹב, סוֹב, סוֹב!</p>
+                    <p class="song-translit">S'vivon, sov, sov, sov,<br>Hanukkah hu chag tov!<br>Hanukkah hu chag tov,<br>S'vivon, sov, sov, sov!</p>
+                    <p class="song-english">Dreidel, spin, spin, spin,<br>Hanukkah is a good holiday!<br>Hanukkah is a good holiday,<br>Dreidel, spin, spin, spin!</p>
+                </div>
+                <div class="song-stanza">
+                    <p class="song-hebrew">חַג שִׂמְחָה הוּא לָעָם,<br>נֵס גָּדוֹל הָיָה פֹּה!<br>נֵס גָּדוֹל הָיָה פֹּה,<br>חַג שִׂמְחָה הוּא לָעָם!</p>
+                    <p class="song-translit">Chag simchah hu la'am,<br>Nes gadol hayah poh!<br>Nes gadol hayah poh,<br>Chag simchah hu la'am!</p>
+                    <p class="song-english">It is a joyous holiday for the nation,<br>A great miracle happened here!<br>A great miracle happened here,<br>It is a joyous holiday for the nation!</p>
+                </div>
+            </div>
+
+            <!-- I Have a Little Dreidel -->
+            <div class="song-card">
+                <h4>I Have a Little Dreidel</h4>
+                <p style="color:var(--p-muted);font-size:0.86rem;margin:0.2rem 0 0.7rem;">A beloved Yiddish-origin children's Hanukkah song, popularized in the United States.</p>
+                <div class="song-stanza">
+                    <p class="song-english">I have a little dreidel,<br>I made it out of clay,<br>And when it's dry and ready,<br>Then dreidel I shall play!</p>
+                    <p class="song-translit">Oh, dreidel, dreidel, dreidel,<br>I made it out of clay,<br>Oh, dreidel, dreidel, dreidel,<br>Now dreidel I shall play!</p>
+                </div>
+                <div class="song-stanza">
+                    <p class="song-english">It has a lovely body,<br>With legs so short and thin,<br>And when it gets all tired,<br>It drops and then I win!</p>
+                    <p class="song-translit">Oh, dreidel, dreidel, dreidel,<br>With legs so short and thin,<br>Oh, dreidel, dreidel, dreidel,<br>It drops and then I win!</p>
+                </div>
+                <div class="song-stanza">
+                    <p class="song-english">My dreidel's always playful,<br>It loves to dance and spin,<br>A happy game of dreidel,<br>Come play now, let's begin!</p>
+                    <p class="song-translit">Oh, dreidel, dreidel, dreidel,<br>It loves to dance and spin,<br>Oh, dreidel, dreidel, dreidel,<br>Come play now, let's begin!</p>
+                </div>
+                <div class="song-stanza">
+                    <p class="song-english">I have a little dreidel,<br>I made it out of gold,<br>It spins for eight whole evenings,<br>A story to be told!</p>
+                    <p class="song-translit">Oh, dreidel, dreidel, dreidel,<br>I made it out of gold,<br>Oh, dreidel, dreidel, dreidel,<br>A story to be told!</p>
+                </div>
+            </div>
+        </section>
+
+        <div id="closing" class="ending-banner">
+            <h3>!חֲנֻכָּה שָׂמֵחַ</h3>
+            <p>Happy Hanukkah! May the lights of the Hanukkiah illuminate your home and heart.</p>
+        </div>
+        <p class="page-footer">Hanukkah — The Complete Guide &middot; A Letter in the Scroll</p>
+    </main>
+    </div>
+
+    <script>
+        (function() {
+            const links = document.querySelectorAll('.anchor-menu .anchor-link[href^="#"]');
+            const sectionIds = [...links].map(l => l.getAttribute('href').slice(1)).filter(Boolean);
+            const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+            function setActive(id) { links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id)); }
+            if ('IntersectionObserver' in window && sections.length) {
+                const observer = new IntersectionObserver((entries) => {
+                    const visible = entries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+                    if (visible.length) setActive(visible[0].target.id);
+                }, { rootMargin: '-18% 0px -70% 0px', threshold: [0.01, 0.1, 0.3] });
+                sections.forEach(s => observer.observe(s));
+            }
+            links.forEach(l => l.addEventListener('click', () => { const id = l.getAttribute('href').replace('#',''); if (id) setActive(id); }));
+        })();
+    </script>
+    <script src="js/header-fallback.js"></script>
+    <script src="js/sidebar-nav.js"></script>
+    <script src="js/text-size-control.js"></script>
+</body>
+</html>

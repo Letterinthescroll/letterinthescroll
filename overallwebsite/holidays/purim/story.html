@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Purim Story — Summary &amp; Interpretations | A Letter in the Scroll</title>
+    <meta name="description" content="The complete and beautifully told story of Purim: Queen Esther, Mordechai, Haman, and the miracle hidden inside history. Learn the story, its lessons, and how to celebrate.">
+    <link rel="icon" type="image/png" href="../../media/images/Icon.png">
+    <link rel="apple-touch-icon" href="../../media/images/Icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/mobile-overrides.css">
+    <link rel="stylesheet" href="../../css/purim.css">
+    <style>
+        .purim-story-body {
+            background: linear-gradient(170deg, #f0f5ff 0%, #e8effe 40%, #f5f8ff 100%);
+            min-height: 100vh;
+            color: #1a3147;
+        }
+        .purim-story-body .purim-main {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 0 1.25rem 4.2rem;
+        }
+        .purim-story-body .purim-hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 55%, #2563eb 100%);
+            color: #fff;
+            text-align: center;
+            padding: 2.8rem 1.5rem 2.6rem;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        .purim-story-body .purim-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 72% 30%, rgba(255,255,255,0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at 18% 80%, rgba(244,193,90,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        /* Floating festive decorations */
+        .purim-hero__deco {
+            position: absolute;
+            pointer-events: none;
+            user-select: none;
+        }
+        .purim-hero__deco--l {
+            left: 1.5%;
+            top: 8%;
+            width: clamp(70px, 11vw, 150px);
+            opacity: 0.22;
+            transform: rotate(-18deg);
+            filter: drop-shadow(0 4px 16px rgba(0,0,0,0.22));
+        }
+        .purim-hero__deco--r {
+            right: 1.5%;
+            top: 6%;
+            width: clamp(70px, 11vw, 150px);
+            opacity: 0.22;
+            transform: rotate(15deg) scaleX(-1);
+            filter: drop-shadow(0 4px 16px rgba(0,0,0,0.22));
+        }
+        .purim-hero__deco--bl {
+            left: 3%;
+            bottom: 4%;
+            width: clamp(55px, 8vw, 105px);
+            opacity: 0.16;
+            transform: rotate(12deg);
+        }
+        .purim-hero__deco--br {
+            right: 3%;
+            bottom: 4%;
+            width: clamp(55px, 8vw, 105px);
+            opacity: 0.16;
+            transform: rotate(-14deg);
+        }
+        .purim-story-body .purim-kicker {
+            font-size: 0.68rem;
+            letter-spacing: 0.26em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.55);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        .purim-hero__hebrew {
+            margin: 0 0 0.1rem;
+            direction: rtl;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+            font-weight: 700;
+            color: #bfdbfe;
+            position: relative;
+            line-height: 1.15;
+        }
+        .purim-hero__divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            max-width: 320px;
+            margin: 0.7rem auto 1rem;
+            position: relative;
+        }
+        .purim-hero__divider-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(212,175,55,0.55), transparent);
+        }
+        .purim-hero__divider-img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            opacity: 0.65;
+        }
+        .purim-story-body .purim-title {
+            margin: 0;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.08;
+            letter-spacing: -0.01em;
+            text-shadow: 0 2px 28px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .purim-title__accent {
+            color: #fbbf24;
+            font-style: italic;
+        }
+        .purim-story-body .purim-subtitle {
+            font-size: 0.93rem;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.72;
+            max-width: 560px;
+            margin: 0.6rem auto 0;
+            position: relative;
+        }
+        .purim-story-body .purim-cta-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.1rem;
+            position: relative;
+        }
+        .purim-story-body .purim-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            border-radius: 999px;
+            padding: 0.7rem 1.55rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: opacity 0.18s, transform 0.16s, box-shadow 0.16s;
+        }
+        .purim-story-body .purim-cta:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .purim-story-body .purim-cta--primary {
+            background: #fff;
+            color: #1e3a8a;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+        }
+        .purim-story-body .purim-cta--ghost {
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.9);
+            border: 1.5px solid rgba(255,255,255,0.32);
+        }
+        .hag-section-label {
+            margin: 2rem 0 0.75rem;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        .hag-section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, rgba(37,99,235,0.28), transparent);
+        }
+        .purim-story-body .purim-video {
+            margin-top: 0;
+            background: #fff;
+            border: 1px solid rgba(30,58,138,0.09);
+            border-radius: 18px;
+            padding: 1.6rem 1.65rem 1.5rem;
+            box-shadow: 0 2px 20px rgba(30,58,138,0.07);
+        }
+        .purim-story-body .purim-section__eyebrow {
+            margin: 0;
+            font-size: 0.66rem;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #2563eb;
+        }
+        .purim-story-body .purim-video h2 {
+            margin: 0.35rem 0 0;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.35rem, 2.8vw, 2.05rem);
+            color: #1e3a5f;
+            line-height: 1.15;
+        }
+        .purim-story-body .purim-video__desc {
+            margin: 0.75rem 0 0;
+            color: #4b6278;
+            line-height: 1.74;
+            font-size: 0.94rem;
+        }
+        .purim-story-body .purim-video__frame {
+            margin-top: 1rem;
+            border: 1px solid rgba(30,58,138,0.12);
+            border-radius: 12px;
+            background: #f8fbff;
+            min-height: 240px;
+            padding: 0.7rem;
+        }
+        .anchor-menu {
+            position: fixed;
+            right: 0;
+            top: 116px;
+            z-index: 60;
+            width: 102px;
+            max-height: 72vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: rgba(255, 255, 255, 0.74);
+            backdrop-filter: blur(18px) saturate(180%);
+            -webkit-backdrop-filter: blur(18px) saturate(180%);
+            border: 1px solid rgba(30, 58, 138, 0.14);
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+            box-shadow: -4px 6px 28px rgba(30,58,138,0.1), inset 0 1px 0 rgba(255,255,255,0.6);
+            padding: 0.42rem 0.32rem;
+        }
+        .anchor-menu::-webkit-scrollbar { width: 3px; }
+        .anchor-menu::-webkit-scrollbar-track { background: transparent; }
+        .anchor-menu::-webkit-scrollbar-thumb { background: rgba(30,58,138,0.2); border-radius: 3px; }
+        .anchor-menu__title {
+            margin: 0 0 0.32rem;
+            padding: 0 0.28rem 0.3rem;
+            font-size: 0.58rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #2563eb;
+            border-bottom: 1px solid rgba(37,99,235,0.15);
+        }
+        .anchor-link {
+            display: block;
+            text-decoration: none;
+            color: #3b5270;
+            font-size: 0.65rem;
+            font-weight: 600;
+            line-height: 1.3;
+            padding: 0.24rem 0.3rem;
+            border-radius: 7px;
+            transition: background 0.14s, color 0.14s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .anchor-link:hover { background: rgba(37,99,235,0.09); color: #1e3a8a; }
+        .anchor-link.active {
+            background: rgba(37,99,235,0.13);
+            color: #1e3a8a;
+            font-weight: 700;
+        }
+        @media (max-width: 1120px) {
+            .anchor-menu { display: none; }
+        }
+        @media (max-width: 860px) {
+            .purim-story-body .purim-hero {
+                padding: 3.5rem 1.2rem 3.5rem;
+            }
+            .purim-hero__deco--l, .purim-hero__deco--r,
+            .purim-hero__deco--bl, .purim-hero__deco--br {
+                display: none;
+            }
+            .purim-story-body .purim-video {
+                padding: 1.1rem 1rem 1rem;
+            }
+            .purim-story-body .purim-video__frame {
+                min-height: 200px;
+                padding: 0.55rem;
+            }
+        }
+    </style>
+</head>
+<body class="purim-story-body" data-enable-text-size="true" data-header-fallback="true">
+
+    <header class="header-main relative z-30">
+        <div class="header-container">
+            <div class="header-branding-section">
+                <button id="home-branding" type="button" aria-label="Return to home" class="header-branding-button">
+                    <div class="header-text">
+                        <h1 class="header-title">A Letter in the Scroll</h1>
+                        <p class="header-subtitle">Interactive Weekly Portion Study &amp; Discussion</p>
+                    </div>
+                </button>
+            </div>
+            <div class="header-actions-wrapper">
+                <div id="header-actions" class="header-actions">
+                    <button id="go-to-weekly" class="header-btn header-btn-primary" title="Go to this week's parsha">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="header-btn-text">This Week's Parsha</span>
+                    </button>
+                    <a href="../../prayers.html" class="header-btn header-btn-secondary" title="Important Prayers and Readings">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                        <span class="header-btn-text">Prayers</span>
+                    </a>
+                    <a href="../../songs.html" class="header-btn header-btn-secondary" title="Songs and Poems">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13"></path>
+                            <circle cx="6" cy="18" r="3" stroke-width="2"></circle>
+                            <circle cx="18" cy="16" r="3" stroke-width="2"></circle>
+                        </svg>
+                        <span class="header-btn-text">Songs and Poems</span>
+                    </a>
+                    <a href="../index.html" class="header-btn header-btn-secondary" title="Jewish Holidays">
+                        <img src="../../media/images/party.png" class="header-btn-icon" alt="" style="width:22px;height:22px;object-fit:contain;">
+                        <span class="header-btn-text">Holidays</span>
+                    </a>
+                    <a href="../../about.html" class="header-btn header-btn-secondary" title="About this project">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="header-btn-text">About</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="anchor-menu" aria-label="Purim story section links">
+        <p class="anchor-menu__title">Purim Story</p>
+        <a class="anchor-link" href="#purim-top">Top</a>
+        <a class="anchor-link" href="#purim-video">Video</a>
+        <a class="anchor-link" href="#purim-story">Overview</a>
+        <a class="anchor-link" href="#purim-timeline">Timeline</a>
+        <a class="anchor-link" href="#purim-lessons">Lessons</a>
+        <a class="anchor-link" href="#purim-dates">Dates</a>
+        <a class="anchor-link" href="#purim-reflection">Reflection</a>
+        <a class="anchor-link" href="#purim-footer">Footer</a>
+    </nav>
+
+    <section id="purim-top" class="purim-hero" aria-labelledby="purim-title">
+        <img src="../../media/images/mask.png" alt="" class="purim-hero__deco purim-hero__deco--l" aria-hidden="true">
+        <img src="../../media/images/mask2.png" alt="" class="purim-hero__deco purim-hero__deco--r" aria-hidden="true">
+        <img src="../../media/images/hamantashen1.png" alt="" class="purim-hero__deco purim-hero__deco--bl" aria-hidden="true">
+        <img src="../../media/images/hamantaschen2.png" alt="" class="purim-hero__deco purim-hero__deco--br" aria-hidden="true">
+        <p class="purim-kicker">ב״ה &nbsp;&middot;&nbsp; Purim 2026 &nbsp;&middot;&nbsp; 14 Adar, 5786</p>
+        <p class="purim-hero__hebrew">מְגִלַּת אֶסְתֵּר</p>
+        <div class="purim-hero__divider" aria-hidden="true">
+            <span class="purim-hero__divider-line"></span>
+            <img src="../../media/images/noiser2.png" alt="" class="purim-hero__divider-img">
+            <span class="purim-hero__divider-line"></span>
+        </div>
+        <h1 id="purim-title" class="purim-title">The Story of <span class="purim-title__accent">Purim</span></h1>
+        <p class="purim-subtitle">
+            A concise retelling of Esther, Mordechai, and the hidden reversal that turned fear into joy.
+        </p>
+        <div class="purim-cta-row">
+            <a href="#purim-story" class="purim-cta purim-cta--primary">Read the Complete Story</a>
+            <a href="esther.html" class="purim-cta purim-cta--ghost">Read the Full Megillah</a>
+        </div>
+    </section>
+
+    <main class="purim-main">
+
+        <div class="hag-section-label">Watch First</div>
+
+        <!-- ── VIDEO ─────────────────────────────────────────────────── -->
+        <section id="purim-video" class="purim-video reveal" aria-labelledby="purim-video-title">
+            <div class="purim-section__head">
+                <p class="purim-section__eyebrow">Watch First</p>
+                <h2 id="purim-video-title">The Purim Story — In Video</h2>
+            </div>
+            <p class="purim-video__desc">
+                Watch this beautifully produced overview of the Purim story, then continue below for the
+                complete, in-depth telling of every chapter — from the fateful party to the joyful reversal.
+            </p>
+            <div class="purim-video__frame" aria-label="Purim video player">
+                <script language="javascript" type="text/javascript" src="https://embed.chabad.org/multimedia/mediaplayer/embedded/embed.js.asp?aid=5719356&width=auto&height=auto&HideVideoInfo=false"></script>
+            </div>
+        </section>
+
+        <!-- ── STORY INTRO ────────────────────────────────────────────── -->
+        <section id="purim-story" class="purim-section reveal" aria-labelledby="purim-overview-title">
+            <div class="purim-section__head">
+                <p class="purim-section__eyebrow">Overview</p>
+                <h2 id="purim-overview-title">The Purim Story in Brief</h2>
+            </div>
+            <p class="purim-intro-text">
+                The story of Purim takes place in Ancient Persia, approximately 2,400 years ago. As recorded in the
+                Book of Esther — the <em>Megillah</em> — the evil Haman convinced King Ahasuerus to sign a royal
+                decree ordering the annihilation of the entire Jewish people. His plot was foiled by Queen Esther,
+                who was secretly Jewish, and her wise and courageous cousin Mordechai. G‑d's name never appears
+                in the Book of Esther — and yet His hand is visible in every twist and turn of the story.
+                That hiddenness is itself one of Purim's deepest lessons.
+            </p>
+            <div class="purim-highlight-quote">
+                <p>
+                    <em>"And who knows — perhaps for just such a moment as this you arrived at your royal position."</em>
+                </p>
+                <span>— Mordechai to Esther (Megillat Esther 4:14)</span>
+            </div>
+            <figure class="purim-overview-fig">
+                <img
+                    src="https://w2.chabad.org/media/images/804/MOWX8044067.jpg"
+                    alt="The Purim Story — Queen Esther and Mordechai in Ancient Persia"
+                    class="purim-overview-img"
+                    loading="lazy"
+                >
+                <figcaption class="purim-overview-caption">The Purim story — a tale of courage, faith, and hidden miracles</figcaption>
+            </figure>
+        </section>
+
+        <!-- ── FULL TIMELINE ──────────────────────────────────────────── -->
+        <section id="purim-timeline" class="purim-section reveal" aria-labelledby="timeline-title">
+            <div class="purim-section__head">
+                <p class="purim-section__eyebrow">The Complete Story</p>
+                <h2 id="timeline-title">Chapter by Chapter: Every Turn of the Story</h2>
+            </div>
+
+            <div class="purim-timeline">
+
+                <article class="purim-event">
+                    <div class="purim-event__head">
+                        <span class="purim-event__num">1</span>
+                        <h3>A Fateful Party</h3>
+                    </div>
+                    <p>
+                        The story begins in the fourth century BCE, in the kingdom of Persia. More than fifty years had
+                        passed since the destruction of the Holy Temple in Jerusalem, and the Jews were scattered across
+                        a vast empire of 127 provinces extending from India to Ethiopia.
+                    </p>
+                    <p>
+                        Three years after King Ahasuerus ascended the Persian throne, feeling secure in his reign, he
+                        celebrated with an extraordinary 180-day-long banquet for all the nobles and ministers of the
+                        empire. Following this grand affair, he held a seven-day feast for the residents of the capital
+                        city, Shushan. Meanwhile, in the women's quarters, Queen Vashti hosted her own celebration
+                        for the women of the palace.
+                    </p>
+                    <p>
+                        On the seventh day of the feast, with "his heart merry with wine," Ahasuerus commanded Vashti
+                        to appear before his guests — he wanted to display her renowned beauty. She refused. Advised by
+                        his minister Memuchan, the enraged king ordered her removal from the throne and her execution.
+                    </p>
+                </article>
+
+                <article class="purim-event">
+                    <div class="purim-event__head">
+                        <span class="purim-event__num">2</span>
+                        <h3>The Beauty Contest</h3>
+                    </div>
+                    <p>
+                        When the king's anger cooled, he was lonely for a queen. His advisers proposed a royal beauty
+                        pageant: officials would gather all the most beautiful young women in the kingdom, and whoever
+                        pleased the king most would become the new Queen of Persia.
+                    </p>
+                    <p>
+                        At that time, the leader of the Jewish community in Shushan was Mordechai, a man of deep faith
+                        and wisdom. He had a cousin, Hadassah — known in Persian as Esther — who had been orphaned as
+                        a child. Mordechai had raised her as his own daughter.
+                    </p>
+                    <p>
+                        Though Esther had no desire to become queen, she was forcibly brought to the palace with the
+                        other young women. While all the other contestants adorned themselves with perfumes and finery,
+                        Esther did nothing special. Yet when she appeared before the king, he was immediately taken
+                        with her, and she became the new Queen of Persia. But as Mordechai had instructed her, Esther
+                        kept her Jewish identity completely hidden, even from the king himself.
+                    </p>
+                </article>
+
+                <article class="purim-event">
+                    <div class="purim-event__head">
+                        <span class="purim-event__num">3</span>
+                        <h3>Mordechai Saves the King</h3>
+                    </div>
+                    <figure class="purim-event__fig">
+                        <img
+                            src="https://w2.chabad.org/media/images/804/OSKi8044054.jpg"
+                            alt="Mordechai at the gates of Shushan, illustration by Ahuva Klein"
+                            class="purim-event__img"
+                            loading="lazy"
+                        >
+                        <figcaption class="purim-event__caption">Mordechai at the gates of Shushan</figcaption>
+                    </figure>
+                    <p>
+                        Shortly after Esther became queen, Mordechai was sitting at the palace gate — a position that
+                        allowed him to watch over Esther — when he overheard two of the king's chamberlains, Bigsan
+                        and Teresh, plotting to assassinate Ahasuerus.
+                    </p>
+                    <p>
+                        Mordechai immediately reported the plot to Esther, who passed the information to the king with
+                        full credit given to Mordechai. The conspirators were investigated, found guilty, and hanged.
+                        The act was recorded in the Royal Chronicles — but Mordechai received no reward.
+                    </p>
+                    <p>
+                        This seemingly small detail — an unrewarded good deed recorded in a royal book — would become
+                        a pivotal turning point when G‑d's hidden plan began to unfold.
+                    </p>
+                </article>
+
+                <article class="purim-event">
+                    <div class="purim-event__head">
+                        <span class="purim-event__num">4</span>
+                        <h3>The Rise of Haman and a Genocidal Plot</h3>
+                    </div>
+                    <figure class="purim-event__fig">
+                        <img
+                            src="https://w2.chabad.org/media/images/804/Txrq8044061.jpg"
+                            alt="Haman the wicked prime minister, illustration by Ahuva Klein"
+                            class="purim-event__img"
+                            loading="lazy"
+                        >
+                        <figcaption class="purim-event__caption">Haman, the wicked prime minister</figcaption>
+                    </figure>
+                    <p>
+                        Meanwhile, a minister named Haman rose to the position of prime minister. Haman was no ordinary
+                        political figure — he was a descendant of Amalek, the nation that was the sworn enemy of Israel
+                        throughout the ages. His hatred of the Jewish people was deep, visceral, and generational.
+                    </p>
+                    <p>
+                        After his promotion, the king issued a decree ordering everyone to bow to Haman whenever he passed.
+                        Haman reportedly wore a large idol around his neck, making such bowing an act of idolatry — something
+                        a Jew could never do. When Mordechai, a proud Jew, refused to bow, Haman was filled with fury.
+                    </p>
+                    <p>
+                        But Haman did not seek revenge against Mordechai alone. He resolved to destroy the entire Jewish
+                        people. He cast lots — called <em>purim</em> in Hebrew — to determine the most auspicious month
+                        for his plan. The lot fell on the 13th day of Adar. Armed with his chosen date, Haman approached
+                        the king.
+                    </p>
+                    <p>
+                        "There is a certain people scattered throughout the empire," Haman told Ahasuerus, "whose laws are
+                        different from every other people, and who do not observe the king's laws. It is not in the king's
+                        interest to tolerate them." He offered the king 10,000 silver talents to finance the extermination.
+                        Ahasuerus, who was no friend of the Jews himself, told Haman: "The money is yours to keep, and the
+                        nation is yours to do with as you please."
+                    </p>
+                    <p>
+                        Sealed with the royal signet ring, a decree was sent to every corner of the empire: on the 13th of
+                        Adar, all Jews — men, women, and children — were to be killed and their property seized. The city
+                        of Shushan was in confusion, but Haman sat down to drink.
+                    </p>
+                </article>
+
+                <article class="purim-event">
+                    <div class="purim-event__head">
+                        <span class="purim-event__num">5</span>
+                        <h3>Mordechai's Call to Esther</h3>
+                    </div>
+                    <figure class="purim-event__fig">
+                        <img
+                            src="https://w2.chabad.org/media/images/804/yIeq8044062.jpg"
+                            alt="Mordechai sending a message to Esther, illustration by Ahuva Klein"
+                            class="purim-event__img"
+                            loading="lazy"
+                        >
+                        <figcaption class="purim-event__caption">Mordechai's message reaches Esther</figcaption>
+                    </figure>
+                    <p>
+                        When Mordechai learned of the decree, he rent his garments and donned sackcloth and ashes — the
+                        traditional sign of mourning. He cried out bitterly at the palace gate. Throughout the empire,
+                        Jews wept, fasted, and prayed.
+                    </p>
+                    <p>
+                        Esther heard about Mordechai's state and sent him clothing. He refused it and instead sent her a
+                        copy of the decree, asking her to go to the king and plead for her people.
+                    </p>
+                    <p>
+                        Esther responded with a sobering reality: "Anyone who enters the king's inner chamber without
+                        being summoned is put to death — unless the king extends his golden scepter. And I have not been
+                        summoned by the king for thirty days."
+                    </p>
+                    <p>
+                        Mordechai's reply was one of the most stirring speeches in all of Jewish history:
+                    </p>
+                    <div class="purim-inline-quote">
+                        <p>"Do not imagine that you will escape the fate of all the Jews because you are in the king's
+                        palace. For if you remain silent at this time, relief and salvation will come to the Jews from
+                        another source — and you and your father's house will be lost. And who knows — perhaps for just
+                        such a moment as this you arrived at your royal position."</p>
+                    </div>
+                    <p>
+                        Esther agreed. But first, she made a request: gather every Jew in Shushan and fast for three
+                        full days — no food, no water. She and her maidens would do the same. And then — "I will go to
+                        the king, though it is against the law, and if I perish, I perish."
+                    </p>
+                    <p>
+                        Mordechai gathered the Jews of Shushan, including 22,000 Jewish children, who fasted, repented,
+                        and prayed with all their hearts to G‑d.
+                    </p>
+                </article>
+
+                <article class="purim-event">
+                    <div class="purim-event__head">
+                        <span class="purim-event__num">6</span>
+                        <h3>Esther Enters the King's Chamber</h3>
+                    </div>
+                    <figure class="purim-event__fig">
+                        <img
+                            src="https://w2.chabad.org/media/images/804/QryK8044063.jpg"
+                            alt="Esther approaches King Ahasuerus, illustration by Ahuva Klein"
+                            class="purim-event__img"
+                            loading="lazy"
+                        >
+                        <figcaption class="purim-event__caption">Esther approaches the king</figcaption>
+                    </figure>
+                    <p>
+                        On the third day, Esther dressed in royal garments — not out of vanity, but to carry herself
+                        with the dignity of a queen before the king. She stood at the entrance to the inner chamber.
+                        The king looked up — and extended the golden scepter.
+                    </p>
+                    <p>
+                        "What is it, Queen Esther?" he asked warmly. "Whatever you ask, even half the kingdom, it shall
+                        be granted to you."
+                    </p>
+                    <p>
+                        Esther did not reveal her request immediately. Instead, she invited the king and Haman to a
+                        private wine feast she had prepared. They came. At the feast, the king again asked what she
+                        wanted. Her reply was unexpected: "My request is this — that the king and Haman come to a
+                        second feast tomorrow, and then I will tell you."
+                    </p>
+                    <p>
+                        Esther was waiting for the right moment — guided, the sages explain, by a kind of Divine
+                        intuition about when to act and when to hold back.
+                    </p>
+                </article>
+
+                <article class="purim-event">
+                    <div class="purim-event__head">
+                        <span class="purim-event__num">7</span>
+                        <h3>Haman's Plans — and a Sleepless King</h3>
+                    </div>
+                    <figure class="purim-event__fig">
+                        <img
+                            src="https://w2.chabad.org/media/images/804/RAKY8044074.jpg"
+                            alt="The king's sleep was interrupted — the Royal Chronicles are read aloud, illustration by Ahuva Klein"
+                            class="purim-event__img"
+                            loading="lazy"
+                        >
+                        <figcaption class="purim-event__caption">"The king's sleep was interrupted…"</figcaption>
+                    </figure>
+                    <p>
+                        Haman left the first feast in high spirits. He alone had been invited to dine with the king
+                        and queen! But as he passed through the palace gate, he saw Mordechai — who still refused to
+                        stand or bow. Haman's joy turned to rage.
+                    </p>
+                    <p>
+                        At home, his wife Zeresh and advisers urged him to build a gallows fifty cubits high and go to
+                        the king in the morning to request permission to hang Mordechai on it. Haman liked the idea.
+                        He had the gallows built that very night.
+                    </p>
+                    <p>
+                        That same night — the night before the second feast — the king could not sleep. He had his
+                        servants read to him from the Royal Chronicles. They happened to read the account of how
+                        Mordechai had once uncovered and reported the plot to assassinate Ahasuerus.
+                    </p>
+                    <p>
+                        "Was he rewarded for this?" the king asked. "No," came the answer. "Nothing was done for him."
+                    </p>
+                    <p>
+                        At that exact moment, Haman arrived at the outer courtyard — ready to ask permission to hang
+                        Mordechai. Before he could speak, the king called out to him: "Haman — what should be done for
+                        a man whom the king wishes to honor?"
+                    </p>
+                    <p>
+                        Haman, certain the king was speaking of him, replied grandly: "Let royal garments be brought,
+                        and a royal horse. Let one of the king's nobles lead him through the city proclaiming: 'So is
+                        done for the man whom the king wishes to honor!'"
+                    </p>
+                    <p>
+                        "Excellent," said the king. "Do exactly this for Mordechai the Jew who sits at the king's gate."
+                    </p>
+                    <p>
+                        Haman had no choice. He personally dressed Mordechai in royal garments, placed him on the king's
+                        horse, and led him through the streets of Shushan, calling out his honor. Then he rushed home,
+                        ashamed and humiliated. His wife and wise men told him: "If Mordechai is of Jewish descent,
+                        you will surely fall before him." Then the king's servants arrived to bring Haman to the feast.
+                    </p>
+                </article>
+
+                <article class="purim-event">
+                    <div class="purim-event__head">
+                        <span class="purim-event__num">8</span>
+                        <h3>The Second Feast — The Truth Revealed</h3>
+                    </div>
+                    <figure class="purim-event__fig">
+                        <img
+                            src="https://w2.chabad.org/media/images/804/esHG8044079.jpg"
+                            alt="Esther reveals her Jewish identity to the king at the second feast, illustration by Ahuva Klein"
+                            class="purim-event__img"
+                            loading="lazy"
+                        >
+                        <figcaption class="purim-event__caption">Esther reveals her identity to the king</figcaption>
+                    </figure>
+                    <p>
+                        At the second feast, the king again asked Esther: "What is your wish, Queen Esther? It shall
+                        be granted to you, even half the kingdom."
+                    </p>
+                    <p>
+                        This time, Esther spoke. Her voice was steady, her words precise:
+                    </p>
+                    <div class="purim-inline-quote">
+                        <p>"If I have found favor in the king's eyes, and if it pleases the king — let my life be given
+                        to me as my wish, and the lives of my people as my request. For my people and I have been sold
+                        to be destroyed, killed, and annihilated."</p>
+                    </div>
+                    <p>
+                        "Who is he — where is the man — who dares to do this?" the king demanded.
+                    </p>
+                    <p>
+                        Esther pointed to the man reclining at the table across from them: "The adversary and enemy is
+                        this wicked Haman."
+                    </p>
+                    <p>
+                        Ahasuerus was furious. He stepped outside to the palace garden. Haman threw himself on Esther's
+                        couch to beg for his life. When the king returned and saw this, he took it as another offense.
+                        "Will he also force himself upon the queen in my own palace?"
+                    </p>
+                    <p>
+                        A servant pointed out the gallows Haman had built for Mordechai — fifty cubits high, visible
+                        across the city. "Hang him on it," the king ordered. And so Haman was hanged on the very gallows
+                        he had built for Mordechai. The king's fury subsided.
+                    </p>
+                </article>
+
+                <article class="purim-event">
+                    <div class="purim-event__head">
+                        <span class="purim-event__num">9</span>
+                        <h3>The Decree Is Reversed — The Tables Turn</h3>
+                    </div>
+                    <figure class="purim-event__fig">
+                        <img
+                            src="https://w2.chabad.org/media/images/804/ywNV8044081.jpg"
+                            alt="Mordechai and Esther write the new decree, illustration by Ahuva Klein"
+                            class="purim-event__img"
+                            loading="lazy"
+                        >
+                        <figcaption class="purim-event__caption">Mordechai and Esther write the counter-decree</figcaption>
+                    </figure>
+                    <p>
+                        Haman was dead — but his sealed decree remained in force. According to the laws of Persia and
+                        Media, a decree sealed by the royal ring could not simply be rescinded.
+                    </p>
+                    <p>
+                        Esther returned to plead before the king. This time, she fell at his feet weeping, begging him
+                        to avert Haman's evil plan. The king again extended his scepter, raising her up.
+                    </p>
+                    <p>
+                        That same day, Ahasuerus gave Haman's estate to Esther, and appointed Mordechai as the new
+                        prime minister — Haman's replacement. The king also gave Mordechai his own signet ring —
+                        the same ring that had sealed the original decree of destruction.
+                    </p>
+                    <p>
+                        Mordechai and Esther immediately wrote a new royal decree, sealed with the king's ring, and
+                        sent it to all 127 provinces: the Jews had the right to assemble and defend themselves against
+                        any who attacked them — and to take the property of their enemies. By this time, with a Jewish
+                        queen and a Jewish prime minister now openly known, the balance of power had visibly shifted.
+                    </p>
+                    <p>
+                        In every province, the Jews celebrated. There was joy and gladness, and many people of other
+                        nations declared themselves Jewish — for the fear of the Jews had fallen upon them.
+                    </p>
+                </article>
+
+                <article class="purim-event">
+                    <div class="purim-event__head">
+                        <span class="purim-event__num">10</span>
+                        <h3>The Day of Battle — and Victory</h3>
+                    </div>
+                    <p>
+                        On the 13th of Adar — the very day Haman had chosen for destruction — the Jews of every province
+                        mobilized to defend themselves. The enemies who had hoped to overpower them were defeated.
+                        Throughout the empire, 75,000 enemies were killed. In the capital Shushan, among the fallen
+                        were Haman's ten sons.
+                    </p>
+                    <p>
+                        Esther made one more request: let the Jews of Shushan have an additional day — the 14th of Adar —
+                        to complete the battle. The king granted it. On the 15th of Adar, the Jews of Shushan rested
+                        and celebrated.
+                    </p>
+                    <p>
+                        The rest of the Jewish world celebrated on the 14th of Adar. That is why to this day, Purim is
+                        observed on the 14th by most communities, and on the 15th — called <em>Shushan Purim</em> — in
+                        walled cities like Jerusalem.
+                    </p>
+                </article>
+
+                <article class="purim-event purim-event--final">
+                    <div class="purim-event__head">
+                        <span class="purim-event__num">11</span>
+                        <h3>In Commemoration — A Holiday Forever</h3>
+                    </div>
+                    <p>
+                        Mordechai and Esther established Purim as a permanent holiday for the Jewish people and their
+                        descendants — for all generations. They wrote letters to the Jews of all the provinces, near and
+                        far, instructing them to celebrate these days annually:
+                    </p>
+                    <ul class="purim-list">
+                        <li>With <strong>feasting and joy</strong> (<em>mishteh v'simcha</em>)</li>
+                        <li>With <strong>sending gifts of food</strong> to one another (<em>mishloach manot</em>)</li>
+                        <li>With <strong>gifts to the poor</strong> (<em>matanot la'evyonim</em>)</li>
+                        <li>With <strong>reading the Megillah</strong> — Esther's scroll — night and morning</li>
+                    </ul>
+                    <p>
+                        Purim, the sages teach, is the most joyful holiday on the entire Jewish calendar — even more
+                        joyful than the other holidays. Its name comes from the word <em>pur</em> — the lot that Haman
+                        cast to destroy the Jews, which G‑d transformed into the foundation of their greatest celebration.
+                    </p>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- ── LESSONS ────────────────────────────────────────────────── -->
+        <section id="purim-lessons" class="purim-section purim-grid reveal" aria-labelledby="lessons-title">
+
+            <article class="purim-card">
+                <h2 id="lessons-title">What Purim Teaches</h2>
+                <ul>
+                    <li>
+                        <strong>G‑d's hiddenness is not His absence.</strong> The Megillah never mentions G‑d's name
+                        explicitly — yet every "coincidence" in the story is His fingerprint.
+                    </li>
+                    <li>
+                        <strong>One person's courage can save a nation.</strong> Esther could have stayed silent. She chose
+                        to act — and that choice changed everything.
+                    </li>
+                    <li>
+                        <strong>Unity is a spiritual force.</strong> Mordechai gathered all the Jews — especially the
+                        children — to fast and pray together. Their solidarity preceded the salvation.
+                    </li>
+                    <li>
+                        <strong>Joy is a form of faith.</strong> Celebrating on Purim, even with intensity, is itself a
+                        declaration: we trust in G‑d's ultimate care for His people.
+                    </li>
+                    <li>
+                        <strong>Each person has a unique role.</strong> "And who knows — perhaps for just such a moment
+                        you arrived here." You are placed exactly where you are for a reason.
+                    </li>
+                </ul>
+            </article>
+
+            <article class="purim-card">
+                <h2>How Purim Is Celebrated</h2>
+                <ul>
+                    <li>
+                        <strong>Read the Megillah</strong> — Megillat Esther is chanted from a handwritten parchment scroll,
+                        once at night and once during the day. The congregation drowns out Haman's name with noise and rattles (<em>graggers</em>).
+                    </li>
+                    <li>
+                        <strong>Mishloach Manot</strong> — Send a gift of at least two ready-to-eat foods to at least one
+                        friend. This builds connection and community.
+                    </li>
+                    <li>
+                        <strong>Matanot La'Evyonim</strong> — Give monetary gifts to at least two poor people on Purim day
+                        itself, so they too can celebrate. This is a halacha, not just a custom.
+                    </li>
+                    <li>
+                        <strong>Seudat Purim</strong> — Hold a festive meal during the day with family and friends,
+                        including wine, singing, Torah discussion, and joy.
+                    </li>
+                    <li>
+                        <strong>Costumes</strong> — Dressing up reflects the hidden and revealed nature of the Purim story.
+                        Even the disguised can carry great meaning.
+                    </li>
+                </ul>
+            </article>
+
+        </section>
+
+        <!-- ── KEY DATES ──────────────────────────────────────────────── -->
+        <section id="purim-dates" class="purim-section reveal" aria-labelledby="dates-title">
+            <div class="purim-section__head">
+                <p class="purim-section__eyebrow">2026 Calendar</p>
+                <h2 id="dates-title">Purim 2026 — Key Dates</h2>
+            </div>
+            <div class="purim-dates-grid">
+                <div class="purim-date-card">
+                    <span class="purim-date-label">Fast of Esther</span>
+                    <span class="purim-date-value">Sunday, March 1</span>
+                    <span class="purim-date-note">Taanit Esther — fast day before Purim</span>
+                </div>
+                <div class="purim-date-card purim-date-card--highlight">
+                    <span class="purim-date-label">Purim Night</span>
+                    <span class="purim-date-value">Sunday night, March 1</span>
+                    <span class="purim-date-note">Megillah reading after nightfall</span>
+                </div>
+                <div class="purim-date-card purim-date-card--highlight">
+                    <span class="purim-date-label">Purim Day</span>
+                    <span class="purim-date-value">Monday, March 2</span>
+                    <span class="purim-date-note">Megillah, gifts, feast, and celebration</span>
+                </div>
+                <div class="purim-date-card">
+                    <span class="purim-date-label">Shushan Purim</span>
+                    <span class="purim-date-value">Tuesday, March 3</span>
+                    <span class="purim-date-note">Celebrated in walled cities (e.g. Jerusalem)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── REFLECTION ─────────────────────────────────────────────── -->
+        <section id="purim-reflection" class="purim-reflection reveal" aria-labelledby="reflection-title">
+            <h2 id="reflection-title">A Reflection for This Week</h2>
+            <p>
+                Esther did not wait for permission. She did not wait until it was safe. She said,
+                <em>"If I perish, I perish"</em> — and she moved forward. That one step of courage,
+                taken with full awareness of the cost, became the hinge upon which history turned.
+            </p>
+            <p>
+                Ask yourself: <strong>Where am I being called to act, even when it feels too risky?</strong>
+                Where is my own story asking me to be the person who steps forward rather than waits?
+            </p>
+            <p>
+                Purim is not only a historical memory. It is an annual invitation — to find the Esther
+                within yourself. To look at your life, your relationships, your community, and ask:
+                perhaps for just such a moment as this, I am exactly where I am.
+            </p>
+            <p class="purim-closing">
+                <strong>Chag Purim Sameach.</strong> May this holiday fill your home with light, laughter,
+                and a deep trust in the guiding hand of Hashem — seen or hidden, always present.
+            </p>
+        </section>
+
+    </main>
+
+    <footer id="purim-footer" class="purim-footer">
+        <p>
+            <a href="index.html">← Back to Purim</a>
+            &nbsp;&middot;&nbsp;
+            <a href="esther.html">Read the Book of Esther →</a>
+            &nbsp;&middot;&nbsp;
+            <a href="../../index.html">Return to A Letter in the Scroll</a>
+        </p>
+    </footer>
+
+    <script>
+        (function () {
+            const links = Array.from(document.querySelectorAll('.anchor-link[href^="#"]'));
+            const sections = links
+                .map(link => document.querySelector(link.getAttribute('href')))
+                .filter(Boolean);
+
+            function setActive(id) {
+                links.forEach(link => {
+                    const isActive = link.getAttribute('href') === '#' + id;
+                    link.classList.toggle('active', isActive);
+                });
+            }
+
+            if ('IntersectionObserver' in window && sections.length) {
+                const observer = new IntersectionObserver((entries) => {
+                    const visible = entries
+                        .filter(e => e.isIntersecting)
+                        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+                    if (visible.length) {
+                        setActive(visible[0].target.id);
+                    }
+                }, {
+                    rootMargin: '-18% 0px -70% 0px',
+                    threshold: [0.01, 0.1, 0.3]
+                });
+                sections.forEach(section => observer.observe(section));
+            }
+
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    const id = link.getAttribute('href').replace('#', '');
+                    if (id) setActive(id);
+                });
+            });
+        })();
+    </script>
+    <script src="../../js/header-fallback.js"></script>
+    <script src="../../js/sidebar-nav.js"></script>
+    <script src="../../js/text-size-control.js"></script>
+</body>
+</html>

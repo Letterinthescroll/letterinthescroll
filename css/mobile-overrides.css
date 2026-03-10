@@ -1,0 +1,359 @@
+/* ========================================
+   MOBILE-ONLY OVERRIDES FOR STATUS BAR
+   ======================================== */
+
+@media (max-width: 768px) {
+    /* Compact horizontal-scroll status bar on mobile */
+    #community-status-bar {
+        min-height: 36px;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    #community-status-bar .container {
+        min-height: 36px;
+        overflow: hidden;
+    }
+
+    #community-status-content {
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 0.5rem !important;
+        font-size: 0.68rem;
+        min-height: 36px;
+        padding: 0 0.75rem !important;
+        align-items: center;
+    }
+
+    #community-status-content::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide "your status" on mobile — saves space */
+    #header-your-status {
+        display: none !important;
+    }
+
+    /* Online section stays horizontal */
+    #header-online-section {
+        flex-shrink: 0;
+        gap: 0.4rem !important;
+        flex-wrap: nowrap;
+        align-items: center;
+        width: auto;
+    }
+
+    #header-online-section > div:first-child {
+        gap: 0.2rem !important;
+        min-width: auto;
+        flex-shrink: 0;
+    }
+
+    #header-online-section > div:first-child .text-xs {
+        font-size: 0.62rem !important;
+        font-weight: 700;
+        white-space: nowrap;
+        opacity: 1;
+    }
+
+    #header-online-users-list {
+        gap: 0.25rem !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        width: auto;
+        min-width: 0;
+        flex-shrink: 0;
+    }
+
+    #header-online-users-list::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Concurrency label hidden on mobile (too wide) */
+    #header-online-concurrency {
+        display: none !important;
+    }
+
+    /* Compact horizontal pills on mobile */
+    #header-online-users-list .status-badge {
+        gap: 0.22rem;
+        padding: 0.22rem 0.55rem;
+        border-radius: 999px;
+        font-size: 0.65rem;
+        font-weight: 500;
+        line-height: 1.2;
+        box-shadow: none;
+        border-color: rgba(148, 163, 184, 0.22);
+        background: rgba(255, 255, 255, 0.88);
+        flex: 0 0 auto;
+        min-width: auto;
+        max-width: none;
+        width: auto;
+        align-items: center;
+        justify-content: flex-start;
+        white-space: nowrap;
+        min-height: auto;
+    }
+
+    /* Status dots - compact on mobile */
+    #header-online-users-list .status-dot {
+        width: 0.34rem;
+        height: 0.34rem;
+        flex-shrink: 0;
+        margin-top: 0;
+    }
+
+    #header-online-users-list .status-badge--presence {
+        padding: 0.22rem 0.55rem;
+        backdrop-filter: blur(4px);
+    }
+
+    /* Name and time inline on one line */
+    #header-online-users-list .status-badge__info {
+        display: flex;
+        flex-direction: row;
+        gap: 0.18rem;
+        align-items: baseline;
+        width: auto;
+        min-width: 0;
+        white-space: nowrap;
+    }
+
+    #header-online-users-list .status-name--presence {
+        font-size: 0.67rem;
+        letter-spacing: 0;
+        white-space: nowrap;
+    }
+
+    #header-online-users-list .status-time--detail {
+        font-size: 0.58rem;
+        line-height: 1.2;
+        white-space: nowrap;
+        opacity: 0.72;
+    }
+
+    .weekly-holiday-box {
+        border-radius: 16px;
+        margin-bottom: 1.4rem;
+    }
+
+    .weekly-holiday-box__content {
+        padding: 1.2rem 1rem 1.1rem;
+        gap: 0.65rem;
+    }
+
+    .weekly-holiday-box__title {
+        font-size: 1.25rem;
+    }
+
+    .weekly-holiday-box__text {
+        font-size: 0.95rem;
+        line-height: 1.62;
+    }
+
+    .weekly-holiday-box__actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.65rem;
+    }
+
+    .weekly-holiday-box__button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .weekly-holiday-box__link {
+        text-align: center;
+        width: fit-content;
+        align-self: center;
+    }
+
+    .mitzvah-card {
+        padding: 1.5rem;
+        gap: 1.5rem;
+    }
+
+    .mitzvah-card__body {
+        grid-template-columns: 1fr;
+        gap: 1.1rem;
+    }
+
+    .mitzvah-card__section {
+        padding: 1rem 1.1rem;
+    }
+
+    .mitzvah-card__title-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+    }
+
+    .mitzvah-card__countdown {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .mitzvah-card__grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .mitzvah-card__subheading {
+        text-align: center;
+    }
+
+    .mitzvah-checklist {
+        align-items: center;
+        text-align: center;
+    }
+
+    .mitzvah-checklist__label {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .mitzvah-checklist__input {
+        margin-top: 0;
+    }
+
+    .mitzvah-chat {
+        padding: 1.25rem;
+    }
+
+    .mitzvah-chat__header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .mitzvah-chat__messages {
+        max-height: 220px;
+    }
+
+    .mitzvah-chat__actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .mitzvah-chat__submit {
+        width: 100%;
+    }
+
+    .mitzvah-chat__hint {
+        text-align: center;
+    }
+
+    .mitzvah-locked__card {
+        padding: 1.35rem;
+    }
+
+    #header-online-users-list .status-dot--compact {
+        width: 0.34rem;
+        height: 0.34rem;
+        margin-top: 0.04rem;
+    }
+
+    #header-online-users-list .status-badge--active {
+        background: rgba(240, 253, 244, 0.78);
+    }
+
+    /* Mobile tooltip styling - centered bubble */
+    .status-tooltip[data-tooltip] {
+        position: relative;
+    }
+
+    .status-tooltip[data-tooltip]::after {
+        top: calc(100% + 0.4rem) !important;
+        bottom: auto !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translate(-50%, 0) !important;
+        width: min(72vw, 260px) !important;
+        min-width: 180px !important;
+        max-width: calc(100vw - 3rem) !important;
+        padding: 0.55rem 0.85rem !important;
+        font-size: 0.66rem !important;
+        line-height: 1.45 !important;
+        border-radius: 0.65rem !important;
+        text-align: left !important;
+        white-space: normal !important;
+        background: rgba(15, 23, 42, 0.95) !important;
+        color: #f8fafc !important;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.35) !important;
+        border: 1px solid rgba(148, 163, 184, 0.25) !important;
+        z-index: 50 !important;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .status-tooltip[data-tooltip]::before {
+        display: none !important;
+    }
+
+    .status-tooltip[data-tooltip]:hover::after,
+    .status-tooltip[data-tooltip]:focus-visible::after,
+    .status-tooltip[data-tooltip]:active::after {
+        opacity: 1 !important;
+        transform: translate(-50%, 0) !important;
+    }
+
+    /* Ensure reaction button tooltips never show on mobile */
+    .reaction-btn.status-tooltip[data-tooltip]::after,
+    .reaction-btn.status-tooltip[data-tooltip]::before {
+        display: none !important;
+        opacity: 0 !important;
+    }
+
+    /* Hover effects - more subtle on mobile */
+    #header-online-users-list .status-badge:hover {
+        transform: translateY(-0.4px);
+        box-shadow: 0 2px 5px rgba(15, 23, 42, 0.06);
+    }
+
+    /* Status leading dot - smaller on mobile */
+    .status-leading-dot {
+        width: 0.3rem !important;
+        height: 0.3rem !important;
+        flex-shrink: 0;
+    }
+}
+
+/* Extra small screens - 375px and below */
+@media (max-width: 375px) {
+    #community-status-bar {
+        min-height: 34px;
+        padding: 0 !important;
+    }
+
+    #community-status-content {
+        padding: 0 0.6rem !important;
+        min-height: 34px;
+    }
+
+    #header-online-users-list .status-badge {
+        font-size: 0.62rem;
+        padding: 0.18rem 0.45rem;
+        flex: 0 0 auto;
+        min-width: auto;
+        max-width: none;
+    }
+
+    #header-online-users-list .status-dot {
+        width: 0.3rem;
+        height: 0.3rem;
+    }
+
+    .status-tooltip[data-tooltip]::after {
+        max-width: 220px !important;
+        font-size: 0.62rem !important;
+        padding: 0.42rem 0.6rem !important;
+    }
+}
