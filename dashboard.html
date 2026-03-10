@@ -1760,7 +1760,7 @@
     }
     function inviteLink(code) {
         const normalizedCode = sanitizeInviteCode(String(code || ''));
-        const url = new URL('index.html', window.location.href);
+        const url = new URL('invite.html', window.location.href);
         if (normalizedCode.length === INVITE_CODE_LENGTH) {
             url.searchParams.set('invite', normalizedCode);
         }

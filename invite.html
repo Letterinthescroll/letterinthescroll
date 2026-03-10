@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You've Been Invited to Join a Chavruta | A Letter in the Scroll</title>
+    <meta name="description" content="You've been invited to join a chavruta on A Letter in the Scroll. Study Torah together with friends in a beautiful shared space.">
+    <link rel="canonical" href="https://sillybob123.github.io/invite.html">
+    <link rel="icon" type="image/png" href="media/images/Icon.png">
+    <link rel="apple-touch-icon" href="media/images/Icon.png">
+    <meta http-equiv="refresh" content="2; url=index.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="A Letter in the Scroll">
+    <meta property="og:title" content="You've Been Invited to Join a Chavruta">
+    <meta property="og:description" content="Tap to join your study group and start learning Torah together.">
+    <meta property="og:image" content="https://sillybob123.github.io/media/images/Icon.png">
+    <meta property="og:image:width" content="800">
+    <meta property="og:image:height" content="800">
+    <meta property="og:image:alt" content="A Letter in the Scroll logo">
+    <meta property="og:url" content="https://sillybob123.github.io/invite.html">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="You've Been Invited to Join a Chavruta">
+    <meta name="twitter:description" content="Tap to join your study group and start learning Torah together.">
+    <meta name="twitter:image" content="https://sillybob123.github.io/media/images/Icon.png">
+
+    <style>
+        :root {
+            color-scheme: light;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Plus Jakarta Sans", "Helvetica Neue", Arial, sans-serif;
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(circle at 18% 16%, rgba(56, 95, 186, 0.25), transparent 44%),
+                radial-gradient(circle at 86% 18%, rgba(201, 160, 63, 0.25), transparent 42%),
+                linear-gradient(160deg, #f6faff 0%, #eef3fb 100%);
+            color: #1f2a44;
+            padding: 24px;
+        }
+
+        .card {
+            width: min(560px, 100%);
+            border: 1px solid rgba(26, 52, 117, 0.12);
+            border-radius: 28px;
+            padding: 28px 24px;
+            text-align: center;
+            background:
+                radial-gradient(circle at 82% 16%, rgba(201, 160, 63, 0.16), transparent 36%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(248, 252, 255, 0.98) 100%);
+            box-shadow: 0 20px 54px rgba(20, 41, 88, 0.16);
+        }
+
+        .logo {
+            width: 84px;
+            height: 84px;
+            border-radius: 24px;
+            object-fit: cover;
+            box-shadow: 0 10px 24px rgba(22, 40, 94, 0.28);
+            margin: 0 auto 18px;
+            display: block;
+        }
+
+        h1 {
+            font-size: clamp(1.5rem, 3.2vw, 2rem);
+            line-height: 1.2;
+            margin: 0;
+            color: #16285e;
+            font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+        }
+
+        p {
+            margin: 12px auto 0;
+            max-width: 42ch;
+            line-height: 1.6;
+            color: #334155;
+            font-size: 0.98rem;
+        }
+
+        .code {
+            margin-top: 14px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: #9d7418;
+            font-size: 0.9rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            display: none;
+        }
+
+        .cta {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, #c89a35, #b7871e);
+            padding: 10px 18px;
+            border-radius: 999px;
+            box-shadow: 0 10px 20px rgba(168, 123, 22, 0.3);
+        }
+
+        .sub {
+            margin-top: 14px;
+            font-size: 0.82rem;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <img class="logo" src="media/images/Icon.png" alt="A Letter in the Scroll logo">
+        <h1>You've Been Invited to Join a Chavruta</h1>
+        <p>Opening your invite now. Study Torah together, share insights, and grow with your learning group.</p>
+        <div id="invite-code" class="code"></div>
+        <a id="open-link" class="cta" href="index.html">Open Invite</a>
+        <p class="sub">If you are not redirected automatically, tap "Open Invite".</p>
+    </main>
+
+    <script>
+        (function () {
+            const INVITE_CODE_LENGTH = 16;
+            const params = new URLSearchParams(window.location.search);
+            const rawInvite = params.get('invite') || '';
+
+            function sanitizeInviteCode(value) {
+                if (typeof value !== 'string') {
+                    return '';
+                }
+                return value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, INVITE_CODE_LENGTH);
+            }
+
+            const code = sanitizeInviteCode(rawInvite);
+            const target = new URL('index.html', window.location.href);
+
+            if (code.length === INVITE_CODE_LENGTH) {
+                target.searchParams.set('invite', code);
+                const codeEl = document.getElementById('invite-code');
+                codeEl.textContent = 'Invite Code: ' + code;
+                codeEl.style.display = 'block';
+            }
+
+            document.getElementById('open-link').href = target.toString();
+            window.location.replace(target.toString());
+        })();
+    </script>
+</body>
+</html>
