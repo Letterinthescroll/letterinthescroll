@@ -245,10 +245,10 @@ function initAuth(onAuthReady) {
     } else {
       currentUser = null;
       console.log('No user authenticated');
-      // Redirect unauthenticated users away from all app pages.
-      // Only the login page is public.
+      // Redirect unauthenticated users away from protected app pages.
+      // Login and invite onboarding routes are public.
       const path = window.location.pathname.replace(/\/+$/, '') || '/';
-      const publicPaths = ['', '/'];
+      const publicPaths = ['', '/', '/invite', '/join'];
       const isPublic = publicPaths.includes(path);
       if (!isPublic) {
         showLoginRequiredOverlayAndRedirect();

@@ -8,6 +8,12 @@
 
     var FIREBASE_VERSION = '10.7.1';
     var CDN = 'https://www.gstatic.com/firebasejs/' + FIREBASE_VERSION;
+    var path = window.location.pathname.replace(/\/+$/, '') || '/';
+    var publicPaths = ['', '/', '/invite', '/join'];
+
+    if (publicPaths.includes(path)) {
+        return;
+    }
 
     // If firebase is already loaded (e.g. dashboard, settings), reuse it
     if (window.firebase && window.firebase.auth) {
