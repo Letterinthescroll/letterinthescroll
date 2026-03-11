@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"js/\\(main|page-auth|daily-inspiration\\)\" /Users/yairben-dor/XCode/LetterInTheScroll/*.html)",
+      "Bash(git push:*)",
+      "Bash(git add:*)",
+      "Bash(grep -l \"GoogleAuthProvider\\\\|signInWithPopup\\\\|signInWithRedirect\" /Users/yairben-dor/XCode/LetterInTheScroll/*.html)",
+      "Bash(git commit -m \"fix: improve Google sign-in with mobile redirect fallback and better error handling:*)",
+      "Bash(grep -rho \"\\\\\\(src\\\\|href\\\\\\)=[''''][^'''']*\\\\\\(js\\\\|css\\\\|images\\\\\\)/[^'''']*['''']\" /Users/yairben-dor/XCode/LetterInTheScroll --include=*.html)"
+    ]
+  }
+}

@@ -61,7 +61,7 @@
         sidebarHead.className = 'site-sidebar-head';
 
         var brandLink = document.createElement('a');
-        brandLink.href = getSitePath('dashboard.html');
+        brandLink.href = '/dashboard';
         brandLink.className = 'site-sidebar-brand-link';
         brandLink.title = 'A Letter in the Scroll — Home';
 
@@ -108,32 +108,32 @@
 
         // ── Highlight the active page in the sidebar clone ──
         (function highlightActivePage() {
-            var path = window.location.pathname;
-            var page = path.replace(/\/$/, '').split('/').pop() || 'study.html';
+            var path = window.location.pathname.replace(/\/$/, '') || '/';
+            var page = path.split('/').filter(Boolean).pop() || '';
 
             var pageMap = {
-                'study.html':  '#go-to-weekly',
-                'index.html':  '#go-to-weekly',
-                'dashboard.html': 'a[href$="dashboard.html"]',
-                'prayers.html': 'a[href$="prayers.html"]',
-                'songs.html':   'a[href$="songs.html"]',
-                'about.html':   'a[href$="about.html"]',
-                'bookmarks.html': 'a[href$="bookmarks.html"]',
-                'settings.html': 'a[href$="settings.html"]',
-                'song-detail.html': 'a[href$="songs.html"]'
+                'study':      '#go-to-weekly',
+                '':           '#go-to-weekly',
+                'dashboard':  'a[href$="/dashboard"]',
+                'prayers':    'a[href$="/prayers"]',
+                'songs':      'a[href$="/songs"]',
+                'about':      'a[href$="/about"]',
+                'bookmarks':  'a[href$="/bookmarks"]',
+                'settings':   'a[href$="/settings"]',
+                'song-detail':'a[href$="/songs"]'
             };
 
             var holidayPages = [
-                'hanukkah.html', 'rosh-hashanah.html', 'yom-kippur.html',
-                'lag-baomer.html', 'shavuot.html', 'sukkot.html',
-                'tu-bishvat.html', 'yom-haatzmaut.html', 'yom-hazikaron.html',
-                'shabbat-preview.html', 'passover', 'purim'
+                'hanukkah', 'rosh-hashanah', 'yom-kippur',
+                'lag-baomer', 'shavuot', 'sukkot',
+                'tu-bishvat', 'yom-haatzmaut', 'yom-hazikaron',
+                'shabbat-preview', 'passover', 'purim'
             ];
             var isHolidayPage = path.indexOf('/holidays') !== -1 ||
                 holidayPages.some(function(h) { return page === h || path.indexOf(h) !== -1; });
             if (isHolidayPage) {
                 page = '__holidays__';
-                pageMap['__holidays__'] = 'a[href$="holidays/"], a[href$="holidays/index.html"]';
+                pageMap['__holidays__'] = 'a[href$="/holidays"]';
             }
 
             var selector = pageMap[page];

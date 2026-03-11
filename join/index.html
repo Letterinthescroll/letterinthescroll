@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>You've Been Invited to a Chavruta</title>
     <meta name="description" content="Join your partner for a deep-dive study session. Click to accept your invitation and start learning.">
-    <link rel="canonical" href="https://sillybob123.github.io/join/index.html">
+    <link rel="canonical" href="https://www.aletterinthescroll.com/join">
 
     <!-- Favicons & Apple Touch -->
     <link rel="icon" type="image/png" sizes="196x196" href="../media/images/Icon.png">
@@ -23,19 +23,19 @@
     <meta property="og:site_name" content="A Letter in the Scroll">
     <meta property="og:title" content="You've Been Invited to a Chavruta">
     <meta property="og:description" content="Join your partner for a deep-dive Torah study session. Tap to accept your invitation and start learning.">
-    <meta property="og:image" content="https://sillybob123.github.io/media/images/chavruta-invite-card-1200x630.jpg">
-    <meta property="og:image:secure_url" content="https://sillybob123.github.io/media/images/chavruta-invite-card-1200x630.jpg">
+    <meta property="og:image" content="https://www.aletterinthescroll.com/media/images/chavruta-invite-card-1200x630.jpg">
+    <meta property="og:image:secure_url" content="https://www.aletterinthescroll.com/media/images/chavruta-invite-card-1200x630.jpg">
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="You've been invited to join a Chavruta — Accept Invitation">
-    <meta property="og:url" content="https://sillybob123.github.io/join/index.html">
+    <meta property="og:url" content="https://www.aletterinthescroll.com/join">
 
     <!-- Twitter / iMessage large image card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="You've Been Invited to a Chavruta">
     <meta name="twitter:description" content="Join your partner for a deep-dive Torah study session. Tap to accept your invitation and start learning.">
-    <meta name="twitter:image" content="https://sillybob123.github.io/media/images/chavruta-invite-card-1200x630.jpg">
+    <meta name="twitter:image" content="https://www.aletterinthescroll.com/media/images/chavruta-invite-card-1200x630.jpg">
     <meta name="twitter:image:alt" content="You've been invited to join a Chavruta — Accept Invitation">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -381,18 +381,18 @@
         </section>
 
         <section class="actions">
-            <a id="signup-cta" class="btn-primary" href="../index.html">
+            <a id="signup-cta" class="btn-primary" href="/">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
                 </svg>
                 Sign Up to Join
             </a>
-            <a id="login-cta" class="link-login" href="../index.html">Already have an account? <strong>Log In</strong></a>
+            <a id="login-cta" class="link-login" href="/">Already have an account? <strong>Log In</strong></a>
         </section>
     </main>
 
     <footer class="join-footer">
-        <a href="../index.html">A Letter in the Scroll</a> &mdash; Interactive Torah Study
+        <a href="/">A Letter in the Scroll</a> &mdash; Interactive Torah Study
     </footer>
 
     <script>
@@ -426,11 +426,11 @@
             var inviteCode = sanitizeInviteCode(fromQuery || fromPath);
 
             if (inviteCode.length === INVITE_CODE_LENGTH) {
-                var signUpTarget = new URL('../index.html', window.location.href);
+                var signUpTarget = new URL('/', window.location.origin);
                 signUpTarget.searchParams.set('invite', inviteCode);
                 signUpTarget.searchParams.set('auth', 'create');
 
-                var loginTarget = new URL('../index.html', window.location.href);
+                var loginTarget = new URL('/', window.location.origin);
                 loginTarget.searchParams.set('invite', inviteCode);
                 loginTarget.searchParams.set('auth', 'signin');
 

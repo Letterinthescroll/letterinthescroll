@@ -2101,7 +2101,7 @@
   /* ── ⌘C / ⌘U  Verse Copy ──────────────────────────────────────── */
   /*   ⌘C (with verse selection) → rich HTML copy for emails        */
   /*   ⌘U                        → clean plain-text copy            */
-  var SITE_URL = 'https://sillybob123.github.io/39839/';
+  var SITE_URL = 'https://www.aletterinthescroll.com/';
   var LOGO_URL = SITE_URL + 'media/images/Icon.png';
 
   function showCopyToast(message, success) {

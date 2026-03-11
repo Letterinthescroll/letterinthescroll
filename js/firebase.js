@@ -169,11 +169,10 @@ function initAuth(onAuthReady) {
     } else {
       currentUser = null;
       console.log('No user authenticated');
-      // If not on index.html, redirect to login page
-      const path = window.location.pathname;
-      const page = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
-      if (page !== 'index.html') {
-        window.location.href = 'index.html';
+      // If not on home page, redirect to login
+      const path = window.location.pathname.replace(/\/$/, '') || '/';
+      if (path !== '' && path !== '/' && !path.endsWith('/join')) {
+        window.location.href = '/';
         return;
       }
       if (onAuthReady) onAuthReady(null);

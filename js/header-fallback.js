@@ -26,16 +26,16 @@
         }
 
         const redirectMap = [
-            { selector: '#home-branding', url: 'dashboard.html' },
-            { selector: '#go-to-weekly', url: 'study.html' },
-            { selector: '#my-bookmarks-btn', url: 'bookmarks.html' },
-            { selector: '#logout-btn', url: 'index.html' },
-            { selector: '#general-parsha-chat', url: 'study.html#general-parsha-chat' },
-            { selector: '#general-parsha-chat-mobile', url: 'study.html#general-parsha-chat' },
-            { selector: '#show-significance', url: 'study.html#significance' },
-            { selector: '#show-significance-mobile', url: 'study.html#significance' },
-            { selector: '#prev-parsha', url: 'study.html' },
-            { selector: '#next-parsha', url: 'study.html' }
+            { selector: '#home-branding', url: '/dashboard' },
+            { selector: '#go-to-weekly', url: '/study' },
+            { selector: '#my-bookmarks-btn', url: '/bookmarks' },
+            { selector: '#logout-btn', url: '/' },
+            { selector: '#general-parsha-chat', url: '/study#general-parsha-chat' },
+            { selector: '#general-parsha-chat-mobile', url: '/study#general-parsha-chat' },
+            { selector: '#show-significance', url: '/study#significance' },
+            { selector: '#show-significance-mobile', url: '/study#significance' },
+            { selector: '#prev-parsha', url: '/study' },
+            { selector: '#next-parsha', url: '/study' }
         ];
 
         redirectMap.forEach(item => wireRedirect(item.selector, item.url));

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - A Letter in the Scroll</title>
+    <link rel="icon" type="image/png" href="media/images/Icon.png">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/shabbat.css">
+    <link rel="stylesheet" href="/css/mobile-overrides.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        /* ── Hero ── */
+        .about-hero {
+            background: linear-gradient(145deg, #0a1530 0%, #16285e 50%, #1a3a8a 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 5rem 1.5rem 4rem;
+            text-align: center;
+        }
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        /* Gold ring decoration */
+        .about-hero::after {
+            content: '';
+            position: absolute;
+            top: -120px; right: -120px;
+            width: 400px; height: 400px;
+            border-radius: 50%;
+            border: 1px solid rgba(212,175,55,0.15);
+            pointer-events: none;
+        }
+        .about-hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #d4af37;
+            margin-bottom: 1.5rem;
+            padding: 0.35rem 1rem;
+            border: 1px solid rgba(212,175,55,0.3);
+            border-radius: 9999px;
+            background: rgba(212,175,55,0.07);
+        }
+        .about-hero-hebrew {
+            font-family: 'Cormorant Garamond', 'David', serif;
+            font-size: clamp(3.5rem, 8vw, 6rem);
+            font-weight: 600;
+            color: rgba(255,255,255,0.12);
+            letter-spacing: 0.05em;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            display: block;
+            direction: rtl;
+        }
+        .about-hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.2;
+            margin-bottom: 1.25rem;
+            letter-spacing: -0.01em;
+        }
+        .about-hero-title em {
+            font-style: italic;
+            color: #f0d060;
+        }
+        .about-hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.15rem);
+            color: #cbd5e1;
+            max-width: 56ch;
+            margin: 0 auto 2rem;
+            line-height: 1.75;
+            font-weight: 400;
+        }
+        .about-hero-scroll {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(5px); }
+        }
+
+        /* ── Gold divider ── */
+        .gold-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            margin: 0;
+            border: none;
+        }
+
+        /* ── Content wrapper ── */
+        .about-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* ── Pull quote ── */
+        .about-pull-quote {
+            position: relative;
+            background: linear-gradient(135deg, #f0f4ff 0%, #fafbff 100%);
+            border-left: 4px solid #d4af37;
+            border-radius: 0 16px 16px 0;
+            padding: 2rem 2rem 2rem 2.5rem;
+            margin: 0;
+        }
+        .about-pull-quote blockquote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+            font-style: italic;
+            color: #16285e;
+            line-height: 1.7;
+            margin: 0 0 0.75rem;
+        }
+        .about-pull-quote cite {
+            font-size: 0.78rem;
+            color: #64748b;
+            font-style: normal;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* ── Section labels ── */
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #d4af37;
+            margin-bottom: 0.6rem;
+        }
+
+        /* ── Feature cards ── */
+        .feature-card {
+            background: #ffffff;
+            border: 1px solid rgba(22,40,94,0.07);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 12px rgba(22,40,94,0.06);
+        }
+        .feature-card:hover {
+            border-color: rgba(22,40,94,0.15);
+            box-shadow: 0 8px 28px rgba(22,40,94,0.1);
+            transform: translateY(-2px);
+        }
+        .feature-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, #eef2ff, #dbeafe);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* ── Closing message ── */
+        .about-closing {
+            background: linear-gradient(135deg, #16285e 0%, #1e3a8a 100%);
+            border-radius: 20px;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .about-closing::before {
+            content: '';
+            position: absolute;
+            bottom: -40px; left: -40px;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            border: 1px solid rgba(212,175,55,0.2);
+            pointer-events: none;
+        }
+        .about-closing::after {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 280px; height: 280px;
+            border-radius: 50%;
+            border: 1px solid rgba(212,175,55,0.12);
+            pointer-events: none;
+        }
+
+        /* ── Data attribution ── */
+        .about-attribution {
+            background: #f8faff;
+            border: 1px solid rgba(22,40,94,0.08);
+            border-radius: 14px;
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen" style="background:#f5f7fc;" data-header-fallback="true">
+
+    <!-- Header -->
+    <header class="header-main relative z-30">
+        <div class="header-container">
+            <div class="header-branding-section">
+                <a id="home-branding" href="/dashboard" aria-label="Go to dashboard home" class="header-branding-button" style="text-decoration:none">
+                    <div class="header-text">
+                        <h1 class="header-title">A Letter in the Scroll</h1>
+                        <p class="header-subtitle">Interactive Weekly Portion Study & Discussion</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="header-actions-wrapper">
+                <div id="header-actions" class="header-actions">
+                    <a href="/dashboard" class="header-btn header-btn-secondary" title="Dashboard home">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10.5L12 3l9 7.5M5 9.5V21h14V9.5"></path>
+                        </svg>
+                        <span class="header-btn-text">Home</span>
+                    </a>
+                    <a id="go-to-weekly" href="/study" class="header-btn header-btn-secondary" title="Open study room">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                        <span class="header-btn-text">Study</span>
+                    </a>
+                    <a href="/holidays" class="header-btn header-btn-secondary" title="Jewish holidays">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <rect x="3" y="5" width="18" height="16" rx="2" ry="2" stroke-width="2"></rect>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3v4M8 3v4M3 11h18"></path>
+                        </svg>
+                        <span class="header-btn-text">Holidays</span>
+                    </a>
+                    <a href="/prayers" class="header-btn header-btn-secondary" title="Important prayers">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3l2.4 4.9L20 9l-4 3.9.9 5.6L12 16l-4.9 2.5.9-5.6L4 9l5.6-1.1L12 3z"></path>
+                        </svg>
+                        <span class="header-btn-text">Prayers</span>
+                    </a>
+                    <a href="/songs" class="header-btn header-btn-secondary" title="Songs and poems">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13"></path>
+                            <circle cx="6" cy="18" r="3" stroke-width="2"></circle>
+                            <circle cx="18" cy="16" r="3" stroke-width="2"></circle>
+                        </svg>
+                        <span class="header-btn-text">Songs</span>
+                    </a>
+                    <!-- User dropdown injected by page-auth.js -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ── HERO ── -->
+    <section class="about-hero">
+        <div style="position:relative;z-index:1;">
+            <div class="about-hero-eyebrow">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                About this project
+            </div>
+            <span class="about-hero-hebrew" aria-hidden="true">תּוֹרָה</span>
+            <h1 class="about-hero-title">
+                Every Jew Is a Letter<br>In <em>One</em> Living Torah
+            </h1>
+            <p class="about-hero-subtitle">
+                A space built for connection — with ancient wisdom,<br>with yourself, and with one another.
+            </p>
+            <div class="about-hero-scroll" aria-hidden="true">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+                Scroll to learn more
+            </div>
+        </div>
+    </section>
+
+    <hr class="gold-divider">
+
+    <!-- ── MAIN CONTENT ── -->
+    <main style="background:#f5f7fc; padding-bottom: 5rem;">
+        <div class="about-content">
+
+            <!-- The Mission -->
+            <div style="padding-top:4rem; padding-bottom:3rem;">
+                <p class="section-label">Our Foundation</p>
+                <h2 style="font-family:'Cormorant Garamond',serif; font-size:clamp(1.6rem,3vw,2.2rem); font-weight:700; color:#16285e; margin-bottom:1.75rem; line-height:1.3;">Being a Letter in the Scroll</h2>
+
+                <div class="about-pull-quote" style="margin-bottom:2rem;">
+                    <blockquote>
+                        "Every single Jewish soul is like a unique letter in the Torah scroll. If even one letter is missing or flawed, the entire scroll is considered invalid."
+                    </blockquote>
+                    <cite>The Zohar — Jewish Mystical Tradition</cite>
+                </div>
+
+                <p style="color:#374151; line-height:1.85; font-size:1.05rem; margin-bottom:1.25rem;">
+                    This teaching tells us that <strong style="color:#16285e;">each of us has an irreplaceable role to play</strong>. By studying together, we strengthen our own connection — and in doing so, strengthen the entire scroll. Our community. Our shared story.
+                </p>
+                <p style="color:#374151; line-height:1.85; font-size:1.05rem; margin-bottom:1.25rem;">
+                    It's a way for us to grow as individuals, striving to be better people grounded in values that encourage kindness, justice, and deeper understanding.
+                </p>
+                <p style="color:#374151; line-height:1.85; font-size:1.05rem;">
+                    Ultimately, this journey inward connects us to something larger: the work of <em style="color:#16285e; font-weight:600;">Tikkun Olam</em> — repairing the world. By refining ourselves through study and reflection, we become better equipped to bring light and healing to the world around us.
+                </p>
+            </div>
+
+            <!-- Feature cards -->
+            <div style="padding-bottom:3.5rem;">
+                <p class="section-label">The Study Experience</p>
+                <h2 style="font-family:'Cormorant Garamond',serif; font-size:clamp(1.5rem,3vw,2rem); font-weight:700; color:#16285e; margin-bottom:1.75rem; line-height:1.3;">Everything You Need to Learn Together</h2>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:1.25rem;">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="18" height="18" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
+                        </div>
+                        <h3 style="font-weight:700; color:#16285e; font-size:1rem; margin-bottom:0.5rem;">Weekly Portions</h3>
+                        <p style="color:#64748b; font-size:0.875rem; line-height:1.7;">Follow the traditional Torah reading cycle with automatic highlighting of the current week's parsha, in both Hebrew and English.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="18" height="18" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <h3 style="font-weight:700; color:#16285e; font-size:1rem; margin-bottom:0.5rem;">Chavruta Study</h3>
+                        <p style="color:#64748b; font-size:0.875rem; line-height:1.7;">Study is better together. Form private study groups with friends and family, share insights, and discuss verses in a dedicated space.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="18" height="18" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                        </div>
+                        <h3 style="font-weight:700; color:#16285e; font-size:1rem; margin-bottom:0.5rem;">Commentary &amp; Insights</h3>
+                        <p style="color:#64748b; font-size:0.875rem; line-height:1.7;">Access insights from classical commentators and explore definitions of key Hebrew terms to enrich your daily learning.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="18" height="18" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                            </svg>
+                        </div>
+                        <h3 style="font-weight:700; color:#16285e; font-size:1rem; margin-bottom:0.5rem;">Universal Bookmarks</h3>
+                        <p style="color:#64748b; font-size:0.875rem; line-height:1.7;">Save the verses that speak to you. Your bookmarks span across your study groups, letting your community see what inspires you.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Sources -->
+            <div style="padding-bottom:3.5rem;">
+                <div class="about-attribution">
+                    <p class="section-label" style="margin-bottom:0.75rem;">Data Sources</p>
+                    <p style="color:#475569; font-size:0.875rem; line-height:1.75; margin-bottom:0.75rem;">
+                        <strong style="color:#1e293b;">Torah Text:</strong> All Hebrew and English Torah text is provided by
+                        <a href="https://www.sefaria.org" target="_blank" style="color:#2563eb; font-weight:600; text-decoration:none; hover:underline;">Sefaria.org</a>
+                        — a free living library of Jewish texts.
+                    </p>
+                    <p style="color:#475569; font-size:0.875rem; line-height:1.75; margin:0;">
+                        <strong style="color:#1e293b;">Commentary &amp; Definitions:</strong> Curated from traditional sources and modern scholars to enrich your study.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Closing Message -->
+            <div style="padding-bottom:1rem;">
+                <div class="about-closing">
+                    <div style="position:relative;z-index:1;">
+                        <p style="font-family:'Cormorant Garamond',serif; font-size:1.75rem; font-weight:600; color:#d4af37; margin-bottom:1rem; font-style:italic;">With love,</p>
+                        <p style="color:#e2e8f0; font-size:1rem; line-height:1.85; max-width:52ch; margin:0 auto 1.5rem;">
+                            I truly hope you enjoy using this website as much as I enjoyed building it for us. May our shared study bring us closer to the text, to each other, and to the values we cherish.
+                        </p>
+                        <p style="font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-style:italic; color:#94a3b8; margin:0;">
+                            Chazak chazak v'nitchazek — Be strong, be strong, and let us strengthen one another
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-blue-900 text-white py-6 mt-0">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm">Torah text provided by <a href="https://www.sefaria.org" target="_blank" class="underline hover:text-blue-300">Sefaria.org</a></p>
+            <p class="text-xs mt-2 text-blue-300">Built with love for shared learning</p>
+        </div>
+    </footer>
+
+    <script src="/js/shabbat.js"></script>
+    <script src="/js/header-fallback.js"></script>
+    <script src="/js/sidebar-nav.js"></script>
+    <script type="module" src="/js/page-auth.js"></script>
+</body>
+</html>

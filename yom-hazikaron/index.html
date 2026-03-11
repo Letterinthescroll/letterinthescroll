@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yom HaZikaron — Israel's Memorial Day | A Letter in the Scroll</title>
+    <meta name="description" content="A complete guide to Yom HaZikaron — Israel's solemn Memorial Day for fallen soldiers and victims of terror.">
+    <link rel="icon" type="image/png" href="media/images/Icon.png">
+    <link rel="apple-touch-icon" href="media/images/Icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/mobile-overrides.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --p-navy:   #0f1d3a;
+            --p-blue:   #1a2f5f;
+            --p-blue2:  #1e3a8a;
+            --p-blue3:  #2563eb;
+            --p-red:    #b91c1c;
+            --p-crimson:#dc2626;
+            --p-gold:   #b7791f;
+            --p-amber:  #f59e0b;
+            --p-border: rgba(15, 29, 58, 0.14);
+            --p-muted:  #4b5e78;
+            --p-radius: 16px;
+        }
+        html { scroll-behavior: smooth; }
+        body.haggadah-body {
+            background: linear-gradient(170deg, #eef2ff 0%, #e5eaf7 40%, #f0f2fa 100%);
+            min-height: 100vh; color: #1a2a40; overflow-x: hidden;
+        }
+        .hag-page { position: relative; z-index: 2; }
+
+        /* Hero — darker, more solemn navy */
+        .hag-hero {
+            background: linear-gradient(135deg, #0a1628 0%, #1a2f5f 55%, #243d75 100%);
+            color: #fff; text-align: center;
+            padding: 3.8rem 1.5rem 3.6rem;
+            position: relative; overflow: hidden;
+        }
+        .hag-hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 72% 35%, rgba(255,255,255,0.06) 0%, transparent 62%);
+            pointer-events: none;
+        }
+        .hag-hero::after {
+            content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+            height: 46px;
+            background: linear-gradient(to bottom right, transparent 49%, #eef2ff 50%);
+        }
+        .hag-hero__eyebrow { font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(255,255,255,0.5); font-weight: 600; margin-bottom: 0.5rem; position: relative; }
+        .hag-hero__hebrew { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 700; direction: rtl; color: #bfdbfe; margin-bottom: 0.35rem; position: relative; }
+        .hag-hero__title { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 5.5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1rem; position: relative; }
+        .hag-hero__title span { color: #fca5a5; }
+        .hag-hero__subtitle { font-size: 0.96rem; color: rgba(255,255,255,0.65); line-height: 1.68; max-width: 560px; margin: 0 auto 1.6rem; position: relative; }
+        .hag-hero__actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.65rem; position: relative; }
+        .hag-hero__btn { display: inline-flex; align-items: center; text-decoration: none; border-radius: 999px; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.88rem; transition: opacity 0.18s, transform 0.15s; }
+        .hag-hero__btn:hover { opacity: 0.88; transform: translateY(-1px); }
+        .hag-hero__btn--primary { background: rgba(255,255,255,0.15); color: #fff; border: 1.5px solid rgba(255,255,255,0.38); backdrop-filter: blur(6px); }
+        .hag-hero__btn--secondary { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.18); }
+
+        .haggadah-shell { max-width: 1040px; margin: 0 auto; padding: 0 1.25rem 4.4rem; }
+
+        .hag-section-label { margin: 2rem 0 0.75rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--p-blue3); display: flex; align-items: center; gap: 0.7rem; }
+        .hag-section-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(37,99,235,0.28), transparent); }
+
+        .seder-section { margin-top: 1.55rem; background: #fff; border: 1px solid rgba(15,29,58,0.1); border-radius: 18px; padding: 1.6rem 1.65rem 1.5rem; box-shadow: 0 2px 20px rgba(15,29,58,0.07); scroll-margin-top: 82px; }
+        .section-kicker-wrap { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+        .section-kicker { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--p-blue3); margin: 0; }
+        .section-title { margin: 0; font-family: 'Playfair Display', serif; font-size: clamp(1.35rem, 2.8vw, 2.05rem); color: var(--p-navy); line-height: 1.15; }
+        .section-hebrew { margin: 0.25rem 0 0.8rem; direction: rtl; color: var(--p-blue2); font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2.2vw, 1.3rem); opacity: 0.72; }
+        .section-subtitle { margin: 0.12rem 0 0; color: var(--p-muted); line-height: 1.74; font-size: 0.94rem; }
+
+        .step-callout { margin-top: 1.08rem; background: #eff6ff; border: 1px solid rgba(37,99,235,0.23); border-radius: 10px; padding: 0.86rem 1.05rem; color: #1e3a8a; font-size: 0.9rem; line-height: 1.74; }
+
+        .note-panel { background: #f8fbff; border: 1px solid rgba(30,58,138,0.12); border-radius: 12px; padding: 0.85rem 0.95rem; margin-top: 1rem; }
+        .note-panel h4 { margin: 0; color: var(--p-blue2); font-size: 0.9rem; font-weight: 700; }
+        .note-panel p, .note-panel li { margin: 0.38rem 0 0; color: #355671; font-size: 0.87rem; line-height: 1.72; }
+        .note-panel ul { margin: 0.32rem 0 0; padding-left: 1rem; }
+
+        .mini-heading { margin: 1.35rem 0 0.56rem; color: var(--p-blue2); font-size: 0.78rem; letter-spacing: 0.11em; text-transform: uppercase; font-weight: 800; }
+
+        /* Siren / tradition card */
+        .tradition-card { background: linear-gradient(145deg, #f0f4ff, #e8effe); border: 1px solid rgba(30,58,138,0.15); border-radius: 14px; padding: 1.1rem 1.2rem; margin-top: 0.85rem; }
+        .tradition-card__title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--p-navy); margin: 0 0 0.5rem; }
+        .tradition-card p { color: var(--p-muted); font-size: 0.92rem; line-height: 1.72; margin: 0; }
+        .tradition-card p + p { margin-top: 0.5rem; }
+
+        /* Siren highlight */
+        .siren-block { margin-top: 1rem; display: grid; gap: 0.8rem; grid-template-columns: 1fr 1fr; }
+        .siren-item { background: #fff; border: 1px solid rgba(185,28,28,0.18); border-left: 4px solid var(--p-crimson); border-radius: 10px; padding: 0.8rem 0.9rem; }
+        .siren-item__time { font-weight: 800; font-size: 1.05rem; color: var(--p-red); margin: 0 0 0.25rem; }
+        .siren-item__desc { font-size: 0.88rem; color: #374151; line-height: 1.65; margin: 0; }
+
+        /* Zikaron Project feature */
+        .zikaron-feature {
+            margin-top: 1.2rem;
+            background: linear-gradient(135deg, #1a2f5f 0%, #243d75 100%);
+            border-radius: 18px; padding: 1.8rem 1.6rem;
+            position: relative; overflow: hidden; color: #fff;
+        }
+        .zikaron-feature::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 80% 30%, rgba(255,255,255,0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .zikaron-feature__eyebrow { font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.5); font-weight: 700; margin: 0 0 0.4rem; position: relative; }
+        .zikaron-feature__title { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 2.8vw, 1.8rem); color: #fff; margin: 0 0 0.7rem; position: relative; }
+        .zikaron-feature__desc { font-size: 0.93rem; color: rgba(255,255,255,0.72); line-height: 1.72; margin: 0 0 1.2rem; position: relative; max-width: 600px; }
+        .zikaron-feature__link {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(255,255,255,0.15); color: #fff;
+            border: 1.5px solid rgba(255,255,255,0.38);
+            border-radius: 999px; padding: 0.65rem 1.35rem;
+            text-decoration: none; font-weight: 700; font-size: 0.9rem;
+            backdrop-filter: blur(6px); transition: opacity 0.18s, transform 0.15s;
+            position: relative;
+        }
+        .zikaron-feature__link:hover { opacity: 0.88; transform: translateY(-1px); }
+        .zikaron-feature__link svg { flex-shrink: 0; }
+
+        /* Date info block */
+        .date-block { margin-top: 1rem; background: #fff8eb; border: 1px solid rgba(183,121,31,0.25); border-radius: 12px; padding: 1rem 1.2rem; }
+        .date-block__label { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--p-gold); margin: 0 0 0.3rem; }
+        .date-block__date { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: #7a4e11; margin: 0 0 0.2rem; }
+        .date-block__note { font-size: 0.87rem; color: #8a6240; margin: 0; line-height: 1.6; }
+
+        /* Closing — dignified */
+        .ending-banner { margin-top: 1.3rem; text-align: center; background: linear-gradient(135deg, #0a1628 0%, #1a2f5f 55%, #243d75 100%); border-radius: 20px; padding: 2.2rem 1.5rem; position: relative; overflow: hidden; }
+        .ending-banner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 60% 40%, rgba(255,255,255,0.06) 0%, transparent 65%); pointer-events: none; }
+        .ending-banner h3 { margin: 0; color: #bfdbfe; font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3.5vw, 2.4rem); line-height: 1.2; position: relative; }
+        .ending-banner p { margin: 0.55rem 0 0; color: rgba(255,255,255,0.7); font-size: 1.05rem; position: relative; }
+        .page-footer { margin: 1.8rem 0 0; color: rgba(30,58,138,0.38); text-align: center; font-size: 0.79rem; }
+
+        .anchor-menu { position: fixed; right: 0; top: 116px; z-index: 60; width: 92px; max-height: 72vh; overflow-y: auto; overflow-x: hidden; background: rgba(255,255,255,0.74); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); border: 1px solid rgba(30,58,138,0.14); border-right: none; border-radius: 10px 0 0 10px; box-shadow: -4px 6px 28px rgba(30,58,138,0.1), inset 0 1px 0 rgba(255,255,255,0.6); padding: 0.42rem 0.32rem; }
+        .anchor-menu__title { margin: 0 0 0.32rem; padding: 0 0.28rem 0.3rem; font-size: 0.58rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--p-blue3); border-bottom: 1px solid rgba(37,99,235,0.15); }
+        .anchor-link { display: block; text-decoration: none; color: #3b5270; font-size: 0.65rem; font-weight: 600; line-height: 1.3; padding: 0.24rem 0.3rem; border-radius: 7px; transition: background 0.14s, color 0.14s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .anchor-link:hover { background: rgba(37,99,235,0.09); color: var(--p-blue2); }
+        .anchor-link.active { background: rgba(37,99,235,0.13); color: var(--p-blue2); font-weight: 700; }
+
+        @media (max-width: 1120px) { .anchor-menu { display: none; } }
+        @media (max-width: 760px) { .siren-block { grid-template-columns: 1fr; } .hag-hero { padding: 2.8rem 1rem 3rem; } }
+    </style>
+</head>
+<body class="haggadah-body" data-enable-text-size="true" data-header-fallback="true">
+
+    <header class="header-main relative z-30">
+        <div class="header-container">
+            <div class="header-branding-section">
+                <button id="home-branding" type="button" aria-label="Return to home" class="header-branding-button">
+                    <div class="header-text">
+                        <h1 class="header-title">A Letter in the Scroll</h1>
+                        <p class="header-subtitle">Interactive Weekly Portion Study &amp; Discussion</p>
+                    </div>
+                </button>
+            </div>
+            <div class="header-actions-wrapper">
+                <div id="header-actions" class="header-actions">
+                    <button id="go-to-weekly" class="header-btn header-btn-primary" title="Go to this week's parsha">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        <span class="header-btn-text">This Week's Parsha</span>
+                    </button>
+                    <a href="/prayers" class="header-btn header-btn-secondary">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        <span class="header-btn-text">Prayers</span>
+                    </a>
+                    <a href="/songs" class="header-btn header-btn-secondary">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13"/><circle cx="6" cy="18" r="3" stroke-width="2"/><circle cx="18" cy="16" r="3" stroke-width="2"/></svg>
+                        <span class="header-btn-text">Songs and Poems</span>
+                    </a>
+                    <a href="holidays/" class="header-btn header-btn-secondary">
+                        <img src="media/images/party.png" class="header-btn-icon" alt="" style="width:22px;height:22px;object-fit:contain;">
+                        <span class="header-btn-text">Holidays</span>
+                    </a>
+                    <a href="/about" class="header-btn header-btn-secondary">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span class="header-btn-text">About</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="anchor-menu" aria-label="Yom HaZikaron section links">
+        <p class="anchor-menu__title">On This Page</p>
+        <a class="anchor-link" href="#hero">Top</a>
+        <a class="anchor-link" href="#overview">Overview</a>
+        <a class="anchor-link" href="#importance">Why It Matters</a>
+        <a class="anchor-link" href="#traditions">Traditions</a>
+        <a class="anchor-link" href="#dates">2026 Dates</a>
+        <a class="anchor-link" href="#transition">Transition</a>
+        <a class="anchor-link" href="#zikaron-project">Zikaron Project</a>
+        <a class="anchor-link" href="#oct7">October 7</a>
+    </nav>
+
+    <div class="hag-page">
+    <section id="hero" class="hag-hero" aria-labelledby="yhz-title">
+        <p class="hag-hero__eyebrow">National Memorial Day &middot; Israel</p>
+        <p class="hag-hero__hebrew">יוֹם הַזִּכָּרוֹן</p>
+        <h1 id="yhz-title" class="hag-hero__title">Yom <span>HaZikaron</span></h1>
+        <p class="hag-hero__subtitle">
+            Israel's Memorial Day for the Fallen Soldiers of the Wars of Israel and Victims of Actions of Terrorism —
+            a profound day of national mourning that unites the entire Jewish people.
+        </p>
+        <div class="hag-hero__actions">
+            <a class="hag-hero__btn hag-hero__btn--primary" href="holidays/">All Holidays</a>
+            <a class="hag-hero__btn hag-hero__btn--secondary" href="/study">Home</a>
+        </div>
+    </section>
+
+    <main class="haggadah-shell">
+
+        <!-- Overview -->
+        <div class="hag-section-label">About the Day</div>
+        <section id="overview" class="seder-section" aria-labelledby="overview-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Introduction</p></div>
+            <h2 id="overview-title" class="section-title">What is Yom HaZikaron?</h2>
+            <p class="section-hebrew">מהו יום הזיכרון</p>
+            <p class="section-subtitle">Yom HaZikaron (Hebrew: יוֹם הַזִּכָּרוֹן), formally known as <em>Yom HaZikaron LeHalalei Ma'arakhot Yisrael ul'Nifge'ei Peulot HaEivah</em> — Memorial Day for the Fallen Soldiers of the Wars of Israel and Victims of Actions of Terrorism — is the national day of mourning in Israel.</p>
+            <div class="step-callout" style="margin-top:1rem;">
+                Unlike Memorial Day in many other countries, which can sometimes feel like a long weekend, Yom HaZikaron is a day of profound, active mourning. It honors:<br><br>
+                <strong>Fallen Soldiers:</strong> All members of the IDF, police, Mossad, Shin Bet, and pre-state underground organizations (like the Haganah or Irgun) who died in the line of duty.<br><br>
+                <strong>Victims of Terror:</strong> Civilians who have been killed in acts of terrorism against Israel and the Jewish people.
+            </div>
+        </section>
+
+        <!-- Why It Matters -->
+        <section id="importance" class="seder-section" aria-labelledby="importance-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Significance</p></div>
+            <h2 id="importance-title" class="section-title">Why Is It So Important?</h2>
+            <p class="section-hebrew">מדוע יום זה כה משמעותי</p>
+            <p class="section-subtitle">To understand Yom HaZikaron is to understand the Israeli psyche. Because of mandatory military service, almost every Israeli family is a "bereaved family" or is closely connected to one.</p>
+            <div style="display:grid;gap:1rem;grid-template-columns:1fr 1fr 1fr;margin-top:1.2rem;">
+                <div class="note-panel" style="margin:0;">
+                    <h4>National Survival</h4>
+                    <p>It reinforces the idea that the State of Israel does not exist by chance, but through the sacrifice of its citizens — generation after generation.</p>
+                </div>
+                <div class="note-panel" style="margin:0;">
+                    <h4>Unity</h4>
+                    <p>It is one of the few days that almost completely bridges the gap between religious, secular, left-wing, and right-wing Israelis. The shared grief creates a powerful national bond.</p>
+                </div>
+                <div class="note-panel" style="margin:0;">
+                    <h4>The Price of Freedom</h4>
+                    <p>It serves as a constant reminder that Jewish sovereignty comes with a heavy, ongoing cost — one that must never be forgotten or taken for granted.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Traditions -->
+        <div class="hag-section-label">How the Day Is Observed</div>
+        <section id="traditions" class="seder-section" aria-labelledby="traditions-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Rituals</p></div>
+            <h2 id="traditions-title" class="section-title">Key Traditions and Rituals</h2>
+            <p class="section-hebrew">מנהגי יום הזיכרון</p>
+
+            <p class="mini-heading">The Sirens — A Nation Stops</p>
+            <p style="color:var(--p-muted);font-size:0.93rem;line-height:1.74;">The most iconic and moving part of the day occurs twice. During these sirens, the entire country stops. Cars pull over on highways and drivers stand beside them; pedestrians stop walking; shops pause transactions. There is a total, haunting silence across the land.</p>
+
+            <div class="siren-block">
+                <div class="siren-item">
+                    <p class="siren-item__time">8:00 PM</p>
+                    <p class="siren-item__desc"><strong>One-minute siren</strong> at the start of the evening, marking the beginning of Yom HaZikaron. The entire country falls silent.</p>
+                </div>
+                <div class="siren-item">
+                    <p class="siren-item__time">11:00 AM</p>
+                    <p class="siren-item__desc"><strong>Two-minute siren</strong> the following morning — the longest silence. Cities, highways, and workplaces all come to a complete halt.</p>
+                </div>
+            </div>
+
+            <p class="mini-heading">Closures and National Atmosphere</p>
+            <p style="color:var(--p-muted);font-size:0.93rem;line-height:1.74;">By law, all places of entertainment are closed — cinemas, restaurants, pubs, theaters. Radio and TV stations switch their programming entirely to documentaries about the fallen, memorial ceremonies, and somber music.</p>
+
+            <p class="mini-heading">Dam HaMaccabim — Blood of the Maccabees</p>
+            <div class="tradition-card">
+                <p class="tradition-card__title">The Red Anemone</p>
+                <p>The symbol of the day is a small red flower called <em>Dam HaMaccabim</em> (Blood of the Maccabees). Legend says that where this flower grows, a drop of a hero's blood once fell. People wear a sticker of this flower on their shirts throughout the day as a mark of solidarity and remembrance.</p>
+            </div>
+
+            <p class="mini-heading">Memorial Ceremonies</p>
+            <div class="note-panel">
+                <ul>
+                    <li><strong>The Western Wall:</strong> The official opening ceremony takes place here on the eve of the day, with the national torch lighting.</li>
+                    <li><strong>Mount Herzl:</strong> The main national ceremony occurs at the military cemetery on Mount Herzl in Jerusalem, attended by the President, Prime Minister, and Chief of Staff.</li>
+                    <li><strong>Schools and Communities:</strong> Every school and community center holds its own <em>Tekes</em> (ceremony) where the names of local fallen are read and candles are lit.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Dates -->
+        <section id="dates" class="seder-section" aria-labelledby="dates-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Calendar</p></div>
+            <h2 id="dates-title" class="section-title">2026 Dates</h2>
+            <p class="section-hebrew">תאריכי יום הזיכרון תשפ"ו</p>
+
+            <div class="date-block">
+                <p class="date-block__label">Yom HaZikaron 2026</p>
+                <p class="date-block__date">Sundown Monday, April 20 &rarr; Nightfall Tuesday, April 21, 2026</p>
+                <p class="date-block__note">The date is officially the 4th of Iyar on the Hebrew calendar. It is sometimes shifted by a day to avoid coinciding with the Sabbath — when the sirens and ceremonies would be prohibited.</p>
+            </div>
+
+            <div class="step-callout" style="margin-top:1rem;">
+                <strong>Note for the Diaspora:</strong> While the observance is primarily an Israeli state occasion, many Jewish communities worldwide hold parallel memorial ceremonies on this day, standing in solidarity with Israel's bereaved families and acknowledging the shared Jewish connection to those who fell defending the Jewish homeland.
+            </div>
+        </section>
+
+        <!-- Transition -->
+        <section id="transition" class="seder-section" aria-labelledby="transition-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">The Turning Point</p></div>
+            <h2 id="transition-title" class="section-title">From Mourning to Joy</h2>
+            <p class="section-hebrew">מאבל לשמחה</p>
+            <p class="section-subtitle">One of the most unique and emotionally powerful aspects of Israeli culture is the transition from Yom HaZikaron directly into Yom Ha'atzmaut (Independence Day).</p>
+            <p style="margin-top:0.8rem;color:var(--p-muted);font-size:0.94rem;line-height:1.74;">At nightfall on the day of Memorial, a ceremony at Mount Herzl marks the end of mourning and the start of celebration. The flag is raised from half-mast to the top of the pole. The "switch" is jarring and difficult for many — moving from deep grief to ecstatic celebration in a matter of minutes — but it is intentional.</p>
+            <div class="note-panel">
+                <h4>The Profound Message</h4>
+                <p>The seamless transition from Yom HaZikaron to Yom Ha'atzmaut symbolizes that the independence being celebrated was bought with the lives of those being mourned. You cannot understand the joy of the one without feeling the weight of the other. The State of Israel was born through sacrifice — and it survives through sacrifice.</p>
+            </div>
+        </section>
+
+        <!-- The Zikaron Project — Featured Link -->
+        <div class="hag-section-label">Songs of Remembrance</div>
+        <section id="zikaron-project" class="seder-section" aria-labelledby="zp-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Resource</p></div>
+            <h2 id="zp-title" class="section-title">The Zikaron Project</h2>
+            <p class="section-subtitle">One of the most moving ways to observe Yom HaZikaron — especially in the Diaspora — is through the songs that have become the soundtrack of Israeli grief, memory, and hope.</p>
+
+            <div class="zikaron-feature">
+                <p class="zikaron-feature__eyebrow">Featured Resource</p>
+                <p class="zikaron-feature__title">The Zikaron Project — Songs, Lyrics &amp; Translations</p>
+                <p class="zikaron-feature__desc">
+                    The Zikaron Project is a beautiful, deeply curated website dedicated to the memorial songs of Yom HaZikaron — the iconic Israeli songs of remembrance that every Israeli knows by heart. Each song is presented with its original Hebrew lyrics, transliterations, and full English translations, making this powerful music accessible to Jewish communities worldwide.
+                </p>
+                <p class="zikaron-feature__desc">
+                    Whether you are planning a community ceremony, teaching a class, or simply want to connect deeply with the spirit of the day, The Zikaron Project is an extraordinary resource. The songs it features are not merely music — they are the emotional language of an entire people's grief, resilience, and enduring love for those who fell.
+                </p>
+                <a href="http://thezikaronproject.com/" target="_blank" rel="noopener noreferrer" class="zikaron-feature__link">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    Visit thezikaronproject.com
+                </a>
+            </div>
+        </section>
+
+        <!-- October 7 -->
+        <div class="hag-section-label">Recent History</div>
+        <section id="oct7" class="seder-section" aria-labelledby="oct7-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Contemporary Context</p></div>
+            <h2 id="oct7-title" class="section-title">The Impact of October 7</h2>
+            <p class="section-hebrew">השפעת ה-7 באוקטובר</p>
+            <p class="section-subtitle">In recent years, the weight of Yom HaZikaron has grown exponentially for the entire Jewish world.</p>
+            <p style="margin-top:0.8rem;color:var(--p-muted);font-size:0.94rem;line-height:1.74;">The events of October 7, 2023, and the subsequent war in Gaza, have added thousands of names to the list of the fallen and victims of terror. For many Israelis, the "old" grief of past wars has been layered with the very "raw" and "fresh" grief of the present, making the annual observance particularly intense and painful.</p>
+            <div class="note-panel">
+                <h4>A Different Kind of Memorial</h4>
+                <p>Yom HaZikaron 2024 and 2025 were unlike any before them. Families of hostages still held in Gaza attended ceremonies alongside families of soldiers who had fallen in combat, creating a new and heartbreaking dimension to the day. The hostages are not yet counted among the fallen — yet the uncertainty of their fate adds a layer of ongoing anguish that has no historical parallel in modern Israeli memory.</p>
+                <p>For Jews everywhere, this makes Yom HaZikaron 2026 a particularly solemn and significant occasion — a day to stand together in solidarity with Israel, to say the names of the fallen, and to pray for the swift return of those still held captive.</p>
+            </div>
+        </section>
+
+        <div id="closing" class="ending-banner">
+            <h3>יִזְכּוֹר</h3>
+            <p>May the memory of all the fallen be for a blessing. זִכְרוֹנָם לִבְרָכָה.</p>
+        </div>
+        <p class="page-footer">Yom HaZikaron — Israel's Memorial Day &middot; A Letter in the Scroll</p>
+    </main>
+    </div>
+
+    <script>
+        (function() {
+            const links = document.querySelectorAll('.anchor-menu .anchor-link[href^="#"]');
+            const sectionIds = [...links].map(l => l.getAttribute('href').slice(1)).filter(Boolean);
+            const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+            function setActive(id) { links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id)); }
+            if ('IntersectionObserver' in window && sections.length) {
+                const observer = new IntersectionObserver((entries) => {
+                    const visible = entries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+                    if (visible.length) setActive(visible[0].target.id);
+                }, { rootMargin: '-18% 0px -70% 0px', threshold: [0.01, 0.1, 0.3] });
+                sections.forEach(s => observer.observe(s));
+            }
+            links.forEach(l => l.addEventListener('click', () => { const id = l.getAttribute('href').replace('#',''); if (id) setActive(id); }));
+        })();
+    </script>
+    <script src="/js/header-fallback.js"></script>
+    <script src="/js/sidebar-nav.js"></script>
+    <script src="/js/text-size-control.js"></script>
+</body>
+</html>

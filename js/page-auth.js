@@ -158,7 +158,7 @@ function buildHeaderDropdown(firstName, email) {
     });
 
     logoutBtn.addEventListener('click', () => {
-        window.location.href = `${base}index.html`;
+        window.location.href = '/';
     });
 }
 

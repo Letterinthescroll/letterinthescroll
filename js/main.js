@@ -2529,7 +2529,7 @@ function setupLoginListeners() {
                 hideInfoPanel();
                 // Clear chavruta context and redirect to login
                 sessionStorage.removeItem('activeChavrutaId');
-                window.location.href = 'index.html';
+                window.location.href = '/';
             } catch (error) {
                 console.error('Sign-out error:', error);
             }
@@ -2952,7 +2952,7 @@ function updateHeaderUserDropdown(user, userProfile) {
                         closeCommentsPanel(stopListeningForComments);
                         hideInfoPanel();
                         sessionStorage.removeItem('activeChavrutaId');
-                        window.location.href = 'index.html';
+                        window.location.href = '/';
                     }
                 } catch (error) {
                     console.error('Sign-out error:', error);

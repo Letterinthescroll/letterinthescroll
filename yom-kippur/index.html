@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yom Kippur — The Complete Guide | A Letter in the Scroll</title>
+    <meta name="description" content="A complete guide to Yom Kippur: the Day of Atonement, its origins, customs, the five prayer services, and blessings.">
+    <link rel="icon" type="image/png" href="media/images/Icon.png">
+    <link rel="apple-touch-icon" href="media/images/Icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/mobile-overrides.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --p-navy:   #1e3a5f;
+            --p-blue:   #1e3a8a;
+            --p-blue2:  #1e40af;
+            --p-blue3:  #2563eb;
+            --p-gold:   #b7791f;
+            --p-amber:  #f59e0b;
+            --p-border: rgba(30, 58, 138, 0.11);
+            --p-muted:  #4b6278;
+            --p-radius: 16px;
+        }
+        html { scroll-behavior: smooth; }
+        body.haggadah-body {
+            background: linear-gradient(170deg, #f0f5ff 0%, #e8effe 40%, #f5f8ff 100%);
+            min-height: 100vh; color: #1a3147; overflow-x: hidden;
+        }
+        .hag-page { position: relative; z-index: 2; }
+
+        .hag-hero {
+            background: linear-gradient(135deg, #0d1b3e 0%, #1a2f5f 50%, #1e3a8a 100%);
+            color: #fff; text-align: center;
+            padding: 3.8rem 1.5rem 3.6rem;
+            position: relative; overflow: hidden;
+        }
+        .hag-hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 72% 35%, rgba(255,255,255,0.07) 0%, transparent 62%);
+            pointer-events: none;
+        }
+        .hag-hero::after {
+            content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+            height: 46px;
+            background: linear-gradient(to bottom right, transparent 49%, #f0f5ff 50%);
+        }
+        .hag-hero__eyebrow { font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(255,255,255,0.5); font-weight: 600; margin-bottom: 0.5rem; position: relative; }
+        .hag-hero__hebrew { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 700; direction: rtl; color: #e2e8f0; margin-bottom: 0.35rem; position: relative; }
+        .hag-hero__title { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 5.5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1rem; position: relative; }
+        .hag-hero__title span { color: #93c5fd; }
+        .hag-hero__subtitle { font-size: 0.96rem; color: rgba(255,255,255,0.65); line-height: 1.68; max-width: 560px; margin: 0 auto 1.6rem; position: relative; }
+        .hag-hero__actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.65rem; position: relative; }
+        .hag-hero__btn { display: inline-flex; align-items: center; text-decoration: none; border-radius: 999px; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.88rem; transition: opacity 0.18s, transform 0.15s; }
+        .hag-hero__btn:hover { opacity: 0.88; transform: translateY(-1px); }
+        .hag-hero__btn--primary { background: rgba(255,255,255,0.15); color: #fff; border: 1.5px solid rgba(255,255,255,0.38); backdrop-filter: blur(6px); }
+        .hag-hero__btn--secondary { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.18); }
+
+        .haggadah-shell { max-width: 1040px; margin: 0 auto; padding: 0 1.25rem 4.4rem; }
+
+        .hag-section-label { margin: 2rem 0 0.75rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--p-blue3); display: flex; align-items: center; gap: 0.7rem; }
+        .hag-section-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(37,99,235,0.28), transparent); }
+
+        .seder-section { margin-top: 1.55rem; background: #fff; border: 1px solid rgba(30,58,138,0.09); border-radius: 18px; padding: 1.6rem 1.65rem 1.5rem; box-shadow: 0 2px 20px rgba(30,58,138,0.07); scroll-margin-top: 82px; }
+        .section-kicker-wrap { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+        .section-kicker { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--p-blue3); margin: 0; }
+        .section-title { margin: 0; font-family: 'Playfair Display', serif; font-size: clamp(1.35rem, 2.8vw, 2.05rem); color: #1e3a5f; line-height: 1.15; }
+        .section-hebrew { margin: 0.25rem 0 0.8rem; direction: rtl; color: var(--p-blue2); font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2.2vw, 1.3rem); opacity: 0.72; }
+        .section-subtitle { margin: 0.12rem 0 0; color: var(--p-muted); line-height: 1.74; font-size: 0.94rem; }
+
+        .step-callout { margin-top: 1.08rem; background: #eff6ff; border: 1px solid rgba(37,99,235,0.23); border-radius: 10px; padding: 0.86rem 1.05rem; color: #1e3a8a; font-size: 0.9rem; line-height: 1.74; }
+        .step-callout strong { color: #1e3a5f; }
+
+        .blessing-card { margin-top: 1.1rem; background: #fff; border: 1px solid rgba(183,121,31,0.25); border-radius: 14px; padding: 1.02rem 1.08rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.72rem 0.82rem; }
+        .blessing-card h4 { margin: 0 0 0.12rem; color: #7a4e11; font-size: 0.95rem; font-weight: 700; grid-column: 1 / -1; }
+        .blessing-meta { margin: 0.3rem 0 0; color: #5a6d80; font-size: 0.86rem; line-height: 1.66; grid-column: 1 / -1; }
+        .blessing-hebrew { margin: 0; direction: rtl; text-align: right; font-family: 'Playfair Display', serif; font-size: 1.12rem; line-height: 1.92; color: #7c2d12; background: #fffbf2; border: 1px solid rgba(183,121,31,0.17); border-radius: 10px; padding: 0.62rem 0.82rem; grid-column: 1; min-width: 0; }
+        .blessing-translit, .blessing-english { margin: 0; font-size: 0.89rem; line-height: 1.74; color: #334e67; background: #f8fbff; border: 1px solid rgba(30,58,138,0.12); border-radius: 10px; padding: 0.62rem 0.82rem; min-width: 0; }
+        .blessing-translit { grid-column: 2; font-style: italic; }
+        .blessing-english  { grid-column: 3; }
+
+        .mini-heading { margin: 1.35rem 0 0.56rem; color: var(--p-blue); font-size: 0.78rem; letter-spacing: 0.11em; text-transform: uppercase; font-weight: 800; }
+
+        .note-panel { background: #f8fbff; border: 1px solid rgba(30,58,138,0.12); border-radius: 12px; padding: 0.85rem 0.95rem; margin-top: 1rem; }
+        .note-panel h4 { margin: 0; color: var(--p-blue); font-size: 0.9rem; font-weight: 700; }
+        .note-panel p, .note-panel li { margin: 0.38rem 0 0; color: #355671; font-size: 0.87rem; line-height: 1.72; }
+        .note-panel ul { margin: 0.32rem 0 0; padding-left: 1rem; }
+
+        /* Prohibition cards */
+        .prohibition-grid { margin-top: 1.2rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.85rem; }
+        .prohibition-card { background: linear-gradient(145deg, #f8fbff, #eff6ff); border: 1px solid rgba(30,58,138,0.14); border-radius: 12px; padding: 0.9rem 1rem; }
+        .prohibition-card__num { width: 1.8rem; height: 1.8rem; background: linear-gradient(135deg, #1e3a8a, #2563eb); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .prohibition-card__title { font-weight: 700; font-size: 0.9rem; color: #1e3a5f; margin: 0 0 0.35rem; }
+        .prohibition-card__desc { font-size: 0.84rem; color: var(--p-muted); line-height: 1.62; margin: 0; }
+
+        /* Prayer services list */
+        .service-list { margin-top: 1.1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .service-item { display: grid; grid-template-columns: 2rem 1fr; gap: 0.75rem; align-items: start; background: #f8fbff; border: 1px solid rgba(30,58,138,0.12); border-radius: 12px; padding: 0.85rem 1rem; }
+        .service-item__num { width: 2rem; height: 2rem; background: linear-gradient(135deg, #1e3a8a, #2563eb); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; flex-shrink: 0; }
+        .service-item__body {}
+        .service-item__name { font-weight: 700; font-size: 0.95rem; color: #1e3a5f; margin: 0 0 0.3rem; }
+        .service-item__desc { font-size: 0.87rem; color: var(--p-muted); line-height: 1.68; margin: 0; }
+
+        /* Quote block */
+        .quote-block { margin-top: 1rem; background: #fff8eb; border-left: 4px solid var(--p-amber); border-radius: 0 12px 12px 0; padding: 0.9rem 1.1rem; }
+        .quote-block__text { font-family: 'Playfair Display', serif; font-size: 1.02rem; color: #7a4e11; line-height: 1.7; margin: 0 0 0.4rem; font-style: italic; }
+        .quote-block__cite { font-size: 0.82rem; color: #8a6240; margin: 0; }
+
+        .ending-banner { margin-top: 1.3rem; text-align: center; background: linear-gradient(135deg, #0d1b3e 0%, #1a2f5f 50%, #1e3a8a 100%); border-radius: 20px; padding: 2.2rem 1.5rem; position: relative; overflow: hidden; }
+        .ending-banner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 60% 40%, rgba(255,255,255,0.07) 0%, transparent 65%); pointer-events: none; }
+        .ending-banner h3 { margin: 0; direction: rtl; color: #e2e8f0; font-family: 'Playfair Display', serif; font-size: clamp(1.9rem, 4.5vw, 2.8rem); line-height: 1.2; position: relative; }
+        .ending-banner p { margin: 0.55rem 0 0; color: rgba(255,255,255,0.72); font-size: 1.05rem; position: relative; }
+        .page-footer { margin: 1.8rem 0 0; color: rgba(30,58,138,0.38); text-align: center; font-size: 0.79rem; }
+
+        .anchor-menu { position: fixed; right: 0; top: 116px; z-index: 60; width: 92px; max-height: 72vh; overflow-y: auto; overflow-x: hidden; background: rgba(255,255,255,0.74); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); border: 1px solid rgba(30,58,138,0.14); border-right: none; border-radius: 10px 0 0 10px; box-shadow: -4px 6px 28px rgba(30,58,138,0.1), inset 0 1px 0 rgba(255,255,255,0.6); padding: 0.42rem 0.32rem; }
+        .anchor-menu__title { margin: 0 0 0.32rem; padding: 0 0.28rem 0.3rem; font-size: 0.58rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--p-blue3); border-bottom: 1px solid rgba(37,99,235,0.15); }
+        .anchor-link { display: block; text-decoration: none; color: #3b5270; font-size: 0.65rem; font-weight: 600; line-height: 1.3; padding: 0.24rem 0.3rem; border-radius: 7px; transition: background 0.14s, color 0.14s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .anchor-link:hover { background: rgba(37,99,235,0.09); color: var(--p-blue); }
+        .anchor-link.active { background: rgba(37,99,235,0.13); color: var(--p-blue); font-weight: 700; }
+
+        @media (max-width: 1120px) { .anchor-menu { display: none; } .blessing-card { grid-template-columns: 1fr; } }
+        @media (max-width: 760px) { .prohibition-grid { grid-template-columns: 1fr 1fr; } .hag-hero { padding: 2.8rem 1rem 3rem; } }
+        @media (max-width: 480px) { .prohibition-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body class="haggadah-body" data-enable-text-size="true" data-header-fallback="true">
+
+    <header class="header-main relative z-30">
+        <div class="header-container">
+            <div class="header-branding-section">
+                <button id="home-branding" type="button" aria-label="Return to home" class="header-branding-button">
+                    <div class="header-text">
+                        <h1 class="header-title">A Letter in the Scroll</h1>
+                        <p class="header-subtitle">Interactive Weekly Portion Study &amp; Discussion</p>
+                    </div>
+                </button>
+            </div>
+            <div class="header-actions-wrapper">
+                <div id="header-actions" class="header-actions">
+                    <button id="go-to-weekly" class="header-btn header-btn-primary" title="Go to this week's parsha">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        <span class="header-btn-text">This Week's Parsha</span>
+                    </button>
+                    <a href="/prayers" class="header-btn header-btn-secondary">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        <span class="header-btn-text">Prayers</span>
+                    </a>
+                    <a href="/songs" class="header-btn header-btn-secondary">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13"/><circle cx="6" cy="18" r="3" stroke-width="2"/><circle cx="18" cy="16" r="3" stroke-width="2"/></svg>
+                        <span class="header-btn-text">Songs and Poems</span>
+                    </a>
+                    <a href="holidays/" class="header-btn header-btn-secondary">
+                        <img src="media/images/party.png" class="header-btn-icon" alt="" style="width:22px;height:22px;object-fit:contain;">
+                        <span class="header-btn-text">Holidays</span>
+                    </a>
+                    <a href="/about" class="header-btn header-btn-secondary">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span class="header-btn-text">About</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="anchor-menu" aria-label="Yom Kippur section links">
+        <p class="anchor-menu__title">Yom Kippur</p>
+        <a class="anchor-link" href="#hero">Top</a>
+        <a class="anchor-link" href="#overview">Overview</a>
+        <a class="anchor-link" href="#origins">Origins</a>
+        <a class="anchor-link" href="#jonah">Story of Jonah</a>
+        <a class="anchor-link" href="#prohibitions">Prohibitions</a>
+        <a class="anchor-link" href="#services">Services</a>
+        <a class="anchor-link" href="#blessings">Blessings</a>
+    </nav>
+
+    <div class="hag-page">
+    <section id="hero" class="hag-hero" aria-labelledby="yk-title">
+        <p class="hag-hero__eyebrow">The Holiest Day of the Jewish Year</p>
+        <p class="hag-hero__hebrew">יוֹם הַכִּפּוּרִים</p>
+        <h1 id="yk-title" class="hag-hero__title">Yom <span>Kippur</span></h1>
+        <p class="hag-hero__subtitle">
+            The Day of Atonement — a 25-hour fast, intensive prayer, and a profound opportunity to seek forgiveness,
+            renew our souls, and return to our best selves.
+        </p>
+        <div class="hag-hero__actions">
+            <a class="hag-hero__btn hag-hero__btn--primary" href="holidays/">All Holidays</a>
+            <a class="hag-hero__btn hag-hero__btn--secondary" href="/rosh-hashanah">Rosh Hashanah</a>
+            <a class="hag-hero__btn hag-hero__btn--secondary" href="/study">Home</a>
+        </div>
+    </section>
+
+    <main class="haggadah-shell">
+
+        <!-- Overview -->
+        <div class="hag-section-label">About the Holiday</div>
+        <section id="overview" class="seder-section" aria-labelledby="yk-overview">
+            <div class="section-kicker-wrap"><p class="section-kicker">Introduction</p></div>
+            <h2 id="yk-overview" class="section-title">What is Yom Kippur?</h2>
+            <p class="section-hebrew">מהו יום כיפור</p>
+            <div style="display:grid;gap:0.85rem;grid-template-columns:1fr 1fr;margin-top:0.5rem;">
+                <div>
+                    <p style="margin:0;color:var(--p-muted);font-size:0.93rem;line-height:1.72;"><strong style="color:#1e3a5f;">Hebrew Date:</strong> 10th of Tishrei</p>
+                    <p style="margin:0.4rem 0 0;color:var(--p-muted);font-size:0.93rem;line-height:1.72;"><strong style="color:#1e3a5f;">Upcoming Date (2026):</strong> Begins evening of Sunday, September 20, 2026</p>
+                </div>
+                <div>
+                    <p style="margin:0;color:var(--p-muted);font-size:0.93rem;line-height:1.72;"><strong style="color:#1e3a5f;">Meaning:</strong> "Day of Atonement"</p>
+                    <p style="margin:0.4rem 0 0;color:var(--p-muted);font-size:0.93rem;line-height:1.72;"><strong style="color:#1e3a5f;">Duration:</strong> 25 hours — from before sunset to nightfall the next day</p>
+                </div>
+            </div>
+            <div class="step-callout" style="margin-top:1rem;">
+                Yom Kippur is the pinnacle of the Jewish High Holy Days (<em>Yamim Nora'im</em>, the "Days of Awe"). Occurring ten days after Rosh Hashanah, it is a solemn but ultimately joyous day dedicated entirely to fasting, prayer, repentance, and spiritual cleansing.
+            </div>
+            <div class="note-panel">
+                <h4>The Book of Life</h4>
+                <p>According to Jewish tradition, on Rosh Hashanah, God writes the fate of each person for the coming year into the "Book of Life," and on Yom Kippur, that decree is <em>sealed</em>. The days in between — the Ten Days of Repentance — are a crucial window to make amends with others and with God. Yom Kippur is the final, ultimate opportunity.</p>
+                <p>Unlike other Jewish holidays that focus on historical events or agricultural seasons, Yom Kippur focuses entirely on the individual and communal soul. For 25 hours, Jewish people abstain from physical pleasures to emulate angels — focusing strictly on the spiritual.</p>
+            </div>
+        </section>
+
+        <!-- Historical Origins -->
+        <div class="hag-section-label">The Story</div>
+        <section id="origins" class="seder-section" aria-labelledby="origins-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Historical Origins</p></div>
+            <h2 id="origins-title" class="section-title">Where Did Yom Kippur Come From?</h2>
+            <p class="section-hebrew">מָקוֹר יוֹם כִּפּוּר</p>
+
+            <p class="mini-heading">Moses and the Second Tablets</p>
+            <p style="color:var(--p-muted);font-size:0.93rem;line-height:1.74;">After the Exodus from Egypt, Moses received the Ten Commandments at Mount Sinai and remained on the mountain for 40 days. In his absence, the Israelites panicked and built the Golden Calf. Upon returning and seeing this idolatry, Moses shattered the original stone tablets in anguish.</p>
+            <p style="margin-top:0.7rem;color:var(--p-muted);font-size:0.93rem;line-height:1.74;">Moses then pleaded with God for the nation's forgiveness. God instructed Moses to carve a second set of tablets and return to the top of the mountain. On the <strong>10th day of the Hebrew month of Tishrei</strong>, Moses descended with the second set of tablets — a sign that God had fully forgiven the Jewish people. Consequently, the 10th of Tishrei was designated for all future generations as a day of national atonement.</p>
+
+            <p class="mini-heading">The Temple Service — The Avodah</p>
+            <p style="color:var(--p-muted);font-size:0.93rem;line-height:1.74;">During the eras of the First and Second Holy Temples in Jerusalem, Yom Kippur was the only day of the year when the Kohen Gadol (High Priest) was permitted to enter the Holy of Holies — the innermost sanctum of the Temple where the Ark of the Covenant was kept.</p>
+            <div class="note-panel">
+                <h4>The Scapegoat — Azazel</h4>
+                <p>The High Priest performed a complex set of rituals including changing his garments multiple times and bringing specific offerings. A famous element involved casting lots over two goats: one was offered to God, and the other — the "scapegoat" — was symbolically laden with the sins of the entire people and sent out into the wilderness of Azazel. Today, since the Temple no longer exists, these sacrifices are replaced by intensive prayer services — specifically the Musaf service's <em>Avodah</em> recitation.</p>
+            </div>
+        </section>
+
+        <!-- Story of Jonah -->
+        <section id="jonah" class="seder-section" aria-labelledby="jonah-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Special Reading</p></div>
+            <h2 id="jonah-title" class="section-title">The Story of Jonah</h2>
+            <p class="section-hebrew">סֵפֶר יוֹנָה</p>
+            <p class="section-subtitle">During the afternoon service (Mincha) of Yom Kippur, it is a universal Jewish custom to read the Book of Jonah — one of the most profound and universal stories in all of Scripture.</p>
+
+            <p style="margin-top:0.8rem;color:var(--p-muted);font-size:0.94rem;line-height:1.74;">God commands the prophet Jonah to go to the wicked city of Nineveh and warn its inhabitants that they will be destroyed unless they repent. Reluctant to help Israel's enemies, Jonah attempts to flee from God by boarding a ship to Tarshish. A massive storm threatens the ship. Realizing the storm is a divine consequence of his disobedience, Jonah tells the sailors to throw him overboard.</p>
+            <p style="margin-top:0.7rem;color:var(--p-muted);font-size:0.94rem;line-height:1.74;">He is swallowed by a giant fish, where he remains for three days and nights. From the belly of the fish, Jonah prays to God, and the fish spits him out onto dry land. Commanded again to go to Nineveh, he obeys — and the people of Nineveh, from the king down to the commoners, immediately fast, repent, and turn from their evil ways. God sees their genuine repentance and spares the city.</p>
+
+            <div class="note-panel">
+                <h4>Why Read Jonah on Yom Kippur?</h4>
+                <ul>
+                    <li><strong>The Power of Teshuvah (Repentance):</strong> The central theme is that no one is beyond redemption. If the wicked people of Nineveh can genuinely repent and be forgiven by God, so too can anyone — including ourselves.</li>
+                    <li><strong>You Cannot Hide from God:</strong> Jonah's futile attempt to flee teaches that one cannot escape God's presence or one's own spiritual responsibilities.</li>
+                    <li><strong>Universal Mercy:</strong> It demonstrates that God's compassion and desire for repentance extend to all people, not just a select few — a powerful message for a day of collective judgment.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- The Five Prohibitions -->
+        <div class="hag-section-label">The Five Prohibitions</div>
+        <section id="prohibitions" class="seder-section" aria-labelledby="prohibitions-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Halachah</p></div>
+            <h2 id="prohibitions-title" class="section-title">The Five Prohibitions</h2>
+            <p class="section-hebrew">חֲמִשָּׁה עִינּוּיִים</p>
+            <p class="section-subtitle">To completely remove themselves from the physical world and focus on the spiritual, Jewish law mandates five primary prohibitions for the full 25 hours of Yom Kippur.</p>
+            <div class="prohibition-grid">
+                <div class="prohibition-card">
+                    <div class="prohibition-card__num">1</div>
+                    <p class="prohibition-card__title">No Eating or Drinking</p>
+                    <p class="prohibition-card__desc">A complete fast from all food and water. (Those whose health would be endangered are strictly forbidden from fasting — preserving life overrides the fast).</p>
+                </div>
+                <div class="prohibition-card">
+                    <div class="prohibition-card__num">2</div>
+                    <p class="prohibition-card__title">No Leather Shoes</p>
+                    <p class="prohibition-card__desc">Leather historically represented luxury and comfort. Wearing simple, non-leather footwear (canvas or rubber) is a sign of humility and abstinence.</p>
+                </div>
+                <div class="prohibition-card">
+                    <div class="prohibition-card__num">3</div>
+                    <p class="prohibition-card__title">No Bathing or Washing</p>
+                    <p class="prohibition-card__desc">Washing for pleasure is prohibited, further removing physical comforts from the experience of the day.</p>
+                </div>
+                <div class="prohibition-card">
+                    <div class="prohibition-card__num">4</div>
+                    <p class="prohibition-card__title">No Lotions or Cosmetics</p>
+                    <p class="prohibition-card__desc">Anointing the body with oils, perfumes, or cosmetics is forbidden for the duration of the fast.</p>
+                </div>
+                <div class="prohibition-card">
+                    <div class="prohibition-card__num">5</div>
+                    <p class="prohibition-card__title">No Marital Relations</p>
+                    <p class="prohibition-card__desc">Abstaining from physical intimacy to maintain strict focus on spiritual purity and the soul's work of the day.</p>
+                </div>
+            </div>
+            <div class="step-callout" style="margin-top:1rem;">
+                <strong>The Kittel — Wearing White:</strong> It is customary for many to wear white clothing on Yom Kippur. Married Ashkenazi men traditionally wear a <em>kittel</em>, a simple white robe, symbolizing purity (Isaiah: "Though your sins are like scarlet, they shall be as white as snow"), and resembling the simple white shroud in which Jewish people are buried — a reminder of mortality and the urgency of sincere repentance.
+            </div>
+        </section>
+
+        <!-- Five Prayer Services -->
+        <div class="hag-section-label">The Liturgy</div>
+        <section id="services" class="seder-section" aria-labelledby="services-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Prayer</p></div>
+            <h2 id="services-title" class="section-title">The Five Prayer Services</h2>
+            <p class="section-hebrew">חֲמֵשׁ תְּפִלּוֹת</p>
+            <p class="section-subtitle">Yom Kippur is the only day of the Jewish year with five distinct prayer services, reflecting the extraordinary spiritual work of the day.</p>
+            <div class="service-list">
+                <div class="service-item">
+                    <div class="service-item__num">1</div>
+                    <div class="service-item__body">
+                        <p class="service-item__name">Maariv &amp; Kol Nidre — Evening Service</p>
+                        <p class="service-item__desc">The holiday opens with <em>Kol Nidre</em> ("All Vows") — a haunting and emotionally powerful Aramaic declaration annulling all personal vows made to God under duress or by mistake in the coming year. The melody of Kol Nidre is one of the most recognizable and deeply moving in all of Jewish music.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <div class="service-item__num">2</div>
+                    <div class="service-item__body">
+                        <p class="service-item__name">Shacharit — Morning Service</p>
+                        <p class="service-item__desc">The morning service includes reading from the Torah about the High Priest's Yom Kippur service (Leviticus 16) and the Yizkor memorial prayers for departed relatives — one of the most emotionally significant moments of the High Holy Days.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <div class="service-item__num">3</div>
+                    <div class="service-item__body">
+                        <p class="service-item__name">Musaf — Additional Service</p>
+                        <p class="service-item__desc">The longest service of the year. It features a detailed recounting of the <em>Avodah</em> (the High Priest's Temple service) and the <em>Eleh Ezkera</em> (Martyrology), which recounts the tragic deaths of ten great rabbis killed by the Roman Empire.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <div class="service-item__num">4</div>
+                    <div class="service-item__body">
+                        <p class="service-item__name">Mincha — Afternoon Service</p>
+                        <p class="service-item__desc">The afternoon service features the reading of the Book of Jonah — its message of universal repentance and divine mercy perfectly suited to this moment of the day, as the fast nears its end.</p>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <div class="service-item__num">5</div>
+                    <div class="service-item__body">
+                        <p class="service-item__name">Neilah — The Closing of the Gates</p>
+                        <p class="service-item__desc">Unique to Yom Kippur. As the sun sets, the "Gates of Heaven" are symbolically closing. The Ark remains open for the entire service and the congregation stands. The liturgy shifts from asking God to "inscribe" us to asking God to "seal" us in the Book of Life. The day ends with the congregation declaring the Shema, followed by a single, long blast of the Shofar — signaling the end of the fast.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blessings -->
+        <div class="hag-section-label">Prayers &amp; Blessings</div>
+        <section id="blessings" class="seder-section" aria-labelledby="blessings-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Liturgy</p></div>
+            <h2 id="blessings-title" class="section-title">Yom Kippur Blessings &amp; Texts</h2>
+            <p class="section-hebrew">בְּרָכוֹת יוֹם כִּפּוּר</p>
+            <p class="section-subtitle">Prior to the fast beginning, candles are lit to sanctify the holy day and special blessings are recited. Unlike standard holidays, the fast begins immediately after candle lighting.</p>
+
+            <p class="mini-heading">1. Candle Lighting Blessing</p>
+            <div class="blessing-card">
+                <h4>Hadlakat Nerot — Candle Lighting</h4>
+                <p class="blessing-meta">Recited before sunset as the fast begins. If Yom Kippur falls on Friday evening, the bracketed words are added for Shabbat.</p>
+                <p class="blessing-hebrew">בָּרוּךְ אַתָּה, יְיָ אֱלֹהֵינוּ, מֶלֶךְ הָעוֹלָם, אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו וְצִוָּנוּ לְהַדְלִיק נֵר שֶׁל [שַׁבָּת וְשֶׁל] יוֹם הַכִּפּוּרִים.</p>
+                <p class="blessing-translit">Baruch atah, Adonai Eloheinu, Melech haolam, asher kid'shanu b'mitzvotav v'tzivanu l'hadlik ner shel [Shabbat v'shel] Yom HaKippurim.</p>
+                <p class="blessing-english">Blessed are You, Adonai our God, Sovereign of the universe, who has sanctified us with His commandments and commanded us to kindle the light of [Shabbat and of] the Day of Atonement.</p>
+            </div>
+
+            <p class="mini-heading">2. Shehecheyanu — Blessing of Firsts</p>
+            <div class="blessing-card">
+                <h4>Shehecheyanu</h4>
+                <p class="blessing-meta">Recited immediately after the candle lighting blessing, thanking God for allowing us to reach this holy day.</p>
+                <p class="blessing-hebrew">בָּרוּךְ אַתָּה, יְיָ אֱלֹהֵינוּ, מֶלֶךְ הָעוֹלָם, שֶׁהֶחֱיָנוּ וְקִיְּמָנוּ וְהִגִּיעָנוּ לַזְּמַן הַזֶּה.</p>
+                <p class="blessing-translit">Baruch atah, Adonai Eloheinu, Melech haolam, shehecheyanu v'kiy'manu v'higiyanu laz'man hazeh.</p>
+                <p class="blessing-english">Blessed are You, Adonai our God, Sovereign of all, who has kept us alive, sustained us, and brought us to this season.</p>
+            </div>
+
+            <p class="mini-heading">3. Baruch Shem Kavod — Spoken Aloud</p>
+            <div class="step-callout" style="margin-top:0.5rem;">Throughout the year, the second line of the Shema — "Baruch Shem Kavod" — is whispered quietly, as it is considered angelic praise too sublime for ordinary speech. On Yom Kippur, because we abstain from physical needs and are likened to angels, this line is chanted aloud by the entire congregation.</div>
+            <div class="blessing-card">
+                <h4>Baruch Shem Kavod</h4>
+                <p class="blessing-meta">The second line of the Shema, normally whispered. Chanted aloud only on Yom Kippur, when we are likened to angels.</p>
+                <p class="blessing-hebrew">בָּרוּךְ שֵׁם כְּבוֹד מַלְכוּתוֹ לְעוֹלָם וָעֶד</p>
+                <p class="blessing-translit">Baruch shem kavod malchuto l'olam va-ed.</p>
+                <p class="blessing-english">Blessed be the name of His glorious majesty forever and ever.</p>
+            </div>
+        </section>
+
+        <div id="closing" class="ending-banner">
+            <h3>!גְּמַר חֲתִימָה טוֹבָה</h3>
+            <p>May you be sealed for a good and blessed year. An easy and meaningful fast.</p>
+        </div>
+        <p class="page-footer">Yom Kippur — The Complete Guide &middot; A Letter in the Scroll</p>
+    </main>
+    </div>
+
+    <script>
+        (function() {
+            const links = document.querySelectorAll('.anchor-menu .anchor-link[href^="#"]');
+            const sectionIds = [...links].map(l => l.getAttribute('href').slice(1)).filter(Boolean);
+            const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+            function setActive(id) { links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id)); }
+            if ('IntersectionObserver' in window && sections.length) {
+                const observer = new IntersectionObserver((entries) => {
+                    const visible = entries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+                    if (visible.length) setActive(visible[0].target.id);
+                }, { rootMargin: '-18% 0px -70% 0px', threshold: [0.01, 0.1, 0.3] });
+                sections.forEach(s => observer.observe(s));
+            }
+            links.forEach(l => l.addEventListener('click', () => { const id = l.getAttribute('href').replace('#',''); if (id) setActive(id); }));
+        })();
+    </script>
+    <script src="/js/header-fallback.js"></script>
+    <script src="/js/sidebar-nav.js"></script>
+    <script src="/js/text-size-control.js"></script>
+</body>
+</html>

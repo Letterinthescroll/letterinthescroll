@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Important Prayers & Readings - A Letter in the Scroll</title>
+    <link rel="icon" type="image/png" href="media/images/Icon.png">
+    <link rel="apple-touch-icon" href="media/images/Icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="A Letter in the Scroll">
+    <meta property="og:title" content="Important Prayers & Readings">
+    <meta property="og:description" content="A collection of important prayers and readings for daily spiritual practice.">
+    <meta property="og:image" content="https://www.aletterinthescroll.com/media/images/Icon.png">
+    <meta property="og:url" content="https://www.aletterinthescroll.com/prayers.html">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/shabbat.css">
+    <link rel="stylesheet" href="/css/mobile-overrides.css">
+    <link rel="stylesheet" href="/css/prayers-style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen" data-header-fallback="true">
+
+    <!-- Header -->
+    <header class="header-main relative z-30">
+        <div class="header-container">
+            <div class="header-branding-section">
+                <a id="home-branding" href="/dashboard" aria-label="Go to dashboard home" class="header-branding-button" style="text-decoration:none">
+                    <div class="header-text">
+                        <h1 class="header-title">A Letter in the Scroll</h1>
+                        <p class="header-subtitle">Interactive Weekly Portion Study & Discussion</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="header-actions-wrapper">
+                <div id="header-actions" class="header-actions">
+                    <a href="/dashboard" class="header-btn header-btn-secondary" title="Dashboard home">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10.5L12 3l9 7.5M5 9.5V21h14V9.5"></path>
+                        </svg>
+                        <span class="header-btn-text">Home</span>
+                    </a>
+                    <a id="go-to-weekly" href="/study" class="header-btn header-btn-secondary" title="Open study room">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                        <span class="header-btn-text">Study</span>
+                    </a>
+                    <a href="/holidays" class="header-btn header-btn-secondary" title="Jewish holidays">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <rect x="3" y="5" width="18" height="16" rx="2" ry="2" stroke-width="2"></rect>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3v4M8 3v4M3 11h18"></path>
+                        </svg>
+                        <span class="header-btn-text">Holidays</span>
+                    </a>
+                    <a href="/prayers" aria-current="page" class="header-btn header-btn-primary" title="Important prayers">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3l2.4 4.9L20 9l-4 3.9.9 5.6L12 16l-4.9 2.5.9-5.6L4 9l5.6-1.1L12 3z"></path>
+                        </svg>
+                        <span class="header-btn-text">Prayers</span>
+                    </a>
+                    <a href="/songs" class="header-btn header-btn-secondary" title="Songs and poems">
+                        <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13"></path>
+                            <circle cx="6" cy="18" r="3" stroke-width="2"></circle>
+                            <circle cx="18" cy="16" r="3" stroke-width="2"></circle>
+                        </svg>
+                        <span class="header-btn-text">Songs</span>
+                    </a>
+                    <!-- User dropdown injected by page-auth.js -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+
+
+    <!-- Page Title Bar -->
+    <div style="background:#1a3264;border-bottom:2px solid rgba(212,175,55,0.25);padding:9px 0;">
+        <div style="max-width:1200px;margin:0 auto;padding:0 1rem;">
+            <p style="margin:0;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#d4af37;">Important Prayers &amp; Readings</p>
+        </div>
+    </div>
+
+    <!-- Right-Side Anchor Menu (populated by JS after prayers render) -->
+    <nav id="prayers-anchor-menu" class="prayers-anchor-menu" aria-label="Jump to prayer section">
+        <p class="prayers-anchor-menu__title">Prayers</p>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 pt-2 pb-8">
+        <!-- Prayer Finder (moved to top) -->
+        <section id="prayer-finder" class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8 border border-blue-100 prayer-finder-sticky">
+            <div class="finder-header">
+                <div>
+                    <h3 class="text-lg md:text-xl font-semibold text-blue-900">Find a Prayer</h3>
+                    <p class="text-blue-800 text-sm">
+                        Search, filter by focus area, and choose the text you want to view.
+                    </p>
+                </div>
+            </div>
+            <div class="finder-grid">
+                <label class="filter-field" aria-label="Search prayers">
+                    <span class="filter-label">Search</span>
+                    <div style="position: relative;">
+                        <input type="search" id="prayer-search" class="filter-input" placeholder="Search by title: Shabbat, Shema, Modeh Ani…" autocomplete="off">
+                        <div id="prayer-autocomplete" class="prayer-autocomplete hidden"></div>
+                    </div>
+                    <span class="filter-helper">Live results update as you type.</span>
+                </label>
+                <label class="filter-field" aria-label="Filter prayers by focus area">
+                    <span class="filter-label">Focus Area</span>
+                    <select id="prayer-category" class="filter-input">
+                        <option value="">All focus areas</option>
+                    </select>
+                    <span class="filter-helper">Includes Shabbat, daily, praise, healing, and more.</span>
+                </label>
+            </div>
+            <div class="finder-footer">
+                <p id="prayer-count" class="prayer-count text-blue-900 font-semibold">Showing 0 prayers</p>
+                <button type="button" id="reset-prayer-filters" class="reset-button" data-reset-filters>Reset filters</button>
+            </div>
+        </section>
+
+        <!-- Quick Access -->
+        <section class="quick-access-bar">
+            <div class="quick-access-header">
+                <span class="quick-access-title">Quick Access</span>
+                <span class="quick-access-subtitle">Jump to frequently used prayers.</span>
+            </div>
+            <div class="quick-access-pills">
+                <a href="#shabbat-candles" class="quick-link">Shabbat Candle Lighting</a>
+                <a href="#havdalah" class="quick-link">Havdalah</a>
+                <a href="#modeh-ani" class="quick-link">Modeh Ani</a>
+                <a href="#shema" class="quick-link">Shema Yisrael</a>
+                <a href="#birkat-hatorah" class="quick-link">Birkat HaTorah</a>
+                <a href="#bracha-finder" class="quick-link" style="border-color:#a78bfa;color:#5b21b6;background:#f5f3ff;">Food Blessing Finder</a>
+            </div>
+        </section>
+
+        <!-- Navigation Hub -->
+        <section id="navigation-hub" class="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-10 border border-gray-200 nav-hub" data-hub-view="categories">
+            <div class="nav-hub-header">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-bold text-blue-900">Navigation Hub</h2>
+                    <p class="text-blue-800 mt-2 max-w-2xl text-sm">
+                        Filter by focus area, then open the prayer you need. The directory stays in sync with your search.
+                    </p>
+                </div>
+                <div class="nav-hub-tabs" role="tablist" aria-label="Navigation views">
+                    <button type="button" class="hub-tab active" data-hub-tab="categories" role="tab" aria-selected="true">Categories</button>
+                    <button type="button" class="hub-tab" data-hub-tab="directory" role="tab" aria-selected="false">Directory</button>
+                </div>
+            </div>
+            <div class="nav-hub-panels">
+                <div class="nav-hub-panel" data-hub-panel="categories">
+                    <div class="nav-hub-panel-header">
+                        <h3 class="text-lg font-semibold text-blue-900">Focus Areas</h3>
+                        <p class="text-blue-700 text-sm">Select a category to filter the prayer directory.</p>
+                    </div>
+                    <div id="category-nav" class="category-nav"></div>
+                </div>
+                <div class="nav-hub-panel" data-hub-panel="directory">
+                    <div class="nav-hub-panel-header">
+                        <h3 class="text-lg font-semibold text-blue-900">Prayer Directory</h3>
+                        <p class="text-blue-700 text-sm">Tap a title to open the prayer below.</p>
+                    </div>
+                    <div id="prayer-directory" class="directory-grid"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Back to Top Button -->
+        <a href="#" id="back-to-top" class="fixed bottom-8 right-8 bg-blue-700 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition-all hidden z-50">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+            </svg>
+        </a>
+
+        <!-- Prayer Sections Will Be Loaded by JavaScript -->
+        <div id="prayers-container"></div>
+
+        <!-- Food Blessing Finder -->
+        <section id="bracha-finder" class="bracha-finder" aria-labelledby="bracha-title">
+            <div class="bracha-finder__inner">
+                <header class="bracha-finder__head">
+                    <p class="bracha-finder__eyebrow" aria-hidden="true">מה הברכה?</p>
+                    <h2 id="bracha-title" class="bracha-finder__title">Food Blessing Finder</h2>
+                    <p class="bracha-finder__sub">Type any food below and find the correct blessing to say before eating.</p>
+                </header>
+
+                <div class="bracha-finder__form">
+                    <div class="bracha-finder__input-wrap">
+                        <input type="text" id="bracha-input" class="bracha-finder__input"
+                            placeholder="e.g. apple, bread, chocolate, whiskey, salad…"
+                            autocomplete="off" autocorrect="off" spellcheck="false"
+                            aria-label="Enter a food to find its blessing">
+                        <button type="button" id="bracha-find-btn" class="bracha-finder__btn">Find Blessing</button>
+                    </div>
+                    <div class="bracha-finder__examples" aria-label="Example foods">
+                        <span class="bracha-finder__ex-label">Try:</span>
+                        <button type="button" class="bracha-ex-pill" data-food="bread">bread</button>
+                        <button type="button" class="bracha-ex-pill" data-food="apple">apple</button>
+                        <button type="button" class="bracha-ex-pill" data-food="wine">wine</button>
+                        <button type="button" class="bracha-ex-pill" data-food="potato">potato</button>
+                        <button type="button" class="bracha-ex-pill" data-food="cake">cake</button>
+                        <button type="button" class="bracha-ex-pill" data-food="chocolate">chocolate</button>
+                        <button type="button" class="bracha-ex-pill" data-food="whiskey">whiskey</button>
+                        <button type="button" class="bracha-ex-pill" data-food="salad">salad</button>
+                    </div>
+                </div>
+
+                <div id="bracha-result" class="bracha-finder__result" hidden aria-live="polite"></div>
+
+                <div class="bracha-finder__guide">
+                    <h3 class="bracha-guide__title">The Six Food Blessings at a Glance</h3>
+                    <div class="bracha-guide__grid">
+                        <div class="bracha-guide-card bracha-guide-card--amber">
+                            <span class="bgc-hebrew">הַמּוֹצִיא</span>
+                            <span class="bgc-name">HaMotzi</span>
+                            <span class="bgc-desc">Bread</span>
+                        </div>
+                        <div class="bracha-guide-card bracha-guide-card--yellow">
+                            <span class="bgc-hebrew">מְזוֹנוֹת</span>
+                            <span class="bgc-name">Mezonot</span>
+                            <span class="bgc-desc">Grain products</span>
+                        </div>
+                        <div class="bracha-guide-card bracha-guide-card--purple">
+                            <span class="bgc-hebrew">הַגָּפֶן</span>
+                            <span class="bgc-name">HaGafen</span>
+                            <span class="bgc-desc">Wine &amp; grape juice</span>
+                        </div>
+                        <div class="bracha-guide-card bracha-guide-card--green">
+                            <span class="bgc-hebrew">הָעֵץ</span>
+                            <span class="bgc-name">HaEtz</span>
+                            <span class="bgc-desc">Tree fruits &amp; nuts</span>
+                        </div>
+                        <div class="bracha-guide-card bracha-guide-card--brown">
+                            <span class="bgc-hebrew">הָאֲדָמָה</span>
+                            <span class="bgc-name">HaAdama</span>
+                            <span class="bgc-desc">Ground vegetables &amp; fruits</span>
+                        </div>
+                        <div class="bracha-guide-card bracha-guide-card--blue">
+                            <span class="bgc-hebrew">שֶׁהַכֹּל</span>
+                            <span class="bgc-name">Shehakol</span>
+                            <span class="bgc-desc">Meat, fish, dairy &amp; more</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-blue-900 text-white py-6 mt-12 border-t-4 border-blue-700">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm">May your prayers be meaningful</p>
+            <p class="text-xs text-blue-300 mt-2">A Letter in the Scroll</p>
+        </div>
+    </footer>
+
+    <script src="/js/shabbat.js"></script>
+    <script src="/js/prayers-data.js"></script>
+    <script src="/js/prayers.js"></script>
+    <script src="/js/header-fallback.js"></script>
+    <script type="module" src="/js/page-auth.js"></script>
+
+    <script>
+    /* ============================================================
+       PRAYERS PAGE — In-Page Anchor Menu + Food Blessing Finder
+       ============================================================ */
+
+    // ── ANCHOR MENU ─────────────────────────────────────────────
+
+    function buildPrayersAnchorMenu() {
+        const menu = document.getElementById('prayers-anchor-menu');
+        if (!menu) return;
+        const categories = (typeof window !== 'undefined' && window.PRAYER_CATEGORIES) || [];
+        if (!categories.length) return;
+
+        // Track seen IDs to avoid duplicating prayers that appear in multiple categories
+        const seen = new Set();
+        let html = '<p class="prayers-anchor-menu__title">Prayers</p>';
+
+        categories.forEach(function(cat) {
+            if (!cat.links || !cat.links.length) return;
+            const fresh = cat.links.filter(function(l) { return !seen.has(l.id); });
+            if (!fresh.length) return;
+            html += '<p class="prayers-anchor-cat">' + cat.title + '</p>';
+            fresh.forEach(function(link) {
+                seen.add(link.id);
+                html += '<a class="prayers-anchor-link" href="#' + link.id + '">' + link.label + '</a>';
+            });
+        });
+
+        // Link to the food blessing finder at the bottom
+        html += '<p class="prayers-anchor-cat">Tools</p>';
+        html += '<a class="prayers-anchor-link" href="#bracha-finder">Food Blessing</a>';
+
+        menu.innerHTML = html;
+        setupAnchorMenuObserver(menu);
+    }
+
+    function setupAnchorMenuObserver(menu) {
+        const links = Array.from(menu.querySelectorAll('.prayers-anchor-link[href^="#"]'));
+        if (!links.length) return;
+
+        const idMap = new Map();
+        links.forEach(function(link) {
+            const id = link.getAttribute('href').slice(1);
+            if (id) idMap.set(id, link);
+        });
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                const link = idMap.get(entry.target.id);
+                if (link) link.classList.toggle('active', entry.isIntersecting);
+            });
+        }, { threshold: 0.1, rootMargin: '-80px 0px -55% 0px' });
+
+        idMap.forEach(function(link, id) {
+            const el = document.getElementById(id);
+            if (el) observer.observe(el);
+        });
+
+        // Scroll active link into view inside the menu panel
+        menu.addEventListener('scroll', function() {}, { passive: true });
+    }
+
+    // ── FOOD BLESSING DATABASE ───────────────────────────────────
+
+    var BRACHA_DB = [
+        {
+            id: 'haGafen', name: 'HaGafen', nameHebrew: 'הַגָּפֶן', color: 'purple',
+            blessing: 'בָּרוּךְ אַתָּה יְהוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם בּוֹרֵא פְּרִי הַגָּפֶן',
+            transliteration: "Baruch Ata Adonai Eloheinu Melech ha'olam, borei pri hagafen.",
+            english: 'Blessed are You, Lord our God, King of the universe, Who creates the fruit of the vine.',
+            note: 'Said before drinking wine or grape juice, including Kiddush and Havdalah.',
+            keywords: ['wine', 'grape juice', 'kiddush', 'havdalah', 'merlot', 'cabernet', 'champagne',
+                       'sparkling wine', 'red wine', 'white wine', 'rose wine', 'rosé', 'concord wine',
+                       'sauvignon', 'pinot', 'chianti', 'sangria']
+        },
+        {
+            id: 'haMotzi', name: 'HaMotzi', nameHebrew: 'הַמּוֹצִיא', color: 'amber',
+            blessing: 'בָּרוּךְ אַתָּה יְהוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם הַמּוֹצִיא לֶחֶם מִן הָאָרֶץ',
+            transliteration: "Baruch Ata Adonai Eloheinu Melech ha'olam, hamotzi lechem min ha'aretz.",
+            english: 'Blessed are You, Lord our God, King of the universe, Who brings forth bread from the earth.',
+            note: 'Said before eating bread made from the five grains — wheat, barley, oats, rye, or spelt — including challah, pita, and most sliced bread.',
+            keywords: ['bread', 'challah', 'pita', 'sourdough', 'ciabatta', 'baguette', 'toast',
+                       'rye bread', 'whole wheat bread', 'white bread', 'focaccia', 'naan', 'lavash',
+                       'sandwich', 'dinner roll', 'kaiser roll', 'french bread', 'italian bread',
+                       'sliced bread', 'whole grain bread', 'pumpernickel', 'multigrain bread']
+        },
+        {
+            id: 'mezonot', name: 'Mezonot', nameHebrew: 'מְזוֹנוֹת', color: 'yellow',
+            blessing: 'בָּרוּךְ אַתָּה יְהוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם בּוֹרֵא מִינֵי מְזוֹנוֹת',
+            transliteration: "Baruch Ata Adonai Eloheinu Melech ha'olam, borei minei mezonot.",
+            english: 'Blessed are You, Lord our God, King of the universe, Who creates the various kinds of sustenance.',
+            note: 'Said before grain products that are not bread — cake, pasta, crackers, cereal, and rice (many Ashkenazim) or oats cooked as porridge.',
+            keywords: ['cake', 'cookie', 'cookies', 'cracker', 'crackers', 'pasta', 'noodle', 'noodles',
+                       'cereal', 'pretzel', 'pretzels', 'muffin', 'muffins', 'waffle', 'waffles',
+                       'pancake', 'pancakes', 'rice cake', 'granola', 'granola bar', 'oatmeal', 'couscous',
+                       'quiche', 'pie crust', 'puff pastry', 'croissant', 'bagel', 'biscuit', 'biscuits',
+                       'crouton', 'croutons', 'dumpling', 'dumplings', 'ravioli', 'lasagna', 'spaghetti',
+                       'macaroni', 'fettuccine', 'linguine', 'penne', 'rigatoni', 'orzo', 'rice',
+                       'white rice', 'brown rice', 'jasmine rice', 'basmati rice', 'fried rice',
+                       'graham cracker', 'brownie', 'donut', 'doughnut', 'pita chip', 'flatbread',
+                       'tortilla', 'taco', 'taco shell', 'matza', 'matzah', 'matzoh', 'matzot',
+                       'kasha', 'bulgur', 'wheat crackers', 'corn chip', 'tortilla chip', 'popcorn']
+        },
+        {
+            id: 'haEtz', name: 'HaEtz', nameHebrew: 'הָעֵץ', color: 'green',
+            blessing: 'בָּרוּךְ אַתָּה יְהוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם בּוֹרֵא פְּרִי הָעֵץ',
+            transliteration: "Baruch Ata Adonai Eloheinu Melech ha'olam, borei pri ha'etz.",
+            english: 'Blessed are You, Lord our God, King of the universe, Who creates the fruit of the tree.',
+            note: 'Said before fruits that grow on trees or perennial shrubs — apples, oranges, grapes, olives, nuts, and most tree fruits.',
+            keywords: ['apple', 'pear', 'orange', 'grape', 'grapes', 'plum', 'peach', 'cherry', 'cherries',
+                       'apricot', 'mango', 'avocado', 'pomegranate', 'fig', 'figs', 'date', 'dates',
+                       'olive', 'olives', 'almond', 'almonds', 'walnut', 'walnuts', 'pecan', 'pecans',
+                       'cashew', 'cashews', 'pistachio', 'pistachios', 'grapefruit', 'lemon', 'lime',
+                       'lychee', 'nectarine', 'tangerine', 'clementine', 'mandarin', 'kumquat',
+                       'persimmon', 'guava', 'starfruit', 'dragonfruit', 'blueberry', 'blueberries',
+                       'raspberry', 'raspberries', 'blackberry', 'blackberries', 'cranberry', 'cranberries',
+                       'gooseberry', 'currant', 'currants', 'mulberry', 'mulberries', 'coconut',
+                       'hazelnut', 'hazelnuts', 'macadamia', 'brazil nut', 'pine nut', 'kiwi', 'quince',
+                       'longan', 'rambutan', 'jackfruit', 'passion fruit', 'papaya', 'tamarind',
+                       'boysenberry', 'elderberry', 'elderberries', 'mixed nuts', 'trail mix',
+                       'dried fruit', 'raisins', 'dried apricots', 'dried cranberries', 'prunes']
+        },
+        {
+            id: 'haAdama', name: 'HaAdama', nameHebrew: 'הָאֲדָמָה', color: 'brown',
+            blessing: 'בָּרוּךְ אַתָּה יְהוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם בּוֹרֵא פְּרִי הָאֲדָמָה',
+            transliteration: "Baruch Ata Adonai Eloheinu Melech ha'olam, borei pri ha'adamah.",
+            english: 'Blessed are You, Lord our God, King of the universe, Who creates the fruit of the ground.',
+            note: 'Said before vegetables and fruits that grow from annual ground plants — potatoes, carrots, corn, bananas, strawberries, and most vegetables.',
+            keywords: ['potato', 'potatoes', 'carrot', 'carrots', 'corn', 'cucumber', 'cucumbers',
+                       'tomato', 'tomatoes', 'lettuce', 'onion', 'onions', 'garlic', 'pea', 'peas',
+                       'beet', 'beets', 'banana', 'bananas', 'watermelon', 'cantaloupe', 'melon',
+                       'honeydew', 'squash', 'zucchini', 'pumpkin', 'artichoke', 'asparagus', 'broccoli',
+                       'cauliflower', 'celery', 'eggplant', 'pepper', 'peppers', 'radish', 'radishes',
+                       'spinach', 'sweet potato', 'sweet potatoes', 'yam', 'strawberry', 'strawberries',
+                       'pineapple', 'pineapples', 'parsley', 'cilantro', 'dill', 'basil', 'mint',
+                       'chard', 'kale', 'arugula', 'cabbage', 'leek', 'leeks', 'scallion', 'scallions',
+                       'ginger', 'horseradish', 'turnip', 'parsnip', 'okra', 'bean', 'beans',
+                       'lentils', 'lentil', 'chickpea', 'chickpeas', 'edamame', 'cassava', 'taro',
+                       'broccolini', 'bok choy', 'brussels sprout', 'brussels sprouts', 'fennel',
+                       'watercress', 'collard greens', 'snap peas', 'french fries', 'fries',
+                       'potato chips', 'chips', 'salad', 'green salad', 'vegetable salad', 'coleslaw',
+                       'cole slaw', 'hummus', 'tahini', 'peanut', 'peanuts', 'peanut butter',
+                       'sunflower seeds', 'sesame seeds', 'vegetable soup']
+        },
+        {
+            id: 'shehakol', name: 'Shehakol', nameHebrew: 'שֶׁהַכֹּל', color: 'blue',
+            blessing: 'בָּרוּךְ אַתָּה יְהוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם שֶׁהַכֹּל נִהְיֶה בִּדְבָרוֹ',
+            transliteration: "Baruch Ata Adonai Eloheinu Melech ha'olam, shehakol nihyeh bidvaro.",
+            english: 'Blessed are You, Lord our God, King of the universe, by Whose word all things came to be.',
+            note: 'The universal blessing — said before meat, fish, eggs, dairy, water, juice (except grape), candy, and anything else not covered by the specific blessings above.',
+            keywords: ['meat', 'beef', 'steak', 'chicken', 'turkey', 'lamb', 'veal', 'duck', 'goose',
+                       'fish', 'salmon', 'tuna', 'tilapia', 'cod', 'halibut', 'trout', 'herring',
+                       'sardine', 'anchovy', 'lox', 'smoked salmon', 'sushi', 'sashimi', 'gefilte fish',
+                       'egg', 'eggs', 'omelet', 'scrambled eggs', 'hard boiled egg', 'fried egg',
+                       'milk', 'cheese', 'yogurt', 'butter', 'cream', 'ice cream', 'sour cream',
+                       'cottage cheese', 'cream cheese', 'whipped cream', 'feta', 'mozzarella',
+                       'cheddar', 'parmesan', 'swiss', 'gouda', 'brie',
+                       'water', 'sparkling water', 'juice', 'apple juice', 'orange juice', 'lemonade',
+                       'soda', 'cola', 'coca cola', 'pepsi', 'sprite', 'tea', 'coffee', 'espresso',
+                       'cappuccino', 'latte', 'hot chocolate',
+                       'candy', 'chocolate', 'mushroom', 'mushrooms',
+                       'whiskey', 'beer', 'vodka', 'bourbon', 'rum', 'gin', 'tequila', 'schnapps',
+                       'brandy', 'liqueur', 'sake', 'hard cider',
+                       'soup', 'chicken soup', 'tomato soup', 'broth', 'stock',
+                       'honey', 'jam', 'jelly', 'syrup', 'maple syrup',
+                       'ketchup', 'mustard', 'mayo', 'mayonnaise', 'salsa', 'guacamole',
+                       'hot dog', 'sausage', 'deli', 'salami', 'pepperoni', 'pastrami', 'corned beef',
+                       'brisket', 'ribs', 'chicken wings', 'chicken nuggets',
+                       'shrimp', 'lobster', 'crab', 'clam', 'oyster', 'mussel',
+                       'tofu', 'seitan', 'tempeh',
+                       'pudding', 'custard', 'mousse', 'sherbet', 'sorbet', 'popsicle',
+                       'candy bar', 'lollipop', 'gummy bears', 'marshmallow', 'gelatin', 'jello',
+                       'protein shake', 'smoothie', 'milkshake']
+        }
+    ];
+
+    function findBracha(foodInput) {
+        var food = foodInput.toLowerCase().trim();
+        if (!food) return null;
+
+        // Exact match first
+        for (var i = 0; i < BRACHA_DB.length; i++) {
+            if (BRACHA_DB[i].keywords.indexOf(food) !== -1) return BRACHA_DB[i];
+        }
+
+        // Word-boundary substring match (longer keywords first to prefer specific phrases)
+        for (var i = 0; i < BRACHA_DB.length; i++) {
+            var keywords = BRACHA_DB[i].keywords.slice().sort(function(a, b) { return b.length - a.length; });
+            for (var j = 0; j < keywords.length; j++) {
+                var kw = keywords[j].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                var regex = new RegExp('\\b' + kw + '\\b', 'i');
+                if (regex.test(food)) return BRACHA_DB[i];
+            }
+        }
+
+        // Default to Shehakol
+        return BRACHA_DB[BRACHA_DB.length - 1];
+    }
+
+    function renderBrachaResult(bracha, foodLabel) {
+        var result = document.getElementById('bracha-result');
+        if (!result) return;
+
+        if (!bracha) {
+            result.innerHTML = '<div class="bracha-result__not-found"><strong>Food not recognized</strong>Please try a different term — e.g. "chicken", "apple", "bread".</div>';
+            result.hidden = false;
+            return;
+        }
+
+        result.innerHTML = [
+            '<div class="bracha-result-card bracha-result-card--' + bracha.color + '">',
+            '  <div>',
+            '    <span class="bracha-result__badge">Blessing for</span>',
+            '    <span class="bracha-result__food"> ' + foodLabel + '</span>',
+            '  </div>',
+            '  <div class="bracha-result__name-row">',
+            '    <span class="bracha-result__name-en">' + bracha.name + '</span>',
+            '    <span class="bracha-result__name-he">' + bracha.nameHebrew + '</span>',
+            '  </div>',
+            '  <div class="bracha-result__hebrew-text">' + bracha.blessing + '</div>',
+            '  <p class="bracha-result__translit">' + bracha.transliteration + '</p>',
+            '  <p class="bracha-result__english">' + bracha.english + '</p>',
+            '  <p class="bracha-result__note">' + bracha.note + '</p>',
+            '</div>'
+        ].join('\n');
+        result.hidden = false;
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function setupBrachaFinder() {
+        var input = document.getElementById('bracha-input');
+        var btn   = document.getElementById('bracha-find-btn');
+        if (!input || !btn) return;
+
+        function lookup() {
+            var val = input.value.trim();
+            if (!val) return;
+            renderBrachaResult(findBracha(val), val);
+        }
+
+        btn.addEventListener('click', lookup);
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') lookup();
+        });
+
+        // Example pills
+        var pills = document.querySelectorAll('.bracha-ex-pill');
+        pills.forEach(function(pill) {
+            pill.addEventListener('click', function() {
+                var food = pill.getAttribute('data-food');
+                input.value = food;
+                renderBrachaResult(findBracha(food), food);
+            });
+        });
+    }
+
+    // ── INIT ─────────────────────────────────────────────────────
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Build anchor menu after prayers.js has rendered all sections
+        buildPrayersAnchorMenu();
+        setupBrachaFinder();
+    });
+    </script>
+    <script src="/js/sidebar-nav.js"></script>
+</body>
+</html>

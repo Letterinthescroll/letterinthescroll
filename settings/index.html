@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings — A Letter in the Scroll</title>
+    <link rel="icon" type="image/png" href="media/images/Icon.png">
+    <link rel="apple-touch-icon" href="media/images/Icon.png">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/shabbat.css">
+    <link rel="stylesheet" href="/css/mobile-overrides.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f5f7fc; }
+        .font-heading { font-family: 'Cormorant Garamond', serif; }
+        .site-header { background: linear-gradient(138deg, #16285e 0%, #23408f 55%, #2f56ab 100%); }
+        .nav-link {
+            color: rgba(255,255,255,0.75); font-size: 0.8125rem; font-weight: 500;
+            padding: 0.375rem 0.75rem; border-radius: 0.5rem;
+            transition: background 0.15s, color 0.15s; white-space: nowrap; text-decoration: none; display: inline-block;
+        }
+        .nav-link:hover { color: #fff; background: rgba(255,255,255,0.12); }
+        .card { background: #fff; border-radius: 1.25rem; border: 1px solid rgba(20,40,100,0.08); box-shadow: 0 4px 20px rgba(22,40,94,0.07); }
+        .input-field { transition: border-color 0.2s, box-shadow 0.2s; }
+        .input-field:focus { border-color: #274ea8; box-shadow: 0 0 0 3px rgba(39,78,168,0.15); }
+        .gold-line { height: 2px; background: linear-gradient(90deg, transparent, #c89a35, transparent); }
+        .fade-up { animation: fadeUp 0.45s ease-out both; }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+        .fd1{animation-delay:.05s} .fd2{animation-delay:.1s} .fd3{animation-delay:.15s}
+        .spinner { width:20px; height:20px; border:3px solid rgba(255,255,255,0.35); border-top:3px solid #fff; border-radius:50%; animation:spin 0.7s linear infinite; display:inline-block; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+        .mobile-menu { display:none; } .mobile-menu.open { display:block; }
+
+        /* Side nav tab */
+        .side-tab {
+            display: flex; align-items: center; gap: 0.625rem;
+            padding: 0.625rem 0.875rem; border-radius: 0.75rem;
+            font-size: 0.875rem; font-weight: 500; color: #64748b;
+            cursor: pointer; transition: all 0.15s; text-decoration: none;
+            border: 1.5px solid transparent;
+        }
+        .side-tab:hover { background: #f0f4ff; color: #16285e; }
+        .side-tab.active { background: #eff4ff; color: #16285e; font-weight: 600; border-color: rgba(22,40,94,0.12); }
+        .side-tab .icon { width: 1.75rem; height: 1.75rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; }
+
+        /* Section panel */
+        .settings-section { display: none; }
+        .settings-section.active { display: block; }
+    </style>
+</head>
+<body class="min-h-screen">
+
+<!-- ═══ HEADER ═══ -->
+<header class="header-main relative z-30">
+    <div class="header-container">
+        <div class="header-branding-section">
+            <a id="home-branding" href="/dashboard" aria-label="Go to dashboard home" class="header-branding-button" style="text-decoration:none">
+                <div class="header-text">
+                    <h1 class="header-title">A Letter in the Scroll</h1>
+                    <p class="header-subtitle">Interactive Weekly Portion Study & Discussion</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="header-actions-wrapper">
+            <div id="header-actions" class="header-actions">
+                <a href="/dashboard" class="header-btn header-btn-secondary" title="Dashboard home">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10.5L12 3l9 7.5M5 9.5V21h14V9.5"></path>
+                    </svg>
+                    <span class="header-btn-text">Home</span>
+                </a>
+                <a href="/study" class="header-btn header-btn-secondary" title="Open study room">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    <span class="header-btn-text">Study</span>
+                </a>
+                <a href="/holidays" class="header-btn header-btn-secondary" title="Jewish holidays">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <rect x="3" y="5" width="18" height="16" rx="2" ry="2" stroke-width="2"></rect>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3v4M8 3v4M3 11h18"></path>
+                    </svg>
+                    <span class="header-btn-text">Holidays</span>
+                </a>
+                <a href="/prayers" class="header-btn header-btn-secondary" title="Important prayers">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3l2.4 4.9L20 9l-4 3.9.9 5.6L12 16l-4.9 2.5.9-5.6L4 9l5.6-1.1L12 3z"></path>
+                    </svg>
+                    <span class="header-btn-text">Prayers</span>
+                </a>
+                <a href="/songs" class="header-btn header-btn-secondary" title="Songs and poems">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13"></path>
+                        <circle cx="6" cy="18" r="3" stroke-width="2"></circle>
+                        <circle cx="18" cy="16" r="3" stroke-width="2"></circle>
+                    </svg>
+                    <span class="header-btn-text">Songs</span>
+                </a>
+                <a href="/about" class="header-btn header-btn-secondary" title="About this project">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="header-btn-text">About</span>
+                </a>
+                <a href="/bookmarks" class="header-btn header-btn-secondary" title="View your saved verses">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                    </svg>
+                    <span class="header-btn-text">Bookmarks</span>
+                </a>
+                <span id="user-greeting" class="header-btn header-btn-secondary hidden lg:inline-flex cursor-default pointer-events-none"></span>
+                <button onclick="signOutUser()" class="header-btn header-btn-secondary" title="Sign out">
+                    <svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                    <span class="header-btn-text">Sign Out</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<!-- ═══ MAIN ═══ -->
+<main class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+
+    <!-- Loading -->
+    <div id="loading-state" class="flex flex-col items-center justify-center py-24 gap-3">
+        <div class="w-8 h-8 border-3 rounded-full" style="border:3px solid #dde3f0;border-top-color:#c89a35;animation:spin 0.7s linear infinite"></div>
+        <p class="text-sm text-slate-400">Loading…</p>
+    </div>
+
+    <!-- Content -->
+    <div id="main-content" class="hidden">
+        <!-- Page title -->
+        <div class="mb-7 fade-up fd1">
+            <p class="text-xs font-bold uppercase tracking-widest text-blue-600/60 mb-1">Account</p>
+            <h1 class="font-heading text-4xl font-semibold text-slate-900" style="font-family:'Cormorant Garamond',serif">Settings</h1>
+            <div class="gold-line mt-3 w-28"></div>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-6">
+
+            <!-- ── Side nav ── -->
+            <aside class="md:w-52 shrink-0 fade-up fd2">
+                <div class="card p-3 space-y-1">
+                    <button class="side-tab active w-full text-left" id="nav-profile" onclick="showSection('profile')">
+                        <span class="icon bg-blue-50">
+                            <svg class="w-4 h-4 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9.953 9.953 0 0112 15c2.601 0 4.97.993 6.758 2.619M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </span>
+                        Profile
+                    </button>
+                    <button class="side-tab w-full text-left" id="nav-email" onclick="showSection('email')">
+                        <span class="icon bg-indigo-50">
+                            <svg class="w-4 h-4 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </span>
+                        Email
+                    </button>
+                    <button class="side-tab w-full text-left" id="nav-password" onclick="showSection('password')">
+                        <span class="icon bg-amber-50">
+                            <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c-1.105 0-2 .895-2 2v2a2 2 0 104 0v-2c0-1.105-.895-2-2-2zm-6 2V9a6 6 0 1112 0v4"></path>
+                            </svg>
+                        </span>
+                        Password
+                    </button>
+                    <div class="gold-line my-2"></div>
+                    <button class="side-tab w-full text-left text-red-500 hover:bg-red-50 hover:text-red-600" onclick="signOutUser()">
+                        <span class="icon bg-red-50">
+                            <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                        </span>
+                        Sign Out
+                    </button>
+                </div>
+                <!-- Account info card -->
+                <div class="card p-4 mt-4 text-center">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-2" id="avatar-circle" style="background:linear-gradient(135deg,#16285e,#2f56ab)">?</div>
+                    <p id="sidebar-name" class="text-sm font-semibold text-slate-700 truncate"></p>
+                    <p id="sidebar-email" class="text-xs text-slate-400 truncate"></p>
+                    <a href="/dashboard" class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                        Back to Home
+                    </a>
+                </div>
+            </aside>
+
+            <!-- ── Right panel ── -->
+            <div class="flex-1 space-y-0 fade-up fd3">
+
+                <!-- ── PROFILE SECTION ── -->
+                <div id="sec-profile" class="settings-section active">
+                    <div class="card p-6 sm:p-7">
+                        <h2 class="font-semibold text-slate-800 text-lg mb-1">Profile</h2>
+                        <p class="text-sm text-slate-400 mb-5">Your display name is shown to study partners in your groups.</p>
+                        <div class="gold-line mb-6"></div>
+
+                        <div id="profile-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
+
+                        <div id="profile-locked" class="hidden mb-4 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+                            <p class="text-sm font-semibold text-amber-800">Display name has been set</p>
+                            <p class="text-xs text-amber-600 mt-1">Your display name can only be changed once and has already been updated. Contact the group leader if you need to change it again.</p>
+                        </div>
+
+                        <form id="profile-form" onsubmit="saveProfile(event)" class="space-y-5">
+                            <div>
+                                <label for="profile-name" class="block text-sm font-semibold text-slate-700 mb-1.5">Display Name</label>
+                                <input type="text" id="profile-name" minlength="2" maxlength="50" required
+                                    placeholder="Your full name"
+                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                                <p class="text-xs text-slate-400 mt-1">This is how you appear to others. Between 2–50 characters.</p>
+                                <p class="text-xs text-amber-600 mt-1 font-medium">You can only change your display name once. Choose carefully!</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button type="submit" id="profile-btn"
+                                    class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
+                                    style="background:linear-gradient(135deg,#16285e,#2f56ab)">
+                                    Save Changes
+                                </button>
+                                <button type="button" onclick="cancelEdit('profile')" class="px-5 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-700 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ── EMAIL SECTION ── -->
+                <div id="sec-email" class="settings-section">
+                    <div class="card p-6 sm:p-7">
+                        <h2 class="font-semibold text-slate-800 text-lg mb-1">Email Address</h2>
+                        <p class="text-sm text-slate-400 mb-5">Update the email you use to sign in. You'll need to confirm your current password.</p>
+                        <div class="gold-line mb-6"></div>
+
+                        <!-- Google-sign-in notice (shown/hidden by JS) -->
+                        <div id="google-notice" class="hidden mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800">
+                            <strong>Signed in with Google.</strong> Your email is managed by your Google account and cannot be changed here.
+                        </div>
+
+                        <div id="email-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
+
+                        <form id="email-form" onsubmit="saveEmail(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1.5">New Email Address</label>
+                                <input type="email" id="new-email" required placeholder="new@example.com" autocomplete="email"
+                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1.5">Current Password <span class="text-slate-400 font-normal">(to confirm it's you)</span></label>
+                                <input type="password" id="email-current-pw" required placeholder="Your current password" autocomplete="current-password"
+                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                            </div>
+                            <button type="submit" id="email-btn"
+                                class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
+                                style="background:linear-gradient(135deg,#16285e,#2f56ab)">
+                                Update Email
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ── PASSWORD SECTION ── -->
+                <div id="sec-password" class="settings-section">
+                    <div class="card p-6 sm:p-7">
+                        <h2 class="font-semibold text-slate-800 text-lg mb-1">Change Password</h2>
+                        <p class="text-sm text-slate-400 mb-5">Choose a strong password with at least 8 characters.</p>
+                        <div class="gold-line mb-6"></div>
+
+                        <div id="google-pw-notice" class="hidden mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800">
+                            <strong>Signed in with Google.</strong> Your password is managed by Google. Use <a href="https://myaccount.google.com/security" target="_blank" class="underline">Google Account Security</a> to change it.
+                        </div>
+
+                        <div id="pw-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
+
+                        <form id="pw-form" onsubmit="savePassword(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1.5">Current Password</label>
+                                <input type="password" id="pw-current" required placeholder="Your current password" autocomplete="current-password"
+                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1.5">New Password</label>
+                                <input type="password" id="pw-new" required minlength="6" placeholder="At least 6 characters" autocomplete="new-password"
+                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1.5">Confirm New Password</label>
+                                <input type="password" id="pw-confirm" required placeholder="Re-enter new password" autocomplete="new-password"
+                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                            </div>
+                            <button type="submit" id="pw-btn"
+                                class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
+                                style="background:linear-gradient(135deg,#16285e,#2f56ab)">
+                                Update Password
+                            </button>
+                        </form>
+
+                        <!-- Forgot password -->
+                        <div class="mt-5 pt-5 border-t border-slate-100">
+                            <p class="text-sm text-slate-500 mb-3">Forgot your current password?</p>
+                            <button onclick="sendPasswordReset()" class="text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors">
+                                Send a password reset email →
+                            </button>
+                            <div id="reset-msg" class="hidden mt-3 text-sm px-4 py-3 rounded-xl"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<!-- ═══ FIREBASE + SCRIPT ═══ -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script>
+    /* ── Firebase ── */
+    firebase.initializeApp({
+        apiKey:"AIzaSyCpDtcBpKvjLwihnL2bizxBFxXD6Qn8Lb4",
+        authDomain:"letterinthescroll.firebaseapp.com",
+        projectId:"letterinthescroll",
+        storageBucket:"letterinthescroll.firebasestorage.app",
+        messagingSenderId:"625129870318",
+        appId:"1:625129870318:web:a654e97b734faa3b4df4ff",
+        measurementId:"G-LYSXTDEPVG"
+    });
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+
+    let currentUser = null;
+    let isGoogleUser = false;
+
+    /* ════ AUTH ════ */
+    auth.onAuthStateChanged(async user => {
+        if (!user) { window.location.href = '/'; return; }
+        currentUser = user;
+
+        // Detect Google sign-in
+        isGoogleUser = (user.providerData || []).some(p => p.providerId === 'google.com');
+
+        // Populate sidebar
+        const firstName = (user.displayName || user.email || '').split(' ')[0].split('@')[0];
+        document.getElementById('user-greeting').textContent = firstName;
+        document.getElementById('sidebar-name').textContent  = user.displayName || '';
+        document.getElementById('sidebar-email').textContent = user.email || '';
+        document.getElementById('avatar-circle').textContent = firstName.charAt(0).toUpperCase();
+
+        // Pre-fill profile form
+        document.getElementById('profile-name').value = user.displayName || '';
+
+        // Check if display name was already changed (one-time limit)
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (userDoc.exists() && userDoc.data().displayNameChanged) {
+                document.getElementById('profile-form').classList.add('hidden');
+                document.getElementById('profile-locked').classList.remove('hidden');
+            }
+        } catch(e) { console.error('Error checking displayNameChanged:', e); }
+
+        // Show Google notice if applicable
+        if (isGoogleUser) {
+            document.getElementById('google-notice').classList.remove('hidden');
+            document.getElementById('email-form').classList.add('hidden');
+            document.getElementById('google-pw-notice').classList.remove('hidden');
+            document.getElementById('pw-form').classList.add('hidden');
+        }
+
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('main-content').classList.remove('hidden');
+    });
+
+    function signOutUser() { auth.signOut().then(() => window.location.href = '/'); }
+
+    /* ════ SECTION SWITCHING ════ */
+    function showSection(sec) {
+        ['profile','email','password'].forEach(s => {
+            document.getElementById('sec-'+s).classList.toggle('active', s===sec);
+            document.getElementById('nav-'+s).classList.toggle('active', s===sec);
+        });
+    }
+
+    function cancelEdit(sec) {
+        if (sec === 'profile') document.getElementById('profile-name').value = currentUser?.displayName || '';
+    }
+
+    /* ════ SAVE PROFILE ════ */
+    async function saveProfile(e) {
+        e.preventDefault();
+        const name = document.getElementById('profile-name').value.trim();
+        const btn  = document.getElementById('profile-btn');
+        const msg  = document.getElementById('profile-msg');
+
+        if (!name || name.length < 2) { showMsg(msg, 'Name must be at least 2 characters.', 'error'); return; }
+
+        setLoading(btn, true, 'Saving…');
+        hideMsg(msg);
+
+        try {
+            await currentUser.updateProfile({ displayName: name });
+            // Also update Firestore with displayNameChanged flag
+            await db.collection('users').doc(currentUser.uid).set({
+                displayName: name,
+                displayNameChanged: true
+            }, { merge: true });
+            document.getElementById('sidebar-name').textContent = name;
+            document.getElementById('avatar-circle').textContent = name.charAt(0).toUpperCase();
+            showMsg(msg, '✓ Display name updated successfully. This change is permanent.', 'success');
+            // Lock the form since they've used their one change
+            setTimeout(() => {
+                document.getElementById('profile-form').classList.add('hidden');
+                document.getElementById('profile-locked').classList.remove('hidden');
+            }, 2000);
+        } catch (err) {
+            showMsg(msg, 'Failed to update name. Please try again.', 'error');
+        } finally {
+            setLoading(btn, false, 'Save Changes');
+        }
+    }
+
+    /* ════ SAVE EMAIL ════ */
+    async function saveEmail(e) {
+        e.preventDefault();
+        if (isGoogleUser) return;
+        const newEmail = document.getElementById('new-email').value.trim();
+        const password = document.getElementById('email-current-pw').value;
+        const btn      = document.getElementById('email-btn');
+        const msg      = document.getElementById('email-msg');
+
+        if (!newEmail) { showMsg(msg, 'Please enter a new email address.', 'error'); return; }
+        if (!password) { showMsg(msg, 'Please enter your current password.', 'error'); return; }
+
+        setLoading(btn, true, 'Updating…');
+        hideMsg(msg);
+
+        try {
+            // Re-authenticate first
+            const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, password);
+            await currentUser.reauthenticateWithCredential(cred);
+            await currentUser.updateEmail(newEmail);
+            await db.collection('users').doc(currentUser.uid).set({ email: newEmail, emailLower: newEmail.toLowerCase() }, { merge: true });
+            document.getElementById('sidebar-email').textContent = newEmail;
+            document.getElementById('new-email').value = '';
+            document.getElementById('email-current-pw').value = '';
+            showMsg(msg, '✓ Email updated successfully.', 'success');
+        } catch (err) {
+            if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+                showMsg(msg, 'Incorrect password. Please try again.', 'error');
+            } else if (err.code === 'auth/email-already-in-use') {
+                showMsg(msg, 'That email is already in use by another account.', 'error');
+            } else if (err.code === 'auth/invalid-email') {
+                showMsg(msg, 'Please enter a valid email address.', 'error');
+            } else {
+                showMsg(msg, 'Failed to update email. Please try again.', 'error');
+            }
+        } finally {
+            setLoading(btn, false, 'Update Email');
+        }
+    }
+
+    /* ════ SAVE PASSWORD ════ */
+    async function savePassword(e) {
+        e.preventDefault();
+        if (isGoogleUser) return;
+        const current  = document.getElementById('pw-current').value;
+        const newPw    = document.getElementById('pw-new').value;
+        const confirm  = document.getElementById('pw-confirm').value;
+        const btn      = document.getElementById('pw-btn');
+        const msg      = document.getElementById('pw-msg');
+
+        if (!current) { showMsg(msg, 'Please enter your current password.', 'error'); return; }
+        if (newPw.length < 6) { showMsg(msg, 'New password must be at least 6 characters.', 'error'); return; }
+        if (newPw !== confirm) { showMsg(msg, 'Passwords do not match.', 'error'); return; }
+
+        setLoading(btn, true, 'Updating…');
+        hideMsg(msg);
+
+        try {
+            const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, current);
+            await currentUser.reauthenticateWithCredential(cred);
+            await currentUser.updatePassword(newPw);
+            document.getElementById('pw-current').value = '';
+            document.getElementById('pw-new').value = '';
+            document.getElementById('pw-confirm').value = '';
+            showMsg(msg, '✓ Password updated successfully.', 'success');
+        } catch (err) {
+            if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+                showMsg(msg, 'Current password is incorrect.', 'error');
+            } else if (err.code === 'auth/weak-password') {
+                showMsg(msg, 'Password is too weak. Use at least 6 characters.', 'error');
+            } else {
+                showMsg(msg, 'Failed to update password. Please try again.', 'error');
+            }
+        } finally {
+            setLoading(btn, false, 'Update Password');
+        }
+    }
+
+    /* ════ PASSWORD RESET EMAIL ════ */
+    function sendPasswordReset() {
+        const msg = document.getElementById('reset-msg');
+        if (!currentUser?.email) { showMsg(msg, 'No email address on your account.', 'error'); return; }
+        hideMsg(msg);
+        auth.sendPasswordResetEmail(currentUser.email)
+            .then(() => showMsg(msg, '✓ Reset email sent to ' + currentUser.email + '. Check your inbox.', 'success'))
+            .catch(() => showMsg(msg, 'Failed to send reset email. Please try again.', 'error'));
+    }
+
+    /* ════ HELPERS ════ */
+    function setLoading(btn, loading, text) {
+        if (loading) {
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>';
+            btn.classList.add('opacity-80','cursor-not-allowed');
+        } else {
+            btn.disabled = false;
+            btn.textContent = text;
+            btn.classList.remove('opacity-80','cursor-not-allowed');
+        }
+    }
+
+    function showMsg(el, msg, type) {
+        el.textContent = msg;
+        el.className = 'mb-4 text-sm px-4 py-3 rounded-xl ' + (type === 'success'
+            ? 'bg-green-50 border border-green-200 text-green-800'
+            : 'bg-red-50 border border-red-200 text-red-700');
+        el.classList.remove('hidden');
+    }
+
+    function hideMsg(el) { el.classList.add('hidden'); }
+</script>
+    <script src="/js/sidebar-nav.js"></script>
+</body>
+</html>
