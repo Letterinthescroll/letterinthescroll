@@ -211,7 +211,7 @@ function transformV3Response(v3Data) {
  */
 export async function loadCommentaryData() {
     try {
-        const response = await fetch('data/data.json');
+        const response = await fetch('/data/data.json');
         if (!response.ok) {
             throw new Error('Failed to load commentary data');
         }
@@ -227,7 +227,7 @@ export async function loadCommentaryData() {
  */
 export async function loadMitzvahChallenges() {
     try {
-        const response = await fetch('data/mitzvah-challenges.json');
+        const response = await fetch('/data/mitzvah-challenges.json');
         if (!response.ok) {
             throw new Error('Failed to load mitzvah challenge data');
         }
