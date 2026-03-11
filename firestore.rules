@@ -142,6 +142,38 @@ service cloud.firestore {
         allow update: if false;
       }
 
+      // ─── CHAT MESSAGES (scoped to chavruta) ───
+      match /chatMessages/{messageId} {
+        allow read: if isChavrutaMember(chavrutaId);
+
+        allow create: if isChavrutaMember(chavrutaId) &&
+          request.resource.data.userId == request.auth.uid &&
+          request.resource.data.text is string &&
+          request.resource.data.text.size() >= 1 &&
+          request.resource.data.text.size() <= 2000;
+
+        // Only message author can edit their own message
+        allow update: if isChavrutaMember(chavrutaId) &&
+          resource.data.userId == request.auth.uid &&
+          request.resource.data.userId == resource.data.userId &&
+          request.resource.data.text is string &&
+          request.resource.data.text.size() >= 1 &&
+          request.resource.data.text.size() <= 2000;
+
+        // Only message author can delete
+        allow delete: if isChavrutaMember(chavrutaId) &&
+          resource.data.userId == request.auth.uid;
+      }
+
+      // ─── CHAT READ RECEIPTS (scoped to chavruta) ───
+      match /chatReadReceipts/{userId} {
+        allow read: if isChavrutaMember(chavrutaId);
+
+        // Users can only write their own read receipt
+        allow write: if isChavrutaMember(chavrutaId) &&
+          request.auth.uid == userId;
+      }
+
       // ─── MITZVAH DATA (scoped to chavruta) ───
       match /mitzvah-data/{docId} {
         allow read: if isChavrutaMember(chavrutaId);

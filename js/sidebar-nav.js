@@ -1,17 +1,15 @@
 /*
- * Shared sidebar navigation controller for the global header.
- * - Desktop: always-visible left panel, collapsible to icon strip
- * - Mobile:  hidden drawer revealed by a fixed hamburger button
+ * Mobile-only hamburger navigation for the global header.
+ * - Desktop: header stays exactly as-is (inline buttons)
+ * - Mobile (≤960px): hamburger button reveals a slide-in drawer
  *
- * Hamburger is appended directly to document.body so it is never
- * affected by ancestor overflow, z-index stacking contexts, or
- * transforms on the header element.
+ * This script CLONES the header actions into a separate drawer
+ * so the original header is never modified on desktop.
  */
-(function initSidebarNavigation() {
+(function initMobileNav() {
     'use strict';
 
-    var DESKTOP_BREAKPOINT = 960;
-    var COLLAPSE_KEY = 'siteSidebarCollapsed';
+    var MOBILE_BREAKPOINT = 960;
 
     function onReady(fn) {
         if (document.readyState === 'loading') {
@@ -51,21 +49,19 @@
         if (body.classList.contains('sidebar-nav-enabled')) return;
         body.classList.add('sidebar-nav-enabled');
 
-        // ── 1. Pull the actions wrapper out of the header and make it the sidebar
-        actionsWrap.parentNode.removeChild(actionsWrap);
-        actionsWrap.className = 'site-sidebar';
-        actionsWrap.id = 'site-sidebar';
-        actionsWrap.setAttribute('role', 'navigation');
-        actionsWrap.setAttribute('aria-label', 'Primary navigation');
-        document.body.appendChild(actionsWrap);
+        // ── 1. Build the mobile drawer (separate from original header)
+        var sidebar = document.createElement('div');
+        sidebar.className = 'site-sidebar';
+        sidebar.id = 'site-sidebar';
+        sidebar.setAttribute('role', 'navigation');
+        sidebar.setAttribute('aria-label', 'Mobile navigation');
 
-        // ── 2. Build the sidebar head (brand link → home + collapse btn)
+        // ── 2. Build the sidebar head (brand link + close btn)
         var sidebarHead = document.createElement('div');
         sidebarHead.className = 'site-sidebar-head';
 
-        // Wrap brand icon + site name in a home link
         var brandLink = document.createElement('a');
-        brandLink.href = getSitePath('study.html');
+        brandLink.href = getSitePath('dashboard.html');
         brandLink.className = 'site-sidebar-brand-link';
         brandLink.title = 'A Letter in the Scroll — Home';
 
@@ -80,7 +76,6 @@
         brandImg.style.objectFit = 'contain';
         brandImg.style.display = 'block';
         brandImg.addEventListener('error', function () {
-            // Fallback if IconOnly is unavailable in a given deployment.
             this.src = getAssetPath('Icon.png');
         }, { once: true });
         brand.appendChild(brandImg);
@@ -92,14 +87,7 @@
         brandLink.appendChild(brand);
         brandLink.appendChild(sidebarTitle);
 
-        var collapseBtn = document.createElement('button');
-        collapseBtn.type = 'button';
-        collapseBtn.className = 'site-sidebar-collapse';
-        collapseBtn.setAttribute('aria-controls', 'site-sidebar');
-        collapseBtn.setAttribute('aria-label', 'Collapse navigation');
-        collapseBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
-
-        // Mobile-only close button inside the drawer
+        // Close button (X) inside the drawer
         var closeBtn = document.createElement('button');
         closeBtn.type = 'button';
         closeBtn.className = 'site-sidebar-close-btn';
@@ -107,35 +95,43 @@
         closeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
 
         sidebarHead.appendChild(brandLink);
-        sidebarHead.appendChild(collapseBtn);
         sidebarHead.appendChild(closeBtn);
-        actionsWrap.insertBefore(sidebarHead, hActions);
+        sidebar.appendChild(sidebarHead);
 
-        // Keep sign-out visually isolated at the bottom of the sidebar.
-        var logoutBtn = hActions.querySelector('#logout-btn');
-        if (logoutBtn) {
-            logoutBtn.classList.add('site-sidebar-signout');
-            hActions.appendChild(logoutBtn);
-        }
+        // ── 3. CLONE nav items into the drawer (original stays in header)
+        var clonedActions = hActions.cloneNode(true);
+        clonedActions.id = 'sidebar-nav-actions'; // unique ID to avoid conflicts
+        clonedActions.className = 'header-actions';
+        sidebar.appendChild(clonedActions);
 
-        // ── Highlight the sidebar button for the current page ──
+        document.body.appendChild(sidebar);
+
+        // ── Highlight the active page in the sidebar clone ──
         (function highlightActivePage() {
             var path = window.location.pathname;
-            // Normalise: strip trailing slash, treat bare domain as index
             var page = path.replace(/\/$/, '').split('/').pop() || 'study.html';
 
-            // Map page filenames → selector for matching sidebar element
             var pageMap = {
                 'study.html':  '#go-to-weekly',
                 'index.html':  '#go-to-weekly',
+                'dashboard.html': 'a[href$="dashboard.html"]',
                 'prayers.html': 'a[href$="prayers.html"]',
                 'songs.html':   'a[href$="songs.html"]',
                 'about.html':   'a[href$="about.html"]',
-                'song-detail.html': 'a[href$="songs.html"]'  // song-detail → Songs
+                'bookmarks.html': 'a[href$="bookmarks.html"]',
+                'settings.html': 'a[href$="settings.html"]',
+                'song-detail.html': 'a[href$="songs.html"]'
             };
 
-            // Holiday pages → highlight Holidays button
-            if (path.indexOf('/holidays') !== -1) {
+            var holidayPages = [
+                'hanukkah.html', 'rosh-hashanah.html', 'yom-kippur.html',
+                'lag-baomer.html', 'shavuot.html', 'sukkot.html',
+                'tu-bishvat.html', 'yom-haatzmaut.html', 'yom-hazikaron.html',
+                'shabbat-preview.html', 'passover', 'purim'
+            ];
+            var isHolidayPage = path.indexOf('/holidays') !== -1 ||
+                holidayPages.some(function(h) { return page === h || path.indexOf(h) !== -1; });
+            if (isHolidayPage) {
                 page = '__holidays__';
                 pageMap['__holidays__'] = 'a[href$="holidays/"], a[href$="holidays/index.html"]';
             }
@@ -143,15 +139,15 @@
             var selector = pageMap[page];
             if (!selector) return;
 
-            var activeEl = hActions.querySelector(selector);
+            // Highlight in the sidebar clone (use clonedActions, not hActions)
+            var activeEl = clonedActions.querySelector(selector);
             if (activeEl) {
                 activeEl.classList.add('header-btn--active');
                 activeEl.setAttribute('aria-current', 'page');
             }
         })();
 
-        // ── 3. Hamburger button — appended directly to document.body
-        //       so NO ancestor CSS can interfere with its visibility or z-index
+        // ── 4. Hamburger button — appended to body for z-index safety
         var hamburger = document.createElement('button');
         hamburger.type = 'button';
         hamburger.id = 'site-hamburger';
@@ -163,33 +159,24 @@
             '<span class="site-header-nav-toggle-icon" aria-hidden="true">' +
             '<span></span><span></span><span></span>' +
             '</span>';
-        document.body.appendChild(hamburger);   // <-- body, not header!
+        document.body.appendChild(hamburger);
 
-        // ── 4. Backdrop for mobile
+        // ── 5. Backdrop
         var backdrop = document.createElement('div');
         backdrop.className = 'site-sidebar-backdrop';
         backdrop.setAttribute('aria-hidden', 'true');
         document.body.appendChild(backdrop);
 
-        // ── 5. State helpers
-        var mql = window.matchMedia('(max-width: ' + DESKTOP_BREAKPOINT + 'px)');
+        // ── 6. State helpers (mobile only)
+        var mql = window.matchMedia('(max-width: ' + MOBILE_BREAKPOINT + 'px)');
 
         function isMobile() { return mql.matches; }
         function isOpen()   { return body.classList.contains('sidebar-nav-mobile-open'); }
 
-        function getSaved() {
-            try { return localStorage.getItem(COLLAPSE_KEY) === '1'; } catch (e) { return false; }
-        }
-        function saveCollapsed(v) {
-            try { localStorage.setItem(COLLAPSE_KEY, v ? '1' : '0'); } catch (e) { /* ignore */ }
-        }
-
-        // ── 6. Open / close mobile drawer
         function openDrawer() {
             body.classList.add('sidebar-nav-mobile-open');
             hamburger.setAttribute('aria-expanded', 'true');
             hamburger.setAttribute('aria-label', 'Close navigation menu');
-            // Prevent body scroll while drawer is open
             body.style.overflow = 'hidden';
         }
 
@@ -200,56 +187,29 @@
             body.style.overflow = '';
         }
 
-        // ── 7. Collapse desktop sidebar
-        function setCollapsed(next) {
-            body.classList.toggle('sidebar-nav-collapsed', next);
-            collapseBtn.setAttribute('aria-label', next ? 'Expand navigation' : 'Collapse navigation');
-            collapseBtn.setAttribute('aria-expanded', String(!next));
-            saveCollapsed(next);
-        }
-
-        // ── 8. Sync state when screen size changes
         function sync() {
-            if (isMobile()) {
-                body.classList.remove('sidebar-nav-collapsed');
+            if (!isMobile()) {
                 closeDrawer();
-            } else {
-                closeDrawer();
-                setCollapsed(getSaved());
             }
         }
 
-        // ── 9. Event listeners
+        // ── 7. Event listeners
         hamburger.addEventListener('click', function (e) {
             e.stopPropagation();
-            if (isMobile()) {
-                isOpen() ? closeDrawer() : openDrawer();
-            } else {
-                setCollapsed(!body.classList.contains('sidebar-nav-collapsed'));
-            }
+            isOpen() ? closeDrawer() : openDrawer();
         });
 
         closeBtn.addEventListener('click', function () {
             closeDrawer();
         });
 
-        collapseBtn.addEventListener('click', function () {
-            if (isMobile()) {
-                closeDrawer();
-            } else {
-                setCollapsed(!body.classList.contains('sidebar-nav-collapsed'));
-            }
-        });
-
         backdrop.addEventListener('click', function () {
             closeDrawer();
         });
 
-        // Close when the user navigates away via a link/button inside the drawer
-        actionsWrap.addEventListener('click', function (e) {
-            if (!isMobile()) return;
+        // Close when user taps a nav link inside the drawer
+        sidebar.addEventListener('click', function (e) {
             if (e.target.closest('.site-sidebar-close-btn')) return;
-            if (e.target.closest('.site-sidebar-collapse')) return;
             if (e.target.closest('.text-size-control')) return;
             if (e.target.closest('a') || e.target.closest('button')) {
                 closeDrawer();
