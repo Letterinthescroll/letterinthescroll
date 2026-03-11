@@ -1,7 +1,7 @@
 // songs.js - render the Songs and Poems page from songs.json
 
-const SONGS_URL = "data/songs.json";
-const DVAR_ARCHIVE_URL = "data/past-dvar-torahs.json";
+const SONGS_URL = "/data/songs.json";
+const DVAR_ARCHIVE_URL = "/data/past-dvar-torahs.json";
 let allEntries = [];
 let activeTypeFilter = "all";
 

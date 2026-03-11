@@ -1,6 +1,6 @@
 // song-detail.js - display individual song and poem details
 
-const SONGS_URL = "data/songs.json";
+const SONGS_URL = "/data/songs.json";
 
 function escapeHtml(value = "") {
   return String(value)
