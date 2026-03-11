@@ -242,8 +242,16 @@
                     <!-- Card Header with Logo -->
                     <div class="text-center pt-8 pb-4 px-6">
                         <img src="media/images/Icon.png" alt="A Letter in the Scroll" class="w-20 h-20 mx-auto rounded-xl shadow-md mb-4">
-                        <h2 class="font-heading text-3xl font-semibold text-slate-900">Welcome Back</h2>
-                        <p class="text-slate-600 text-sm mt-1">Sign in, then land on your dashboard home to manage rooms and enter study.</p>
+                        <h2 id="login-greeting" class="font-heading text-3xl font-semibold text-slate-900">Welcome</h2>
+                        <p id="login-subtitle" class="text-slate-600 text-sm mt-1">Create an account or sign in to start studying Torah together.</p>
+                        <script>
+                            try {
+                                if (localStorage.getItem('hasSignedIn')) {
+                                    document.getElementById('login-greeting').textContent = 'Welcome Back';
+                                    document.getElementById('login-subtitle').textContent = 'Sign in, then land on your dashboard home to manage rooms and enter study.';
+                                }
+                            } catch(e) {}
+                        </script>
                         <div class="decorative-line mt-4 mx-auto w-36"></div>
                     </div>
 
@@ -389,6 +397,9 @@
 
                 <p class="text-center text-gray-500 text-xs mb-2 italic font-heading">
                     Each of us is a letter in the scroll of Torah.
+                </p>
+                <p class="text-center mt-3 mb-1">
+                    <a href="/about" style="color:#2857be;font-size:0.85rem;font-weight:600;text-decoration:none;">Learn more about this project &rarr;</a>
                 </p>
             </div>
         </div>
@@ -690,6 +701,8 @@
             if (!user || authFlowInProgress) {
                 return;
             }
+
+            try { localStorage.setItem('hasSignedIn', '1'); } catch(e) {}
 
             syncUserProfile(user).finally(function() {
                 const inviteCode = resolveInviteCode();

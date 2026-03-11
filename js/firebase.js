@@ -170,9 +170,9 @@ function initAuth(onAuthReady) {
       currentUser = null;
       console.log('No user authenticated');
       // Redirect unauthenticated users away from all app pages.
-      // Only the login page (/), invite (/invite), and join (/join) are public.
+      // Only the login page (/), invite (/invite), join (/join), and about (/about) are public.
       const path = window.location.pathname.replace(/\/+$/, '') || '/';
-      const publicPaths = ['', '/', '/invite', '/join'];
+      const publicPaths = ['', '/', '/invite', '/join', '/about'];
       const isPublic = publicPaths.includes(path);
       if (!isPublic) {
         window.location.href = '/';

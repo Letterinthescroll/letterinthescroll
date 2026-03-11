@@ -373,6 +373,61 @@
             background: radial-gradient(circle, rgba(255, 216, 107, 0.2) 0%, transparent 74%);
         }
 
+        /* ── Features grid ── */
+        .features-panel {
+            background: linear-gradient(150deg, rgba(255,255,255,0.92), rgba(240,245,255,0.88));
+            border: 1px solid var(--panel-border);
+        }
+        .features-panel h2 { color: var(--ink-900); }
+        .features-panel .panel-kicker {
+            border-color: rgba(40, 87, 190, 0.24);
+            background: rgba(40, 87, 190, 0.08);
+            color: #1b3f8d;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1.4rem;
+        }
+        .feature-card {
+            background: rgba(255,255,255,0.85);
+            border: 1px solid rgba(15, 37, 86, 0.10);
+            border-radius: 16px;
+            padding: 1.3rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(8, 24, 59, 0.10);
+        }
+        .feature-icon {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #1e3a8a, #2857be);
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .feature-icon svg { width: 18px; height: 18px; }
+        .feature-card h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--ink-900);
+            margin: 0;
+        }
+        .feature-card p {
+            font-size: 0.86rem;
+            color: var(--ink-600);
+            line-height: 1.6;
+            margin: 0;
+        }
+
         .closing-panel h2,
         .closing-panel p,
         .closing-panel .panel-kicker { color: #e8efff; }
@@ -579,6 +634,54 @@
                 <p>We are the heirs of those who stood at the foot of Mount Sinai and pledged themselves to a covenant of love and law. We are the descendants of those who, even in the darkest nights of history, never lost their humor, their faith, or their commitment to education.</p>
                 <p>They stayed faithful to the scroll when it would have been easier to walk away. They knew that as long as the scroll existed, they were never truly lost. They were home.</p>
                 <p>By joining this project, you are stepping into that lineage. You are choosing to be more than a consumer of content; you are choosing to be a guardian of the trust. You are learning the language of your ancestors so that you can speak it to your children.</p>
+            </article>
+
+            <article class="about-panel features-panel reveal" data-reveal>
+                <p class="panel-kicker">What You Get</p>
+                <h2>Everything Inside the Platform</h2>
+                <p>A Letter in the Scroll is a free, interactive Torah study experience designed for depth, community, and daily growth.</p>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></div>
+                        <h3>Weekly Torah Portions</h3>
+                        <p>Read the full parsha in Hebrew and English, with verse-by-verse commentary, definitions, and insights from classical sources.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+                        <h3>Chavruta Study Groups</h3>
+                        <p>Create or join a chavruta. Discuss verses, share reflections, and learn together in a private study room with your partners.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg></div>
+                        <h3>Verse-by-Verse Discussion</h3>
+                        <p>Click any verse to open a discussion thread with your chavruta. Share thoughts, ask questions, and deepen your understanding together.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></div>
+                        <h3>Bookmarks &amp; Highlights</h3>
+                        <p>Save meaningful verses, commentaries, and definitions to your personal bookmarks library for easy reference later.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-2c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg></div>
+                        <h3>Songs &amp; Poems</h3>
+                        <p>Explore a curated collection of Jewish songs and poems with Hebrew lyrics, transliterations, and English translations.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" ry="2" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3v4M8 3v4M3 11h18"/></svg></div>
+                        <h3>Jewish Holiday Guides</h3>
+                        <p>Comprehensive guides for every major holiday with blessings, prayers, customs, songs, and historical context.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3l2.4 4.9L20 9l-4 3.9.9 5.6L12 16l-4.9 2.5.9-5.6L4 9l5.6-1.1L12 3z"/></svg></div>
+                        <h3>Prayer Collection</h3>
+                        <p>Important Jewish prayers with Hebrew text, transliterations, English translations, and audio pronunciations.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+                        <h3>Weekly Mitzvah Challenges</h3>
+                        <p>Each parsha comes with a practical mitzvah challenge — a real-world action to integrate Torah wisdom into your daily life.</p>
+                    </div>
+                </div>
             </article>
 
             <article class="about-panel closing-panel reveal" data-reveal>
