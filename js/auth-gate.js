@@ -9,7 +9,7 @@
     var FIREBASE_VERSION = '10.7.1';
     var CDN = 'https://www.gstatic.com/firebasejs/' + FIREBASE_VERSION;
     var path = window.location.pathname.replace(/\/+$/, '') || '/';
-    var publicPaths = ['', '/', '/invite', '/join'];
+    var publicPaths = ['', '/', '/invite', '/join', '/about'];
 
     if (publicPaths.includes(path)) {
         return;

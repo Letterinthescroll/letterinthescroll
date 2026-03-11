@@ -343,7 +343,7 @@ function initAuth(onAuthReady) {
       // Redirect unauthenticated users away from protected app pages.
       // Login and invite onboarding routes are public.
       const path = window.location.pathname.replace(/\/+$/, '') || '/';
-      const publicPaths = ['', '/', '/invite', '/join'];
+      const publicPaths = ['', '/', '/invite', '/join', '/about'];
       const isPublic = publicPaths.includes(path);
       if (!isPublic) {
         showLoginRequiredOverlayAndRedirect();
