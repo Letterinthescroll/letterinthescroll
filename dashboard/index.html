@@ -2479,7 +2479,7 @@
     }
     function inviteLink(code) {
         const normalizedCode = sanitizeInviteCode(String(code || ''));
-        const url = new URL('/join', window.location.origin);
+        const url = new URL('/invite', window.location.origin);
         if (normalizedCode.length === INVITE_CODE_LENGTH) {
             url.searchParams.set('invite', normalizedCode);
         }
