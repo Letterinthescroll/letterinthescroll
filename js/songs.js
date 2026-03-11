@@ -1,9 +1,28 @@
 // songs.js - render the Songs and Poems page from songs.json
 
-const SONGS_URL = "/data/songs.json";
-const DVAR_ARCHIVE_URL = "/data/past-dvar-torahs.json";
+const SONGS_URL_CANDIDATES = ["/data/songs.json", "data/songs.json"];
+const DVAR_ARCHIVE_URL_CANDIDATES = ["/data/past-dvar-torahs.json", "data/past-dvar-torahs.json"];
 let allEntries = [];
 let activeTypeFilter = "all";
+
+async function fetchJsonWithFallback(urlCandidates, errorMessage) {
+  let lastError = null;
+
+  for (const url of urlCandidates) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        lastError = new Error(`${errorMessage} (${response.status}) via ${url}`);
+        continue;
+      }
+      return await response.json();
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error(errorMessage);
+}
 
 function escapeHtml(value = "") {
   return String(value)
@@ -238,12 +257,10 @@ function setupSearchAndTabs() {
 
 async function loadEntries() {
   try {
-    const response = await fetch(SONGS_URL);
-    if (!response.ok) {
-      throw new Error("Failed to load songs and poems");
-    }
-
-    const data = await response.json();
+    const data = await fetchJsonWithFallback(
+      SONGS_URL_CANDIDATES,
+      "Failed to load songs and poems"
+    );
     allEntries = Array.isArray(data)
       ? data.map((entry, index) => ({
           ...entry,
@@ -387,12 +404,10 @@ async function loadPastWeeklyDvarTorahs() {
   if (!listContainer) return;
 
   try {
-    const archiveResponse = await fetch(DVAR_ARCHIVE_URL);
-    if (!archiveResponse.ok) {
-      throw new Error("Failed to load dvar Torah archive");
-    }
-
-    const archiveData = await archiveResponse.json();
+    const archiveData = await fetchJsonWithFallback(
+      DVAR_ARCHIVE_URL_CANDIDATES,
+      "Failed to load dvar Torah archive"
+    );
     const entries = Array.isArray(archiveData?.entries) ? archiveData.entries.slice() : [];
     renderPastWeeklyDvarTorahs(entries);
   } catch (error) {
