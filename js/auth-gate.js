@@ -87,6 +87,31 @@
                 '  color: #1f3b75;',
                 '  font-size: 0.93rem;',
                 '  line-height: 1.45;',
+                '}',
+                '#login-required-overlay .login-required-btn {',
+                '  margin-top: 0.95rem;',
+                '  display: inline-flex;',
+                '  align-items: center;',
+                '  justify-content: center;',
+                '  min-height: 42px;',
+                '  padding: 0.62rem 1rem;',
+                '  border: 1px solid rgba(25, 81, 190, 0.32);',
+                '  border-radius: 999px;',
+                '  background: linear-gradient(180deg, #2f6fe0 0%, #1d4ed8 100%);',
+                '  color: #ffffff;',
+                '  font-size: 0.9rem;',
+                '  font-weight: 700;',
+                '  letter-spacing: 0.01em;',
+                '  cursor: pointer;',
+                '  text-decoration: none;',
+                '  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.28);',
+                '}',
+                '#login-required-overlay .login-required-btn:hover {',
+                '  background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);',
+                '}',
+                '#login-required-overlay .login-required-btn:focus-visible {',
+                '  outline: 2px solid #1d4ed8;',
+                '  outline-offset: 2px;',
                 '}'
             ].join('\n');
             document.head.appendChild(style);
@@ -103,15 +128,18 @@
             overlay.setAttribute('aria-live', 'assertive');
             overlay.innerHTML =
                 '<div class="login-required-card">' +
-                '  <p class="login-required-title">Login Required</p>' +
-                '  <p class="login-required-text">please first login or create an account</p>' +
+                '  <p class="login-required-title">Welcome to A Letter in the Scroll</p>' +
+                '  <p class="login-required-text">Login or create an account first.</p>' +
+                '  <button type="button" id="login-required-cta" class="login-required-btn">Login / Create Account</button>' +
                 '</div>';
             (document.body || document.documentElement).appendChild(overlay);
+            var cta = overlay.querySelector('#login-required-cta');
+            if (cta) {
+                cta.addEventListener('click', function () {
+                    window.location.assign('/');
+                });
+            }
         }
-
-        window.setTimeout(function () {
-            window.location.replace('/');
-        }, 1100);
     }
 
     function checkAuth() {
