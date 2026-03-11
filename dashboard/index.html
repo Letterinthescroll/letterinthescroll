@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home — A Letter in the Scroll</title>
-    <link rel="icon" type="image/png" href="media/images/Icon.png">
-    <link rel="apple-touch-icon" href="media/images/Icon.png">
+    <link rel="icon" type="image/png" href="/media/images/Icon.png">
+    <link rel="apple-touch-icon" href="/media/images/Icon.png">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/shabbat.css">
     <link rel="stylesheet" href="/css/mobile-overrides.css">
@@ -1956,13 +1956,13 @@
                     <span id="chavruta-count" class="dash-count-pill"></span>
                 </div>
                 <div class="dash-tab-group">
-                    <button class="ptab active" id="ptab-create" onclick="showPanel('create')">+ New Group</button>
+                    <button class="ptab" id="ptab-create" onclick="showPanel('create')">+ New Group</button>
                     <button class="ptab" id="ptab-join" onclick="showPanel('join')">Join with Code</button>
                 </div>
             </div>
 
-            <div class="dash-panel-shell">
-                <div id="pp-create">
+            <div id="dash-panel-shell" class="dash-panel-shell hidden">
+                <div id="pp-create" class="hidden">
                     <p class="dash-panel-note">Give your group a name and choose a size. You'll get a shareable invite code right away.</p>
                     <form id="create-form" onsubmit="createChavruta(event)" class="dash-form-stack">
                         <div class="dash-form-row">
@@ -2449,6 +2449,10 @@
 
     /* ════ PANEL TABS ════ */
     function showPanel(tab) {
+        const panelShell = document.getElementById('dash-panel-shell');
+        if (panelShell) {
+            panelShell.classList.remove('hidden');
+        }
         ['create','join'].forEach(t => {
             document.getElementById('pp-'+t).classList.toggle('hidden', t!==tab);
             document.getElementById('ptab-'+t).classList.toggle('active', t===tab);
@@ -3317,6 +3321,7 @@
     // ── Unread notification tracking (persisted via localStorage) ──
     const CHAT_SEEN_KEY = 'chatLastSeenCounts';
     const chatUnreadCounts = {};       // { roomId: number }
+    const chatRoomMessageTotals = {};  // { roomId: total message count }
     const chatBgUnsubs = [];           // background listeners for all rooms
     const chatFabBadgeEl = document.getElementById('chat-fab-badge');
 
@@ -3347,7 +3352,32 @@
         chatBgUnsubs.forEach(u => u());
         chatBgUnsubs.length = 0;
 
-        if (!userChavrutas || !userChavrutas.length || !currentUser) return;
+        const roomIds = new Set((userChavrutas || []).map(room => room.id));
+        let removedSeenKeys = false;
+        Object.keys(chatLastSeenCounts).forEach(roomId => {
+            if (!roomIds.has(roomId)) {
+                delete chatLastSeenCounts[roomId];
+                removedSeenKeys = true;
+            }
+        });
+        Object.keys(chatUnreadCounts).forEach(roomId => {
+            if (!roomIds.has(roomId)) {
+                delete chatUnreadCounts[roomId];
+            }
+        });
+        Object.keys(chatRoomMessageTotals).forEach(roomId => {
+            if (!roomIds.has(roomId)) {
+                delete chatRoomMessageTotals[roomId];
+            }
+        });
+        if (removedSeenKeys) {
+            saveChatLastSeen();
+        }
+
+        if (!userChavrutas || !userChavrutas.length || !currentUser) {
+            updateChatBadge();
+            return;
+        }
 
         userChavrutas.forEach(room => {
             const unsub = db.collection('chavrutas').doc(room.id)
@@ -3356,6 +3386,7 @@
                 .onSnapshot(snap => {
                     const docs = snap.docs;
                     const totalCount = docs.length;
+                    chatRoomMessageTotals[room.id] = totalCount;
 
                     // Use persisted last-seen count, or set baseline on first load
                     if (!(room.id in chatLastSeenCounts)) {
@@ -3364,7 +3395,15 @@
                         saveChatLastSeen();
                     } else {
                         // Count new messages from OTHER users since last seen
-                        const seenCount = chatLastSeenCounts[room.id];
+                        let seenCount = Number(chatLastSeenCounts[room.id]);
+                        if (!Number.isFinite(seenCount) || seenCount < 0) {
+                            seenCount = 0;
+                        }
+                        if (seenCount > totalCount) {
+                            seenCount = totalCount;
+                            chatLastSeenCounts[room.id] = seenCount;
+                            saveChatLastSeen();
+                        }
                         if (totalCount > seenCount) {
                             const newMsgs = docs.slice(seenCount);
                             const unreadFromOthers = newMsgs.filter(d => d.data().userId !== currentUser.uid).length;
@@ -3393,8 +3432,17 @@
 
     function markRoomAsRead(roomId) {
         chatUnreadCounts[roomId] = 0;
-        // Set to a very high number (Infinity is not JSON-serializable)
-        chatLastSeenCounts[roomId] = 999999;
+        const knownTotal = Number(chatRoomMessageTotals[roomId]);
+        const activeRoomTotal = roomId === activeChatRoomId ? chatMsgList.length : NaN;
+        const previousSeen = Number(chatLastSeenCounts[roomId]);
+        const safeSeen = Number.isFinite(knownTotal)
+            ? knownTotal
+            : Number.isFinite(activeRoomTotal)
+                ? activeRoomTotal
+                : Number.isFinite(previousSeen)
+                    ? Math.max(0, previousSeen)
+                    : 0;
+        chatLastSeenCounts[roomId] = safeSeen;
         saveChatLastSeen();
         updateChatBadge();
     }
