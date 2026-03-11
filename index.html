@@ -367,17 +367,15 @@
                     <div class="p-6">
                         <div class="text-center mb-4">
                             <h3 class="font-heading text-2xl font-semibold text-gray-900">Join a Chavruta</h3>
-                            <p class="text-gray-500 text-xs mt-1">Have an invite code? Enter the 16-character code below.</p>
+                            <p class="text-gray-500 text-xs mt-1">Paste an invite link or 16-character code below.</p>
                         </div>
                         <div class="flex gap-3">
                             <input
                                 type="text"
                                 id="invite-code-input"
-                                placeholder="16-character invite code"
-                                maxlength="16"
-                                minlength="16"
-                                class="input-field flex-1 px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900 text-sm font-mono tracking-wider uppercase"
-                                oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '')"
+                                placeholder="Paste invite link or code"
+                                class="input-field flex-1 px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900 text-sm font-mono tracking-wider"
+                                oninput="handleInviteInput(this)"
                             />
                             <button id="join-btn" onclick="handleJoinChavruta()" class="px-6 py-2.5 bg-gradient-to-r from-blue-800 to-blue-600 text-white rounded-xl hover:from-blue-900 hover:to-blue-700 transition-all font-semibold shadow-md hover:shadow-lg text-sm whitespace-nowrap">
                                 Join
@@ -490,7 +488,26 @@
             if (typeof rawValue !== 'string') {
                 return '';
             }
-            return rawValue.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, INVITE_CODE_LENGTH);
+            return rawValue.replace(/[^A-Za-z0-9]/g, '').slice(0, INVITE_CODE_LENGTH);
+        }
+
+        // Extract invite code from a pasted link or raw code
+        function extractInviteCode(input) {
+            if (typeof input !== 'string') return '';
+            input = input.trim();
+            try {
+                if (input.includes('//') || input.includes('invite')) {
+                    var url = new URL(input, window.location.href);
+                    var fromParam = url.searchParams.get('invite');
+                    if (fromParam) return sanitizeInviteCode(fromParam);
+                    var parts = url.pathname.split('/').filter(Boolean);
+                    var ji = parts.lastIndexOf('join');
+                    if (ji >= 0 && parts[ji+1] && parts[ji+1].toLowerCase() !== 'index.html') {
+                        return sanitizeInviteCode(parts[ji+1]);
+                    }
+                }
+            } catch(e) {}
+            return sanitizeInviteCode(input);
         }
 
         function savePendingInviteCode(code) {
@@ -526,6 +543,18 @@
                 input.value = pending;
             }
             return pending;
+        }
+
+        function handleInviteInput(el) {
+            var raw = el.value;
+            if (raw.includes('//') || raw.includes('invite')) {
+                var code = extractInviteCode(raw);
+                if (code.length === INVITE_CODE_LENGTH) {
+                    el.value = code;
+                }
+            } else {
+                el.value = raw.replace(/[^A-Za-z0-9]/g, '').slice(0, INVITE_CODE_LENGTH);
+            }
         }
 
         function toTitleWord(word) {
@@ -1005,14 +1034,14 @@
             joinError.classList.add('hidden');
             joinSuccess.classList.add('hidden');
 
-            const code = sanitizeInviteCode(document.getElementById('invite-code-input').value);
+            const code = extractInviteCode(document.getElementById('invite-code-input').value);
             if (!code) {
-                joinError.textContent = 'Please enter an invite code.';
+                joinError.textContent = 'Please enter an invite code or link.';
                 joinError.classList.remove('hidden');
                 return;
             }
             if (code.length !== INVITE_CODE_LENGTH) {
-                joinError.textContent = 'Invite codes must be exactly 16 letters/numbers.';
+                joinError.textContent = 'Invite codes must be exactly 16 characters.';
                 joinError.classList.remove('hidden');
                 return;
             }

@@ -66,7 +66,9 @@ service cloud.firestore {
       allow update: if isAuth() &&
         (request.auth.uid in resource.data.members ||
          // Allow joining (user adding themselves via invite code)
-         request.auth.uid in request.resource.data.members);
+         request.auth.uid in request.resource.data.members ||
+         // Allow requesting to join (adding self to pendingMembers)
+         request.auth.uid in request.resource.data.pendingMembers);
 
       // Only leader can delete
       allow delete: if isAuth() &&

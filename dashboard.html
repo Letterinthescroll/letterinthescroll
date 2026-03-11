@@ -1974,6 +1974,11 @@
                             </select>
                             <button type="submit" id="create-btn" class="dash-submit-btn dash-submit-btn-create">Create Group</button>
                         </div>
+                        <label class="flex items-center gap-2.5 mt-2 cursor-pointer select-none">
+                            <input type="checkbox" id="create-require-approval" class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 accent-blue-600">
+                            <span class="text-xs text-slate-600">Require leader approval to join</span>
+                            <span class="text-[10px] text-slate-400 italic">(members must be accepted before joining)</span>
+                        </label>
                     </form>
                     <div id="create-success" class="hidden dash-feedback dash-feedback--info">
                         <p>Group created. Share this with your friends:</p>
@@ -1994,9 +1999,9 @@
                 </div>
 
                 <div id="pp-join" class="hidden">
-                    <p class="dash-panel-note">Ask your study partner for their 16-character invite code, then paste it here.</p>
+                    <p class="dash-panel-note">Paste an invite link or 16-character code to join a study group.</p>
                     <form id="join-form" onsubmit="joinChavruta(event)" class="dash-form-row">
-                        <input type="text" id="join-code" required placeholder="Paste 16-character invite code" maxlength="16" class="dash-input mono-code" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
+                        <input type="text" id="join-code" required placeholder="Paste invite link or code" class="dash-input mono-code" oninput="handleJoinInput(this)">
                         <button type="submit" id="join-btn" class="dash-submit-btn dash-submit-btn-join">Join Group</button>
                     </form>
                     <div id="join-success" class="hidden dash-feedback dash-feedback--success"></div>
@@ -2351,7 +2356,29 @@
         if (typeof rawValue !== 'string') {
             return '';
         }
-        return rawValue.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, INVITE_CODE_LENGTH);
+        return rawValue.replace(/[^A-Za-z0-9]/g, '').slice(0, INVITE_CODE_LENGTH);
+    }
+
+    // Extract invite code from a pasted link or raw code
+    function extractInviteCode(input) {
+        if (typeof input !== 'string') return '';
+        input = input.trim();
+        // Try to extract from URL (e.g. .../join/index.html?invite=CODE or .../join/CODE)
+        try {
+            if (input.includes('//') || input.includes('invite')) {
+                var url = new URL(input, window.location.href);
+                var fromParam = url.searchParams.get('invite');
+                if (fromParam) return sanitizeInviteCode(fromParam);
+                // Check path: /join/CODE
+                var parts = url.pathname.split('/').filter(Boolean);
+                var ji = parts.lastIndexOf('join');
+                if (ji >= 0 && parts[ji+1] && parts[ji+1].toLowerCase() !== 'index.html') {
+                    return sanitizeInviteCode(parts[ji+1]);
+                }
+            }
+        } catch(e) {}
+        // Otherwise treat as raw code
+        return sanitizeInviteCode(input);
     }
 
     /* ════ AUTH ════ */
@@ -2442,7 +2469,7 @@
 
     /* ════ INVITE CODE ════ */
     function generateCode() {
-        const c = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const c = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const v = new Uint8Array(16); crypto.getRandomValues(v);
         return Array.from(v, x => c[x%c.length]).join('');
     }
@@ -2488,7 +2515,7 @@
         }
         empty.classList.add('hidden');
 
-        const uids = new Set(); list.forEach(c=>(c.members||[]).forEach(u=>uids.add(u)));
+        const uids = new Set(); list.forEach(c=>{ (c.members||[]).forEach(u=>uids.add(u)); (c.pendingMembers||[]).forEach(u=>uids.add(u)); });
         await fetchNames([...uids]);
 
         configureHeroStudyButton();
@@ -2576,6 +2603,25 @@
             return `<div class="av" style="background:${getMemberColor(u, mems)};${i>0?'margin-left:-6px':''}">${n[0].toUpperCase()}</div>`;
         }).join('') + (count>5?`<div class="av" style="background:#94a3b8;margin-left:-6px">+${count-5}</div>`:'');
 
+        const pending = c.pendingMembers||[];
+        const pendingRows = canManage && pending.length ? `
+            <div class="mt-3 pt-3 border-t border-slate-100">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-2">Pending Requests (${pending.length})</p>
+                ${pending.map(uid=>{
+                    const n=nameCache[uid]||uid.slice(0,8)+'…';
+                    return `<div class="flex items-center justify-between py-2 px-2.5 rounded-xl bg-amber-50/60">
+                        <div class="flex items-center gap-2.5">
+                            <div class="av-ring"><div class="av-inner" style="background:#e67e22">${n[0].toUpperCase()}</div></div>
+                            <span class="text-sm font-medium text-slate-700">${escHTML(n)}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="approveMember('${c.id}','${uid}')" class="text-xs font-semibold text-green-600 hover:text-white hover:bg-green-500 px-2.5 py-1 rounded-lg border border-green-300 transition-all">Accept</button>
+                            <button onclick="rejectMember('${c.id}','${uid}')" class="text-xs font-semibold text-red-500 hover:text-white hover:bg-red-500 px-2.5 py-1 rounded-lg border border-red-200 transition-all">Reject</button>
+                        </div>
+                    </div>`;
+                }).join('')}
+            </div>` : '';
+
         const memberRows = (c.members||[]).map(uid=>{
             const n=nameCache[uid]||uid.slice(0,8)+'…', me=uid===currentUser.uid;
             const isLdr=uid===c.leader, isCoLdr=coLeaders.includes(uid);
@@ -2645,8 +2691,19 @@
                     <div id="sp-m-${c.id}" class="hidden space-y-1">
                         <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">${count} / ${max} members</p>
                         ${memberRows}
+                        ${pendingRows}
                     </div>
                     ${isLeader?`<div id="sp-s-${c.id}" class="hidden space-y-4">
+                        <div>
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1.5">Join Approval</label>
+                            <label class="flex items-center gap-2.5 cursor-pointer select-none bg-slate-50 px-3 py-2.5 rounded-xl border border-slate-200">
+                                <input type="checkbox" ${c.requireApproval?'checked':''} onchange="toggleApproval('${c.id}',this.checked)" class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 accent-blue-600">
+                                <div>
+                                    <span class="text-xs font-medium text-slate-700">Require approval to join</span>
+                                    <p class="text-[10px] text-slate-400 mt-0.5">New members must be accepted by a leader before joining</p>
+                                </div>
+                            </label>
+                        </div>
                         <div>
                             <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1.5">Rename Group</label>
                             <div class="flex gap-2">
@@ -2679,6 +2736,7 @@
                 <div class="flex items-center gap-1">
                     <div class="flex">${avatars}</div>
                     <span class="ml-2 text-blue-200/80 text-xs">${count}/${max} members</span>
+                    ${canManage && pending.length ? `<span class="ml-1.5 bg-amber-400 text-amber-900 text-[10px] font-bold px-1.5 py-0.5 rounded-full">${pending.length} pending</span>` : ''}
                 </div>
             </div>
             <div class="px-5 py-4 space-y-2.5">
@@ -2974,12 +3032,14 @@
     async function createChavruta(e) {
         e.preventDefault();
         const name=document.getElementById('create-name').value.trim(), max=+document.getElementById('create-max-members').value;
+        const requireApproval = document.getElementById('create-require-approval').checked;
         const btn=document.getElementById('create-btn'), sEl=document.getElementById('create-success'), eEl=document.getElementById('create-error');
         if(name.length<2){showEl(eEl,'Name is too short.');return;}
         btn.disabled=true; btn.textContent='Creating…'; eEl.classList.add('hidden'); sEl.classList.add('hidden');
         try {
             const code=generateCode();
-            await db.collection('chavrutas').add({name,leader:currentUser.uid,createdBy:currentUser.uid,members:[currentUser.uid],maxMembers:max,inviteCode:code,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+            const docData = {name,leader:currentUser.uid,createdBy:currentUser.uid,members:[currentUser.uid],maxMembers:max,inviteCode:code,requireApproval:requireApproval,pendingMembers:[],createdAt:firebase.firestore.FieldValue.serverTimestamp()};
+            await db.collection('chavrutas').add(docData);
             document.getElementById('created-invite-code').textContent = code;
             document.getElementById('created-invite-link').value = inviteLink(code);
             sEl.classList.remove('hidden'); document.getElementById('create-name').value='';
@@ -2988,9 +3048,23 @@
     }
 
     /* ════ JOIN ════ */
+    // Handle paste/input in join code field — extract code from links
+    function handleJoinInput(el) {
+        var raw = el.value;
+        // If it looks like a URL, extract the code
+        if (raw.includes('//') || raw.includes('invite')) {
+            var code = extractInviteCode(raw);
+            if (code.length === INVITE_CODE_LENGTH) {
+                el.value = code;
+            }
+        } else {
+            el.value = raw.replace(/[^A-Za-z0-9]/g, '').slice(0, INVITE_CODE_LENGTH);
+        }
+    }
+
     async function joinChavruta(e) {
         e.preventDefault();
-        const code = sanitizeInviteCode(document.getElementById('join-code').value);
+        const code = extractInviteCode(document.getElementById('join-code').value);
         const btn=document.getElementById('join-btn'), sEl=document.getElementById('join-success'), eEl=document.getElementById('join-error');
         sEl.classList.add('hidden'); eEl.classList.add('hidden');
         if (code.length !== INVITE_CODE_LENGTH) {
@@ -2998,7 +3072,15 @@
             return;
         }
         btn.disabled=true; btn.textContent='Joining…';
-        try { await joinByCode(code); sEl.textContent='Joined! Your group is now showing below.'; sEl.classList.remove('hidden'); document.getElementById('join-code').value=''; }
+        try {
+            const result = await joinByCode(code);
+            if (result === 'pending') {
+                sEl.textContent='Request sent! The group leader will review your request.';
+            } else {
+                sEl.textContent='Joined! Your group is now showing below.';
+            }
+            sEl.classList.remove('hidden'); document.getElementById('join-code').value='';
+        }
         catch(err){ showEl(eEl, err.message||'Failed to join.'); }
         finally { btn.disabled=false; btn.textContent='Join Group'; }
     }
@@ -3006,14 +3088,22 @@
     async function joinByCode(code) {
         const normalizedCode = sanitizeInviteCode(code);
         if (normalizedCode.length !== INVITE_CODE_LENGTH) {
-            throw new Error('Invite codes must be exactly 16 letters/numbers.');
+            throw new Error('Invite codes must be exactly 16 characters.');
         }
         const snap=await db.collection('chavrutas').where('inviteCode','==',normalizedCode).limit(1).get();
         if(snap.empty) throw new Error('Code not found. Double-check and try again.');
         const doc=snap.docs[0], data=doc.data();
         if((data.members||[]).includes(currentUser.uid)) throw new Error('You are already in this group.');
+        if((data.pendingMembers||[]).includes(currentUser.uid)) throw new Error('Your request to join is pending approval.');
         if((data.members||[]).length>=(data.maxMembers||8)) throw new Error('This group is full.');
+
+        if (data.requireApproval) {
+            // Add to pending list instead of members
+            await db.collection('chavrutas').doc(doc.id).update({pendingMembers:firebase.firestore.FieldValue.arrayUnion(currentUser.uid)});
+            return 'pending';
+        }
         await db.collection('chavrutas').doc(doc.id).update({members:firebase.firestore.FieldValue.arrayUnion(currentUser.uid)});
+        return 'joined';
     }
 
     /* ════ AUTO-JOIN ════ */
@@ -3023,7 +3113,13 @@
             if(!doc.exists){showBanner('Group not found.','error');return;}
             const d=doc.data();
             if((d.members||[]).includes(currentUser.uid)){showBanner('You are already in "'+d.name+'".','info');return;}
+            if((d.pendingMembers||[]).includes(currentUser.uid)){showBanner('Your request to join "'+d.name+'" is pending approval.','info');return;}
             if((d.members||[]).length>=(d.maxMembers||8)){showBanner('"'+d.name+'" is full.','warning');return;}
+            if (d.requireApproval) {
+                await db.collection('chavrutas').doc(id).update({pendingMembers:firebase.firestore.FieldValue.arrayUnion(currentUser.uid)});
+                showBanner('Request sent! The leader of "'+d.name+'" will review your request.','info');
+                return;
+            }
             await db.collection('chavrutas').doc(id).update({members:firebase.firestore.FieldValue.arrayUnion(currentUser.uid)});
             showBanner('Joined "'+d.name+'" successfully!','success');
         } catch { showBanner('Could not auto-join.','error'); }
@@ -3069,6 +3165,32 @@
                 coLeaders: firebase.firestore.FieldValue.arrayRemove(uid)
             });
         } catch { alert('Failed to demote.'); }
+    }
+
+    /* ════ APPROVAL SYSTEM ════ */
+    async function approveMember(id, uid) {
+        const n = nameCache[uid] || 'this person';
+        try {
+            await db.collection('chavrutas').doc(id).update({
+                members: firebase.firestore.FieldValue.arrayUnion(uid),
+                pendingMembers: firebase.firestore.FieldValue.arrayRemove(uid)
+            });
+            showBanner(n + ' has been added to the group!', 'success');
+        } catch { alert('Failed to approve member.'); }
+    }
+    async function rejectMember(id, uid) {
+        const n = nameCache[uid] || 'this person';
+        if (!await showConfirm('Reject Request', 'Reject ' + n + "'s request to join?")) return;
+        try {
+            await db.collection('chavrutas').doc(id).update({
+                pendingMembers: firebase.firestore.FieldValue.arrayRemove(uid)
+            });
+        } catch { alert('Failed to reject member.'); }
+    }
+    async function toggleApproval(id, checked) {
+        try {
+            await db.collection('chavrutas').doc(id).update({ requireApproval: checked });
+        } catch { alert('Failed to update setting.'); }
     }
 
     /* ════ RENAME / TRANSFER / REGEN ════ */

@@ -409,7 +409,7 @@
 
             function sanitizeInviteCode(value) {
                 if (typeof value !== 'string') return '';
-                return value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, INVITE_CODE_LENGTH);
+                return value.replace(/[^A-Za-z0-9]/g, '').slice(0, INVITE_CODE_LENGTH);
             }
 
             function inviteCodeFromPath() {
