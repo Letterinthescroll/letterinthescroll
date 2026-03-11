@@ -5217,7 +5217,6 @@ async function refreshFriendLogins() {
 }
 
 function updateCurrentUserStatusDisplay(userProfile, fallbackEmail) {
-    const defaultName = getSavedUsername();
     const profileEmails = Array.isArray(userProfile?.emails) ? userProfile.emails : [];
     const primaryProfileEmail = profileEmails.length > 0
         ? profileEmails[0]
@@ -5225,20 +5224,21 @@ function updateCurrentUserStatusDisplay(userProfile, fallbackEmail) {
     const normalizedFallbackEmail = typeof fallbackEmail === 'string' && fallbackEmail.trim()
         ? fallbackEmail.trim().toLowerCase()
         : null;
-    const fallbackName = defaultName !== 'Anonymous'
-        ? defaultName
-        : (primaryProfileEmail
-            ? getDisplayNameFromEmail(primaryProfileEmail)
-            : (normalizedFallbackEmail ? getDisplayNameFromEmail(normalizedFallbackEmail) : 'Friend'));
-    let displayName = userProfile?.username;
-    if (!displayName || (typeof displayName === 'string' && displayName.includes('@'))) {
+
+    // Prefer displayName (user-chosen) over username (email-derived)
+    let displayName = userProfile?.displayName;
+    if (!displayName || displayName === 'Friend' || (typeof displayName === 'string' && displayName.includes('@'))) {
+        displayName = userProfile?.username;
+    }
+    if (!displayName || displayName === 'Friend' || (typeof displayName === 'string' && displayName.includes('@'))) {
         if (primaryProfileEmail) {
             displayName = getDisplayNameFromEmail(primaryProfileEmail);
+        } else if (normalizedFallbackEmail) {
+            displayName = getDisplayNameFromEmail(normalizedFallbackEmail);
         } else {
-            displayName = fallbackName;
+            displayName = getSavedUsername() !== 'Anonymous' ? getSavedUsername() : 'Friend';
         }
     }
-    displayName = displayName || fallbackName;
     const loginTime = userProfile?.lastLogin || userProfile?.lastSeen || new Date();
 
     displayLastLogin(displayName, loginTime);

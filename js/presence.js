@@ -81,7 +81,7 @@ function normalizePresenceUser(user) {
         ? emails[0]
         : (typeof user.email === 'string' ? user.email : null);
 
-    let displayName = user.username;
+    let displayName = user.displayName || user.username;
     if (!displayName || (typeof displayName === 'string' && displayName.includes('@'))) {
         displayName = primaryEmail ? getDisplayNameFromEmail(primaryEmail) : 'Friend';
     }
@@ -90,6 +90,7 @@ function normalizePresenceUser(user) {
         docId,
         canonicalUserId,
         username: displayName,
+        displayName: displayName,
         email: primaryEmail,
         emails,
         isOnline: user.isOnline || false,
@@ -251,8 +252,8 @@ function updateCurrentUserStatusDisplay(userProfile, fallbackEmail) {
         ? fallbackEmail.trim().toLowerCase()
         : null;
 
-    let displayName = userProfile?.username;
-    if (!displayName || (typeof displayName === 'string' && displayName.includes('@'))) {
+    let displayName = userProfile?.displayName || userProfile?.username;
+    if (!displayName || displayName === 'Friend' || (typeof displayName === 'string' && displayName.includes('@'))) {
         if (primaryProfileEmail) {
             displayName = getDisplayNameFromEmail(primaryProfileEmail);
         } else if (normalizedFallbackEmail) {

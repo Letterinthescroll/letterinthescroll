@@ -204,6 +204,11 @@
 
                         <div id="profile-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
 
+                        <div id="profile-locked" class="hidden mb-4 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+                            <p class="text-sm font-semibold text-amber-800">Display name has been set</p>
+                            <p class="text-xs text-amber-600 mt-1">Your display name can only be changed once and has already been updated. Contact the group leader if you need to change it again.</p>
+                        </div>
+
                         <form id="profile-form" onsubmit="saveProfile(event)" class="space-y-5">
                             <div>
                                 <label for="profile-name" class="block text-sm font-semibold text-slate-700 mb-1.5">Display Name</label>
@@ -211,6 +216,7 @@
                                     placeholder="Your full name"
                                     class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
                                 <p class="text-xs text-slate-400 mt-1">This is how you appear to others. Between 2–50 characters.</p>
+                                <p class="text-xs text-amber-600 mt-1 font-medium">You can only change your display name once. Choose carefully!</p>
                             </div>
                             <div class="flex items-center gap-3">
                                 <button type="submit" id="profile-btn"
@@ -352,6 +358,15 @@
         // Pre-fill profile form
         document.getElementById('profile-name').value = user.displayName || '';
 
+        // Check if display name was already changed (one-time limit)
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (userDoc.exists() && userDoc.data().displayNameChanged) {
+                document.getElementById('profile-form').classList.add('hidden');
+                document.getElementById('profile-locked').classList.remove('hidden');
+            }
+        } catch(e) { console.error('Error checking displayNameChanged:', e); }
+
         // Show Google notice if applicable
         if (isGoogleUser) {
             document.getElementById('google-notice').classList.remove('hidden');
@@ -392,11 +407,19 @@
 
         try {
             await currentUser.updateProfile({ displayName: name });
-            // Also update Firestore
-            await db.collection('users').doc(currentUser.uid).set({ displayName: name }, { merge: true });
+            // Also update Firestore with displayNameChanged flag
+            await db.collection('users').doc(currentUser.uid).set({
+                displayName: name,
+                displayNameChanged: true
+            }, { merge: true });
             document.getElementById('sidebar-name').textContent = name;
             document.getElementById('avatar-circle').textContent = name.charAt(0).toUpperCase();
-            showMsg(msg, '✓ Display name updated successfully.', 'success');
+            showMsg(msg, '✓ Display name updated successfully. This change is permanent.', 'success');
+            // Lock the form since they've used their one change
+            setTimeout(() => {
+                document.getElementById('profile-form').classList.add('hidden');
+                document.getElementById('profile-locked').classList.remove('hidden');
+            }, 2000);
         } catch (err) {
             showMsg(msg, 'Failed to update name. Please try again.', 'error');
         } finally {

@@ -250,20 +250,28 @@ async function recordUserLogin(userId, email) {
 
   try {
     const userDocRef = doc(db, 'users', userId);
-    const displayName = getDisplayNameFromEmail(normalizedEmail || email);
+
+    // Check if user already has a displayName set — don't overwrite it
+    const existingDoc = await getDoc(userDocRef);
+    const existingData = existingDoc.exists() ? existingDoc.data() : {};
+    const emailDerivedName = getDisplayNameFromEmail(normalizedEmail || email);
 
     const payload = {
       userId,
       email: normalizedEmail,
-      username: displayName || 'Friend',
       isOnline: true,
       lastLogin: serverTimestamp(),
       lastSeen: serverTimestamp()
     };
 
+    // Only set username if no displayName exists yet
+    if (!existingData.displayName) {
+      payload.username = emailDerivedName || 'Friend';
+    }
+
     await setDoc(userDocRef, payload, { merge: true });
     console.log(`User login recorded for ${email}`);
-    return payload;
+    return { ...payload, displayName: existingData.displayName || payload.username || emailDerivedName };
   } catch (error) {
     console.error('Error recording user login:', error);
     throw error;
@@ -1100,7 +1108,7 @@ async function updateUserPresence(userId) {
       {
         isOnline: true,
         lastSeen: serverTimestamp(),
-        displayName: userData.username || userData.displayName || 'Friend',
+        displayName: userData.displayName || userData.username || 'Friend',
         email: userData.email || null
       },
       { merge: true }
@@ -1198,6 +1206,7 @@ async function getUserInfo(userId) {
         email: data.email || null,
         username: data.displayName || data.username || 'Friend',
         displayName: data.displayName || data.username || 'Friend',
+        displayNameChanged: !!data.displayNameChanged,
         lastLogin: data.lastLogin || null,
         isOnline: !!data.isOnline,
         lastSeen: data.lastSeen || null
