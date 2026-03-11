@@ -463,6 +463,134 @@ function highlightVerseAndScroll(verseRef, attempt = 0) {
     }, 2600);
 }
 
+function isStudyPagePath() {
+    const normalizedPath = window.location.pathname.replace(/\/+$/, '') || '/';
+    return normalizedPath === '/study' || normalizedPath === '/study/index.html';
+}
+
+function closeStudyRoomPickerModal() {
+    const modal = document.getElementById('study-room-picker-modal');
+    if (!modal || modal.classList.contains('hidden')) {
+        return;
+    }
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+function openStudyRoomPickerModal(chavrutas = []) {
+    const modal = document.getElementById('study-room-picker-modal');
+    const options = document.getElementById('study-room-picker-options');
+    const cancelBtn = document.getElementById('study-room-picker-cancel');
+
+    if (!modal || !options) {
+        return;
+    }
+
+    const roomList = Array.isArray(chavrutas) ? chavrutas : [];
+    options.innerHTML = roomList.map((room) => {
+        const name = escapeHtml(room?.name || 'Study Room');
+        const membersCount = Array.isArray(room?.members) ? room.members.length : 0;
+        const maxMembers = Number(room?.maxMembers) > 0 ? Number(room.maxMembers) : 8;
+        return `
+            <button type="button"
+                    data-chavruta-id="${escapeHtml(room.id)}"
+                    class="w-full text-left rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-slate-100 transition-colors px-4 py-3">
+                <div class="text-sm font-bold text-slate-800">${name}</div>
+                <div class="text-xs text-slate-500 mt-0.5">${membersCount}/${maxMembers} members</div>
+            </button>
+        `;
+    }).join('');
+
+    options.onclick = (event) => {
+        const pickButton = event.target.closest('button[data-chavruta-id]');
+        if (!pickButton) {
+            return;
+        }
+        const selectedId = pickButton.getAttribute('data-chavruta-id');
+        if (!selectedId) {
+            return;
+        }
+        sessionStorage.setItem('activeChavrutaId', selectedId);
+        document.documentElement.removeAttribute('data-readonly');
+        const targetUrl = new URL('/study', window.location.origin);
+        targetUrl.searchParams.set('chavruta', selectedId);
+        window.location.assign(targetUrl.toString());
+    };
+
+    if (cancelBtn) {
+        cancelBtn.onclick = closeStudyRoomPickerModal;
+    }
+
+    modal.onclick = (event) => {
+        if (event.target === modal) {
+            closeStudyRoomPickerModal();
+        }
+    };
+
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+async function enforceStudyRoomSelection(user) {
+    if (!user || !isStudyPagePath()) {
+        return false;
+    }
+
+    try {
+        const membershipsQuery = query(
+            collection(db, 'chavrutas'),
+            where('members', 'array-contains', user.uid)
+        );
+        const membershipsSnapshot = await getDocs(membershipsQuery);
+        const chavrutas = membershipsSnapshot.docs.map((docSnapshot) => ({
+            id: docSnapshot.id,
+            ...docSnapshot.data()
+        }));
+
+        if (!chavrutas.length) {
+            sessionStorage.removeItem('activeChavrutaId');
+            document.documentElement.setAttribute('data-readonly', 'true');
+            closeStudyRoomPickerModal();
+            return false;
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const requestedChavrutaId = params.get('chavruta');
+        const chavrutaIds = new Set(chavrutas.map((room) => room.id));
+
+        if (requestedChavrutaId && chavrutaIds.has(requestedChavrutaId)) {
+            sessionStorage.setItem('activeChavrutaId', requestedChavrutaId);
+            document.documentElement.removeAttribute('data-readonly');
+            closeStudyRoomPickerModal();
+            return false;
+        }
+
+        if (chavrutas.length === 1) {
+            const onlyRoomId = chavrutas[0].id;
+            sessionStorage.setItem('activeChavrutaId', onlyRoomId);
+            document.documentElement.removeAttribute('data-readonly');
+            closeStudyRoomPickerModal();
+
+            if (requestedChavrutaId !== onlyRoomId) {
+                const targetUrl = new URL('/study', window.location.origin);
+                targetUrl.searchParams.set('chavruta', onlyRoomId);
+                window.location.replace(targetUrl.toString());
+                return true;
+            }
+            return false;
+        }
+
+        // Multiple rooms and no explicit selection: require user choice.
+        sessionStorage.removeItem('activeChavrutaId');
+        document.documentElement.setAttribute('data-readonly', 'true');
+        openStudyRoomPickerModal(chavrutas);
+        return false;
+    } catch (error) {
+        console.error('Error resolving study room selection:', error);
+        return false;
+    }
+}
+
 async function init() {
     try {
         // ── Phase 1: Instant UI — render cached parsha text before auth ──
@@ -2970,6 +3098,11 @@ async function handleAuthStateChange(user) {
     updateCommentInputState(Boolean(user));
 
     if (user) {
+        const didRedirectForSingleRoom = await enforceStudyRoomSelection(user);
+        if (didRedirectForSingleRoom) {
+            return;
+        }
+
         // Set the user's email so display name can be extracted from it
         setCurrentUserEmail(user.email);
         updateUsernameDisplay();
