@@ -8,215 +8,490 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/shabbat.css">
     <link rel="stylesheet" href="/css/mobile-overrides.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        :root {
+            --bg-ink: #06142e;
+            --bg-deep: #0f2556;
+            --bg-mid: #1f3f86;
+            --gold: #d4af37;
+            --gold-soft: #f2d47b;
+            --ink-900: #0f172a;
+            --ink-700: #334155;
+            --ink-600: #475569;
+            --paper: #f6f8ff;
+            --panel: rgba(255, 255, 255, 0.82);
+            --panel-border: rgba(15, 37, 86, 0.15);
+            --panel-shadow: 0 22px 44px rgba(8, 24, 59, 0.16);
+        }
 
-        /* ── Hero ── */
-        .about-hero {
-            background: linear-gradient(145deg, #0a1530 0%, #16285e 50%, #1a3a8a 100%);
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--ink-900);
+            background:
+                radial-gradient(circle at 85% 8%, rgba(212, 175, 55, 0.16) 0%, transparent 32%),
+                radial-gradient(circle at 6% 26%, rgba(39, 94, 196, 0.16) 0%, transparent 34%),
+                linear-gradient(180deg, #eef2ff 0%, #f8f9fd 38%, #f3f6ff 100%);
+            min-height: 100vh;
+        }
+
+        .about-stage {
             position: relative;
             overflow: hidden;
-            padding: 5rem 1.5rem 4rem;
-            text-align: center;
         }
+
+        .about-stage::before,
+        .about-stage::after {
+            content: '';
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+            filter: blur(0.5px);
+            animation: floatHalo 14s ease-in-out infinite alternate;
+        }
+
+        .about-stage::before {
+            width: 420px;
+            height: 420px;
+            top: 390px;
+            left: -170px;
+            background: radial-gradient(circle, rgba(56, 96, 178, 0.17) 0%, transparent 70%);
+        }
+
+        .about-stage::after {
+            width: 360px;
+            height: 360px;
+            top: 980px;
+            right: -120px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.18) 0%, transparent 68%);
+            animation-delay: 2.3s;
+        }
+
+        @keyframes floatHalo {
+            0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.8; }
+            100% { transform: translate3d(0, -20px, 0) scale(1.05); opacity: 1; }
+        }
+
+        .about-hero {
+            position: relative;
+            overflow: hidden;
+            padding: clamp(4rem, 8vw, 6.25rem) 1.25rem clamp(3.5rem, 7vw, 5.2rem);
+            text-align: center;
+            background:
+                linear-gradient(145deg, var(--bg-ink) 0%, var(--bg-deep) 48%, var(--bg-mid) 100%);
+            isolation: isolate;
+        }
+
         .about-hero::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background:
+                linear-gradient(130deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 42%),
+                repeating-linear-gradient(
+                    125deg,
+                    rgba(255,255,255,0.04) 0,
+                    rgba(255,255,255,0.04) 1px,
+                    transparent 1px,
+                    transparent 12px
+                );
+            z-index: -2;
         }
-        /* Gold ring decoration */
+
         .about-hero::after {
             content: '';
             position: absolute;
-            top: -120px; right: -120px;
-            width: 400px; height: 400px;
+            width: 530px;
+            height: 530px;
+            top: -250px;
+            right: -150px;
+            border: 1px solid rgba(255, 224, 133, 0.26);
             border-radius: 50%;
-            border: 1px solid rgba(212,175,55,0.15);
-            pointer-events: none;
+            box-shadow: 0 0 0 70px rgba(255, 224, 133, 0.05);
+            z-index: -1;
+            animation: heroOrbit 20s linear infinite;
         }
-        .about-hero-eyebrow {
+
+        @keyframes heroOrbit {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-inner {
+            max-width: 980px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.15em;
+            padding: 0.36rem 1rem;
+            border: 1px solid rgba(212, 175, 55, 0.34);
+            border-radius: 999px;
+            color: var(--gold-soft);
             text-transform: uppercase;
-            color: #d4af37;
-            margin-bottom: 1.5rem;
-            padding: 0.35rem 1rem;
-            border: 1px solid rgba(212,175,55,0.3);
-            border-radius: 9999px;
-            background: rgba(212,175,55,0.07);
+            letter-spacing: 0.16em;
+            font-size: 0.71rem;
+            font-weight: 700;
+            background: rgba(212, 175, 55, 0.08);
+            margin-bottom: 1.35rem;
         }
-        .about-hero-hebrew {
-            font-family: 'Cormorant Garamond', 'David', serif;
-            font-size: clamp(3.5rem, 8vw, 6rem);
-            font-weight: 600;
-            color: rgba(255,255,255,0.12);
-            letter-spacing: 0.05em;
-            line-height: 1;
-            margin-bottom: 0.5rem;
+
+        .hero-hebrew {
             display: block;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3.2rem, 8vw, 6rem);
+            font-weight: 700;
+            line-height: 0.92;
+            color: rgba(255, 255, 255, 0.12);
+            margin-bottom: 0.35rem;
+            letter-spacing: 0.06em;
             direction: rtl;
         }
-        .about-hero-title {
+
+        .hero-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 700;
+            font-size: clamp(2.2rem, 6vw, 4rem);
+            line-height: 1.12;
             color: #ffffff;
-            line-height: 1.2;
-            margin-bottom: 1.25rem;
+            margin: 0 auto 1.3rem;
+            max-width: 16.4ch;
             letter-spacing: -0.01em;
+            font-weight: 700;
+            text-wrap: balance;
         }
-        .about-hero-title em {
+
+        .hero-title .gold {
+            color: var(--gold-soft);
             font-style: italic;
-            color: #f0d060;
         }
-        .about-hero-subtitle {
-            font-size: clamp(1rem, 2vw, 1.15rem);
-            color: #cbd5e1;
-            max-width: 56ch;
-            margin: 0 auto 2rem;
-            line-height: 1.75;
-            font-weight: 400;
+
+        .hero-subtitle {
+            max-width: 64ch;
+            margin: 0 auto;
+            color: rgba(230, 238, 255, 0.9);
+            font-size: clamp(1rem, 2.4vw, 1.16rem);
+            line-height: 1.8;
         }
-        .about-hero-scroll {
+
+        .hero-scroll {
+            margin-top: 2rem;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            color: rgba(255,255,255,0.4);
-            font-size: 0.75rem;
-            letter-spacing: 0.08em;
+            gap: 0.45rem;
+            color: rgba(255,255,255,0.5);
             text-transform: uppercase;
-            animation: bounce 2s infinite;
-        }
-        @keyframes bounce {
-            0%,100% { transform: translateY(0); }
-            50%      { transform: translateY(5px); }
+            font-size: 0.68rem;
+            letter-spacing: 0.16em;
+            animation: pulseLift 2.4s ease-in-out infinite;
         }
 
-        /* ── Gold divider ── */
-        .gold-divider {
+        @keyframes pulseLift {
+            0%, 100% { transform: translateY(0); opacity: 0.8; }
+            50% { transform: translateY(5px); opacity: 1; }
+        }
+
+        .hero-divider {
             height: 2px;
-            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            border: 0;
             margin: 0;
-            border: none;
+            background: linear-gradient(90deg, transparent 8%, var(--gold) 50%, transparent 92%);
         }
 
-        /* ── Content wrapper ── */
-        .about-content {
-            max-width: 860px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-
-        /* ── Pull quote ── */
-        .about-pull-quote {
+        .about-content-wrap {
             position: relative;
-            background: linear-gradient(135deg, #f0f4ff 0%, #fafbff 100%);
-            border-left: 4px solid #d4af37;
-            border-radius: 0 16px 16px 0;
-            padding: 2rem 2rem 2rem 2.5rem;
-            margin: 0;
-        }
-        .about-pull-quote blockquote {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(1.15rem, 2.5vw, 1.4rem);
-            font-style: italic;
-            color: #16285e;
-            line-height: 1.7;
-            margin: 0 0 0.75rem;
-        }
-        .about-pull-quote cite {
-            font-size: 0.78rem;
-            color: #64748b;
-            font-style: normal;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
+            z-index: 2;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: clamp(2.3rem, 4vw, 3.2rem) 1.2rem 4.5rem;
         }
 
-        /* ── Section labels ── */
-        .section-label {
+        .about-panel {
+            position: relative;
+            max-width: 960px;
+            margin: 0 auto 1.4rem;
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            box-shadow: var(--panel-shadow);
+            border-radius: 24px;
+            backdrop-filter: blur(4px);
+            padding: clamp(1.5rem, 3.5vw, 2.45rem) clamp(1.2rem, 4vw, 2.5rem);
+            overflow: hidden;
+        }
+
+        .about-panel::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -22%;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.13) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .about-panel h2 {
+            margin: 0 0 1.15rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.7rem, 3vw, 2.35rem);
+            line-height: 1.2;
+            color: #0f2a61;
+            text-wrap: balance;
+            letter-spacing: -0.01em;
+        }
+
+        .panel-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.42rem;
+            margin-bottom: 0.7rem;
+            padding: 0.34rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(15, 42, 97, 0.06);
+            border: 1px solid rgba(15, 42, 97, 0.12);
+            color: #1d3f87;
             font-size: 0.7rem;
             font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: #d4af37;
-            margin-bottom: 0.6rem;
         }
 
-        /* ── Feature cards ── */
-        .feature-card {
+        .about-panel p {
+            color: var(--ink-700);
+            font-size: 1.02rem;
+            line-height: 1.86;
+            margin: 0 0 1rem;
+        }
+
+        .about-panel p:last-child {
+            margin-bottom: 0;
+        }
+
+        .theology-card {
+            margin: 1.3rem 0;
+            background: linear-gradient(125deg, rgba(15, 42, 97, 0.96) 0%, rgba(36, 70, 146, 0.97) 100%);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.35rem 1.15rem;
+            color: #dbe7ff;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+        }
+
+        .theology-card h3 {
+            margin: 0 0 0.65rem;
+            font-size: 0.88rem;
+            letter-spacing: 0.11em;
+            text-transform: uppercase;
+            color: #f9dd86;
+            font-weight: 700;
+        }
+
+        .theology-card p {
+            margin: 0;
+            color: #f2f6ff;
+            font-size: 0.97rem;
+            line-height: 1.8;
+        }
+
+        .quote-block {
+            margin: 1.3rem 0;
+            border-left: 3px solid var(--gold);
+            background: linear-gradient(120deg, rgba(251, 246, 229, 0.82) 0%, rgba(255, 255, 255, 0.7) 100%);
+            border-radius: 0 14px 14px 0;
+            padding: 1.1rem 1.2rem 1.1rem 1.35rem;
+        }
+
+        .quote-block blockquote {
+            margin: 0 0 0.6rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.06rem, 2.2vw, 1.32rem);
+            line-height: 1.6;
+            color: #132d65;
+            font-style: italic;
+        }
+
+        .quote-block cite {
+            font-style: normal;
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #51607e;
+            font-weight: 600;
+        }
+
+        .grid-signal {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.95rem;
+            margin: 1.4rem 0;
+        }
+
+        .signal-card {
+            border-radius: 14px;
+            padding: 0.95rem 0.95rem;
             background: #ffffff;
-            border: 1px solid rgba(22,40,94,0.07);
-            border-radius: 16px;
-            padding: 1.5rem;
-            transition: all 0.25s ease;
-            box-shadow: 0 2px 12px rgba(22,40,94,0.06);
+            border: 1px solid rgba(15, 42, 97, 0.1);
+            box-shadow: 0 10px 22px rgba(15, 42, 97, 0.08);
         }
-        .feature-card:hover {
-            border-color: rgba(22,40,94,0.15);
-            box-shadow: 0 8px 28px rgba(22,40,94,0.1);
-            transform: translateY(-2px);
+
+        .signal-card h4 {
+            margin: 0 0 0.45rem;
+            font-size: 0.84rem;
+            color: #123377;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
-        .feature-icon {
-            width: 2.5rem;
-            height: 2.5rem;
-            background: linear-gradient(135deg, #eef2ff, #dbeafe);
-            border-radius: 10px;
-            display: flex;
+
+        .signal-card p {
+            margin: 0;
+            font-size: 0.91rem;
+            line-height: 1.66;
+            color: #49566f;
+        }
+
+        .closing-panel {
+            text-align: center;
+            background: linear-gradient(145deg, #0d2450 0%, #19387b 55%, #1f438f 100%);
+            border: 1px solid rgba(255, 216, 107, 0.22);
+            color: #ffffff;
+        }
+
+        .closing-panel::before {
+            right: auto;
+            left: -10%;
+            top: -36%;
+            background: radial-gradient(circle, rgba(255, 216, 107, 0.2) 0%, transparent 74%);
+        }
+
+        .closing-panel h2,
+        .closing-panel p,
+        .closing-panel .panel-kicker {
+            color: #e8efff;
+        }
+
+        .closing-panel h2 {
+            color: #ffe4a3;
+        }
+
+        .closing-panel .panel-kicker {
+            border-color: rgba(255, 224, 133, 0.36);
+            background: rgba(255, 224, 133, 0.12);
+            color: #ffe4a3;
+        }
+
+        .closing-tagline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.18rem, 2.5vw, 1.5rem);
+            font-style: italic;
+            line-height: 1.65;
+            color: #ffe6ac;
+            margin: 1rem auto 0;
+            max-width: 40ch;
+        }
+
+        .study-cta {
+            margin-top: 1.4rem;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1rem;
-            flex-shrink: 0;
+            gap: 0.45rem;
+            padding: 0.73rem 1.2rem;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+            color: #0f2859;
+            background: linear-gradient(120deg, #f5d574 0%, #d7ab37 100%);
+            box-shadow: 0 12px 26px rgba(8, 20, 46, 0.28);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
 
-        /* ── Closing message ── */
-        .about-closing {
-            background: linear-gradient(135deg, #16285e 0%, #1e3a8a 100%);
-            border-radius: 20px;
-            padding: 3rem 2.5rem;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        .about-closing::before {
-            content: '';
-            position: absolute;
-            bottom: -40px; left: -40px;
-            width: 200px; height: 200px;
-            border-radius: 50%;
-            border: 1px solid rgba(212,175,55,0.2);
-            pointer-events: none;
-        }
-        .about-closing::after {
-            content: '';
-            position: absolute;
-            top: -60px; right: -60px;
-            width: 280px; height: 280px;
-            border-radius: 50%;
-            border: 1px solid rgba(212,175,55,0.12);
-            pointer-events: none;
+        .study-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 30px rgba(8, 20, 46, 0.34);
         }
 
-        /* ── Data attribution ── */
-        .about-attribution {
-            background: #f8faff;
-            border: 1px solid rgba(22,40,94,0.08);
-            border-radius: 14px;
-            padding: 1.5rem;
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px) scale(0.985);
+            filter: blur(10px);
+            transition:
+                opacity 620ms ease,
+                transform 620ms cubic-bezier(0.2, 0.8, 0.2, 1),
+                filter 620ms ease;
+            will-change: opacity, transform, filter;
+        }
+
+        .reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+
+        .reveal.hero-loaded {
+            opacity: 1;
+            transform: none;
+            filter: none;
+        }
+
+        @media (max-width: 900px) {
+            .grid-signal {
+                grid-template-columns: 1fr;
+            }
+
+            .about-panel {
+                border-radius: 20px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-subtitle br {
+                display: none;
+            }
+
+            .about-panel {
+                padding: 1.35rem 1.05rem;
+            }
+
+            .about-panel p {
+                font-size: 0.96rem;
+                line-height: 1.8;
+            }
+
+            .study-cta {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+
+            .reveal,
+            .reveal.is-visible {
+                opacity: 1;
+                transform: none;
+                filter: none;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen" style="background:#f5f7fc;" data-header-fallback="true">
+<body class="min-h-screen" data-header-fallback="true">
 
-    <!-- Header -->
     <header class="header-main relative z-30">
         <div class="header-container">
             <div class="header-branding-section">
@@ -263,164 +538,151 @@
                         </svg>
                         <span class="header-btn-text">Songs</span>
                     </a>
-                    <!-- User dropdown injected by page-auth.js -->
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- ── HERO ── -->
-    <section class="about-hero">
-        <div style="position:relative;z-index:1;">
-            <div class="about-hero-eyebrow">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-                About this project
+    <section class="about-stage">
+        <section class="about-hero">
+            <div class="hero-inner reveal hero-loaded" data-reveal>
+                <div class="hero-badge">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                    Our Foundation
+                </div>
+                <span class="hero-hebrew" aria-hidden="true">תּוֹרָה</span>
+                <h1 class="hero-title">The Unfinished Story: <span class="gold">An Invitation to the Scroll</span></h1>
+                <p class="hero-subtitle">A living home for Torah study, moral courage, and covenantal connection, where every soul is treated as indispensable to the story we are still writing together.</p>
+                <div class="hero-scroll" aria-hidden="true">
+                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                    Scroll through the story
+                </div>
             </div>
-            <span class="about-hero-hebrew" aria-hidden="true">תּוֹרָה</span>
-            <h1 class="about-hero-title">
-                Every Jew Is a Letter<br>In <em>One</em> Living Torah
-            </h1>
-            <p class="about-hero-subtitle">
-                A space built for connection — with ancient wisdom,<br>with yourself, and with one another.
-            </p>
-            <div class="about-hero-scroll" aria-hidden="true">
-                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                </svg>
-                Scroll to learn more
-            </div>
-        </div>
+        </section>
+
+        <hr class="hero-divider">
+
+        <main class="about-content-wrap">
+            <article class="about-panel reveal" data-reveal>
+                <p class="panel-kicker">Chapter One</p>
+                <h2>The Mystery of the Parchment</h2>
+                <p>The deepest question any human being can ask is: Who am I? To answer it, we must look beyond our names, our professions, or the cities where we reside. We must look at the story into which we were born.</p>
+                <p>In Jewish mysticism, there is a profound teaching that the Torah was originally written in "Black Fire upon White Fire." The black fire represents the letters: the laws, the stories, and the ink. The white fire represents the spaces between the letters: the unspoken intentions, the silences, and the unique souls of those who read them.</p>
+                <div class="theology-card">
+                    <h3>Black Fire on White Fire</h3>
+                    <p>To be a "Letter in the Scroll" is to realize that you are the black fire given form, etched onto the white fire of eternity.</p>
+                </div>
+            </article>
+
+            <article class="about-panel reveal" data-reveal>
+                <p class="panel-kicker">Chapter Two</p>
+                <h2>The Sovereignty of the Single Stroke</h2>
+                <p>In the laws of the Sofer (the scribe), a Torah scroll is a miracle of precision. It contains 304,805 letters. If a single one of those letters is missing, or even if a small crack divides one letter into two, the entire scroll is considered <em>pasul</em>: invalid for use.</p>
+                <p>This is the ultimate rejection of the idea that any individual is ordinary. In the eyes of the Divine, there is no such thing as a redundant person. You are not a face in the crowd or a statistic in a database. You are a specific, essential character in a cosmic narrative.</p>
+                <div class="quote-block">
+                    <blockquote>"I am a Jew because, being a child of my people, I have heard the call to add my chapter to its unfinished story. I am a stage on its journey, a connecting link between the generations."</blockquote>
+                    <cite>Rabbi Jonathan Sacks</cite>
+                </div>
+                <p>This unfinished story depends on your integrity. If you do not show up to your life, if you do not ink your values onto the world, there is a hole in the scroll that no one else can fill. Your existence is a moral claim upon the universe.</p>
+            </article>
+
+            <article class="about-panel reveal" data-reveal>
+                <p class="panel-kicker">Chapter Three</p>
+                <h2>The Architecture of Connection</h2>
+                <p>A letter standing alone is a beautiful thing, but it is silent. It only gains the power of speech when it is joined to others. This project, A Letter in the Scroll, was born from the realization that modern life has left many of us as lonely letters.</p>
+                <p>We have individual identity, but we often lose the words and sentences of community. We believe that Torah is not meant to be studied in isolation. It is meant to be a conversation: a Chavruta, where two souls wrestle with the text until the sparks fly.</p>
+                <div class="grid-signal">
+                    <div class="signal-card">
+                        <h4>Shared Rhythm</h4>
+                        <p>By anchoring study in the weekly portion, we join one global word across time.</p>
+                    </div>
+                    <div class="signal-card">
+                        <h4>Living Community</h4>
+                        <p>Through Chavruta, learning becomes relational, accountable, and spiritually alive.</p>
+                    </div>
+                </div>
+                <p>Through this platform, we seek to recreate the ancient study hall in a digital age. Though scattered across geography, we become united by sacred text and moral purpose.</p>
+            </article>
+
+            <article class="about-panel reveal" data-reveal>
+                <p class="panel-kicker">Chapter Four</p>
+                <h2>Translating Heaven to Earth</h2>
+                <p>The beauty of the scroll is that it is physical. It is made of skin, wood, and ink. It reminds us that Judaism is not a religion of lofty aspiration alone. It is a religion of deeds.</p>
+                <p>We call these deeds Mitzvot. A Mitzvah is the point where the infinite light of the Creator meets the finite reality of a human hand. When you study Torah to become more just, more compassionate, and more disciplined in speech, you are repairing the scroll.</p>
+                <div class="quote-block">
+                    <blockquote>"The world is a darkened room. The Torah is the light. When you study, you are not just gaining knowledge; you are lighting a candle."</blockquote>
+                    <cite>The Baal Shem Tov</cite>
+                </div>
+                <p>Our mission is to help you light that candle. We believe serious study leads to serious living. We are building this company to shape a generation transformed by Torah: people who carry their learning into their businesses, homes, and public lives.</p>
+            </article>
+
+            <article class="about-panel reveal" data-reveal>
+                <p class="panel-kicker">Chapter Five</p>
+                <h2>The Eternal Echo</h2>
+                <p>We are the heirs of those who stood at the foot of Mount Sinai and pledged themselves to a covenant of love and law. We are the descendants of those who, even in history's darkest nights, never surrendered their faith, their humor, or their devotion to learning.</p>
+                <p>They stayed faithful to the scroll when walking away would have been easier. They knew that as long as the scroll existed, they were never truly lost. They were home.</p>
+                <p>By joining this project, you step into that lineage. You choose to be more than a consumer of content. You choose to become a guardian of the trust, learning the language of your ancestors so you can speak it to your children.</p>
+            </article>
+
+            <article class="about-panel closing-panel reveal" data-reveal>
+                <p class="panel-kicker">Final Invitation</p>
+                <h2>A Call to the Scribe Within</h2>
+                <p>The scroll is open. The parchment is waiting. The ink of our generation is currently being prepared.</p>
+                <p>We invite you to find your place, not as a spectator, but as a participant. Use this space to connect with ancient wisdom, build bonds of brotherhood and sisterhood, and refine the stroke of your own soul.</p>
+                <p>Let the eternity of our people live on in you. Carry the scroll, and it will carry you.</p>
+                <p class="closing-tagline">Chazak, chazak, v'nitchazek. Be strong, be strong, and let us strengthen one another.</p>
+                <a class="study-cta" href="/study">
+                    Enter the Beit Midrash
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </article>
+        </main>
     </section>
-
-    <hr class="gold-divider">
-
-    <!-- ── MAIN CONTENT ── -->
-    <main style="background:#f5f7fc; padding-bottom: 5rem;">
-        <div class="about-content">
-
-            <!-- The Mission -->
-            <div style="padding-top:4rem; padding-bottom:3rem;">
-                <p class="section-label">Our Foundation</p>
-                <h2 style="font-family:'Cormorant Garamond',serif; font-size:clamp(1.6rem,3vw,2.2rem); font-weight:700; color:#16285e; margin-bottom:1.75rem; line-height:1.3;">Being a Letter in the Scroll</h2>
-
-                <div class="about-pull-quote" style="margin-bottom:2rem;">
-                    <blockquote>
-                        "Every single Jewish soul is like a unique letter in the Torah scroll. If even one letter is missing or flawed, the entire scroll is considered invalid."
-                    </blockquote>
-                    <cite>The Zohar — Jewish Mystical Tradition</cite>
-                </div>
-
-                <p style="color:#374151; line-height:1.85; font-size:1.05rem; margin-bottom:1.25rem;">
-                    The metaphor of being a letter in the scroll is one of the deepest ways to understand identity. Every person has a unique shape and voice, but that uniqueness reaches full meaning only when joined to the letters that came before and the letters that will follow.
-                </p>
-                <p style="color:#374151; line-height:1.85; font-size:1.05rem; margin-bottom:1.25rem;">
-                    <strong style="color:#16285e;">The Integrity of the Single Character:</strong> In a sacred scroll, one missing letter affects the whole text. This carries a powerful moral claim: your existence is not accidental, and your contribution is not optional. Every person carries dignity that cannot be replaced by the crowd.
-                </p>
-                <p style="color:#374151; line-height:1.85; font-size:1.05rem; margin-bottom:1.25rem;">
-                    <strong style="color:#16285e;">The Connecting Link:</strong> A letter by itself is only a symbol. In sequence, it becomes a word, a sentence, and finally a living story. We are entrusted with ancestral memory and future hope at once. We did not start this story, and we will not finish it, but the chapter being written now depends on us.
-                </p>
-                <p style="color:#374151; line-height:1.85; font-size:1.05rem; margin-bottom:1.25rem;">
-                    <strong style="color:#16285e;">Translating Heaven to Earth:</strong> Torah is not abstract inspiration alone. It is a path walked through action. Through mitzvot, discipline, and reflection, ideals like justice, compassion, and responsibility are translated into daily life.
-                </p>
-                <p style="color:#374151; line-height:1.85; font-size:1.05rem;">
-                    <strong style="color:#16285e;">The Eternal Narrative:</strong> Individual lives are brief, but the scroll endures. By learning deeply, living faithfully, and passing the tradition forward, we keep the unfinished moral story alive. This is the work of <em style="color:#16285e; font-weight:600;">Tikkun Olam</em> - repairing the world through repaired people.
-                </p>
-            </div>
-
-            <!-- Feature cards -->
-            <div style="padding-bottom:3.5rem;">
-                <p class="section-label">The Study Experience</p>
-                <h2 style="font-family:'Cormorant Garamond',serif; font-size:clamp(1.5rem,3vw,2rem); font-weight:700; color:#16285e; margin-bottom:1.75rem; line-height:1.3;">Everything You Need to Learn Together</h2>
-                <p style="color:#475569; line-height:1.85; font-size:1rem; margin-bottom:1.5rem;">
-                    We are building a company dedicated to transforming Torah learning into a daily engine of moral growth, faithful living, and communal strength.
-                </p>
-
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:1.25rem;">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg width="18" height="18" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                            </svg>
-                        </div>
-                        <h3 style="font-weight:700; color:#16285e; font-size:1rem; margin-bottom:0.5rem;">Weekly Portions</h3>
-                        <p style="color:#64748b; font-size:0.875rem; line-height:1.7;">Follow the Torah reading cycle with automatic weekly highlighting, in Hebrew and English, so your learning stays anchored in sacred time and shared rhythm.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg width="18" height="18" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                        </div>
-                        <h3 style="font-weight:700; color:#16285e; font-size:1rem; margin-bottom:0.5rem;">Chavruta Study</h3>
-                        <p style="color:#64748b; font-size:0.875rem; line-height:1.7;">Create private study groups with friends and family, challenge each other with respect, and build bonds through meaningful Torah conversation.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg width="18" height="18" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                            </svg>
-                        </div>
-                        <h3 style="font-weight:700; color:#16285e; font-size:1rem; margin-bottom:0.5rem;">Commentary &amp; Insights</h3>
-                        <p style="color:#64748b; font-size:0.875rem; line-height:1.7;">Explore classical commentary, significance notes, and key Hebrew definitions that help bridge ancient text with contemporary moral life.</p>
-                    </div>
-
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg width="18" height="18" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-                            </svg>
-                        </div>
-                        <h3 style="font-weight:700; color:#16285e; font-size:1rem; margin-bottom:0.5rem;">Universal Bookmarks</h3>
-                        <p style="color:#64748b; font-size:0.875rem; line-height:1.7;">Save verses that shape your life. Bookmarks follow you across chavrutot, creating a shared map of what moves your learning community.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Data Sources -->
-            <div style="padding-bottom:3.5rem;">
-                <div class="about-attribution">
-                    <p class="section-label" style="margin-bottom:0.75rem;">Data Sources</p>
-                    <p style="color:#475569; font-size:0.875rem; line-height:1.75; margin-bottom:0.75rem;">
-                        <strong style="color:#1e293b;">Torah Text:</strong> All Hebrew and English Torah text is provided by
-                        <a href="https://www.sefaria.org" target="_blank" style="color:#2563eb; font-weight:600; text-decoration:none; hover:underline;">Sefaria.org</a>
-                        — a free living library of Jewish texts.
-                    </p>
-                    <p style="color:#475569; font-size:0.875rem; line-height:1.75; margin:0;">
-                        <strong style="color:#1e293b;">Commentary &amp; Definitions:</strong> Curated from traditional sources and modern scholars to enrich your study.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Closing Message -->
-            <div style="padding-bottom:1rem;">
-                <div class="about-closing">
-                    <div style="position:relative;z-index:1;">
-                        <p style="font-family:'Cormorant Garamond',serif; font-size:1.75rem; font-weight:600; color:#d4af37; margin-bottom:1rem; font-style:italic;">Our Commitment</p>
-                        <p style="color:#e2e8f0; font-size:1rem; line-height:1.85; max-width:52ch; margin:0 auto 1.5rem;">
-                            A Letter in the Scroll exists to help shape a generation of people who are more faithful, more ethical, and more committed to one another. We believe serious Torah study can strengthen character, renew communities, and elevate public life.
-                        </p>
-                        <p style="color:#cbd5e1; font-size:0.98rem; line-height:1.85; max-width:56ch; margin:0 auto 1.5rem;">
-                            As a company, our mission is to revolutionize how Torah learning is lived: not only as knowledge, but as a disciplined path toward responsibility, kindness, justice, and spiritual courage.
-                        </p>
-                        <p style="font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-style:italic; color:#94a3b8; margin:0;">
-                            Chazak chazak v'nitchazek - Be strong, be strong, and let us strengthen one another.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </main>
 
     <footer class="bg-blue-900 text-white py-6 mt-0">
         <div class="container mx-auto px-4 text-center">
-            <p class="text-sm">Torah text provided by <a href="https://www.sefaria.org" target="_blank" class="underline hover:text-blue-300">Sefaria.org</a></p>
             <p class="text-xs mt-2 text-blue-300">Built for shared learning, moral growth, and communal strength</p>
         </div>
     </footer>
 
+    <script>
+        (function initAboutReveals() {
+            var items = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
+            if (!items.length) return;
+
+            if (!('IntersectionObserver' in window)) {
+                items.forEach(function(item) {
+                    item.classList.add('is-visible');
+                });
+                return;
+            }
+
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    } else {
+                        entry.target.classList.remove('is-visible');
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '0px 0px -10% 0px',
+                threshold: 0.18
+            });
+
+            items.forEach(function(item, index) {
+                if (!item.classList.contains('hero-loaded')) {
+                    item.style.transitionDelay = Math.min(index * 65, 250) + 'ms';
+                }
+                observer.observe(item);
+            });
+        })();
+    </script>
     <script src="/js/shabbat.js"></script>
     <script src="/js/header-fallback.js"></script>
     <script src="/js/sidebar-nav.js"></script>

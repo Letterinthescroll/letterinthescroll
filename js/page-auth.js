@@ -7,19 +7,6 @@
 import { initAuth, getUserInfo } from './firebase.js';
 import { getDisplayNameFromEmail } from './name-utils.js';
 
-// Resolve a base path prefix for links (handles /holidays/ subdirectory)
-const base = (() => {
-    const parts = window.location.pathname.split('/');
-    // Find the filename (last part) and see how deep the directory is
-    // If we're inside /holidays/ (or any subdirectory that contains the app pages)
-    // we need to go up one level to reach root pages.
-    const dirParts = parts.slice(0, -1); // remove filename
-    const lastDir = dirParts[dirParts.length - 1];
-    // Known subdirectories that are one level below root HTML pages
-    const subdirs = ['holidays', 'holiday'];
-    return subdirs.includes(lastDir) ? '../' : '';
-})();
-
 // ── Inject skeleton pill immediately (prevents layout shift) ──────────────
 (function injectSkeleton() {
     const headerActions = document.getElementById('header-actions');
@@ -87,19 +74,19 @@ function buildHeaderDropdown(firstName, email) {
                 </div>
             </div>
             <div class="header-dropdown-section">
-                <a href="${base}about.html" class="header-dropdown-item" role="menuitem">
+                <a href="/about" class="header-dropdown-item" role="menuitem">
                     <svg class="header-dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     About
                 </a>
-                <a href="${base}bookmarks.html" id="my-bookmarks-btn" class="header-dropdown-item" role="menuitem">
+                <a href="/bookmarks" id="my-bookmarks-btn" class="header-dropdown-item" role="menuitem">
                     <svg class="header-dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
                     </svg>
                     Bookmarks
                 </a>
-                <a href="${base}settings.html" class="header-dropdown-item" role="menuitem">
+                <a href="/settings" class="header-dropdown-item" role="menuitem">
                     <svg class="header-dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>

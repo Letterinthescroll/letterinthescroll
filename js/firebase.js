@@ -169,9 +169,13 @@ function initAuth(onAuthReady) {
     } else {
       currentUser = null;
       console.log('No user authenticated');
-      // If not on home page, redirect to login
-      const path = window.location.pathname.replace(/\/$/, '') || '/';
-      if (path !== '' && path !== '/' && !path.endsWith('/join')) {
+      // Redirect only from protected pages.
+      const path = window.location.pathname.replace(/\/+$/, '') || '/';
+      const protectedPaths = ['/dashboard', '/study', '/bookmarks', '/settings'];
+      const isProtectedPath = protectedPaths.some((protectedPath) =>
+        path === protectedPath || path.startsWith(protectedPath + '/')
+      );
+      if (isProtectedPath) {
         window.location.href = '/';
         return;
       }
