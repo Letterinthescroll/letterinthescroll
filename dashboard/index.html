@@ -1178,7 +1178,8 @@
 
             #daily-inspiration .daily-inspiration-content {
                 all: unset !important;
-                display: block !important;
+                display: flex !important;
+                flex-direction: column !important;
                 padding: 8px 10px 7px !important;
                 padding-right: 28px !important;
             }
@@ -1225,12 +1226,34 @@
                 color: rgba(210,228,255,0.85) !important;
                 font-style: italic !important;
                 display: block !important;
-                margin-bottom: 4px !important;
+                margin-bottom: 2px !important;
                 padding-left: 7px !important;
                 border-left: 2px solid rgba(244,201,111,0.4) !important;
             }
 
-            /* Reflection — full text, no clamp */
+            /* Eyebrow */
+            #daily-inspiration .dash-hero-eyebrow { order: 1 !important; }
+            #daily-inspiration .dash-hero-hebrew { order: 2 !important; }
+            #daily-inspiration .dash-hero-translation { order: 3 !important; }
+
+            /* Source — tiny gold tag, right after the quote */
+            #daily-inspiration .dash-hero-actions {
+                all: unset !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 4px !important;
+                margin-top: 3px !important;
+                order: 4 !important;
+            }
+            #daily-inspiration .dash-hero-source {
+                all: unset !important;
+                font-size: 8px !important;
+                font-weight: 700 !important;
+                color: #f4c96f !important;
+                letter-spacing: 0.06em !important;
+            }
+
+            /* Reflection — full text, separated from source */
             #daily-inspiration .dash-hero-reflection-box {
                 all: unset !important;
                 display: block !important;
@@ -1238,6 +1261,7 @@
                 padding-top: 5px !important;
                 border-top: 1px solid rgba(200,220,255,0.12) !important;
                 margin-bottom: 3px !important;
+                order: 5 !important;
             }
             #daily-inspiration .dash-hero-reflection-icon { display: none !important; }
             #daily-inspiration .dash-hero-reflection {
@@ -1246,22 +1270,6 @@
                 line-height: 1.4 !important;
                 color: rgba(200,220,245,0.72) !important;
                 display: block !important;
-            }
-
-            /* Source — tiny gold tag */
-            #daily-inspiration .dash-hero-actions {
-                all: unset !important;
-                display: flex !important;
-                align-items: center !important;
-                gap: 4px !important;
-                margin-top: 4px !important;
-            }
-            #daily-inspiration .dash-hero-source {
-                all: unset !important;
-                font-size: 8px !important;
-                font-weight: 700 !important;
-                color: #f4c96f !important;
-                letter-spacing: 0.06em !important;
             }
 
             /* Bookmark — floating top-right */
@@ -1300,6 +1308,7 @@
                 padding-top: 5px !important;
                 border-top: 1px solid rgba(200,220,255,0.1) !important;
                 line-height: 1.3 !important;
+                order: 6 !important;
             }
 
             .dash-welcome {

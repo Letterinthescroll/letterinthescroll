@@ -5648,7 +5648,7 @@ body.sidebar-nav-enabled .site-sidebar .header-actions {
     flex: 1;
     min-height: 0;          /* required so flex child can actually scroll */
     overflow-y: auto;
-    overflow-x: visible;    /* allow button shadows to render without clipping */
+    overflow-x: hidden;
 }
 
 /* ── Mobile-only close button inside the drawer ─────────────────────────── */
@@ -5773,14 +5773,10 @@ body.sidebar-nav-enabled .site-sidebar .header-btn-secondary {
     background: rgba(255, 255, 255, 0.18);
     color: #1e3a8a;
     border: 1px solid rgba(255, 255, 255, 0.52);
-    /* No own backdrop-filter — the panel already blurs everything */
+    /* Inset-only shadows — no outer shadows that get clipped by scroll container */
     box-shadow:
-        /* Top highlight — light refracting at glass surface */
         inset 0 1px 0 rgba(255, 255, 255, 0.82),
-        /* Bottom subtle shadow */
-        inset 0 -1px 0 rgba(59, 130, 246, 0.05),
-        /* Subtle outer depth */
-        0 1px 3px rgba(15, 23, 42, 0.04);
+        inset 0 -1px 0 rgba(59, 130, 246, 0.05);
     transition: background 0.17s ease, border-color 0.17s ease,
                 box-shadow 0.17s ease, color 0.17s ease;
 }
@@ -5792,8 +5788,7 @@ body.sidebar-nav-enabled .site-sidebar .header-btn-secondary:hover {
     transform: none;
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.95),
-        inset 0 -1px 0 rgba(59, 130, 246, 0.06),
-        0 2px 10px rgba(59, 130, 246, 0.09);
+        inset 0 -1px 0 rgba(59, 130, 246, 0.06);
 }
 
 /* Prevent primary button from translating up (causes top-clip by sidebar head) */
@@ -5819,8 +5814,7 @@ body.sidebar-nav-enabled .site-sidebar .header-btn--active {
     border-color: rgba(29, 78, 216, 0.32);
     box-shadow:
         inset 3px 0 0 #3b82f6,
-        inset 0 1px 0 rgba(255, 255, 255, 0.45),
-        0 1px 4px rgba(59, 130, 246, 0.10);
+        inset 0 1px 0 rgba(255, 255, 255, 0.45);
     font-weight: 700;
 }
 
@@ -5845,8 +5839,7 @@ body.sidebar-nav-enabled .site-sidebar .header-btn-primary.header-btn--active {
     border-color: rgba(29, 78, 216, 0.32);
     box-shadow:
         inset 3px 0 0 #3b82f6,
-        inset 0 1px 0 rgba(255, 255, 255, 0.45),
-        0 1px 4px rgba(59, 130, 246, 0.10);
+        inset 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 
 /* ── Text size control ──────────────────────────────────────────────────── */
