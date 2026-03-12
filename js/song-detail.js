@@ -51,46 +51,32 @@ function buildLyricsHTML(lyrics = []) {
     return '<p class="lyrics-empty">Lyrics coming soon.</p>';
   }
 
-  const rows = lyrics
+  let lineNum = 0;
+  const cards = lyrics
     .map(line => {
       const hebrew = (line.hebrew || "").trim();
       const transliteration = (line.transliteration || "").trim();
       const english = (line.english || "").trim();
 
       if (!hebrew && !transliteration && !english) {
-        return `
-          <div class="lyrics-detail-row lyrics-detail-spacer" aria-hidden="true">
-            <div class="lyrics-detail-cell">&nbsp;</div>
-            <div class="lyrics-detail-cell">&nbsp;</div>
-            <div class="lyrics-detail-cell">&nbsp;</div>
-          </div>
-        `;
+        return '<div class="lyric-verse-break" aria-hidden="true"><span class="lyric-verse-dot"></span></div>';
       }
 
-      const hebrewCell = hebrew ? escapeHtml(hebrew) : "&nbsp;";
-      const transliterationCell = transliteration ? escapeHtml(transliteration) : "&nbsp;";
-      const englishCell = english ? escapeHtml(english) : "&nbsp;";
-
+      lineNum++;
       return `
-        <div class="lyrics-detail-row">
-          <div class="lyrics-detail-cell lyrics-detail-hebrew" lang="he">${hebrewCell}</div>
-          <div class="lyrics-detail-cell lyrics-detail-transliteration">${transliterationCell}</div>
-          <div class="lyrics-detail-cell lyrics-detail-english">${englishCell}</div>
+        <div class="lyric-line${lineNum % 2 === 0 ? ' lyric-line-alt' : ''}">
+          <div class="lyric-line-num">${lineNum}</div>
+          <div class="lyric-line-content">
+            ${hebrew ? `<p class="lyric-hebrew" lang="he" dir="rtl">${escapeHtml(hebrew)}</p>` : ''}
+            ${transliteration ? `<p class="lyric-translit">${escapeHtml(transliteration)}</p>` : ''}
+            ${english ? `<p class="lyric-english">${escapeHtml(english)}</p>` : ''}
+          </div>
         </div>
       `;
     })
     .join("");
 
-  return `
-    <div class="lyrics-detail-grid">
-      <div class="lyrics-detail-row lyrics-detail-labels">
-        <div class="lyrics-detail-cell">Hebrew</div>
-        <div class="lyrics-detail-cell">Transliteration</div>
-        <div class="lyrics-detail-cell">English</div>
-      </div>
-      ${rows}
-    </div>
-  `;
+  return `<div class="lyric-lines-container">${cards}</div>`;
 }
 
 function splitPoemIntoStanzas(lines = []) {
