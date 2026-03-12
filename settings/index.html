@@ -52,7 +52,7 @@
 <body class="min-h-screen">
 
 <!-- ═══ HEADER ═══ -->
-<div id="shared-header-mount"></div>
+<div id="shared-header-mount" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%);min-height:64px"></div>
     <script src="/js/shared-header.js"></script>
 
 
@@ -322,10 +322,22 @@
 
     let currentUser = null;
     let isGoogleUser = false;
+    let authRedirectTimer = null;
 
     /* ════ AUTH ════ */
     auth.onAuthStateChanged(async user => {
-        if (!user) { window.location.href = '/'; return; }
+        if (!user) {
+            // Firebase fires null initially while loading session from IndexedDB.
+            // Start a redirect timer — if the real user arrives before it fires,
+            // the timer is cancelled below. This avoids a fixed-delay race.
+            if (!authRedirectTimer) {
+                authRedirectTimer = setTimeout(() => {
+                    if (!currentUser) window.location.href = '/';
+                }, 2000);
+            }
+            return;
+        }
+        if (authRedirectTimer) { clearTimeout(authRedirectTimer); authRedirectTimer = null; }
         currentUser = user;
 
         // Detect Google sign-in
@@ -364,7 +376,7 @@
         checkNewsletterStatus();
     });
 
-    function signOutUser() { auth.signOut().then(() => window.location.href = '/'); }
+    function signOutUser() { sessionStorage.setItem('justSignedOut', '1'); auth.signOut().then(() => window.location.href = '/'); }
 
     /* ════ SECTION SWITCHING ════ */
     function showSection(sec) {
