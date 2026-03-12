@@ -257,10 +257,6 @@
             right: -170px;
         }
 
-        .dash-hero-deco {
-            display: none;
-        }
-
         #daily-inspiration .daily-inspiration-content {
             position: relative;
             z-index: 3;
@@ -268,7 +264,7 @@
             border: 1px solid rgba(219, 235, 255, 0.22);
             border-radius: calc(var(--radius-xl) - 0.2rem);
             background: linear-gradient(146deg, rgba(14, 31, 59, 0.58), rgba(19, 74, 94, 0.52));
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: none;
             padding: clamp(1.3rem, 3.1vw, 2.15rem) clamp(1.1rem, 4vw, 2.6rem);
             transition: background .3s ease, border-color .3s ease, box-shadow .3s ease;
         }
@@ -1165,7 +1161,6 @@
 
             #daily-inspiration::before,
             #daily-inspiration::after { display: none !important; }
-            #daily-inspiration .dash-hero-deco { display: none !important; }
 
             #daily-inspiration .daily-inspiration-content {
                 all: unset !important;
@@ -1997,7 +1992,6 @@
         </section>
 
         <section id="daily-inspiration" class="fade-up fd1">
-            <div class="dash-hero-deco" aria-hidden="true">ת</div>
             <div class="dash-hero-inner daily-inspiration-content">
                 <div class="dash-hero-eyebrow">Today's Teaching</div>
                 <p data-quote-hebrew class="dash-hero-hebrew"></p>
