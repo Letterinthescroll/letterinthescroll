@@ -11,96 +11,95 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="A Letter in the Scroll">
     <meta property="og:title" content="Songs and Poems - A Letter in the Scroll">
-    <meta property="og:description" content="Listen, reflect, read, and sing. Explore songs and poems that celebrate faith, hope, and the journey of the soul.">
+    <meta property="og:description" content="A beautiful, immersive song page with Hebrew lyrics, transliteration, and translation side by side.">
     <meta property="og:image" content="https://www.aletterinthescroll.com/media/images/welcome.jpg">
     <meta property="og:url" content="https://www.aletterinthescroll.com/songs/song-detail.html">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Songs and Poems - A Letter in the Scroll">
-    <meta name="twitter:description" content="Listen, reflect, read, and sing. Explore songs and poems that celebrate faith, hope, and the journey of the soul.">
+    <meta name="twitter:description" content="A beautiful, immersive song page with Hebrew lyrics, transliteration, and translation side by side.">
     <meta name="twitter:image" content="https://www.aletterinthescroll.com/media/images/welcome.jpg">
 
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/shabbat.css">
     <link rel="stylesheet" href="/css/mobile-overrides.css">
     <link rel="stylesheet" href="/css/song-detail-style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=Noto+Serif+Hebrew:wght@400;500;600;700&family=Cinzel:wght@500;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Serif+Hebrew:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="sd-body" data-enable-text-size="true" data-header-fallback="true">
+<body class="song-detail-body" data-enable-text-size="true" data-header-fallback="true">
 
-    <!-- Header -->
     <div id="shared-header-mount" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%);min-height:64px"></div>
     <script src="/js/shared-header.js"></script>
 
-    <!-- Content wrapper -->
-    <div class="sd-wrap">
-        <!-- Back link -->
-        <a href="/songs/" class="sd-back">
+    <main class="song-detail-main">
+        <a href="/songs/" class="song-detail-back">
             <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             Songs &amp; Poems
         </a>
 
-        <!-- Loading State -->
-        <div id="loading-state" class="sd-loading">
-            <div class="sd-spinner"></div>
+        <section id="loading-state" class="song-loading">
+            <div class="song-spinner"></div>
             <p>Loading...</p>
-        </div>
+        </section>
 
-        <!-- Error State -->
-        <div id="error-state" class="sd-error hidden">
-            <div class="sd-error-icon">?</div>
+        <section id="error-state" class="song-error hidden">
+            <div class="song-error-icon">?</div>
             <h2>Entry Not Found</h2>
             <p>We couldn't find the song or poem you're looking for.</p>
-            <a href="/songs/" class="sd-error-btn">Back to Songs &amp; Poems</a>
-        </div>
+            <a href="/songs/" class="song-error-btn">Back to Songs &amp; Poems</a>
+        </section>
 
-        <!-- Song Content -->
-        <article id="song-content" class="sd-article hidden">
-
-            <!-- Hero header -->
-            <header class="sd-hero">
-                <div class="sd-hero-inner">
-                    <div class="sd-type-chip" id="sd-type-chip">Song</div>
-                    <h1 id="song-title" class="sd-title"></h1>
-                    <div class="sd-meta">
-                        <p id="song-artist" class="sd-artist"></p>
-                        <p id="song-date" class="sd-date"></p>
-                    </div>
+        <article id="song-content" class="song-page hidden">
+            <header class="song-hero">
+                <div class="song-hero-top">
+                    <div class="song-type-chip" id="sd-type-chip">Song</div>
+                    <div class="song-type-chip song-type-chip-soft" id="song-line-count"></div>
                 </div>
+                <h1 id="song-title" class="song-hero-title"></h1>
+                <div class="song-meta-pills">
+                    <p id="song-artist" class="song-meta-pill"></p>
+                    <p id="song-date" class="song-meta-pill song-meta-pill-soft"></p>
+                </div>
+                <p id="song-overview" class="song-overview"></p>
             </header>
 
-            <!-- Overview -->
-            <div id="song-overview" class="sd-overview"></div>
+            <div class="song-content-grid">
+                <section id="video-section" class="song-media-card">
+                    <h2 class="song-section-title">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>Watch &amp; Listen</span>
+                    </h2>
+                    <div id="video-container" class="youtube-shell"></div>
+                    <div class="song-listen-actions">
+                        <a id="youtube-link" href="#" target="_blank" rel="noopener" class="song-youtube-link">
+                            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                            Open on YouTube
+                        </a>
+                    </div>
+                </section>
 
-            <!-- Video Section -->
-            <section id="video-section" class="sd-video-section">
-                <div class="sd-section-label">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Watch &amp; Listen
-                </div>
-                <div id="video-container" class="sd-video"></div>
-                <a id="youtube-link" href="#" target="_blank" rel="noopener" class="sd-yt-link">
-                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                    Open on YouTube
-                </a>
-            </section>
-
-            <!-- Lyrics / Poem Section -->
-            <section id="lyrics-section" class="sd-lyrics-section">
-                <div class="sd-section-label">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    <span id="lyrics-section-label">Lyrics</span>
-                </div>
-                <div id="lyrics-container" class="sd-lyrics-container"></div>
-            </section>
+                <section id="lyrics-section" class="song-lyrics-card">
+                    <div class="lyrics-toolbar">
+                        <h2 class="song-section-title">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            <span id="lyrics-section-label">Lyrics + Translation</span>
+                        </h2>
+                        <div id="lyrics-controls" class="lyrics-controls" role="group" aria-label="Lyrics display controls">
+                            <button id="toggle-transliteration" class="lyrics-control active" type="button" aria-pressed="true">Transliteration</button>
+                            <button id="toggle-translation" class="lyrics-control active" type="button" aria-pressed="true">Translation</button>
+                            <button id="toggle-compact-mode" class="lyrics-control" type="button" aria-pressed="false">Compact</button>
+                        </div>
+                    </div>
+                    <div id="lyrics-container" class="lyrics-stage"></div>
+                </section>
+            </div>
         </article>
-    </div>
+    </main>
 
-    <!-- Footer -->
-    <footer class="sd-footer">
+    <footer class="song-footer">
         <p>May these songs and poems deepen your faith</p>
-        <p class="sd-footer-sub">A Letter in the Scroll</p>
+        <p class="song-footer-sub">A Letter in the Scroll</p>
     </footer>
 
     <script src="/js/shabbat.js"></script>
