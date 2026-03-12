@@ -408,28 +408,27 @@
 
         @media (max-width: 640px) {
             .hol-hero {
-                padding: 1.8rem 1rem 2rem;
+                padding: 1.3rem 1rem 1.5rem;
+                background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
             }
-            .hol-hero__eyebrow {
-                font-size: 0.6rem;
-                letter-spacing: 0.18em;
-                margin-bottom: 0.35rem;
-            }
+            .hol-hero::before { display: none; }
+            .hol-hero::after { height: 18px; }
+            .hol-hero__eyebrow { display: none; }
             .hol-hero__hebrew {
-                font-size: 1.15rem;
-                margin-bottom: 0.2rem;
+                font-size: 0.95rem;
+                margin-bottom: 0.15rem;
+                opacity: 0.7;
             }
             .hol-hero__title {
-                font-size: 1.65rem;
-                margin-bottom: 0.6rem;
+                font-size: 1.4rem;
+                margin-bottom: 0.4rem;
+                line-height: 1.15;
             }
             .hol-hero__subtitle {
-                font-size: 0.8rem;
-                line-height: 1.5;
-                max-width: 36ch;
-            }
-            .hol-hero::after {
-                height: 24px;
+                font-size: 0.72rem;
+                line-height: 1.45;
+                max-width: 32ch;
+                opacity: 0.8;
             }
             .hol-grid { grid-template-columns: 1fr; padding: 0 1rem 1.5rem; }
             .hol-deco--roshapple,
