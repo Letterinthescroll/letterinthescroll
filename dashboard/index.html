@@ -1164,7 +1164,7 @@
                 position: relative !important;
                 border-radius: 10px !important;
                 background: linear-gradient(135deg, #0f2347 0%, #1a3a6e 60%, #1e4f7a 100%) !important;
-                border: 1px solid rgba(255,255,255,0.1) !important;
+                border: none !important;
                 box-shadow: 0 2px 8px rgba(10,25,55,0.18) !important;
                 margin: 0 !important;
                 padding: 0 !important;
@@ -1182,6 +1182,9 @@
                 flex-direction: column !important;
                 padding: 8px 10px 7px !important;
                 padding-right: 28px !important;
+                box-shadow: none !important;
+                border: none !important;
+                background: none !important;
             }
 
             /* Eyebrow — tiny gold accent */
@@ -1198,11 +1201,7 @@
                 margin-bottom: 4px !important;
             }
             #daily-inspiration .dash-hero-eyebrow::before {
-                content: '' !important;
-                width: 10px !important;
-                height: 1px !important;
-                background: #f4c96f !important;
-                display: block !important;
+                display: none !important;
             }
 
             /* Hebrew */
@@ -2342,7 +2341,13 @@
         if (!dashboardShellRevealed) {
             revealDashboardShell();
         }
-    }, 7000);
+    }, 3000);
+
+    // Fast reveal: if we have cached user info, show shell immediately
+    // while waiting for Firebase Auth to fully resolve.
+    if (sessionStorage.getItem('headerUserCache') || auth.currentUser) {
+        revealDashboardShell();
+    }
 
     /* ════ HEADER DROPDOWN (matches page-auth.js) ════ */
     function buildDashboardHeaderDropdown(firstName, email) {
