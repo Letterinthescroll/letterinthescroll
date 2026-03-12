@@ -2304,6 +2304,7 @@
     }
     const auth = firebase.auth();
     const db   = firebase.firestore();
+    const FieldValue = firebase.firestore.FieldValue;
 
     /* ── State ── */
     let currentUser = null, confirmResolve = null;
@@ -3112,7 +3113,7 @@
                     source: normalized.source,
                     reflection: normalized.reflection,
                     savedOn: normalized.displayDate || null,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    timestamp: FieldValue.serverTimestamp()
                 };
 
                 // Delete first to avoid update-denied (rules allow create, not update)
@@ -3158,7 +3159,7 @@
         btn.disabled=true; btn.textContent='Creating…'; eEl.classList.add('hidden'); sEl.classList.add('hidden');
         try {
             const code=generateCode();
-            const docData = {name,leader:currentUser.uid,createdBy:currentUser.uid,members:[currentUser.uid],maxMembers:max,inviteCode:code,requireApproval:requireApproval,pendingMembers:[],createdAt:firebase.firestore.FieldValue.serverTimestamp()};
+            const docData = {name,leader:currentUser.uid,createdBy:currentUser.uid,members:[currentUser.uid],maxMembers:max,inviteCode:code,requireApproval:requireApproval,pendingMembers:[],createdAt:FieldValue.serverTimestamp()};
             await db.collection('chavrutas').add(docData);
             document.getElementById('created-invite-code').textContent = code;
             document.getElementById('created-invite-link').value = inviteLink(code);
@@ -3219,10 +3220,10 @@
 
         if (data.requireApproval) {
             // Add to pending list instead of members
-            await db.collection('chavrutas').doc(doc.id).update({pendingMembers:firebase.firestore.FieldValue.arrayUnion(currentUser.uid)});
+            await db.collection('chavrutas').doc(doc.id).update({pendingMembers:FieldValue.arrayUnion(currentUser.uid)});
             return 'pending';
         }
-        await db.collection('chavrutas').doc(doc.id).update({members:firebase.firestore.FieldValue.arrayUnion(currentUser.uid)});
+        await db.collection('chavrutas').doc(doc.id).update({members:FieldValue.arrayUnion(currentUser.uid)});
         return 'joined';
     }
 
@@ -3236,11 +3237,11 @@
             if((d.pendingMembers||[]).includes(currentUser.uid)){showBanner('Your request to join "'+d.name+'" is pending approval.','info');return;}
             if((d.members||[]).length>=(d.maxMembers||8)){showBanner('"'+d.name+'" is full.','warning');return;}
             if (d.requireApproval) {
-                await db.collection('chavrutas').doc(id).update({pendingMembers:firebase.firestore.FieldValue.arrayUnion(currentUser.uid)});
+                await db.collection('chavrutas').doc(id).update({pendingMembers:FieldValue.arrayUnion(currentUser.uid)});
                 showBanner('Request sent! The leader of "'+d.name+'" will review your request.','info');
                 return;
             }
-            await db.collection('chavrutas').doc(id).update({members:firebase.firestore.FieldValue.arrayUnion(currentUser.uid)});
+            await db.collection('chavrutas').doc(id).update({members:FieldValue.arrayUnion(currentUser.uid)});
             showBanner('Joined "'+d.name+'" successfully!','success');
         } catch { showBanner('Could not auto-join.','error'); }
     }
@@ -3253,8 +3254,8 @@
             const rem=(d.members||[]).filter(u=>u!==currentUser.uid);
             if(d.leader===currentUser.uid){
                 if(rem.length===0) await db.collection('chavrutas').doc(id).delete();
-                else await db.collection('chavrutas').doc(id).update({members:firebase.firestore.FieldValue.arrayRemove(currentUser.uid),leader:rem[0]});
-            } else { await db.collection('chavrutas').doc(id).update({members:firebase.firestore.FieldValue.arrayRemove(currentUser.uid)}); }
+                else await db.collection('chavrutas').doc(id).update({members:FieldValue.arrayRemove(currentUser.uid),leader:rem[0]});
+            } else { await db.collection('chavrutas').doc(id).update({members:FieldValue.arrayRemove(currentUser.uid)}); }
         } catch { alert('Failed to leave.'); }
     }
     async function deleteChavruta(id,name){
@@ -3264,7 +3265,7 @@
     async function removeMember(id,uid){
         const n=nameCache[uid]||'this member';
         if(!await showConfirm('Remove Member','Remove '+n+' from this group?')) return;
-        try{ await db.collection('chavrutas').doc(id).update({members:firebase.firestore.FieldValue.arrayRemove(uid)}); } catch { alert('Failed to remove.'); }
+        try{ await db.collection('chavrutas').doc(id).update({members:FieldValue.arrayRemove(uid)}); } catch { alert('Failed to remove.'); }
     }
 
     /* ════ PROMOTE / DEMOTE CO-LEADER ════ */
@@ -3273,7 +3274,7 @@
         if (!await showConfirm('Promote to Co-Leader', 'Make ' + n + ' a co-leader? They will be able to manage members.')) return;
         try {
             await db.collection('chavrutas').doc(id).update({
-                coLeaders: firebase.firestore.FieldValue.arrayUnion(uid)
+                coLeaders: FieldValue.arrayUnion(uid)
             });
         } catch { alert('Failed to promote.'); }
     }
@@ -3282,7 +3283,7 @@
         if (!await showConfirm('Remove Co-Leader', 'Remove co-leader status from ' + n + '?')) return;
         try {
             await db.collection('chavrutas').doc(id).update({
-                coLeaders: firebase.firestore.FieldValue.arrayRemove(uid)
+                coLeaders: FieldValue.arrayRemove(uid)
             });
         } catch { alert('Failed to demote.'); }
     }
@@ -3292,8 +3293,8 @@
         const n = nameCache[uid] || 'this person';
         try {
             await db.collection('chavrutas').doc(id).update({
-                members: firebase.firestore.FieldValue.arrayUnion(uid),
-                pendingMembers: firebase.firestore.FieldValue.arrayRemove(uid)
+                members: FieldValue.arrayUnion(uid),
+                pendingMembers: FieldValue.arrayRemove(uid)
             });
             showBanner(n + ' has been added to the group!', 'success');
         } catch { alert('Failed to approve member.'); }
@@ -3303,7 +3304,7 @@
         if (!await showConfirm('Reject Request', 'Reject ' + n + "'s request to join?")) return;
         try {
             await db.collection('chavrutas').doc(id).update({
-                pendingMembers: firebase.firestore.FieldValue.arrayRemove(uid)
+                pendingMembers: FieldValue.arrayRemove(uid)
             });
         } catch { alert('Failed to reject member.'); }
     }
@@ -3841,7 +3842,7 @@
                     text: text,
                     userId: currentUser.uid,
                     username: name,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    timestamp: FieldValue.serverTimestamp()
                 });
             setTimeout(() => { chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight; }, 100);
         } catch (err) {
@@ -3919,7 +3920,7 @@
             await db.collection('chavrutas').doc(activeChatRoomId)
                 .collection('chatMessages').doc(msgId).update({
                     text: newText,
-                    editedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    editedAt: FieldValue.serverTimestamp()
                 });
             chatEditingMsgId = null;
         } catch (err) {
@@ -3975,7 +3976,7 @@
         if (!activeChatRoomId || !currentUser) return;
         db.collection('chavrutas').doc(activeChatRoomId)
             .collection('chatReadReceipts').doc(currentUser.uid).set({
-                lastReadAt: firebase.firestore.FieldValue.serverTimestamp(),
+                lastReadAt: FieldValue.serverTimestamp(),
                 displayName: nameCache[currentUser.uid] || currentUser.displayName || 'User'
             }, { merge: true }).catch(err => console.error('Read receipt update error:', err));
     }
