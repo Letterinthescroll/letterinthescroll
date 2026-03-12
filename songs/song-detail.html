@@ -25,99 +25,82 @@
     <link rel="stylesheet" href="/css/shabbat.css">
     <link rel="stylesheet" href="/css/mobile-overrides.css">
     <link rel="stylesheet" href="/css/song-detail-style.css">
-    <link rel="stylesheet" href="/css/tailwind-utilities.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=Noto+Serif+Hebrew:wght@400;500;600;700&family=Cinzel:wght@500;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-50 min-h-screen" data-enable-text-size="true" data-header-fallback="true">
+<body class="sd-body" data-enable-text-size="true" data-header-fallback="true">
 
-    <!-- Professional Responsive Header -->
+    <!-- Header -->
     <div id="shared-header-mount" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%);min-height:64px"></div>
     <script src="/js/shared-header.js"></script>
 
-    <!-- Back to Songs and Poems Button -->
-    <div class="container mx-auto px-4 py-4">
-        <a href="/songs/" class="back-to-songs-link">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-            </svg>
-            Back to Songs and Poems
+    <!-- Content wrapper -->
+    <div class="sd-wrap">
+        <!-- Back link -->
+        <a href="/songs/" class="sd-back">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            Songs &amp; Poems
         </a>
-    </div>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 pb-8">
         <!-- Loading State -->
-        <div id="loading-state" class="song-detail-loading">
-            <div class="loading-spinner"></div>
-            <p>Loading details...</p>
+        <div id="loading-state" class="sd-loading">
+            <div class="sd-spinner"></div>
+            <p>Loading...</p>
         </div>
 
         <!-- Error State -->
-        <div id="error-state" class="song-detail-error hidden">
-            <svg class="error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
+        <div id="error-state" class="sd-error hidden">
+            <div class="sd-error-icon">?</div>
             <h2>Entry Not Found</h2>
             <p>We couldn't find the song or poem you're looking for.</p>
-            <a href="/songs/" class="error-back-btn">Return to Songs and Poems</a>
+            <a href="/songs/" class="sd-error-btn">Back to Songs &amp; Poems</a>
         </div>
 
         <!-- Song Content -->
-        <article id="song-content" class="song-detail-container hidden">
-            <!-- Song Header -->
-            <header class="song-detail-header">
-                <div class="song-detail-title-section">
-                    <h1 id="song-title" class="song-detail-title"></h1>
-                    <div class="song-detail-meta">
-                        <p id="song-artist" class="song-detail-artist"></p>
-                        <p id="song-date" class="song-detail-date"></p>
+        <article id="song-content" class="sd-article hidden">
+
+            <!-- Hero header -->
+            <header class="sd-hero">
+                <div class="sd-hero-inner">
+                    <div class="sd-type-chip" id="sd-type-chip">Song</div>
+                    <h1 id="song-title" class="sd-title"></h1>
+                    <div class="sd-meta">
+                        <p id="song-artist" class="sd-artist"></p>
+                        <p id="song-date" class="sd-date"></p>
                     </div>
                 </div>
-                <div id="song-overview" class="song-detail-overview"></div>
             </header>
 
+            <!-- Overview -->
+            <div id="song-overview" class="sd-overview"></div>
+
             <!-- Video Section -->
-            <section id="video-section" class="song-detail-video-section">
-                <h2 class="section-title">
-                    <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
+            <section id="video-section" class="sd-video-section">
+                <div class="sd-section-label">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     Watch &amp; Listen
-                </h2>
-                <div id="video-container" class="video-container">
-                    <!-- YouTube embed will be inserted here -->
                 </div>
-                <div class="video-actions">
-                    <a id="youtube-link" href="#" target="_blank" rel="noopener" class="youtube-link">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                        </svg>
-                        Open on YouTube
-                    </a>
-                </div>
+                <div id="video-container" class="sd-video"></div>
+                <a id="youtube-link" href="#" target="_blank" rel="noopener" class="sd-yt-link">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    Open on YouTube
+                </a>
             </section>
 
             <!-- Lyrics / Poem Section -->
-            <section id="lyrics-section" class="song-detail-lyrics-section">
-                <h2 id="lyrics-section-title" class="section-title">
-                    <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
+            <section id="lyrics-section" class="sd-lyrics-section">
+                <div class="sd-section-label">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     <span id="lyrics-section-label">Lyrics</span>
-                </h2>
-                <div id="lyrics-container" class="lyrics-detail-container">
-                    <!-- Lyrics will be inserted here -->
                 </div>
+                <div id="lyrics-container" class="sd-lyrics-container"></div>
             </section>
         </article>
-    </main>
+    </div>
 
     <!-- Footer -->
-    <footer class="bg-blue-900 text-white py-6 mt-12 border-t-4 border-blue-700">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-sm">May these songs and poems deepen your faith</p>
-            <p class="text-xs text-blue-300 mt-2">A Letter in the Scroll</p>
-        </div>
+    <footer class="sd-footer">
+        <p>May these songs and poems deepen your faith</p>
+        <p class="sd-footer-sub">A Letter in the Scroll</p>
     </footer>
 
     <script src="/js/shabbat.js"></script>

@@ -291,6 +291,12 @@ function displaySong(entry) {
     body.classList.toggle("poem-mode", isPoem);
   }
 
+  const typeChip = document.getElementById("sd-type-chip");
+  if (typeChip) {
+    typeChip.textContent = isPoem ? "Poem" : "Song";
+    typeChip.classList.toggle("sd-type-chip-poem", isPoem);
+  }
+
   const songContent = document.getElementById("song-content");
   if (songContent) {
     songContent.setAttribute("data-entry-type", isPoem ? "poem" : "song");

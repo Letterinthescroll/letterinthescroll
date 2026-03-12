@@ -1,239 +1,306 @@
-@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Serif+Hebrew:wght@400;500;600;700&display=swap");
-
-/* Song Detail Page — clean, modern, matches site nav-blue palette */
+/* Song & Poem Detail — matches dashboard / songs-index design language */
 
 :root {
-    --sd-ink: #0f172a;
-    --sd-ink-soft: #334155;
-    --sd-accent: #1d4ed8;
-    --sd-accent-light: #dbeafe;
+    --sd-ink: #102039;
+    --sd-ink-soft: #456188;
+    --sd-ink-muted: #667c9c;
     --sd-surface: #ffffff;
-    --sd-surface-soft: #f8fafc;
-    --sd-border: #e2e8f0;
-    --sd-border-strong: #cbd5e1;
-    --sd-radius: 16px;
+    --sd-surface-soft: #f7fbff;
+    --sd-line: rgba(25, 61, 108, 0.14);
+    --sd-line-strong: rgba(25, 61, 108, 0.22);
+    --sd-navy: #1f3f76;
+    --sd-teal: #0f7b8f;
+    --sd-gold: #cf9a32;
+    --sd-mint: #2f9f84;
+    --sd-radius: 1.05rem;
+    --sd-shadow: 0 4px 12px rgba(17, 44, 84, 0.07);
+    --sd-shadow-lg: 0 12px 30px rgba(17, 44, 84, 0.11);
 }
 
-body.bg-gray-50 {
-    background: #f6f8fc;
+/* ── Body ── */
+.sd-body {
+    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
     color: var(--sd-ink);
+    min-height: 100vh;
+    background:
+        radial-gradient(1200px 580px at -8% -10%, rgba(36, 118, 175, 0.15), transparent 60%),
+        radial-gradient(900px 560px at 108% -12%, rgba(209, 154, 53, 0.14), transparent 58%),
+        linear-gradient(180deg, #f4f8ff 0%, #f9f2e6 47%, #edf5ff 100%);
+}
+
+.hidden { display: none !important; }
+
+/* ── Wrapper ── */
+.sd-wrap {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem 3rem;
 }
 
 /* ── Back link ── */
-.back-to-songs-link {
+.sd-back {
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
-    padding: 0.55rem 1rem;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
     background: var(--sd-surface);
-    border: 1px solid var(--sd-border);
-    border-radius: 10px;
-    color: var(--sd-accent);
-    font-weight: 600;
-    font-size: 0.9rem;
+    border: 1px solid var(--sd-line);
+    border-radius: 999px;
+    color: var(--sd-teal);
+    font-weight: 700;
+    font-size: 0.82rem;
     text-decoration: none;
-    transition: border-color 0.15s;
+    box-shadow: var(--sd-shadow);
+    transition: border-color 0.15s, background 0.15s;
+    margin-bottom: 1.5rem;
 }
 
-.back-to-songs-link:hover {
-    border-color: #93c5fd;
-    background: #f0f5ff;
+.sd-back:hover {
+    border-color: var(--sd-teal);
+    background: rgba(15, 123, 143, 0.04);
 }
 
-/* ── Loading / Error ── */
-.song-detail-loading {
+.sd-back svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+/* ── Loading ── */
+.sd-loading {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 4rem 2rem;
+    padding: 5rem 2rem;
     gap: 1rem;
-    color: var(--sd-accent);
-    font-weight: 600;
+    color: var(--sd-teal);
+    font-weight: 700;
+    font-size: 0.9rem;
 }
 
-.loading-spinner {
+.sd-spinner {
     width: 2.5rem;
     height: 2.5rem;
-    border: 3px solid var(--sd-accent-light);
-    border-top-color: var(--sd-accent);
+    border: 3px solid rgba(15, 123, 143, 0.15);
+    border-top-color: var(--sd-teal);
     border-radius: 50%;
-    animation: spin 0.7s linear infinite;
+    animation: sd-spin 0.7s linear infinite;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes sd-spin { to { transform: rotate(360deg); } }
 
-.song-detail-error {
+/* ── Error ── */
+.sd-error {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 4rem 2rem;
+    padding: 5rem 2rem;
     gap: 1.25rem;
     text-align: center;
 }
 
-.error-icon { width: 3.5rem; height: 3.5rem; color: #dc2626; }
+.sd-error-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--sd-navy);
+    background: rgba(31, 63, 118, 0.08);
+    border-radius: 50%;
+}
 
-.song-detail-error h2 {
+.sd-error h2 {
+    font-family: 'Fraunces', serif;
     font-size: 1.5rem;
     font-weight: 700;
-    color: #1e3a8a;
+    color: var(--sd-ink);
+    margin: 0;
 }
 
-.song-detail-error p {
-    font-size: 1rem;
+.sd-error p {
+    font-size: 0.95rem;
     color: var(--sd-ink-soft);
     max-width: 380px;
+    margin: 0;
+    line-height: 1.6;
 }
 
-.error-back-btn {
+.sd-error-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.7rem 1.4rem;
-    background: var(--sd-accent);
+    padding: 0.65rem 1.4rem;
+    background: var(--sd-navy);
     color: #fff;
-    font-weight: 600;
-    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    border-radius: 999px;
     text-decoration: none;
     transition: background 0.15s;
 }
 
-.error-back-btn:hover { background: #1e40af; }
+.sd-error-btn:hover { background: #16335f; }
 
-/* ── Main card container ── */
-.song-detail-container {
+/* ── Article card ── */
+.sd-article {
     background: var(--sd-surface);
+    border: 1px solid var(--sd-line);
     border-radius: var(--sd-radius);
-    border: 1px solid var(--sd-border);
+    box-shadow: var(--sd-shadow-lg);
     overflow: hidden;
 }
 
-/* ── Header section ── */
-.song-detail-header {
-    background: linear-gradient(135deg, #eef3fc 0%, #f4f7ff 50%, #f8fafc 100%);
-    border-bottom: 1px solid var(--sd-border);
-    padding: 2rem 1.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+/* ── Hero header ── */
+.sd-hero {
+    background:
+        radial-gradient(600px 300px at 80% 20%, rgba(15, 123, 143, 0.06), transparent),
+        linear-gradient(175deg, #f8fbff 0%, #f0f5ff 50%, #f8fafc 100%);
+    border-bottom: 1px solid var(--sd-line);
+    padding: 2rem 2rem 1.75rem;
 }
 
-.song-detail-title-section {
+.sd-hero-inner {
     display: flex;
     flex-direction: column;
-    gap: 0.65rem;
+    gap: 0.75rem;
 }
 
-.song-detail-title {
-    font-size: 2rem;
+/* ── Type chip ── */
+.sd-type-chip {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    border-radius: 999px;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.65rem;
     font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: rgba(15, 123, 143, 0.1);
+    color: var(--sd-teal);
+}
+
+.sd-type-chip-poem {
+    background: rgba(47, 159, 132, 0.1);
+    color: var(--sd-mint);
+}
+
+/* ── Title ── */
+.sd-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.65rem, 3.5vw, 2.4rem);
+    font-weight: 700;
     color: var(--sd-ink);
     line-height: 1.25;
+    margin: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem 0.85rem;
+    gap: 0.35rem 0.75rem;
     align-items: baseline;
 }
 
 .song-title-hebrew {
-    font-size: 1.7rem;
-    color: var(--sd-accent);
+    font-size: clamp(1.35rem, 2.8vw, 1.9rem);
+    color: var(--sd-navy);
     direction: rtl;
+    font-family: 'Noto Serif Hebrew', serif;
 }
 
-.song-detail-meta {
+/* ── Meta (artist / date) ── */
+.sd-meta {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     align-items: center;
 }
 
-.song-detail-artist {
-    font-size: 0.9rem;
+.sd-artist {
+    font-size: 0.85rem;
     color: var(--sd-ink-soft);
     font-weight: 600;
     background: var(--sd-surface);
-    border: 1px solid var(--sd-border);
-    padding: 0.4rem 0.7rem;
-    border-radius: 8px;
+    border: 1px solid var(--sd-line);
+    padding: 0.38rem 0.7rem;
+    border-radius: 999px;
     width: fit-content;
 }
 
-.song-detail-artist::before {
+.sd-artist::before {
     content: attr(data-label) ": ";
-    color: #64748b;
+    color: var(--sd-ink-muted);
     font-weight: 500;
 }
 
-.song-detail-date {
-    font-size: 0.82rem;
-    color: #0f766e;
+.sd-date {
+    font-size: 0.78rem;
+    color: var(--sd-teal);
     font-weight: 700;
     letter-spacing: 0.02em;
-    text-transform: uppercase;
-    background: #f0fdfa;
-    border: 1px solid #99f6e4;
-    padding: 0.4rem 0.7rem;
-    border-radius: 8px;
+    background: rgba(15, 123, 143, 0.06);
+    border: 1px solid rgba(15, 123, 143, 0.15);
+    padding: 0.38rem 0.7rem;
+    border-radius: 999px;
     width: fit-content;
 }
 
-.song-detail-date::before {
-    content: "Date: ";
-    color: #115e59;
-    font-weight: 600;
-}
-
-.song-detail-overview {
-    font-size: 1rem;
+/* ── Overview ── */
+.sd-overview {
+    font-size: 0.95rem;
     line-height: 1.75;
-    color: var(--sd-ink);
-    padding: 1rem 1.15rem;
-    background: var(--sd-surface);
-    border-radius: 12px;
-    border: 1px solid var(--sd-border);
+    color: var(--sd-ink-soft);
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--sd-line);
+    background: var(--sd-surface-soft);
 }
 
-/* ── Video section — compact ── */
-.song-detail-video-section,
-.song-detail-lyrics-section {
-    padding: 1.75rem;
-}
-
-.section-title {
+/* ── Section labels ── */
+.sd-section-label {
     display: inline-flex;
     align-items: center;
-    gap: 0.55rem;
-    font-size: 1.15rem;
+    gap: 0.5rem;
+    font-size: 0.78rem;
     font-weight: 800;
-    color: var(--sd-ink);
-    margin-bottom: 1.25rem;
-    padding: 0.45rem 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--sd-ink-muted);
+    margin-bottom: 1.15rem;
+    padding: 0.4rem 0.8rem;
     background: var(--sd-surface-soft);
-    border-radius: 10px;
-    border: 1px solid var(--sd-border);
+    border-radius: 999px;
+    border: 1px solid var(--sd-line);
 }
 
-.section-icon {
-    width: 1.35rem;
-    height: 1.35rem;
-    color: var(--sd-accent);
+.sd-section-label svg {
+    width: 16px;
+    height: 16px;
+    color: var(--sd-teal);
+    flex-shrink: 0;
 }
 
-.video-container {
+/* ── Video section ── */
+.sd-video-section {
+    padding: 1.75rem 2rem;
+    border-bottom: 1px solid var(--sd-line);
+}
+
+.sd-video {
     position: relative;
     width: 100%;
-    max-width: 640px;
-    padding-top: min(360px, 56.25%);
+    max-width: 580px;
+    padding-top: min(326px, 56.25%);
     background: #0f172a;
-    border-radius: 14px;
+    border-radius: var(--sd-radius);
     overflow: hidden;
-    border: 1px solid rgba(15, 23, 42, 0.3);
+    border: 1px solid rgba(15, 23, 42, 0.25);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.15);
 }
 
-.video-container iframe {
+.sd-video iframe {
     position: absolute;
     top: 0;
     left: 0;
@@ -242,45 +309,43 @@ body.bg-gray-50 {
     border: 0;
 }
 
-.video-actions {
-    display: flex;
-    margin-top: 1rem;
-}
-
-.youtube-link {
+.sd-yt-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.2rem;
+    gap: 0.45rem;
+    margin-top: 0.85rem;
+    padding: 0.5rem 1.1rem;
     background: #dc2626;
     color: #fff;
-    font-weight: 600;
-    font-size: 0.88rem;
-    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 999px;
     text-decoration: none;
     transition: background 0.15s;
 }
 
-.youtube-link:hover { background: #b91c1c; }
+.sd-yt-link:hover { background: #b91c1c; }
+
+.sd-yt-link svg { flex-shrink: 0; }
 
 /* ── Lyrics section ── */
-.song-detail-lyrics-section {
+.sd-lyrics-section {
+    padding: 1.75rem 2rem 2.25rem;
     background: var(--sd-surface-soft);
-    border-top: 1px solid var(--sd-border);
 }
 
-.lyrics-detail-container {
+.sd-lyrics-container {
     background: var(--sd-surface);
-    border-radius: 14px;
-    border: 1px solid var(--sd-border);
-    padding: 1.25rem 1.5rem;
+    border-radius: var(--sd-radius);
+    border: 1px solid var(--sd-line);
+    padding: 1rem 1.25rem;
+    box-shadow: var(--sd-shadow);
 }
 
 /* ── Line-by-line lyrics ── */
 .lyric-lines-container {
     display: flex;
     flex-direction: column;
-    gap: 0;
 }
 
 .lyric-line {
@@ -289,18 +354,19 @@ body.bg-gray-50 {
     gap: 0.85rem;
     padding: 0.85rem 1rem;
     border-radius: 10px;
+    transition: background 0.12s;
 }
 
 .lyric-line:hover {
-    background: #eff6ff;
+    background: rgba(15, 123, 143, 0.04);
 }
 
 .lyric-line-alt {
-    background: #f8fafc;
+    background: var(--sd-surface-soft);
 }
 
 .lyric-line-alt:hover {
-    background: #eef4ff;
+    background: rgba(15, 123, 143, 0.06);
 }
 
 .lyric-line-num {
@@ -310,20 +376,21 @@ body.bg-gray-50 {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: #94a3b8;
-    background: #f1f5f9;
-    border: 1px solid #e2e8f0;
-    border-radius: 7px;
+    font-size: 0.62rem;
+    font-weight: 800;
+    color: var(--sd-ink-muted);
+    background: rgba(25, 61, 108, 0.05);
+    border: 1px solid var(--sd-line);
+    border-radius: 8px;
     margin-top: 0.15rem;
     user-select: none;
+    transition: all 0.15s;
 }
 
 .lyric-line:hover .lyric-line-num {
-    color: #3b82f6;
-    background: var(--sd-accent-light);
-    border-color: #93c5fd;
+    color: var(--sd-teal);
+    background: rgba(15, 123, 143, 0.08);
+    border-color: rgba(15, 123, 143, 0.2);
 }
 
 .lyric-line-content {
@@ -336,27 +403,28 @@ body.bg-gray-50 {
 
 .lyric-hebrew {
     margin: 0;
-    font-size: 1.22rem;
-    font-weight: 700;
+    font-size: 1.25rem;
+    font-weight: 600;
     color: var(--sd-ink);
-    font-family: 'Noto Serif Hebrew', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.5;
+    font-family: 'Noto Serif Hebrew', serif;
+    line-height: 1.55;
 }
 
 .lyric-translit {
     margin: 0;
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     font-weight: 500;
     font-style: italic;
-    color: #1e40af;
+    color: var(--sd-navy);
     line-height: 1.45;
+    opacity: 0.85;
 }
 
 .lyric-english {
     margin: 0;
-    font-size: 0.9rem;
-    color: #64748b;
-    line-height: 1.45;
+    font-size: 0.88rem;
+    color: var(--sd-ink-soft);
+    line-height: 1.5;
 }
 
 .lyric-verse-break {
@@ -371,27 +439,38 @@ body.bg-gray-50 {
     width: 4px;
     height: 4px;
     border-radius: 50%;
-    background: #cbd5e1;
+    background: var(--sd-line-strong);
 }
 
 .lyrics-empty {
     text-align: center;
     padding: 2rem;
-    color: var(--sd-ink-soft);
-    font-size: 1rem;
+    color: var(--sd-ink-muted);
+    font-size: 0.95rem;
     font-style: italic;
     background: var(--sd-surface-soft);
     border-radius: 12px;
-    border: 1px solid var(--sd-border);
+    border: 1px dashed var(--sd-line);
 }
 
 /* ── Poem frame ── */
 .poem-frame {
     position: relative;
-    border-radius: 14px;
+    border-radius: var(--sd-radius);
     padding: 1.75rem 1.85rem;
     background: linear-gradient(145deg, #ffffff, #f0fdf4);
-    border: 1px solid #bbf7d0;
+    border: 1px solid rgba(47, 159, 132, 0.2);
+}
+
+.poem-frame::before {
+    content: "";
+    position: absolute;
+    top: 1rem;
+    bottom: 1rem;
+    left: 0.85rem;
+    width: 3px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, var(--sd-mint), rgba(47, 159, 132, 0.25));
 }
 
 .poem-frame-bilingual {
@@ -405,24 +484,24 @@ body.bg-gray-50 {
 }
 
 .poem-language-column {
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid var(--sd-border);
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--sd-line);
     border-radius: 12px;
     padding: 0.85rem 1rem;
 }
 
 .poem-language-column-hebrew {
     background: rgba(240, 253, 250, 0.8);
-    border-color: #a7f3d0;
+    border-color: rgba(47, 159, 132, 0.2);
 }
 
 .poem-language-title {
     margin: 0 0 0.7rem;
-    font-size: 0.78rem;
-    letter-spacing: 0.1em;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     font-weight: 800;
-    color: #0f766e;
+    color: var(--sd-teal);
 }
 
 .poem-language-title-hebrew {
@@ -430,17 +509,7 @@ body.bg-gray-50 {
     letter-spacing: 0.03em;
     font-size: 0.88rem;
     text-align: right;
-}
-
-.poem-frame::before {
-    content: "";
-    position: absolute;
-    top: 1rem;
-    bottom: 1rem;
-    left: 0.85rem;
-    width: 3px;
-    border-radius: 999px;
-    background: linear-gradient(180deg, #14b8a6, rgba(16, 185, 129, 0.3));
+    font-family: 'Noto Serif Hebrew', serif;
 }
 
 .poem-stanza {
@@ -453,8 +522,8 @@ body.bg-gray-50 {
 .poem-line {
     margin: 0 0 0.3rem;
     color: #1f2937;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.08rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.1rem;
     line-height: 1.85;
 }
 
@@ -464,135 +533,159 @@ body.bg-gray-50 {
 
 .poem-line-opening {
     color: #134e4a;
-    font-size: 1.16rem;
+    font-size: 1.2rem;
 }
 
 .poem-line-opening::first-letter {
     font-size: 1.6em;
     font-weight: 700;
-    color: #0f766e;
+    color: var(--sd-mint);
 }
 
 .poem-line-hebrew {
     direction: rtl;
     text-align: right;
     color: #134e4a;
-    font-family: "Noto Serif Hebrew", "Times New Roman", serif;
+    font-family: 'Noto Serif Hebrew', serif;
 }
 
-/* ── Poem Mode — warm manuscript ── */
-body.poem-mode.bg-gray-50 {
-    background: #faf7f2;
+/* ════════════════════════════════════════
+   Poem Mode — warm manuscript aesthetic
+   ════════════════════════════════════════ */
+
+body.poem-mode.sd-body {
+    background:
+        radial-gradient(1000px 500px at 20% 10%, rgba(180, 120, 50, 0.08), transparent 60%),
+        radial-gradient(800px 400px at 80% 80%, rgba(120, 53, 15, 0.06), transparent 50%),
+        linear-gradient(180deg, #faf7f2 0%, #f5ecd8 50%, #faf7f2 100%);
     color: #2f2416;
 }
 
-body.poem-mode .song-detail-container {
-    background: linear-gradient(160deg, #faf5ec, #f5ecd8);
-    border-color: rgba(120, 53, 15, 0.2);
+body.poem-mode .sd-back {
+    background: rgba(255, 249, 236, 0.95);
+    border-color: rgba(120, 53, 15, 0.18);
+    color: #854d0e;
 }
 
-body.poem-mode .song-detail-container::before,
-body.poem-mode .song-detail-container::after {
+body.poem-mode .sd-back:hover {
+    border-color: rgba(120, 53, 15, 0.35);
+    background: rgba(255, 248, 225, 0.95);
+}
+
+body.poem-mode .sd-type-chip {
+    background: rgba(120, 53, 15, 0.1);
+    color: #854d0e;
+}
+
+body.poem-mode .sd-article {
+    background: linear-gradient(160deg, #faf5ec, #f5ecd8);
+    border-color: rgba(120, 53, 15, 0.18);
+    box-shadow: 0 12px 30px rgba(120, 53, 15, 0.08);
+    position: relative;
+}
+
+body.poem-mode .sd-article::before,
+body.poem-mode .sd-article::after {
     content: "\2766";
     position: absolute;
-    color: rgba(120, 53, 15, 0.35);
+    color: rgba(120, 53, 15, 0.3);
     font-size: 1rem;
     line-height: 1;
     pointer-events: none;
+    z-index: 1;
 }
 
-body.poem-mode .song-detail-container::before { top: 0.85rem; left: 0.9rem; }
-body.poem-mode .song-detail-container::after { bottom: 0.85rem; right: 0.9rem; }
+body.poem-mode .sd-article::before { top: 0.85rem; left: 0.9rem; }
+body.poem-mode .sd-article::after { bottom: 0.85rem; right: 0.9rem; }
 
-body.poem-mode .song-detail-header {
+body.poem-mode .sd-hero {
     background: linear-gradient(175deg, rgba(255, 251, 240, 0.85), rgba(247, 239, 221, 0.95));
-    border-bottom-color: rgba(120, 53, 15, 0.15);
+    border-bottom-color: rgba(120, 53, 15, 0.12);
 }
 
-body.poem-mode .song-detail-title {
-    font-family: "Cinzel", "Cormorant Garamond", Georgia, serif;
+body.poem-mode .sd-title {
+    font-family: 'Cinzel', 'Cormorant Garamond', Georgia, serif;
     color: #5b3a1a;
     letter-spacing: 0.02em;
-    font-size: clamp(1.8rem, 3.2vw, 2.8rem);
 }
 
 body.poem-mode .song-title-hebrew {
-    font-family: "Noto Serif Hebrew", "Times New Roman", serif;
+    font-family: 'Noto Serif Hebrew', serif;
     color: #7c2d12;
-    font-size: clamp(1.4rem, 2.6vw, 2.2rem);
 }
 
-body.poem-mode .song-detail-artist,
-body.poem-mode .song-detail-date {
+body.poem-mode .sd-artist,
+body.poem-mode .sd-date {
     background: rgba(255, 248, 233, 0.9);
-    border-color: rgba(120, 53, 15, 0.2);
+    border-color: rgba(120, 53, 15, 0.18);
     color: #5b3a1a;
 }
 
-body.poem-mode .song-detail-artist::before,
-body.poem-mode .song-detail-date::before { color: #854d0e; }
+body.poem-mode .sd-artist::before { color: #854d0e; }
 
-body.poem-mode .song-detail-overview {
+body.poem-mode .sd-date {
+    color: #854d0e;
+    background: rgba(255, 248, 233, 0.9);
+    border-color: rgba(120, 53, 15, 0.18);
+}
+
+body.poem-mode .sd-overview {
     background: rgba(255, 249, 236, 0.9);
-    border-color: rgba(120, 53, 15, 0.2);
+    border-bottom-color: rgba(120, 53, 15, 0.1);
     color: #4c3a27;
-    font-family: "Cormorant Garamond", Georgia, serif;
-    font-size: 1.12rem;
-    line-height: 1.6;
-}
-
-body.poem-mode .song-detail-lyrics-section {
-    background: linear-gradient(175deg, rgba(248, 242, 226, 0.5), rgba(244, 236, 217, 0.4));
-    border-top-color: rgba(120, 53, 15, 0.12);
-}
-
-body.poem-mode .section-title {
-    background: rgba(254, 249, 239, 0.85);
-    border-color: rgba(120, 53, 15, 0.22);
-    color: #5b3a1a;
-    font-family: "Cinzel", Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.05rem;
-    letter-spacing: 0.06em;
 }
 
-body.poem-mode .section-icon { color: #854d0e; }
+body.poem-mode .sd-lyrics-section {
+    background: linear-gradient(175deg, rgba(248, 242, 226, 0.5), rgba(244, 236, 217, 0.4));
+}
 
-body.poem-mode .lyrics-detail-container {
+body.poem-mode .sd-section-label {
+    background: rgba(254, 249, 239, 0.85);
+    border-color: rgba(120, 53, 15, 0.18);
+    color: #854d0e;
+}
+
+body.poem-mode .sd-section-label svg { color: #854d0e; }
+
+body.poem-mode .sd-lyrics-container {
     background: transparent;
     border: none;
     padding: 0;
+    box-shadow: none;
 }
 
 body.poem-mode .poem-frame {
-    border-color: rgba(120, 53, 15, 0.22);
+    border-color: rgba(120, 53, 15, 0.18);
     background: linear-gradient(158deg, #fffaf0, #f8efd9);
 }
 
 body.poem-mode .poem-frame::before {
     width: 2px;
     left: 0.7rem;
-    background: linear-gradient(180deg, rgba(120, 53, 15, 0.65), rgba(180, 83, 9, 0.25));
+    background: linear-gradient(180deg, rgba(120, 53, 15, 0.6), rgba(180, 83, 9, 0.2));
 }
 
 body.poem-mode .poem-language-column {
     background: rgba(255, 251, 240, 0.76);
-    border-color: rgba(120, 53, 15, 0.2);
+    border-color: rgba(120, 53, 15, 0.18);
 }
 
 body.poem-mode .poem-language-column-hebrew {
     background: rgba(250, 244, 227, 0.84);
-    border-color: rgba(133, 77, 14, 0.22);
+    border-color: rgba(133, 77, 14, 0.2);
 }
 
 body.poem-mode .poem-language-title {
     color: #7c2d12;
-    font-family: "Cinzel", Georgia, serif;
+    font-family: 'Cinzel', Georgia, serif;
     letter-spacing: 0.12em;
-    font-size: 0.74rem;
+    font-size: 0.7rem;
 }
 
 body.poem-mode .poem-language-title-hebrew {
-    font-family: "Noto Serif Hebrew", "Times New Roman", serif;
+    font-family: 'Noto Serif Hebrew', serif;
     letter-spacing: 0.06em;
 }
 
@@ -600,32 +693,23 @@ body.poem-mode .poem-stanza {
     padding: 0 0 1.35rem 0.9rem;
 }
 
-body.poem-mode .poem-stanza:not(:first-child)::before {
-    content: "\2726";
-    position: absolute;
-    top: -0.8rem;
-    left: 0.8rem;
-    font-size: 0.55rem;
-    color: rgba(120, 53, 15, 0.4);
-}
-
 body.poem-mode .poem-line {
     color: #3a2b1c;
-    font-family: "Cormorant Garamond", Georgia, serif;
-    font-size: 1.2rem;
-    line-height: 1.7;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.22rem;
+    line-height: 1.72;
 }
 
 body.poem-mode .poem-line strong { color: #7c2d12; }
 
 body.poem-mode .poem-line-opening {
-    font-size: 1.3rem;
+    font-size: 1.32rem;
     color: #7c2d12;
 }
 
 body.poem-mode .poem-line-opening::first-letter {
     color: #9a3412;
-    font-family: "Cinzel", "Cormorant Garamond", Georgia, serif;
+    font-family: 'Cinzel', 'Cormorant Garamond', Georgia, serif;
     font-size: 1.85em;
     line-height: 0.86;
     margin-right: 0.06em;
@@ -635,15 +719,36 @@ body.poem-mode .poem-line-hebrew {
     color: #4a3320;
     font-size: 1.12rem;
     line-height: 1.75;
-    font-family: "Noto Serif Hebrew", "Times New Roman", serif;
+}
+
+/* ── Footer ── */
+.sd-footer {
+    background: linear-gradient(135deg, #0c1a3e, #1e3a8a);
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    padding: 2rem 1rem;
+    font-size: 0.88rem;
+}
+
+.sd-footer p { margin: 0; }
+
+.sd-footer-sub {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 0.4rem !important;
+}
+
+body.poem-mode .sd-footer {
+    background: linear-gradient(135deg, #3b1f0a, #5b3a1a);
 }
 
 /* ── Responsive ── */
 @media (min-width: 768px) {
-    .song-detail-header { padding: 2.5rem; }
-    .song-detail-video-section,
-    .song-detail-lyrics-section { padding: 2rem 2.5rem; }
-    .lyrics-detail-container { padding: 1.5rem 2rem; }
+    .sd-hero { padding: 2.5rem 2.5rem 2rem; }
+    .sd-overview { padding: 1.15rem 2.5rem; }
+    .sd-video-section { padding: 2rem 2.5rem; }
+    .sd-lyrics-section { padding: 2rem 2.5rem 2.5rem; }
+    .sd-lyrics-container { padding: 1.25rem 1.5rem; }
     .lyric-line { padding: 0.9rem 1.15rem; }
     .lyric-hebrew { font-size: 1.3rem; }
     .poem-frame { padding: 2rem 2.15rem; }
@@ -654,22 +759,31 @@ body.poem-mode .poem-line-hebrew {
 }
 
 @media (min-width: 1024px) {
-    .song-detail-title { font-size: 2.35rem; }
-    .song-title-hebrew { font-size: 1.95rem; }
+    .sd-title { font-size: 2.5rem; }
+    .song-title-hebrew { font-size: 2rem; }
 }
 
 @media (max-width: 640px) {
-    .song-detail-header { padding: 1.5rem 1.15rem; }
-    .song-detail-title { font-size: 1.6rem; }
-    .song-title-hebrew { font-size: 1.35rem; }
-    .song-detail-video-section,
-    .song-detail-lyrics-section { padding: 1.25rem 1rem; }
-    .lyrics-detail-container { padding: 0.75rem; overflow-x: auto; }
-    .lyric-line { padding: 0.7rem 0.6rem; gap: 0.55rem; }
-    .lyric-line-num { width: 22px; height: 22px; font-size: 0.58rem; }
+    .sd-wrap { padding: 1rem 0.85rem 2rem; }
+
+    .sd-hero { padding: 1.5rem 1.15rem; }
+    .sd-title { font-size: 1.55rem; }
+    .song-title-hebrew { font-size: 1.3rem; }
+
+    .sd-overview { padding: 0.85rem 1.15rem; font-size: 0.9rem; }
+
+    .sd-video-section { padding: 1.25rem 1.15rem; }
+    .sd-video { max-width: 100%; }
+
+    .sd-lyrics-section { padding: 1.25rem 1rem; }
+    .sd-lyrics-container { padding: 0.65rem; overflow-x: auto; }
+
+    .lyric-line { padding: 0.7rem 0.55rem; gap: 0.55rem; }
+    .lyric-line-num { width: 22px; height: 22px; font-size: 0.56rem; }
     .lyric-hebrew { font-size: 1.08rem; }
-    .lyric-translit { font-size: 0.84rem; }
-    .lyric-english { font-size: 0.82rem; }
+    .lyric-translit { font-size: 0.82rem; }
+    .lyric-english { font-size: 0.8rem; }
+
     .poem-frame { padding: 1.15rem 1rem; }
     .poem-frame-bilingual { padding: 0.85rem; }
     .poem-bilingual-grid { grid-template-columns: 1fr; gap: 0.8rem; }
@@ -677,8 +791,8 @@ body.poem-mode .poem-line-hebrew {
     .poem-frame::before { left: 0.58rem; }
     .poem-stanza { padding-left: 0.5rem; }
     .poem-line { font-size: 0.96rem; line-height: 1.72; }
-    body.poem-mode .song-detail-overview { font-size: 1rem; }
+
+    body.poem-mode .sd-overview { font-size: 0.95rem; }
     body.poem-mode .poem-line { font-size: 1.04rem; line-height: 1.62; }
     body.poem-mode .poem-line-hebrew { font-size: 0.98rem; line-height: 1.7; }
-    .video-container { max-width: 100%; }
 }
