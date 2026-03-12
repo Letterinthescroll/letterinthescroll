@@ -11,9 +11,56 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 min-h-screen shabbat-mode" data-shabbat-preview="true">
-<div id="shared-header-mount"></div>
-    <script src="/js/shared-header.js"></script>
-    <script src="/js/auth-gate.js"></script>
+    <header class="header-main relative z-30">
+        <div class="header-container">
+            <div class="header-branding-section">
+                <button id="home-branding" type="button" class="header-branding-button">
+                    <div class="header-text">
+                        <h1 class="header-title">A Letter in the Scroll</h1>
+                        <p class="header-subtitle">Interactive Weekly Portion Study & Discussion</p>
+                    </div>
+                </button>
+            </div>
+            <div class="header-actions-wrapper">
+                <div class="header-actions">
+                    <button class="header-btn header-btn-primary">
+                        <span class="header-btn-text">This Week's Parsha</span>
+                    </button>
+                    <a href="#" class="header-btn header-btn-secondary">
+                        <span class="header-btn-text">Prayers</span>
+                    </a>
+                    <a href="#" class="header-btn header-btn-secondary">
+                        <span class="header-btn-text">Songs and Poems</span>
+                    </a>
+                    <a href="#" class="header-btn header-btn-secondary">
+                        <span class="header-btn-text">About</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="daily-inspiration" class="daily-inspiration-header-section">
+            <div class="container mx-auto px-4 py-1">
+                <div class="daily-inspiration-card">
+                    <div class="daily-inspiration-content">
+                        <div class="daily-inspiration-main">
+                            <div class="daily-inspiration-quotes">
+                                <span class="quote-mark quote-mark-start">"</span>
+                                <span class="daily-inspiration-hebrew">בְּרֵאשִׁית בָּרָא אֱלֹהִים אֵת הַשָּׁמַיִם וְאֵת הָאָרֶץ</span>
+                                <span class="quote-mark quote-mark-end">"</span>
+                                <span class="daily-inspiration-translation">In the beginning God created the heavens and the earth.</span>
+                                <span class="daily-inspiration-source">Genesis 1:1</span>
+                            </div>
+                        </div>
+                        <div class="daily-inspiration-explanation-section">
+                            <span class="daily-inspiration-explanation-label">Explanation:</span>
+                            <p class="daily-inspiration-reflection">The opening verse of Torah reminds us that each week can begin again with light, purpose, and peace.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
     <main class="container mx-auto px-4 py-8">
         <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 border border-gray-200">
