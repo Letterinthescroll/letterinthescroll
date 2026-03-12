@@ -1,7 +1,7 @@
 // Firebase Module - "A Letter in the Scroll" Torah Study Platform
 // Most collaborative data is stored under chavrutas/{chavrutaId}/... subcollections.
 // Reactions/bookmarks are synchronized across all chavrutot that a user belongs to.
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { initializeApp, getApps, getApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import {
     getAuth,
     signInWithEmailAndPassword,
@@ -44,7 +44,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 const db = getFirestore(app);
 
