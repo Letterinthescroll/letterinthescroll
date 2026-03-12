@@ -407,7 +407,30 @@
         }
 
         @media (max-width: 640px) {
-            .hol-hero { padding: 2.5rem 1rem 2.5rem; }
+            .hol-hero {
+                padding: 1.8rem 1rem 2rem;
+            }
+            .hol-hero__eyebrow {
+                font-size: 0.6rem;
+                letter-spacing: 0.18em;
+                margin-bottom: 0.35rem;
+            }
+            .hol-hero__hebrew {
+                font-size: 1.15rem;
+                margin-bottom: 0.2rem;
+            }
+            .hol-hero__title {
+                font-size: 1.65rem;
+                margin-bottom: 0.6rem;
+            }
+            .hol-hero__subtitle {
+                font-size: 0.8rem;
+                line-height: 1.5;
+                max-width: 36ch;
+            }
+            .hol-hero::after {
+                height: 24px;
+            }
             .hol-grid { grid-template-columns: 1fr; padding: 0 1rem 1.5rem; }
             .hol-deco--roshapple,
             .hol-deco--passoverplate,
