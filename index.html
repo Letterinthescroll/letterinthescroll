@@ -28,7 +28,7 @@
     <meta name="twitter:image" content="https://www.aletterinthescroll.com/media/images/chavruta-invite-card-1200x630-v5.jpg">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LcyM4gsAAAAAMVsNjMdop2ZWLrKAokWbUrXcZJj" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -467,6 +467,11 @@
                         <button type="submit" id="nl-btn" class="px-6 py-3 rounded-xl font-bold text-sm text-white shadow-lg hover:shadow-xl transition-all whitespace-nowrap" style="background:linear-gradient(135deg,#c89a35,#b7871e)">
                             Subscribe
                         </button>
+                    </div>
+
+                    <!-- reCAPTCHA v2 checkbox -->
+                    <div class="flex justify-center mt-2">
+                        <div class="g-recaptcha" data-sitekey="6LepOYgsAAAAAH5vqu3hk9iVfQJZhqe9Dymj1ATi" data-theme="dark"></div>
                     </div>
                 </form>
             </div>
@@ -1265,25 +1270,17 @@
                 return;
             }
 
-            // Submit to Firestore with reCAPTCHA v3 Enterprise protection
+            // reCAPTCHA v2 check
+            if (!grecaptcha.getResponse()) {
+                errEl.textContent = 'Please check the "I\'m not a robot" box.';
+                errEl.classList.remove('hidden');
+                return;
+            }
+
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span>';
 
             try {
-                // Get reCAPTCHA v3 Enterprise token (invisible, score-based)
-                var token = await new Promise(function(resolve, reject) {
-                    grecaptcha.enterprise.ready(function() {
-                        grecaptcha.enterprise.execute('6LcyM4gsAAAAAMVsNjMdop2ZWLrKAokWbUrXcZJj', {action: 'newsletter_subscribe'})
-                            .then(resolve).catch(reject);
-                    });
-                });
-
-                if (!token) {
-                    errEl.textContent = 'reCAPTCHA verification failed. Please try again.';
-                    errEl.classList.remove('hidden');
-                    return;
-                }
-
                 var docId = email.replace(/[.#$/\[\]]/g, '_');
                 await db.collection('newsletterSubscribers').doc(docId).set({
                     email: email,
@@ -1299,6 +1296,7 @@
                 console.error('Newsletter signup error:', err);
                 errEl.textContent = 'Something went wrong. Please try again.';
                 errEl.classList.remove('hidden');
+                grecaptcha.reset();
             } finally {
                 btn.disabled = false;
                 btn.textContent = 'Subscribe';
