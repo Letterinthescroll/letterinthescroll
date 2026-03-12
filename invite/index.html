@@ -169,7 +169,7 @@
 
             var code = sanitizeInviteCode(rawInvite);
             var target = new URL('/join', window.location.origin);
-            target.searchParams.set('card', 'v5');
+            target.searchParams.set('card', 'v7');
 
             if (code.length === INVITE_CODE_LENGTH) {
                 target.searchParams.set('invite', code);
