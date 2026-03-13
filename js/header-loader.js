@@ -1,20 +1,22 @@
 /**
- * shared-header.js — Single source of truth for the site header.
+ * header-loader.js — Modular header loader with sessionStorage caching.
  *
- * Usage: add <div id="shared-header-mount"></div> where the <header> used to be,
- * then include <script src="/js/shared-header.js"></script> (before page-auth.js / main.js).
+ * Usage: add <div id="shared-header-mount" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%);min-height:64px"></div>
+ * then include <script src="/js/header-loader.js"></script> (before page-auth.js / main.js).
  *
- * The script auto-highlights the current page's nav button.
- * The user-dropdown pill is still injected separately by main.js or page-auth.js.
- *
- * Also handles:
- *  - Prefetching pages on hover for instant navigation
+ * Features:
+ *  - Fetches /includes/header.html and caches it in sessionStorage
+ *  - Auto-highlights the current page's nav button (including holiday sub-pages)
+ *  - Dispatches 'shared-header:ready' + 'headerLoaded' events when the header is in the DOM
+ *  - Prefetches pages on hover for instant navigation
  *  - Smooth page transitions (fade-out on leave, fade-in on arrive)
+ *  - The user-dropdown pill is still injected separately by main.js or page-auth.js
  */
 (function () {
     'use strict';
 
-    var HEADER_TEMPLATE_URL = '/header.html';
+    var HEADER_TEMPLATE_URL = '/includes/header.html';
+    var CACHE_KEY = 'cachedHeaderTemplate';
     var NAV_TOKEN = '__NAV_ITEMS__';
 
     /* ── Nav items ──────────────────────────────────────────────────────── */
@@ -96,6 +98,7 @@
         }).join('\n                ');
     }
 
+    /* ── Inline fallback (used if fetch + cache both miss) ────────────── */
     function fallbackTemplate() {
         return '' +
             '<header class="header-main relative z-30" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%)">' +
@@ -118,69 +121,96 @@
             '</header>';
     }
 
-    function loadTemplateSync() {
+    /* ── Template loading with sessionStorage cache ───────────────────── */
+    function loadTemplate() {
+        // 1. Try sessionStorage cache first (instant)
+        try {
+            var cached = sessionStorage.getItem(CACHE_KEY);
+            if (cached && cached.indexOf(NAV_TOKEN) !== -1) return cached;
+        } catch (_) { /* storage unavailable */ }
+
+        // 2. Synchronous fetch (keeps header render blocking to avoid layout shift)
         try {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', HEADER_TEMPLATE_URL, false);
             xhr.send(null);
 
             var okStatus = (xhr.status >= 200 && xhr.status < 300) || xhr.status === 0;
-            if (okStatus && xhr.responseText) {
+            if (okStatus && xhr.responseText && xhr.responseText.indexOf(NAV_TOKEN) !== -1) {
+                try { sessionStorage.setItem(CACHE_KEY, xhr.responseText); } catch (_) { /* quota */ }
                 return xhr.responseText;
             }
-        } catch (_) {
-            // Fall through to inline fallback
-        }
-        return null;
+        } catch (_) { /* network error */ }
+
+        // 3. Inline fallback
+        return fallbackTemplate();
     }
 
-    function getHeaderTemplate() {
-        var template = loadTemplateSync();
-        if (!template || template.indexOf(NAV_TOKEN) === -1) {
-            template = fallbackTemplate();
-        }
-        return template;
-    }
-
+    /* ── Dispatch ready events ────────────────────────────────────────── */
     function dispatchHeaderReady() {
         window.__sharedHeaderReady = true;
         try {
             document.dispatchEvent(new CustomEvent('shared-header:ready'));
+            document.dispatchEvent(new CustomEvent('headerLoaded'));
         } catch (_) {
-            var event = document.createEvent('Event');
-            event.initEvent('shared-header:ready', true, true);
-            document.dispatchEvent(event);
+            var evt = document.createEvent('Event');
+            evt.initEvent('shared-header:ready', true, true);
+            document.dispatchEvent(evt);
+            var evt2 = document.createEvent('Event');
+            evt2.initEvent('headerLoaded', true, true);
+            document.dispatchEvent(evt2);
         }
     }
 
+    /* ── Mount ──────────────────────────────────────────────────────────── */
     function mountHeader() {
         var mount = document.getElementById('shared-header-mount');
         if (!mount) return;
 
         var navHtml = buildNavHtml();
-        var headerHtml = getHeaderTemplate().replace(NAV_TOKEN, navHtml);
+        var headerHtml = loadTemplate().replace(NAV_TOKEN, navHtml);
         mount.outerHTML = headerHtml;
         dispatchHeaderReady();
     }
 
-    /* ── Mount ──────────────────────────────────────────────────────────── */
     mountHeader();
 
+    /* ── Pre-render user pill from cache (prevents layout shift) ──────
+       page-auth.js / main.js are ES modules (deferred), so they run
+       after DOM parse — too late for the first paint.  We read the same
+       sessionStorage cache they write to and render the pill now, inside
+       the synchronous header-loader script.  When the auth module runs
+       later it tears down this container and rebuilds it identically,
+       so there is zero visual change.
+       ─────────────────────────────────────────────────────────────────── */
+    (function preRenderUserPill() {
+        var ha = document.getElementById('header-actions');
+        if (!ha) return;
+
+        var cached = null;
+        try { cached = JSON.parse(sessionStorage.getItem('headerUserCache')); } catch (_) { return; }
+        if (!cached || !cached.firstName) return;
+
+        var initial = cached.firstName.charAt(0).toUpperCase();
+        var container = document.createElement('div');
+        container.id = 'header-user-dropdown-container';
+        container.style.cssText = 'position:relative;display:flex;align-items:center;';
+        container.innerHTML =
+            '<button id="header-user-menu-btn" class="header-user-pill" title="Account Menu" aria-haspopup="true" aria-expanded="false">' +
+                '<div class="header-user-avatar" aria-hidden="true">' + initial + '</div>' +
+                '<span class="header-btn-text">' + cached.firstName + '</span>' +
+                '<svg class="header-user-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">' +
+                    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>' +
+                '</svg>' +
+            '</button>';
+        ha.appendChild(container);
+    })();
+
     /* ══════════════════════════════════════════════════════════════════════
-       Page Transitions — prefetch on hover + smooth fade between pages
+       Navigation helpers — prefetch on hover + prevent re-navigation
+       Page transitions are handled by the CSS View Transitions API
+       (see style.css @view-transition). No manual fade needed.
        ══════════════════════════════════════════════════════════════════════ */
-
-    /* ── Inject transition styles ─────────────────────────────────────── */
-    var style = document.createElement('style');
-    style.textContent =
-        '@keyframes shPageIn{from{opacity:0}to{opacity:1}}' +
-        '.sh-page-ready{animation:shPageIn .18s ease-out both}' +
-        '.sh-page-leaving{opacity:0!important;transition:opacity .12s ease-in!important}' +
-        '.sh-page-leaving .header-main{opacity:1!important;transition:none!important}';
-    document.head.appendChild(style);
-
-    /* ── Fade-in on arrival ───────────────────────────────────────────── */
-    document.documentElement.classList.add('sh-page-ready');
 
     /* ── Prefetch pages on hover ──────────────────────────────────────── */
     var prefetched = {};
@@ -201,31 +231,12 @@
         prefetchHref(href);
     }, { passive: true });
 
-    /* ── Smooth exit on internal nav clicks ───────────────────────────── */
+    /* ── Prevent re-navigation to the current page ────────────────────── */
     document.addEventListener('click', function (e) {
         var a = e.target.closest && e.target.closest('a[href]');
         if (!a) return;
-
-        var href = a.getAttribute('href');
-        if (!href || href.charAt(0) === '#' || href.indexOf('://') !== -1 || href.indexOf('mailto:') === 0) return;
-
-        // Skip if modifier keys (new tab, etc.)
-        if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
-        // Skip if target="_blank"
-        if (a.target === '_blank') return;
-        // Skip if already on this page
         if (a.getAttribute('aria-current') === 'page') {
             e.preventDefault();
-            return;
         }
-        // Only apply transition to header/sidebar nav links
-        if (!a.closest('.header-actions, .header-branding-section, .site-sidebar')) return;
-
-        e.preventDefault();
-        document.documentElement.classList.remove('sh-page-ready');
-        document.documentElement.classList.add('sh-page-leaving');
-        setTimeout(function () {
-            window.location.href = href;
-        }, 120);
     });
 })();
