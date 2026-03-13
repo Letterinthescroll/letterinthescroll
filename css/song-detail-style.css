@@ -618,37 +618,73 @@ html {
     font-size: 0.8rem;
 }
 
+/* ── Poem layout — elegant parchment-style display ── */
+
 .poem-shell {
-    border-radius: 0.95rem;
-    border: 1px solid rgba(177, 79, 47, 0.22);
-    background: linear-gradient(160deg, #fffaf1 0%, #f7ecda 100%);
-    padding: 1rem;
+    border-radius: 1.4rem;
+    border: 1px solid rgba(160, 110, 60, 0.15);
+    background:
+        radial-gradient(ellipse 90% 70% at 15% 5%, rgba(255, 248, 235, 0.6), transparent),
+        radial-gradient(ellipse 80% 60% at 90% 95%, rgba(245, 230, 200, 0.4), transparent),
+        linear-gradient(168deg, #fffdf8 0%, #fbf5e8 40%, #f7ecd8 100%);
+    padding: 2.5rem 3rem;
+    box-shadow:
+        0 1px 0 rgba(160, 110, 60, 0.06),
+        0 4px 16px rgba(120, 70, 30, 0.05),
+        0 12px 40px rgba(120, 70, 30, 0.06);
+    max-width: 960px;
+    margin: 0 auto;
 }
 
 .poem-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.85rem;
+    grid-template-columns: 1fr auto 1fr;
+    column-gap: 2.5rem;
+    align-items: start;
+}
+
+/* Vertical divider between columns */
+.poem-grid > .poem-divider {
+    width: 1px;
+    align-self: stretch;
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(160, 110, 60, 0.22) 12%,
+        rgba(160, 110, 60, 0.18) 88%,
+        transparent 100%
+    );
 }
 
 .poem-column {
-    border-radius: 0.85rem;
-    border: 1px solid rgba(177, 79, 47, 0.18);
-    background: rgba(255, 255, 255, 0.76);
-    padding: 0.85rem;
+    border-radius: 0;
+    border: none;
+    background: transparent;
+    padding: 0.5rem 0;
 }
 
+/* English column goes in column 1 */
+.poem-column:first-child {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+/* Hebrew column goes in column 3 (after divider) */
 .poem-column-hebrew {
-    background: rgba(255, 250, 241, 0.84);
+    grid-column: 3;
+    grid-row: 1;
+    background: transparent;
 }
 
 .poem-column-title {
-    margin: 0 0 0.6rem;
-    font-size: 0.66rem;
-    letter-spacing: 0.1em;
+    margin: 0 0 1.4rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     font-weight: 700;
-    color: #8a431c;
+    color: rgba(138, 67, 28, 0.5);
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid rgba(160, 110, 60, 0.1);
 }
 
 .poem-column-title-hebrew {
@@ -659,59 +695,109 @@ html {
 }
 
 .poem-stanza + .poem-stanza {
-    margin-top: 1rem;
+    margin-top: 1.8rem;
 }
 
 .poem-line {
     margin: 0;
-    color: #3f2a18;
-    line-height: 1.72;
-    font-size: 1.06rem;
+    color: #3a2615;
+    line-height: 1.95;
+    font-size: 1.15rem;
     font-family: "Cormorant Garamond", Georgia, serif;
 }
 
 .poem-line + .poem-line {
-    margin-top: 0.18rem;
+    margin-top: 0.2rem;
 }
 
 .poem-line strong {
     color: #7f310f;
+    font-weight: 600;
 }
 
 .poem-line-hebrew {
     direction: rtl;
     text-align: right;
     font-family: "Noto Serif Hebrew", serif;
-    color: #4a301d;
-    font-size: 1.01rem;
+    color: #3d2810;
+    font-size: 1.12rem;
+    line-height: 2.05;
 }
 
 body.poem-mode.song-detail-body {
     background:
-        radial-gradient(1100px 600px at -10% -10%, rgba(177, 79, 47, 0.18), transparent 62%),
-        radial-gradient(800px 420px at 110% -12%, rgba(197, 139, 42, 0.22), transparent 58%),
-        linear-gradient(180deg, #fbf6ee 0%, #f7ecd8 50%, #f9f3e8 100%);
+        radial-gradient(1200px 650px at -8% -8%, rgba(160, 110, 60, 0.12), transparent 60%),
+        radial-gradient(900px 500px at 108% -10%, rgba(197, 150, 70, 0.14), transparent 55%),
+        radial-gradient(600px 400px at 50% 100%, rgba(180, 120, 50, 0.06), transparent 60%),
+        linear-gradient(175deg, #fdf8ef 0%, #f8eed9 45%, #faf4e8 100%);
 }
 
 body.poem-mode .song-type-chip {
-    color: #8a431c;
-    border-color: rgba(177, 79, 47, 0.22);
-    background: rgba(177, 79, 47, 0.1);
+    color: #8a5520;
+    border-color: rgba(160, 100, 40, 0.25);
+    background: rgba(160, 100, 40, 0.08);
+}
+
+body.poem-mode .song-meta-pill-soft {
+    color: #8a5520;
+    border-color: rgba(160, 100, 40, 0.2);
+    background: rgba(160, 100, 40, 0.06);
+}
+
+body.poem-mode .song-page {
+    border-color: rgba(160, 110, 60, 0.16);
+    background: linear-gradient(170deg, rgba(255, 252, 245, 0.95), rgba(250, 244, 230, 0.9));
 }
 
 body.poem-mode .song-media-card {
-    border-color: rgba(177, 79, 47, 0.2);
+    border-color: rgba(160, 110, 60, 0.16);
 }
 
 body.poem-mode .song-lyrics-card {
-    border-color: rgba(177, 79, 47, 0.2);
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+}
+
+body.poem-mode .song-lyrics-card .lyrics-toolbar {
+    padding: 0 0.2rem 0.8rem;
+}
+
+body.poem-mode .song-content-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+}
+
+body.poem-mode .song-lyrics-card .song-section-title {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+}
+
+body.poem-mode .lyrics-stage {
+    margin-top: 0;
 }
 
 body.poem-mode .song-hero {
     background:
-        radial-gradient(620px 220px at 100% 0%, rgba(197, 139, 42, 0.18), transparent 70%),
-        radial-gradient(600px 250px at 0% 100%, rgba(177, 79, 47, 0.13), transparent 72%),
-        linear-gradient(160deg, #fffaf3 0%, #fbf2df 52%, #f8ebd5 100%);
+        radial-gradient(700px 250px at 100% 0%, rgba(197, 150, 70, 0.12), transparent 70%),
+        radial-gradient(600px 280px at 0% 100%, rgba(160, 100, 40, 0.08), transparent 72%),
+        linear-gradient(164deg, #fffcf6 0%, #faf3e2 48%, #f7ebd3 100%);
+}
+
+body.poem-mode .song-hero-title {
+    color: #2c1a08;
+}
+
+body.poem-mode .song-title-hebrew {
+    color: #3d2510;
+}
+
+body.poem-mode .song-section-title {
+    color: rgba(138, 85, 32, 0.7);
+}
+
+body.poem-mode .song-section-title svg {
+    color: #a06828;
 }
 
 .song-footer {
@@ -746,6 +832,10 @@ body.poem-mode .song-hero {
     .song-lyrics-card {
         padding: 1.2rem;
     }
+
+    body.poem-mode .song-lyrics-card {
+        padding: 0;
+    }
 }
 
 @media (max-width: 900px) {
@@ -777,6 +867,10 @@ body.poem-mode .song-hero {
     .song-lyrics-card {
         padding: 0.78rem;
         border-radius: 0.86rem;
+    }
+
+    body.poem-mode .song-lyrics-card {
+        padding: 0;
     }
 
     .song-section-title {
@@ -818,7 +912,39 @@ body.poem-mode .song-hero {
         justify-content: center;
     }
 
+    .poem-shell {
+        padding: 1.5rem 1.2rem;
+        border-radius: 1.1rem;
+    }
+
     .poem-grid {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Hide the vertical divider on mobile */
+    .poem-grid > .poem-divider {
+        display: none;
+    }
+
+    .poem-column:first-child,
+    .poem-column-hebrew {
+        grid-column: auto;
+        grid-row: auto;
+    }
+
+    /* Add a horizontal divider between stacked columns on mobile */
+    .poem-column-hebrew {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(160, 110, 60, 0.13);
+    }
+
+    .poem-line {
+        font-size: 1.08rem;
+    }
+
+    .poem-line-hebrew {
+        font-size: 1.05rem;
     }
 }

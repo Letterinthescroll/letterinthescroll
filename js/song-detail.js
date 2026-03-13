@@ -99,6 +99,7 @@ function buildPoemHTML(poemLines = [], poemHebrewLines = []) {
           <h3 class="poem-column-title">English</h3>
           ${buildPoemColumnHTML(englishStanzas)}
         </section>
+        <div class="poem-divider" aria-hidden="true"></div>
         <section class="poem-column poem-column-hebrew">
           <h3 class="poem-column-title poem-column-title-hebrew" lang="he" dir="rtl">עברית</h3>
           ${buildPoemColumnHTML(hebrewStanzas, { isHebrew: true })}

@@ -2060,6 +2060,8 @@
                                 <option value="2">2 people</option><option value="3">3 people</option><option value="4">4 people</option>
                                 <option value="5">5 people</option><option value="6">6 people</option><option value="7">7 people</option>
                                 <option value="8" selected>8 people</option><option value="10">10 people</option><option value="12">12 people</option>
+                                <option value="15">15 people</option><option value="20">20 people</option><option value="25">25 people</option>
+                                <option value="30">30 people (Party)</option>
                             </select>
                             <button type="submit" id="create-btn" class="dash-submit-btn dash-submit-btn-create">Create Group</button>
                         </div>
@@ -2966,6 +2968,16 @@
                                 <button onclick="renameChavruta('${c.id}')" class="px-4 py-2 text-xs font-bold text-white rounded-xl transition-all" style="background:linear-gradient(135deg,#16285e,#2f56ab)">Save</button>
                             </div>
                         </div>
+                        <div>
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1.5">Group Size (${count}/${max} members)</label>
+                            <div class="flex gap-2">
+                                <select id="resize-${c.id}" class="flex-1 px-3 py-2 border-2 border-slate-200 rounded-xl text-sm bg-white text-slate-700 focus:border-blue-500 focus:outline-none">
+                                    ${[2,3,4,5,6,7,8,10,12,15,20,25,30].filter(n=>n>=count).map(n=>`<option value="${n}"${n===max?' selected':''}>${n} people${n===30?' (Party)':''}</option>`).join('')}
+                                </select>
+                                <button onclick="resizeChavruta('${c.id}')" class="px-4 py-2 text-xs font-bold text-white rounded-xl transition-all" style="background:linear-gradient(135deg,#16285e,#2f56ab)">Resize</button>
+                            </div>
+                            ${count>=max?'<p class="text-[10px] text-amber-500 mt-1.5 font-medium">Group is full! Increase the size to allow more members.</p>':''}
+                        </div>
                         ${transferOpts?`<div>
                             <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1.5">Transfer Leadership</label>
                             <select id="trf-${c.id}" class="w-full px-3 py-2 border-2 border-slate-200 rounded-xl text-sm bg-white text-slate-700 focus:border-blue-500 focus:outline-none mb-2">${transferOpts}</select>
@@ -3594,6 +3606,13 @@
         const n=document.getElementById('ren-'+id)?.value?.trim();
         if(!n||n.length<2){alert('Name must be at least 2 characters.');return;}
         try{ await db.collection('chavrutas').doc(id).update({name:n}); } catch { alert('Failed to rename.'); }
+    }
+    async function resizeChavruta(id){
+        const sel=document.getElementById('resize-'+id);
+        if(!sel) return;
+        const newMax=+sel.value;
+        if(newMax<1||newMax>30){alert('Invalid size.');return;}
+        try{ await db.collection('chavrutas').doc(id).update({maxMembers:newMax}); } catch { alert('Failed to resize group.'); }
     }
     async function transferLeadership(id,name){
         const uid=document.getElementById('trf-'+id)?.value; if(!uid) return;

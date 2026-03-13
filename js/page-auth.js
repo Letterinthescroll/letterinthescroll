@@ -6,7 +6,7 @@
  * Uses sessionStorage cache so the pill renders instantly across tab switches.
  */
 
-import { initAuth, getUserInfo } from './firebase.js';
+import { initAuth, getUserInfo, signOutUser } from './firebase.js';
 import { getDisplayNameFromEmail } from './name-utils.js';
 
 const CACHE_KEY = 'headerUserCache';
@@ -157,8 +157,10 @@ function buildHeaderDropdown(firstName, email) {
         if (e.key === 'Escape') closeDropdown();
     });
 
-    logoutBtn.addEventListener('click', () => {
+    logoutBtn.addEventListener('click', async () => {
         sessionStorage.removeItem(CACHE_KEY);
+        sessionStorage.setItem('justSignedOut', '1');
+        try { await signOutUser(); } catch (_) { /* proceed to redirect */ }
         window.location.href = '/';
     });
 }

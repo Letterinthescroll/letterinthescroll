@@ -376,7 +376,7 @@
         checkNewsletterStatus();
     });
 
-    function signOutUser() { sessionStorage.setItem('justSignedOut', '1'); auth.signOut().then(() => window.location.href = '/'); }
+    function signOutUser() { sessionStorage.removeItem('headerUserCache'); sessionStorage.setItem('justSignedOut', '1'); auth.signOut().then(() => window.location.href = '/'); }
 
     /* ════ SECTION SWITCHING ════ */
     function showSection(sec) {

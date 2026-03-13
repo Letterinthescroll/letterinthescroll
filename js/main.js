@@ -2697,6 +2697,8 @@ function setupLoginListeners() {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {
             try {
+                sessionStorage.setItem('justSignedOut', '1');
+                sessionStorage.removeItem('headerUserCache');
                 await signOutUser();
                 closeCommentsPanel(stopListeningForComments);
                 hideInfoPanel();
@@ -3121,11 +3123,12 @@ function updateHeaderUserDropdown(user, userProfile) {
             newLogoutBtn.addEventListener('click', async () => {
                 try {
                     if (typeof signOutUser === 'function') {
+                        sessionStorage.setItem('justSignedOut', '1');
+                        sessionStorage.removeItem('headerUserCache');
                         await signOutUser();
                         closeCommentsPanel(stopListeningForComments);
                         hideInfoPanel();
                         sessionStorage.removeItem('activeChavrutaId');
-                        sessionStorage.removeItem('headerUserCache');
                         window.location.href = '/';
                     }
                 } catch (error) {

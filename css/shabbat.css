@@ -301,6 +301,14 @@ body.shabbat-mode #shabbat-banner {
     z-index: 2;
 }
 
+/* On mobile, shabbat banner makes the sticky header too tall —
+   let the entire header scroll away so it doesn't block content */
+@media (max-width: 960px) {
+    body.shabbat-mode.sidebar-nav-enabled .header-main {
+        position: relative !important;
+    }
+}
+
 body.shabbat-mode #shabbat-banner::before {
     content: '';
     position: absolute;
@@ -688,6 +696,10 @@ body.shabbat-mode #community-status-bar .status-badge--gray {
    transparent, but the dashboard hero card needs its dark bg
    so white text remains visible.
    ============================================= */
+body.shabbat-mode #daily-inspiration {
+    background: linear-gradient(130deg, #122746 0%, #153960 42%, #0f6075 100%) !important;
+}
+
 body.shabbat-mode .dash-hero-inner.daily-inspiration-content {
     background: linear-gradient(145deg, #0e213c 0%, #13586c 100%) !important;
     border: 1px solid rgba(143, 208, 244, 0.25) !important;

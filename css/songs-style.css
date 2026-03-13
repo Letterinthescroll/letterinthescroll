@@ -727,6 +727,25 @@ html { scroll-behavior: auto !important; }
 
     .songs-type-tabs { justify-content: center; }
 
+    .songs-search-wrap {
+        padding: 0.25rem 0.45rem 0.25rem 0.7rem;
+    }
+
+    .songs-search-input {
+        font-size: 0.82rem;
+        padding: 0.22rem 0;
+    }
+
+    .songs-search-icon {
+        width: 0.85rem;
+        height: 0.85rem;
+    }
+
+    .songs-search-clear {
+        padding: 0.2rem 0.55rem;
+        font-size: 0.68rem;
+    }
+
     .songs-grid {
         grid-template-columns: 1fr;
     }

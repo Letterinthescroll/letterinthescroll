@@ -253,7 +253,7 @@
                                 <p style="font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(212,175,55,0.9);font-weight:700;margin-bottom:0.7rem;">✦ &nbsp;The Zohar Teaches</p>
                                 <h2 class="font-heading" style="font-size:clamp(1.8rem,3.4vw,2.55rem);color:#ffffff;line-height:1.1;font-weight:700;margin-bottom:1rem;max-width:22ch;">Every Jew Is a Letter In One Living Torah</h2>
                                 <p style="color:rgba(210,228,255,0.9);font-size:0.95rem;line-height:1.8;margin-bottom:0.8rem;">The Baal Shem Tov taught that the Jewish people itself is a living <em style="color:#ffd070;">Sefer Torah</em> — and every single Jew is one of its sacred letters.</p>
-                                <p style="color:rgba(210,228,255,0.9);font-size:0.95rem;line-height:1.8;">You are not free-floating in history. You are a character in the greatest story ever told — a story whose final chapter has not yet been written. <strong style="color:#ffe4a3;">Your letter belongs in the scroll.</strong></p>
+                                <p style="color:rgba(210,228,255,0.9);font-size:0.95rem;line-height:1.8;">You are not free-floating in history. You are a character in an amazing story — a story whose final chapter has not yet been written. <strong style="color:#ffe4a3;">Your letter belongs in the scroll.</strong></p>
                             </div>
                         </div>
 
@@ -650,16 +650,27 @@
         const googleProvider = new firebase.auth.GoogleAuthProvider();
 
         let authFlowInProgress = false;
+        let signingOut = false;
 
         // ── Prevent auto-login after sign-out (bfcache / sessionStorage flag) ──
         if (sessionStorage.getItem('justSignedOut')) {
             sessionStorage.removeItem('justSignedOut');
-            auth.signOut(); // ensure Firebase state is fully cleared
+            signingOut = true;
+            auth.signOut().then(function() {
+                signingOut = false;
+            }).catch(function() {
+                signingOut = false;
+            });
         }
         // If bfcache restores this page while a user is still in memory, sign them out
         window.addEventListener('pageshow', function(evt) {
             if (evt.persisted && auth.currentUser) {
-                auth.signOut();
+                signingOut = true;
+                auth.signOut().then(function() {
+                    signingOut = false;
+                }).catch(function() {
+                    signingOut = false;
+                });
             }
         });
 
@@ -887,7 +898,7 @@
         }
 
         auth.onAuthStateChanged(function(user) {
-            if (!user || authFlowInProgress) {
+            if (!user || authFlowInProgress || signingOut) {
                 return;
             }
 
@@ -900,8 +911,6 @@
                 db.collection('newsletterSubscribers').doc(nlDocId).get().then(function(doc) {
                     if (doc.exists) {
                         localStorage.setItem('nlSubscribed', '1');
-                        var sec = document.getElementById('nl-section');
-                        if (sec) sec.style.display = 'none';
                     }
                 }).catch(function() {});
             } catch(e) {}
@@ -1437,12 +1446,6 @@
         }
 
         /* ════ NEWSLETTER SIGNUP ════ */
-        (function() {
-            if (localStorage.getItem('nlSubscribed')) {
-                var sec = document.getElementById('nl-section');
-                if (sec) sec.style.display = 'none';
-            }
-        })();
 
         async function handleNewsletterSignup(e) {
             e.preventDefault();

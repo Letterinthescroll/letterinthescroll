@@ -5721,6 +5721,7 @@ body.sidebar-nav-enabled .site-sidebar .header-btn {
     overflow: visible;
     font-size: 0.84rem;
     font-weight: 600;
+    box-shadow: none !important;
 }
 
 body.sidebar-nav-enabled .site-sidebar .header-btn-text {

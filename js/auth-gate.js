@@ -42,6 +42,21 @@
     };
     document.head.appendChild(appScript);
 
+    function updateLoginRequiredOverlayOffset() {
+        var header = document.querySelector('header, .header-main');
+        var overlayTop = 0;
+
+        if (header) {
+            var rect = header.getBoundingClientRect();
+            overlayTop = Math.max(0, Math.round(rect.bottom || 0));
+            if (!overlayTop) {
+                overlayTop = Math.max(0, Math.round(header.offsetHeight || 0));
+            }
+        }
+
+        document.documentElement.style.setProperty('--login-required-overlay-top', overlayTop + 'px');
+    }
+
     function showLoginRequiredOverlayAndRedirect() {
         if (window.__loginRedirectPending) {
             return;
@@ -52,17 +67,85 @@
             var style = document.createElement('style');
             style.id = 'login-required-overlay-style';
             style.textContent = `
-                body.login-required-pending > *:not(#login-required-overlay) {
-                  filter: blur(6px);
-                  pointer-events: none !important;
-                  user-select: none !important;
+                body.login-required-pending {
+                  --login-required-overlay-top: 0px;
+                }
+                body.login-required-pending #shabbat-banner {
+                  display: none !important;
+                }
+                @media (min-width: 961px) {
+                  body.login-required-pending header,
+                  body.login-required-pending .header-main {
+                    z-index: 10001 !important;
+                    filter: none !important;
+                    -webkit-filter: none !important;
+                  }
+                  body.login-required-pending .header-container {
+                    padding: 1.25rem 1.5rem !important;
+                  }
+                  body.shabbat-mode.login-required-pending .header-main {
+                    background: linear-gradient(138deg, #16285e 0%, #203a82 50%, #2b4e9e 100%) !important;
+                    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.45) !important;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+                  }
+                  body.shabbat-mode.login-required-pending .header-main::before,
+                  body.shabbat-mode.login-required-pending .header-main::after {
+                    display: none !important;
+                  }
+                  body.shabbat-mode.login-required-pending .header-title {
+                    color: #fff !important;
+                    text-shadow: none !important;
+                  }
+                  body.shabbat-mode.login-required-pending .header-subtitle {
+                    color: rgba(255, 255, 255, 0.85) !important;
+                    text-shadow: none !important;
+                  }
+                  body.shabbat-mode.login-required-pending .header-btn-primary {
+                    color: #fff !important;
+                    background: rgba(255, 255, 255, 0.15) !important;
+                    border-color: rgba(255, 255, 255, 0.3) !important;
+                    box-shadow: none !important;
+                  }
+                  body.shabbat-mode.login-required-pending .header-btn-secondary {
+                    color: rgba(255, 255, 255, 0.9) !important;
+                    background: rgba(255, 255, 255, 0.08) !important;
+                    border-color: rgba(255, 255, 255, 0.2) !important;
+                    box-shadow: none !important;
+                  }
+                  body.shabbat-mode.login-required-pending .header-user-pill {
+                    color: #fff !important;
+                    background: rgba(255, 255, 255, 0.12) !important;
+                    border-color: rgba(255, 255, 255, 0.25) !important;
+                  }
+                  body.shabbat-mode.login-required-pending .header-user-chevron,
+                  body.shabbat-mode.login-required-pending .header-user-avatar {
+                    color: #fff !important;
+                  }
+                  body.shabbat-mode.login-required-pending #community-status-bar {
+                    background: rgba(0, 0, 0, 0.15) !important;
+                  }
+                  body.shabbat-mode.login-required-pending #community-status-bar * {
+                    color: rgba(255, 255, 255, 0.85) !important;
+                  }
+                }
+                @media (max-width: 960px) {
+                  body.login-required-pending .header-main {
+                    z-index: auto !important;
+                  }
+                  #login-required-overlay {
+                    top: 0 !important;
+                  }
                 }
                 #login-required-overlay {
                   position: fixed;
-                  inset: 0;
-                  z-index: 2147483647;
+                  top: var(--login-required-overlay-top, 0px);
+                  left: 0;
+                  right: 0;
+                  bottom: 0;
+                  z-index: 10000;
                   background: radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.22), transparent 36%), rgba(3, 10, 28, 0.62);
                   backdrop-filter: blur(4px);
+                  -webkit-backdrop-filter: blur(4px);
                   display: flex;
                   align-items: center;
                   justify-content: center;
@@ -180,6 +263,13 @@
         if (document.body) {
             document.body.classList.add('login-required-pending');
         }
+        updateLoginRequiredOverlayOffset();
+        if (!window.__loginOverlayOffsetBound) {
+            window.__loginOverlayOffsetBound = true;
+            window.addEventListener('resize', updateLoginRequiredOverlayOffset);
+        }
+        window.requestAnimationFrame(updateLoginRequiredOverlayOffset);
+        window.setTimeout(updateLoginRequiredOverlayOffset, 120);
 
         if (!document.getElementById('login-required-overlay')) {
             var overlay = document.createElement('div');
@@ -206,6 +296,7 @@
                 });
             }
         }
+        updateLoginRequiredOverlayOffset();
     }
 
     function checkAuth() {
