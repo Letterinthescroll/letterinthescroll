@@ -920,8 +920,20 @@ export function displayOnlineUsers(onlineUsers = []) {
         .slice(0, 10);
 
     if (entries.length === 0) {
+        // If cached data is still showing (alwaysVisible), keep it visible
+        // instead of hiding — fresh data will replace it when it arrives
+        const statusBar = document.getElementById('community-status-bar');
+        if (statusBar && statusBar.dataset.alwaysVisible && usersList.innerHTML.trim()) {
+            return;
+        }
         hideOnlineUsers();
         return;
+    }
+
+    // Fresh data arrived — clear the alwaysVisible flag so normal logic applies
+    const statusBarEl = document.getElementById('community-status-bar');
+    if (statusBarEl && statusBarEl.dataset.alwaysVisible) {
+        delete statusBarEl.dataset.alwaysVisible;
     }
 
     usersList.innerHTML = '';
@@ -1004,8 +1016,10 @@ export function displayOnlineUsers(onlineUsers = []) {
 
     // Cache rendered HTML for instant restore on next page load
     try {
+        var _un = document.getElementById('header-your-username');
         sessionStorage.setItem('presenceCache', JSON.stringify({
             html: usersList.innerHTML,
+            you: _un ? _un.textContent : '',
             ts: Date.now()
         }));
     } catch (e) { /* quota or private mode — ignore */ }
@@ -1077,6 +1091,14 @@ export function displayLastLogin(username, loginTime) {
 
     yourStatusSection.classList.remove('hidden');
     updateCommunityStatusLayout();
+
+    // Update cache with username for instant restore
+    try {
+        var cached = JSON.parse(sessionStorage.getItem('presenceCache') || '{}');
+        cached.you = username;
+        cached.ts = Date.now();
+        sessionStorage.setItem('presenceCache', JSON.stringify(cached));
+    } catch (e) { /* ignore */ }
 }
 
 function updateLoginTimeDisplay() {

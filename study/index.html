@@ -71,7 +71,43 @@
     </div>
     <!-- Instant presence restore — runs before any module loads -->
     <script>
-    (function(){try{var c=JSON.parse(sessionStorage.getItem('presenceCache'));if(!c||!c.html||Date.now()-c.ts>1800000)return;var l=document.getElementById('header-online-users-list');var s=document.getElementById('header-online-section');var b=document.getElementById('community-status-bar');if(l&&s&&b){l.innerHTML=c.html;s.classList.remove('hidden');b.classList.remove('hidden')}}catch(e){}})();
+    (function(){try{
+        var CACHE_TTL=14400000; /* 4 hours */
+        var b=document.getElementById('community-status-bar');
+        if(!b)return;
+        var c=null;
+        try{c=JSON.parse(sessionStorage.getItem('presenceCache'));}catch(e){}
+        var hasCache=c&&(Date.now()-c.ts<CACHE_TTL);
+        /* Kill the CSS transition so restore is truly instant */
+        b.style.transition='none';
+        if(hasCache){
+            /* Restore online users from cache */
+            if(c.html){
+                var l=document.getElementById('header-online-users-list');
+                var s=document.getElementById('header-online-section');
+                if(l&&s){l.innerHTML=c.html;s.classList.remove('hidden');}
+            }
+            /* Restore your-status section */
+            if(c.you){
+                var ys=document.getElementById('header-your-status');
+                var un=document.getElementById('header-your-username');
+                if(ys&&un){un.textContent=c.you;ys.classList.remove('hidden');}
+            }
+        }else{
+            /* No cache — show loading skeleton so bar reserves space */
+            var ls=document.getElementById('header-online-section');
+            var ll=document.getElementById('header-online-users-list');
+            if(ls&&ll){
+                ll.innerHTML='<span class="presence-loading-skeleton"><span class="presence-skeleton-dot"></span><span class="presence-skeleton-bar"></span><span class="presence-skeleton-bar presence-skeleton-bar--short"></span></span>';
+                ls.classList.remove('hidden');
+            }
+        }
+        /* Show bar immediately — no layout shift */
+        b.classList.remove('hidden');
+        b.dataset.alwaysVisible='true';
+        /* Re-enable transitions after first paint for future updates */
+        requestAnimationFrame(function(){requestAnimationFrame(function(){b.style.transition='';});});
+    }catch(e){}})();
     </script>
 
     <!-- Chavruta Context Bar -->

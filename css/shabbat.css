@@ -15,6 +15,17 @@
    stays continuous across all transparent sections.
    ============================================= */
 body.shabbat-mode {
+    background: #fff9f4 !important;
+}
+
+/* GPU-accelerated fixed wallpaper — avoids background-attachment:fixed repaint lag */
+body.shabbat-mode::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    pointer-events: none;
+    will-change: transform;
     background:
         /* subtle warm glow top-left */
         radial-gradient(ellipse 100% 70% at 8% 6%, rgba(255, 228, 196, 0.22) 0%, transparent 55%),
@@ -36,8 +47,7 @@ body.shabbat-mode {
             #fbefe2  80%,
             #fdf5ee  90%,
             #fff9f4 100%
-        ) !important;
-    background-attachment: fixed !important;
+        );
 }
 
 /* =============================================
@@ -54,7 +64,7 @@ body.shabbat-mode .daily-inspiration-header-section,
 body.shabbat-mode #daily-inspiration,
 body.shabbat-mode .daily-inspiration-card,
 body.shabbat-mode .daily-inspiration-content,
-body.shabbat-mode nav {
+body.shabbat-mode nav:not(.prayers-anchor-menu) {
     background: transparent !important;
     background-color: transparent !important;
     border: 0 !important;
@@ -88,7 +98,7 @@ body.shabbat-mode #community-status-bar {
     margin-bottom: 0;           /* was -1px */
 }
 
-body.shabbat-mode nav {
+body.shabbat-mode nav:not(.prayers-anchor-menu) {
     position: static;
     z-index: 10;
     overflow-x: clip;
@@ -105,10 +115,10 @@ body.shabbat-mode nav {
    ============================================= */
 
 /* nav has: bg-white shadow-md border-b-2 border-gray-200 */
-body.shabbat-mode nav[class*="bg-white"],
-body.shabbat-mode nav[class*="shadow-md"],
-body.shabbat-mode nav[class*="border-b"],
-body.shabbat-mode nav[class*="border-gray"] {
+body.shabbat-mode nav:not(.prayers-anchor-menu)[class*="bg-white"],
+body.shabbat-mode nav:not(.prayers-anchor-menu)[class*="shadow-md"],
+body.shabbat-mode nav:not(.prayers-anchor-menu)[class*="border-b"],
+body.shabbat-mode nav:not(.prayers-anchor-menu)[class*="border-gray"] {
     background: transparent !important;
     background-color: transparent !important;
     box-shadow: none !important;
@@ -673,6 +683,19 @@ body.shabbat-mode #community-status-bar .status-badge--gray {
 }
 
 /* =============================================
+   12b. DASHBOARD HERO CARD — keep dark background
+   The nuclear reset (section 2) makes .daily-inspiration-content
+   transparent, but the dashboard hero card needs its dark bg
+   so white text remains visible.
+   ============================================= */
+body.shabbat-mode .dash-hero-inner.daily-inspiration-content {
+    background: linear-gradient(145deg, #0e213c 0%, #13586c 100%) !important;
+    border: 1px solid rgba(143, 208, 244, 0.25) !important;
+    box-shadow: 0 12px 24px rgba(6, 24, 45, 0.26), 0 0 0 1px rgba(143, 208, 244, 0.24) !important;
+    border-radius: 1rem;
+}
+
+/* =============================================
    13. DAILY INSPIRATION — SHABBAT MODE
    ============================================= */
 body.shabbat-mode .daily-inspiration-header-section {
@@ -737,6 +760,29 @@ body.shabbat-mode .text-size-toggle:hover,
 body.shabbat-mode .text-size-toggle:focus-visible {
     background: rgba(255, 255, 255, 0.5) !important;
     border-color: rgba(180, 130, 80, 0.5) !important;
+}
+
+/* =============================================
+   14b. PROFILE DROPDOWN — dark text on light header
+   ============================================= */
+body.shabbat-mode .header-user-pill {
+    color: #3d2815 !important;
+    background: rgba(120, 80, 30, 0.08) !important;
+    border-color: rgba(120, 80, 30, 0.2) !important;
+}
+
+body.shabbat-mode .header-user-pill:hover {
+    background: rgba(120, 80, 30, 0.14) !important;
+    border-color: rgba(120, 80, 30, 0.3) !important;
+}
+
+body.shabbat-mode .header-user-chevron {
+    color: #3d2815 !important;
+}
+
+body.shabbat-mode .header-user-avatar {
+    border-color: rgba(120, 80, 30, 0.3) !important;
+    box-shadow: 0 1px 4px rgba(120, 70, 30, 0.15) !important;
     color: #3d2210 !important;
 }
 
@@ -744,16 +790,9 @@ body.shabbat-mode .text-size-toggle:focus-visible {
    15. RESPONSIVE TUNING
    ============================================= */
 @media (max-width: 768px) {
-    body.shabbat-mode {
-        /* iOS/Safari can repaint fixed gradients darker after initial render,
-           so we use scroll instead of fixed.  But scroll causes the gradient to
-           stretch as the page grows (JS injects the banner, content loads…),
-           shifting the header into the darker blue end.
-           Fix: lock each background layer to exactly one viewport-height so
-           the gradient proportions stay constant regardless of document length. */
-        background-attachment: scroll !important;
-        background-size: 100% 100vh !important;
-        background-repeat: no-repeat !important;
+    body.shabbat-mode::before {
+        /* On mobile, position:fixed pseudo already avoids the old
+           background-attachment:fixed iOS repaint issue.  No changes needed. */
     }
 
     body.shabbat-mode #shabbat-banner {
@@ -816,6 +855,162 @@ body.shabbat-mode .text-size-toggle:focus-visible {
     .shabbat-icon--note-4 {
         display: none;
     }
+}
+
+/* =============================================
+   16. PRAYERS PAGE — SHABBAT OVERRIDES
+   Keep prayer content readable & styled against
+   the sunrise gradient.
+   ============================================= */
+
+/* Page title bar — warm shabbat tones */
+body.shabbat-mode [style*="background:#1a3264"] {
+    background: linear-gradient(135deg, rgba(120, 80, 30, 0.85) 0%, rgba(160, 110, 50, 0.8) 100%) !important;
+    border-bottom-color: rgba(212, 175, 55, 0.35) !important;
+}
+
+/* Prayer finder — warm glassy card */
+body.shabbat-mode .prayer-finder-sticky {
+    background: rgba(255, 255, 255, 0.78) !important;
+    border-color: rgba(180, 130, 80, 0.25) !important;
+    box-shadow: 0 8px 24px rgba(120, 70, 30, 0.1) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+}
+
+/* Navigation hub — warm glass */
+body.shabbat-mode .nav-hub {
+    background: rgba(255, 255, 255, 0.72) !important;
+    border-color: rgba(180, 130, 80, 0.2) !important;
+    box-shadow: 0 12px 32px rgba(120, 70, 30, 0.08) !important;
+}
+
+/* Prayer sections — keep white cards clean */
+body.shabbat-mode .prayer-section {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border-color: rgba(180, 130, 80, 0.18) !important;
+    box-shadow: 0 6px 20px rgba(120, 70, 30, 0.06) !important;
+}
+
+/* Quick access bar */
+body.shabbat-mode .quick-access-bar {
+    background: rgba(255, 255, 255, 0.65) !important;
+    border-color: rgba(180, 130, 80, 0.2) !important;
+}
+
+body.shabbat-mode .quick-link {
+    background: rgba(255, 255, 255, 0.7) !important;
+    border-color: rgba(180, 130, 80, 0.22) !important;
+    color: #5a3518 !important;
+}
+
+body.shabbat-mode .quick-link:hover {
+    background: rgba(255, 240, 215, 0.85) !important;
+    border-color: rgba(180, 130, 80, 0.4) !important;
+}
+
+/* Category cards */
+body.shabbat-mode .category-card {
+    background: linear-gradient(135deg, rgba(255, 252, 245, 0.9) 0%, rgba(255, 245, 230, 0.85) 100%) !important;
+    border-color: rgba(180, 130, 80, 0.2) !important;
+}
+
+/* Hub tabs */
+body.shabbat-mode .hub-tab.active {
+    background: rgba(180, 130, 80, 0.15) !important;
+    color: #5a3518 !important;
+}
+
+/* Food blessing finder */
+body.shabbat-mode .bracha-finder {
+    background: rgba(255, 255, 255, 0.78) !important;
+    border-color: rgba(180, 130, 80, 0.2) !important;
+}
+
+/* Footer — keep dark */
+body.shabbat-mode footer {
+    background: #3d2815 !important;
+}
+
+/* Prayers page headings warm tones */
+body.shabbat-mode .prayer-finder-sticky h3,
+body.shabbat-mode .nav-hub h2,
+body.shabbat-mode .nav-hub h3 {
+    color: #3d2815 !important;
+}
+
+body.shabbat-mode .prayer-finder-sticky p,
+body.shabbat-mode .nav-hub p {
+    color: rgba(70, 40, 18, 0.8) !important;
+}
+
+/* Back-to-top button */
+body.shabbat-mode #back-to-top {
+    background: rgba(120, 80, 30, 0.85) !important;
+}
+
+/* =============================================
+   17. LOGIN / HOME PAGE — SHABBAT MODE
+   Warm sunrise transformation for the landing page.
+   No audio, compact greeting, floating icons.
+   ============================================= */
+
+/* Login header — warm sunrise gradient */
+body.shabbat-mode .gradient-header {
+    background: linear-gradient(
+        145deg,
+        #8b6914 0%,
+        #a67c1a 25%,
+        #c49a30 50%,
+        #d4a840 75%,
+        #b88520 100%
+    ) !important;
+    background-size: 200% 200% !important;
+}
+
+/* Compact shabbat banner inside login header */
+.shabbat-login-banner {
+    position: relative;
+    text-align: center;
+    padding: 0.8rem 1rem 0;
+    overflow: hidden;
+}
+
+.shabbat-login-banner .shabbat-greeting {
+    color: #fff;
+    text-shadow:
+        0 0 18px rgba(255, 228, 180, 0.5),
+        0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.shabbat-login-banner .shabbat-greeting-sub {
+    color: rgba(255, 245, 230, 0.88);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.shabbat-login-banner .shabbat-floating-icons {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.shabbat-login-banner .shabbat-icon {
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
+}
+
+/* Login page body background */
+body.shabbat-mode .mission-card {
+    background:
+        radial-gradient(circle at 85% 15%, rgba(212, 168, 67, 0.15), transparent 35%),
+        linear-gradient(170deg, rgba(255, 252, 245, 0.95), rgba(255, 248, 235, 0.97)) !important;
+    border-color: rgba(180, 130, 80, 0.15) !important;
+}
+
+body.shabbat-mode .auth-card {
+    background: rgba(255, 252, 245, 0.94) !important;
+    border-color: rgba(180, 130, 80, 0.12) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -3792,16 +3792,28 @@ body.torah-text-size-xlarge #parsha-text .english-text {
    USER STATUS HEADER BAR STYLES
    ======================================== */
 
-/* Community status bar animation */
+/* Community status bar — smooth reveal to prevent layout shift.
+   Override Tailwind's .hidden (display:none) so we can transition height. */
 #community-status-bar {
-    animation: slideDown 0.3s ease-out;
-    min-height: 38px;
-    padding: 0.3rem 0 !important;
+    display: block !important;       /* always in flow — never display:none */
+    max-height: 0;
+    min-height: 0;
+    padding: 0 !important;
     margin: 0 !important;
-    overflow-x: clip;
-    overflow-y: visible;
+    overflow: hidden;
     z-index: 40;
     position: relative;
+    opacity: 0;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out, opacity 0.25s ease-out;
+}
+
+#community-status-bar:not(.hidden) {
+    min-height: 38px;
+    max-height: 60px;
+    padding: 0.3rem 0 !important;
+    opacity: 1;
+    overflow-x: clip;
+    overflow-y: visible;
 }
 
 #community-status-bar .container {
@@ -3809,6 +3821,36 @@ body.torah-text-size-xlarge #parsha-text .english-text {
     min-height: 38px;
     overflow-x: clip;
     overflow-y: visible;
+}
+
+/* Loading skeleton for presence bar */
+.presence-loading-skeleton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0.6rem;
+}
+.presence-skeleton-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(148, 163, 184, 0.35);
+    animation: presencePulse 1.4s ease-in-out infinite;
+}
+.presence-skeleton-bar {
+    width: 56px;
+    height: 10px;
+    border-radius: 4px;
+    background: rgba(148, 163, 184, 0.2);
+    animation: presencePulse 1.4s ease-in-out 0.15s infinite;
+}
+.presence-skeleton-bar--short {
+    width: 36px;
+    animation-delay: 0.3s;
+}
+@keyframes presencePulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
 }
 
 #community-status-content {

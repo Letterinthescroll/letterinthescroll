@@ -40,8 +40,8 @@
     const BLESSING_SWITCH_MS = 9800;
     const BLESSING_TRANSITION_MS = 1400;
     const SHABBAT_CHECK_INTERVAL_MS = 60 * 1000;
-    const SHABBAT_AUDIO_INTRO_SRC = 'media/audio/AudioShabbatShalom.m4a';
-    const SHABBAT_AUDIO_SONG_SRC = 'media/audio/שלום עליכם  Shalom Aleichem.mp3';
+    const SHABBAT_AUDIO_INTRO_SRC = '/media/audio/AudioShabbatShalom.m4a';
+    const SHABBAT_AUDIO_SONG_SRC = '/media/audio/שלום עליכם  Shalom Aleichem.mp3';
     const AUDIO_PLAY_ICON_PATH = 'M8 6v12l10-6z';
     const AUDIO_PAUSE_ICON_PATH = 'M8 6h3v12H8zm5 0h3v12h-3';
 
@@ -209,8 +209,47 @@
         updateAudioToggleState(false);
     }
 
+    function createLoginShabbatBanner() {
+        const loginHeader = document.querySelector('.gradient-header');
+        if (!loginHeader || document.getElementById('shabbat-banner')) {
+            return;
+        }
+
+        const banner = document.createElement('div');
+        banner.id = 'shabbat-banner';
+        banner.className = 'shabbat-login-banner';
+        banner.setAttribute('role', 'region');
+        banner.setAttribute('aria-label', 'Shabbat greeting');
+
+        banner.innerHTML =
+            '<div class="shabbat-floating-icons" aria-hidden="true">' +
+                '<div class="shabbat-icon shabbat-icon--challah-1"><img src="/media/images/Challah.png" alt=""></div>' +
+                '<div class="shabbat-icon shabbat-icon--challah-2"><img src="/media/images/Challah.png" alt=""></div>' +
+                '<div class="shabbat-icon shabbat-icon--candle-1"><img src="/media/images/shabbatcandle.png" alt=""></div>' +
+                '<div class="shabbat-icon shabbat-icon--candle-2"><img src="/media/images/shabbatcandle.png" alt=""></div>' +
+            '</div>' +
+            '<div class="shabbat-greeting" style="font-size:clamp(1.1rem,3vw,1.4rem);margin:0;">שַׁבָּת שָׁלוֹם</div>' +
+            '<div class="shabbat-greeting-sub" style="margin-bottom:0;">' +
+                '<span class="shabbat-greeting-sub-prefix">Shabbat Shalom • </span>' +
+                '<span id="shabbat-blessing-text" class="shabbat-blessing-text">' + BLESSINGS[0] + '</span>' +
+            '</div>';
+
+        loginHeader.appendChild(banner);
+    }
+
     function createShabbatBanner() {
         if (document.getElementById('shabbat-banner')) {
+            return;
+        }
+
+        // Skip banner on the about page
+        if (document.body && document.body.dataset.noShabbatBanner === 'true') {
+            return;
+        }
+
+        // Home/login page has .gradient-header — use the compact login banner
+        if (document.querySelector('.gradient-header')) {
+            createLoginShabbatBanner();
             return;
         }
 
@@ -226,14 +265,14 @@
 
         banner.innerHTML =
             '<div class="shabbat-floating-icons" aria-hidden="true">' +
-                '<div class="shabbat-icon shabbat-icon--challah-1"><img src="media/images/Challah.png" alt=""></div>' +
-                '<div class="shabbat-icon shabbat-icon--challah-2"><img src="media/images/Challah.png" alt=""></div>' +
-                '<div class="shabbat-icon shabbat-icon--candle-1"><img src="media/images/shabbatcandle.png" alt=""></div>' +
-                '<div class="shabbat-icon shabbat-icon--candle-2"><img src="media/images/shabbatcandle.png" alt=""></div>' +
-                '<div class="shabbat-icon shabbat-icon--note-1"><img src="media/images/doublenote.png" alt=""></div>' +
-                '<div class="shabbat-icon shabbat-icon--note-2"><img src="media/images/note2.png" alt=""></div>' +
-                '<div class="shabbat-icon shabbat-icon--note-3"><img src="media/images/doublenote.png" alt=""></div>' +
-                '<div class="shabbat-icon shabbat-icon--note-4"><img src="media/images/note2.png" alt=""></div>' +
+                '<div class="shabbat-icon shabbat-icon--challah-1"><img src="/media/images/Challah.png" alt=""></div>' +
+                '<div class="shabbat-icon shabbat-icon--challah-2"><img src="/media/images/Challah.png" alt=""></div>' +
+                '<div class="shabbat-icon shabbat-icon--candle-1"><img src="/media/images/shabbatcandle.png" alt=""></div>' +
+                '<div class="shabbat-icon shabbat-icon--candle-2"><img src="/media/images/shabbatcandle.png" alt=""></div>' +
+                '<div class="shabbat-icon shabbat-icon--note-1"><img src="/media/images/doublenote.png" alt=""></div>' +
+                '<div class="shabbat-icon shabbat-icon--note-2"><img src="/media/images/note2.png" alt=""></div>' +
+                '<div class="shabbat-icon shabbat-icon--note-3"><img src="/media/images/doublenote.png" alt=""></div>' +
+                '<div class="shabbat-icon shabbat-icon--note-4"><img src="/media/images/note2.png" alt=""></div>' +
             '</div>' +
             '<div class="shabbat-greeting-row">' +
                 '<div class="shabbat-audio-shell">' +
@@ -372,8 +411,21 @@
         }
     }
 
+    function isShabbatDisabledOnPage() {
+        return Boolean(
+            document.body &&
+            document.body.dataset &&
+            document.body.dataset.noShabbatBanner === 'true'
+        );
+    }
+
     function activateShabbat() {
         if (!document.body) {
+            return;
+        }
+
+        // Pages that opt out of shabbat mode entirely
+        if (isShabbatDisabledOnPage()) {
             return;
         }
 
