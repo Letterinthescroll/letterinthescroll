@@ -628,6 +628,111 @@ select {
     position: relative;
 }
 
+/* ── Double Parsha Banner ── */
+.double-parsha-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 2px solid #86efac;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.12);
+}
+
+.double-parsha-banner--bottom {
+    margin-top: 2rem;
+    margin-bottom: 0;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-color: #93c5fd;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.12);
+}
+
+.double-parsha-banner__text {
+    font-size: 0.95rem;
+    color: #1e3a5f;
+    line-height: 1.5;
+}
+
+.double-parsha-banner__text strong {
+    color: #15803d;
+}
+
+.double-parsha-banner--bottom .double-parsha-banner__text strong {
+    color: #1e40af;
+}
+
+/* ── Double Parsha Section Header ── */
+.double-parsha-section-header {
+    margin: 1rem 0 2rem 0;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.15);
+    letter-spacing: 0.5px;
+}
+
+/* ── Double Parsha Divider ── */
+.double-parsha-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 6rem 0 3rem 0;
+    padding: 0 0.5rem;
+}
+
+.double-parsha-divider__line {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+}
+
+.double-parsha-divider__label {
+    padding: 0.75rem 2rem;
+    background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.15);
+    white-space: nowrap;
+}
+
+/* ── Double Mitzvah Challenge Blocks ── */
+.double-mitzvah-label {
+    margin-bottom: 0.25rem;
+}
+
+.double-mitzvah-label__parsha {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
+
+.double-mitzvah-block {
+    padding: 0.75rem;
+    border-left: 3px solid #3b82f6;
+    background: rgba(59, 130, 246, 0.04);
+    border-radius: 0 6px 6px 0;
+}
+
+.double-mitzvah-block__name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #2563eb;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.35rem;
+}
+
 /* Current Parsha Highlight */
 .current-parsha-highlight {
     background: #eff6ff;
@@ -2994,11 +3099,61 @@ select {
     }
 }
 
+/* Double parsha responsive - Tablet */
+@media (max-width: 768px) {
+    .double-parsha-banner {
+        padding: 0.75rem 1rem;
+        gap: 0.5rem;
+    }
+
+    .double-parsha-banner__text {
+        font-size: 0.875rem;
+    }
+
+    .double-parsha-section-header {
+        font-size: 1.2rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .double-parsha-divider {
+        margin: 5rem 0 2.5rem 0;
+    }
+
+    .double-parsha-divider__label {
+        font-size: 1.2rem;
+        padding: 0.625rem 1.5rem;
+    }
+}
+
 /* Small Mobile Devices - 640px and Below */
 @media (max-width: 640px) {
     /* Better body padding on small screens */
     body {
         font-size: 16px; /* Prevent zoom on iOS */
+    }
+
+    .double-parsha-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 0.75rem;
+    }
+
+    .double-parsha-banner__text {
+        font-size: 0.8rem;
+    }
+
+    .double-parsha-section-header {
+        font-size: 1.1rem;
+        padding: 0.625rem 0.75rem;
+    }
+
+    .double-parsha-divider {
+        margin: 4rem 0 2rem 0;
+    }
+
+    .double-parsha-divider__label {
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
     }
 
     /* Optimized verse containers for small screens */
