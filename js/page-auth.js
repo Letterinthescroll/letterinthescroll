@@ -173,7 +173,12 @@ initAuth(async (user) => {
     }
     const email = user.email || '';
 
-    // Try Firestore displayName first, fall back to email-derived name
+    // Build dropdown immediately with email-derived name so it's functional
+    // while we fetch the Firestore displayName in the background.
+    const fallbackName = getDisplayNameFromEmail(email).split(' ')[0];
+    buildHeaderDropdown(fallbackName, email);
+
+    // Try Firestore displayName — if different, rebuild with the real name
     let firstName = '';
     try {
         const profile = await getUserInfo(user.uid);
@@ -182,16 +187,15 @@ initAuth(async (user) => {
         }
     } catch (e) { /* ignore */ }
 
-    if (!firstName) {
-        const fullName = getDisplayNameFromEmail(email);
-        firstName = fullName.split(' ')[0];
-    }
+    if (!firstName) firstName = fallbackName;
 
     // Cache for instant rendering on next page load
     try {
-        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ firstName, email }));
+        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ firstName, email, uid: user.uid }));
     } catch (_) { /* ignore */ }
 
-    // Rebuild dropdown with authoritative data (may update cache-rendered version)
-    buildHeaderDropdown(firstName, email);
+    // Rebuild dropdown with authoritative name (only if different from fallback)
+    if (firstName !== fallbackName) {
+        buildHeaderDropdown(firstName, email);
+    }
 });

@@ -111,6 +111,14 @@
                         </span>
                         Newsletter
                     </button>
+                    <button class="side-tab w-full text-left" id="nav-birthday" onclick="showSection('birthday')">
+                        <span class="icon bg-rose-50">
+                            <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </span>
+                        Birthday
+                    </button>
                     <div class="gold-line my-2"></div>
                     <button class="side-tab w-full text-left text-red-500 hover:bg-red-50 hover:text-red-600" onclick="signOutUser()">
                         <span class="icon bg-red-50">
@@ -249,6 +257,37 @@
                     </div>
                 </div>
 
+                <!-- ── BIRTHDAY SECTION ── -->
+                <div id="sec-birthday" class="settings-section">
+                    <div class="card p-6 sm:p-7">
+                        <h2 class="font-semibold text-slate-800 text-lg mb-1">Date of Birth</h2>
+                        <p class="text-sm text-slate-400 mb-5">Used to calculate your personal daily Psalm from the Hebrew calendar.</p>
+                        <div class="gold-line mb-6"></div>
+
+                        <div id="birthday-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
+
+                        <form id="birthday-form" onsubmit="saveBirthday(event)" class="space-y-5">
+                            <div>
+                                <label for="birthday-input" class="block text-sm font-semibold text-slate-700 mb-1.5">Date of Birth</label>
+                                <input type="date" id="birthday-input" autocomplete="bday"
+                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                                <p class="text-xs text-slate-400 mt-1">Enter your Gregorian (English) birthday — we'll calculate the Hebrew date automatically.</p>
+                            </div>
+                            <div id="birthday-hebrew-preview" class="hidden p-4 bg-blue-50 border border-blue-100 rounded-xl">
+                                <p class="text-xs font-bold uppercase tracking-widest text-blue-600/70 mb-1">Hebrew Calendar Date</p>
+                                <p id="birthday-hebrew-text" class="text-sm font-semibold text-slate-700"></p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button type="submit" id="birthday-btn"
+                                    class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
+                                    style="background:linear-gradient(135deg,#16285e,#2f56ab)">
+                                    Save Birthday
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- ── PASSWORD SECTION ── -->
                 <div id="sec-password" class="settings-section">
                     <div class="card p-6 sm:p-7">
@@ -352,14 +391,23 @@
         // Pre-fill profile form
         document.getElementById('profile-name').value = user.displayName || '';
 
-        // Check if display name was already changed (one-time limit)
+        // Check if display name was already changed (one-time limit) + load birthday
         try {
             const userDoc = await db.collection('users').doc(user.uid).get();
-            if (userDoc.exists() && userDoc.data().displayNameChanged) {
+            const uData = userDoc.exists ? (userDoc.data() || {}) : {};
+            if (uData.displayNameChanged) {
                 document.getElementById('profile-form').classList.add('hidden');
                 document.getElementById('profile-locked').classList.remove('hidden');
             }
-        } catch(e) { console.error('Error checking displayNameChanged:', e); }
+            // Pre-fill birthday input with Gregorian date if saved
+            if (uData.birthDateGregorian) {
+                const bdayInput = document.getElementById('birthday-input');
+                if (bdayInput) {
+                    bdayInput.value = uData.birthDateGregorian;
+                    updateHebrewPreview(uData.birthDateGregorian);
+                }
+            }
+        } catch(e) { console.error('Error loading user data:', e); }
 
         // Show Google notice if applicable
         if (isGoogleUser) {
@@ -380,7 +428,7 @@
 
     /* ════ SECTION SWITCHING ════ */
     function showSection(sec) {
-        ['profile','email','password','newsletter'].forEach(s => {
+        ['profile','email','password','newsletter','birthday'].forEach(s => {
             document.getElementById('sec-'+s).classList.toggle('active', s===sec);
             document.getElementById('nav-'+s).classList.toggle('active', s===sec);
         });
@@ -388,6 +436,118 @@
 
     function cancelEdit(sec) {
         if (sec === 'profile') document.getElementById('profile-name').value = currentUser?.displayName || '';
+    }
+
+    /* ════ BIRTHDAY ════ */
+    // Map Intl Hebrew calendar month names (en-US) to canonical display names.
+    // Using month:'long' + numberingSystem:'latn' avoids the Safari bug where
+    // year:'numeric' returns Hebrew letters (e.g. "תשפ״ד") instead of digits.
+    const HEBREW_INTL_MONTH_MAP = {
+        'Tishri': 'Tishrei',   'Tishrei': 'Tishrei',
+        'Heshvan': 'Cheshvan', 'Cheshvan': 'Cheshvan', 'Marheshvan': 'Cheshvan',
+        'Kislev': 'Kislev',
+        'Tevet': 'Tevet',
+        'Shevat': 'Shevat',
+        'Adar': 'Adar',        // non-leap year
+        'Adar I': 'Adar I',    // leap year
+        'Adar II': 'Adar II',  // leap year
+        'Nisan': 'Nisan',
+        'Iyar': 'Iyar',
+        'Sivan': 'Sivan',
+        'Tamuz': 'Tammuz',     'Tammuz': 'Tammuz',
+        'Av': 'Av',
+        'Elul': 'Elul',
+    };
+
+    function gregorianToHebrew(dateStr) {
+        try {
+            const [y, m, d] = dateStr.split('-').map(Number);
+            if (!y || !m || !d) return null;
+            const date = new Date(y, m - 1, d, 12, 0, 0);
+
+            // Use numberingSystem:'latn' to force Arabic digits on all platforms
+            // (Safari with ca-hebrew returns Hebrew letters for year:'numeric').
+            // Use month:'long' to get a reliable text name, immune to leap-year
+            // ordinal shifts that break a simple numeric index lookup.
+            const fmtFull = new Intl.DateTimeFormat('en-US', {
+                calendar: 'hebrew',
+                numberingSystem: 'latn',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            const parts = {};
+            fmtFull.formatToParts(date).forEach(p => { parts[p.type] = p.value; });
+
+            const hebDay  = parseInt(parts.day,  10);
+            const hebYear = parseInt(parts.year, 10);
+            const intlMonthName = (parts.month || '').trim();
+
+            if (!hebDay || !hebYear || !intlMonthName) return null;
+
+            // Get the true ordinal month number (1=Tishrei … 13=Elul in leap year)
+            const fmtNum = new Intl.DateTimeFormat('en-US', {
+                calendar: 'hebrew',
+                numberingSystem: 'latn',
+                month: 'numeric'
+            });
+            const hebMonth = parseInt(fmtNum.format(date), 10);
+            if (!hebMonth) return null;
+
+            const hebrewBirthMonthName = HEBREW_INTL_MONTH_MAP[intlMonthName] || intlMonthName;
+            return { hebrewBirthDay: hebDay, hebrewBirthMonth: hebMonth, hebrewBirthYear: hebYear, hebrewBirthMonthName };
+        } catch { return null; }
+    }
+
+    function updateHebrewPreview(dateStr) {
+        const preview = document.getElementById('birthday-hebrew-preview');
+        const text    = document.getElementById('birthday-hebrew-text');
+        if (!preview || !text || !dateStr) { if (preview) preview.classList.add('hidden'); return; }
+        const heb = gregorianToHebrew(dateStr);
+        if (!heb) { preview.classList.add('hidden'); return; }
+        const monthDisplay = heb.hebrewBirthMonthName || `Month ${heb.hebrewBirthMonth}`;
+        text.textContent = `${heb.hebrewBirthDay} ${monthDisplay} ${heb.hebrewBirthYear}`;
+        preview.classList.remove('hidden');
+    }
+
+    // Wire up live preview on birthday input; also honour ?section= deep-link
+    document.addEventListener('DOMContentLoaded', () => {
+        const bdayInput = document.getElementById('birthday-input');
+        if (bdayInput) bdayInput.addEventListener('input', e => updateHebrewPreview(e.target.value));
+
+        // Auto-navigate to a specific section when linked from the missing-info toast
+        const sectionParam = new URLSearchParams(window.location.search).get('section');
+        if (sectionParam && ['profile','email','password','newsletter','birthday'].includes(sectionParam)) {
+            showSection(sectionParam);
+        }
+    });
+
+    async function saveBirthday(e) {
+        e.preventDefault();
+        const dateStr = document.getElementById('birthday-input').value.trim();
+        const btn     = document.getElementById('birthday-btn');
+        const msg     = document.getElementById('birthday-msg');
+
+        if (!dateStr) { showMsg(msg, 'Please select a date of birth.', 'error'); return; }
+
+        const heb = gregorianToHebrew(dateStr);
+        if (!heb) { showMsg(msg, 'Could not calculate Hebrew date. Please try a different date.', 'error'); return; }
+
+        setLoading(btn, true, 'Saving…');
+        hideMsg(msg);
+
+        try {
+            await db.collection('users').doc(currentUser.uid).set(
+                { birthDateGregorian: dateStr, ...heb },
+                { merge: true }
+            );
+            updateHebrewPreview(dateStr);
+            showMsg(msg, '✓ Birthday saved successfully.', 'success');
+        } catch (err) {
+            showMsg(msg, 'Failed to save birthday. Please try again.', 'error');
+        } finally {
+            setLoading(btn, false, 'Save Birthday');
+        }
     }
 
     /* ════ SAVE PROFILE ════ */

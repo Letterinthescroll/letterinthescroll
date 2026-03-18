@@ -222,6 +222,144 @@ export async function loadCommentaryData() {
     }
 }
 
+// ─── Daily Psalms — Chabad 30-day monthly cycle ───────────────────────────────
+const PSALMS_TTL = 24 * 60 * 60 * 1000; // 24 hours
+
+// Hard-coded Chabad Tehillim cycle: index = Hebrew day (1–30)
+// Each entry: { ref: Sefaria API ref, display: human-readable English }
+const _PORTIONS = [
+    null,                                                                    // 0 – unused
+    { ref: 'Psalms 1-9',       display: 'Psalms 1–9'          },           // Day 1
+    { ref: 'Psalms 10-17',     display: 'Psalms 10–17'        },           // Day 2
+    { ref: 'Psalms 18-22',     display: 'Psalms 18–22'        },           // Day 3
+    { ref: 'Psalms 23-28',     display: 'Psalms 23–28'        },           // Day 4
+    { ref: 'Psalms 29-34',     display: 'Psalms 29–34'        },           // Day 5
+    { ref: 'Psalms 35-38',     display: 'Psalms 35–38'        },           // Day 6
+    { ref: 'Psalms 39-43',     display: 'Psalms 39–43'        },           // Day 7
+    { ref: 'Psalms 44-48',     display: 'Psalms 44–48'        },           // Day 8
+    { ref: 'Psalms 49-54',     display: 'Psalms 49–54'        },           // Day 9
+    { ref: 'Psalms 55-59',     display: 'Psalms 55–59'        },           // Day 10
+    { ref: 'Psalms 60-65',     display: 'Psalms 60–65'        },           // Day 11
+    { ref: 'Psalms 66-68',     display: 'Psalms 66–68'        },           // Day 12
+    { ref: 'Psalms 69-71',     display: 'Psalms 69–71'        },           // Day 13
+    { ref: 'Psalms 72-76',     display: 'Psalms 72–76'        },           // Day 14
+    { ref: 'Psalms 77-78',     display: 'Psalms 77–78'        },           // Day 15
+    { ref: 'Psalms 79-82',     display: 'Psalms 79–82'        },           // Day 16
+    { ref: 'Psalms 83-87',     display: 'Psalms 83–87'        },           // Day 17
+    { ref: 'Psalms 88-89',     display: 'Psalms 88–89'        },           // Day 18
+    { ref: 'Psalms 90-96',     display: 'Psalms 90–96'        },           // Day 19
+    { ref: 'Psalms 97-103',    display: 'Psalms 97–103'       },           // Day 20
+    { ref: 'Psalms 104-105',   display: 'Psalms 104–105'      },           // Day 21
+    { ref: 'Psalms 106-107',   display: 'Psalms 106–107'      },           // Day 22
+    { ref: 'Psalms 108-112',   display: 'Psalms 108–112'      },           // Day 23
+    { ref: 'Psalms 113-118',   display: 'Psalms 113–118'      },           // Day 24
+    { ref: 'Psalms 119:1-96',  display: 'Psalm 119 (א–ל)',  ps119: 'a' }, // Day 25
+    { ref: 'Psalms 119:97-176',display: 'Psalm 119 (מ–ת)', ps119: 'b' }, // Day 26
+    { ref: 'Psalms 120-134',   display: 'Psalms 120–134'      },           // Day 27
+    { ref: 'Psalms 135-139',   display: 'Psalms 135–139'      },           // Day 28
+    { ref: 'Psalms 140-144',   display: 'Psalms 140–144'      },           // Day 29
+    { ref: 'Psalms 145-150',   display: 'Psalms 145–150'      },           // Day 30
+];
+
+/**
+ * Get today's Hebrew day (1–30) and whether the current month has 29 or 30 days.
+ * Uses Intl.DateTimeFormat with the Hebrew calendar — no external library needed.
+ * NOTE: does not account for sunset (Hebrew day starts at nightfall). For evening
+ * readings, users may be one day ahead on the Jewish calendar.
+ */
+function _getHebrewInfo() {
+    const fmt = new Intl.DateTimeFormat('en-US-u-ca-hebrew', {
+        day: 'numeric', month: 'numeric', year: 'numeric'
+    });
+    const now = new Date();
+    const todayParts = Object.fromEntries(fmt.formatToParts(now).map(p => [p.type, p.value]));
+    const hebrewDay   = parseInt(todayParts.day,   10);
+    const hebrewMonth = parseInt(todayParts.month, 10);
+
+    // To detect month length: advance to what would be "day 30" of this month
+    // and check whether that Gregorian date still lands in the same Hebrew month.
+    const probe = new Date(now);
+    probe.setDate(now.getDate() + (30 - hebrewDay));
+    const probeParts = Object.fromEntries(fmt.formatToParts(probe).map(p => [p.type, p.value]));
+    const daysInMonth = (parseInt(probeParts.month, 10) === hebrewMonth) ? 30 : 29;
+
+    return { hebrewDay, daysInMonth };
+}
+
+export function getCachedDailyPsalms() {
+    return _cacheGet(`sefaria_psalms_${CACHE_V}`);
+}
+
+function _cacheDailyPsalms(data) {
+    _cacheSet(`sefaria_psalms_${CACHE_V}`, data, PSALMS_TTL);
+}
+
+/**
+ * Compute today's daily Psalms portion (Chabad 30-day cycle).
+ * Returns { ref, display, hebrewDay, daysInMonth, combined } or null.
+ * Result is cached until the Hebrew day changes (checked on every call).
+ */
+export async function fetchDailyPsalms() {
+    try {
+        const { hebrewDay, daysInMonth } = _getHebrewInfo();
+
+        const day = Math.min(Math.max(hebrewDay, 1), 30);
+
+        // Validate cache by Hebrew day — busts automatically when the day rolls over.
+        const cached = getCachedDailyPsalms();
+        if (cached && cached.hebrewDay === day) return cached;
+
+        // 29-day month: on the 29th, combine day-29 and day-30 portions
+        const combined = (day === 29 && daysInMonth === 29);
+
+        let result;
+        if (combined) {
+            const p29 = _PORTIONS[29];
+            const p30 = _PORTIONS[30];
+            result = {
+                ref: 'Psalms 140-150',
+                display: 'Psalms 140–150',
+                displayNote: '(29th & 30th combined)',
+                hebrewDay: day,
+                daysInMonth,
+                combined: true
+            };
+        } else {
+            const p = _PORTIONS[day];
+            result = {
+                ref: p.ref,
+                display: p.display,
+                ps119: p.ps119 || null,
+                hebrewDay: day,
+                daysInMonth,
+                combined: false
+            };
+        }
+
+        _cacheDailyPsalms(result);
+        return result;
+    } catch (err) {
+        console.error('Psalms computation error:', err);
+        // Fallback: hit Sefaria calendar in case Intl isn't available
+        try {
+            const r = await fetch(`${API_CONFIG.SEFARIA_BASE}/calendars`);
+            if (!r.ok) return null;
+            const data = await r.json();
+            const item = (data.calendar_items || []).find(i => {
+                const en = (i.title?.en || '').toLowerCase();
+                return en === 'daily psalms' || en.includes('tehillim') || en.includes('psalm');
+            });
+            if (item) {
+                const result = { ref: item.ref, display: item.displayValue?.en || item.ref };
+                _cacheDailyPsalms(result);
+                return result;
+            }
+        } catch { /* ignore */ }
+        return null;
+    }
+}
+// ──────────────────────────────────────────────────────────────────────────────
+
 /**
  * Load mitzvah challenge data
  */

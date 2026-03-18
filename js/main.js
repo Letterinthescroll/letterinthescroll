@@ -3409,24 +3409,16 @@ async function handleAuthStateChange(user) {
         // Set the user's email so display name can be extracted from it
         setCurrentUserEmail(user.email);
         updateUsernameDisplay();
-        await refreshBookmarkedVerses();
-        await refreshBookmarkedQuotes();
 
+        // Run independent Firestore operations in parallel for faster loading
         let userProfile = null;
-
-        // Record user login activity
-        try {
-            await recordUserLogin(user.uid, user.email);
-        } catch (error) {
-            console.error('Error recording login:', error);
-        }
-
-        // Fetch the latest user profile (captures Firestore timestamps)
-        try {
-            userProfile = await getUserInfo(user.uid);
-        } catch (error) {
-            console.error('Error loading user profile:', error);
-        }
+        const [, , , profileResult] = await Promise.all([
+            refreshBookmarkedVerses().catch(e => console.error('Error refreshing bookmarks:', e)),
+            refreshBookmarkedQuotes().catch(e => console.error('Error refreshing quote bookmarks:', e)),
+            recordUserLogin(user.uid, user.email).catch(e => console.error('Error recording login:', e)),
+            getUserInfo(user.uid).catch(e => { console.error('Error loading user profile:', e); return null; })
+        ]);
+        userProfile = profileResult || null;
 
         currentUserProfile = userProfile;
 
@@ -3441,7 +3433,7 @@ async function handleAuthStateChange(user) {
             } else if (user.displayName) {
                 cachedFirstName = user.displayName.split(' ')[0];
             }
-            sessionStorage.setItem('headerUserCache', JSON.stringify({ firstName: cachedFirstName, email: user.email || '' }));
+            sessionStorage.setItem('headerUserCache', JSON.stringify({ firstName: cachedFirstName, email: user.email || '', uid: user.uid }));
         } catch (_) {}
 
         // Reflect latest login status in UI
@@ -4154,7 +4146,10 @@ function openParshaSignificanceModal() {
 
 function renderParsha(data, parshaRef) {
     const textContainer = document.getElementById('parsha-text');
-    
+
+    // Always keep the dropdown in sync with whatever parsha is being rendered
+    document.querySelectorAll('select#parsha-selector').forEach(s => { s.value = parshaRef; });
+
     updateParshaHeader(data.book || 'Torah Portion', parshaRef);
     textContainer.innerHTML = '';
 
