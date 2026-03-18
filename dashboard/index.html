@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/shabbat.css">
     <link rel="stylesheet" href="/css/mobile-overrides.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
     <style>
         :root {
@@ -3065,16 +3065,16 @@
     const db   = firebase.firestore();
     const isLocalDevHost = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
     const isSafariBrowser = /^((?!chrome|android).)*safari/i.test(navigator.userAgent || '');
-    try {
-        db.settings({
-            experimentalForceLongPolling: isLocalDevHost || isSafariBrowser,
-            experimentalAutoDetectLongPolling: true,
-            useFetchStreams: false
-        });
-    } catch (_) { /* already initialized in this context */ }
-    try {
-        db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
-    } catch (_) { /* unsupported browser/private mode */ }
+    if (isLocalDevHost || isSafariBrowser) {
+        try {
+            db.settings({
+                experimentalForceLongPolling: true,
+                experimentalAutoDetectLongPolling: true,
+                useFetchStreams: false,
+                merge: true
+            });
+        } catch (_) { /* settings already applied */ }
+    }
     const FieldValue = firebase.firestore.FieldValue;
 
     /* ── State ── */
@@ -3087,9 +3087,12 @@
     let dailyQuoteToggleInFlight = false;
     let dashboardShellRevealed = false;
     let mitzvahDashModuleQueued = false;
+    let chavrutaLoadStartedForUid = null;
     const INVITE_CODE_LENGTH = 16;
     const DASH_QUOTE_SUMMARY_CACHE_PREFIX = 'dashQuoteSummaryCache';
     const DASH_QUOTE_SUMMARY_CACHE_TTL_MS = 300000;
+
+    function dlog(...args) { console.log('%c[Dashboard]', 'color:#1f3f76;font-weight:bold', ...args); }
 
     function queueMitzvahDashModuleLoad() {
         if (mitzvahDashModuleQueued) {
@@ -3149,6 +3152,7 @@
             if (!c || c.uid !== hc.uid || (Date.now() - c.ts) > 300000) return;
             if (!c.groups || !c.groups.length) return;
             if (c.names) Object.assign(nameCache, c.names);
+            dlog('earlyRestoreGroups: rendering', c.groups.length, 'cached groups');
             renderChavrutasSync(c.groups);
             // Also restore the bookmark community line text
             var cachedLine = sessionStorage.getItem('dashQuoteLineCached');
@@ -3328,6 +3332,18 @@
         }
     }
 
+    function startGroupsForUserFast(user) {
+        if (!user || !user.uid) {
+            return;
+        }
+        if (chavrutaLoadStartedForUid === user.uid) {
+            return;
+        }
+        chavrutaLoadStartedForUid = user.uid;
+        currentUser = user;
+        loadChavrutas();
+    }
+
     function sanitizeInviteCode(rawValue) {
         if (typeof rawValue !== 'string') {
             return '';
@@ -3358,8 +3374,14 @@
     }
 
     /* ════ AUTH ════ */
+    dlog('auth.currentUser at script time:', auth.currentUser?.uid || 'null');
+    if (auth.currentUser) {
+        startGroupsForUserFast(auth.currentUser);
+    }
+
     let authRedirectTimer = null;
     auth.onAuthStateChanged(async user => {
+        dlog('onAuthStateChanged fired', { uid: user?.uid || 'null', email: user?.email || 'null' });
         if (!user) {
             // Firebase fires null initially while loading session from IndexedDB.
             // Delay redirect so the real auth state can arrive and cancel it.
@@ -3380,6 +3402,7 @@
         if (authRedirectTimer) { clearTimeout(authRedirectTimer); authRedirectTimer = null; }
         currentUser = user;
         revealDashboardShell();
+        startGroupsForUserFast(user);
         queueMitzvahDashModuleLoad();
 
         const cachedHeader = readCachedHeaderUser();
@@ -3399,8 +3422,6 @@
         // Cache for instant rendering on next page load (include uid so we can validate localStorage group cache)
         try { sessionStorage.setItem('headerUserCache', JSON.stringify({ firstName: firstName, email: user.email || '', uid: user.uid })); } catch(_) {}
 
-        // Start loading groups immediately instead of waiting on profile read.
-        loadChavrutas();
         refreshDailyQuoteBookmarkState();
 
         // Hide newsletter section if this user already subscribed (covers cross-device / cleared storage)
@@ -3617,36 +3638,67 @@
     }
 
     /* ════ LOAD CHAVRUTAS ════ */
+    let lastRenderedGroupIds = null; // skip redundant re-renders
     function loadChavrutas() {
+        dlog('loadChavrutas called', { uid: currentUser?.uid });
         chavUnsubs.forEach(u=>u()); chavUnsubs=[];
 
         // Instantly show cached data while Firestore loads
         const restoredFromCache = restoreFromCache();
+        dlog('restoreFromCache:', restoredFromCache);
         if (restoredFromCache) revealDashboardShell();
 
-        const unsub = db.collection('chavrutas')
-            .where('members','array-contains',currentUser.uid)
+        const groupsQuery = db.collection('chavrutas')
+            .where('members','array-contains',currentUser.uid);
+
+        // onSnapshot fires immediately with cached data, then again when server responds.
+        // No need for a separate .get() call — it just causes race conditions.
+        const unsub = groupsQuery
             .onSnapshot(async snap => {
                 const list = snap.docs.map(d=>({id:d.id,...d.data()}));
+                dlog('onSnapshot fired', { groupCount: list.length, ids: list.map(g=>g.id), fromCache: snap.metadata.fromCache });
+
                 revealDashboardShell();
+
+                // Skip re-render if the group list hasn't changed (avoids DOM flicker)
+                const idKey = list.map(g => g.id).sort().join(',');
+                if (lastRenderedGroupIds === idKey && list.length > 0) {
+                    dlog('Skipping re-render — same group IDs');
+                    return;
+                }
+                lastRenderedGroupIds = idKey;
+
+                dlog('Rendering', list.length, 'groups');
                 await renderChavrutas(list);
+                dlog('renderChavrutas complete');
             }, async err => {
+                dlog('onSnapshot ERROR:', err.message || err);
                 revealDashboardShell();
+
+                // If groups are already visible on screen, don't wipe them —
+                // just retry the listener silently.
+                const grid = document.getElementById('chavrutas-grid');
+                const alreadyHasCards = grid && grid.children.length > 0;
+
                 try {
                     const fallbackSnap = await db.collection('chavrutas')
                         .where('members', 'array-contains', currentUser.uid)
                         .get();
                     const fallbackList = fallbackSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+                    dlog('Fallback query returned', fallbackList.length, 'groups');
                     await renderChavrutas(fallbackList);
-                } catch (_) {
-                    if (!restoredFromCache) renderChavrutas([]);
+                } catch (fallbackErr) {
+                    dlog('Fallback query also failed:', fallbackErr.message);
+                    // Only show empty state if nothing is displayed yet
+                    if (!restoredFromCache && !alreadyHasCards) renderChavrutas([]);
                 }
                 // Retry real-time listener after a short delay.
                 setTimeout(() => {
                     if (currentUser) {
+                        dlog('Retrying loadChavrutas…');
                         loadChavrutas();
                     }
-                }, 10000);
+                }, 5000);
             });
         chavUnsubs.push(unsub);
     }

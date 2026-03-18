@@ -1,16 +1,15 @@
 // Daily Psalms (Tehillim) page module
 import { fetchDailyPsalms, fetchParshaText } from './api.js';
 import {
-    initAuth,
     getCurrentUserId,
-    submitReaction,
-    getUserReactions,
-    getReactionCountsForBook,
-    getBookmarkCountsForVerses,
-    addBookmark,
-    removeBookmark,
-    isVerseBookmarked,
-    getUserBookmarks,
+    submitGlobalReaction,
+    getUserGlobalReactions,
+    getGlobalReactionCountsForBook,
+    getGlobalBookmarkCountsForVerses,
+    addGlobalBookmark,
+    removeGlobalBookmark,
+    isGlobalVerseBookmarked,
+    getUserGlobalBookmarks,
     recordUserLogin,
     updateUserPresence,
     markUserOffline
@@ -71,19 +70,20 @@ async function requireUserId() {
         return immediate;
     }
 
-    // Auth restoration can take a few seconds on some browsers/dev environments.
-    // Poll briefly before concluding the user is unauthenticated.
-    const timeoutMs = authResolvedAtLeastOnce ? 1200 : 12000;
+    // Auth is managed by page-auth.js. Poll getCurrentUserId() briefly
+    // in case auth is still restoring (e.g. user clicked very fast on load).
+    const timeoutMs = 5000;
     const startedAt = Date.now();
     while ((Date.now() - startedAt) < timeoutMs) {
-        if (currentUserId) return currentUserId;
         const uid = getCurrentUserId();
         if (uid) {
             currentUserId = uid;
+            dbg('requireUserId resolved via poll:', uid);
             return uid;
         }
-        await sleep(150);
+        await sleep(200);
     }
+    dbg('requireUserId timed out — user not authenticated');
     return null;
 }
 
@@ -255,14 +255,21 @@ function applyBookmarkStateToAll() {
     });
 }
 
+// ─── Debug logging ────────────────────────────────────────────────────────────
+function dbg(...args) { console.log('%c[Psalms]', 'color:#0f7b8f;font-weight:bold', ...args); }
+
 // ─── Reaction handlers ────────────────────────────────────────────────────────
 
 async function handleReactionClick(verseRef, reactionType, btn) {
+    dbg('handleReactionClick', { verseRef, reactionType, currentUserId, authResolvedAtLeastOnce });
     const uid = await requireUserId();
+    dbg('requireUserId resolved:', uid);
     if (!uid) { alert('Please sign in to react to verses.'); return; }
 
     try {
-        const result = await submitReaction(verseRef, reactionType, uid);
+        dbg('Calling submitGlobalReaction…', { verseRef, reactionType, uid });
+        const result = await submitGlobalReaction(verseRef, reactionType, uid);
+        dbg('submitGlobalReaction result:', result);
         if (!verseReactionCounts[verseRef]) verseReactionCounts[verseRef] = { emphasize: 0, heart: 0 };
         if (!userReactions[verseRef]) userReactions[verseRef] = [];
 
@@ -280,49 +287,44 @@ async function handleReactionClick(verseRef, reactionType, btn) {
         if (el) updateVerseReactionUI(el, verseRef);
     } catch (err) {
         console.error('Reaction error:', err);
-        const msg = String(err?.message || '').toLowerCase();
-        if (msg.includes('no chavruta memberships')) {
-            alert('Join or create a study group first, then you can react to verses.');
-        } else {
-            alert('Error submitting reaction. Please try again.');
-        }
+        alert('Error submitting reaction. Please try again.');
     }
 }
 
 async function handleBookmarkClick(verseRef, bookmarkBtn) {
+    dbg('handleBookmarkClick', { verseRef, currentUserId, authResolvedAtLeastOnce });
     const uid = await requireUserId();
+    dbg('requireUserId resolved:', uid);
     if (!uid) { alert('Please sign in to bookmark verses.'); return; }
 
     try {
         const isBookmarked = bookmarkedVerses.has(verseRef)
             ? true
-            : await isVerseBookmarked(uid, verseRef);
+            : await isGlobalVerseBookmarked(uid, verseRef);
+        dbg('isBookmarked:', isBookmarked, 'for', verseRef);
 
         if (isBookmarked) {
-            await removeBookmark(uid, verseRef);
+            await removeGlobalBookmark(uid, verseRef);
             bookmarkBtn.classList.remove('active');
             bookmarkBtn.setAttribute('aria-pressed', 'false');
             bookmarkedVerses.delete(verseRef);
             if (verseBookmarkCounts[verseRef]) {
                 verseBookmarkCounts[verseRef] = Math.max(0, verseBookmarkCounts[verseRef] - 1);
             }
+            dbg('Bookmark removed:', verseRef);
         } else {
-            await addBookmark(uid, verseRef, { verseText: verseDisplayTexts[verseRef] || '' });
+            await addGlobalBookmark(uid, verseRef, { verseText: verseDisplayTexts[verseRef] || '' });
             bookmarkBtn.classList.add('active');
             bookmarkBtn.setAttribute('aria-pressed', 'true');
             bookmarkedVerses.add(verseRef);
             verseBookmarkCounts[verseRef] = (verseBookmarkCounts[verseRef] || 0) + 1;
+            dbg('Bookmark added:', verseRef);
         }
 
         applyBookmarkStateToAll();
     } catch (err) {
         console.error('Bookmark error:', err);
-        const msg = String(err?.message || '').toLowerCase();
-        if (msg.includes('no chavruta memberships')) {
-            alert('Join or create a study group first, then you can bookmark verses.');
-        } else {
-            alert('Error saving bookmark. Please try again.');
-        }
+        alert('Error saving bookmark. Please try again.');
     }
 }
 
@@ -411,15 +413,25 @@ function renderVerses(data, psalmRef, ps119Part) {
 // ─── Load reactions & bookmarks ───────────────────────────────────────────────
 
 async function loadInteractions(verseRefs) {
-    if (!currentUserId || !verseRefs || verseRefs.length === 0) return;
+    dbg('loadInteractions called', { currentUserId, verseRefCount: verseRefs?.length });
+    if (!currentUserId || !verseRefs || verseRefs.length === 0) {
+        dbg('loadInteractions skipped — no userId or verseRefs');
+        return;
+    }
 
     // Run each query independently so a single failure doesn't block the rest
     const [reactionCounts, bookmarkCounts, userReactionData, userBookmarkData] = await Promise.all([
-        getReactionCountsForBook('Psalms').catch(() => ({})),
-        getBookmarkCountsForVerses(verseRefs).catch(() => ({})),
-        getUserReactions(currentUserId, verseRefs).catch(() => ({})),
-        getUserBookmarks(currentUserId).catch(() => [])
+        getGlobalReactionCountsForBook('Psalms').catch(e => { dbg('getGlobalReactionCountsForBook error:', e.message); return {}; }),
+        getGlobalBookmarkCountsForVerses(verseRefs).catch(e => { dbg('getGlobalBookmarkCountsForVerses error:', e.message); return {}; }),
+        getUserGlobalReactions(currentUserId, verseRefs).catch(e => { dbg('getUserGlobalReactions error:', e.message); return {}; }),
+        getUserGlobalBookmarks(currentUserId).catch(e => { dbg('getUserGlobalBookmarks error:', e.message); return []; })
     ]);
+    dbg('loadInteractions results', {
+        reactionCountKeys: Object.keys(reactionCounts).length,
+        bookmarkCountKeys: Object.keys(bookmarkCounts).length,
+        userReactionKeys: Object.keys(userReactionData).length,
+        userBookmarkCount: Array.isArray(userBookmarkData) ? userBookmarkData.length : 'not-array'
+    });
 
     Object.assign(verseReactionCounts, reactionCounts);
 
@@ -448,22 +460,33 @@ async function init() {
     const refDisplay   = document.getElementById('psalms-ref-display');
     const heRefDisplay = document.getElementById('psalms-ref-display-he');
 
-    // Auth runs in parallel — initAuth handles login gate for non-public pages
-    initAuth(async (user) => {
-        authResolvedAtLeastOnce = true;
-        if (user) {
-            currentUserId = user.uid;
-            try { recordUserLogin(user.uid, user.email); updateUserPresence(); } catch { /* non-critical */ }
-            // If verses already rendered before auth fired, load interactions now
-            if (pendingVerseRefs) {
-                const refs = pendingVerseRefs;
-                pendingVerseRefs = null;
-                await loadInteractions(refs);
+    // Auth is handled by page-auth.js (loaded on this page).
+    // We just watch for the userId via getCurrentUserId() without registering
+    // a competing onAuthStateChanged listener that would race with page-auth.
+    (async function waitForAuth() {
+        dbg('Waiting for auth (getCurrentUserId polling)…');
+        const maxWait = 10000;
+        const start = Date.now();
+        while ((Date.now() - start) < maxWait) {
+            const uid = getCurrentUserId();
+            if (uid) {
+                currentUserId = uid;
+                authResolvedAtLeastOnce = true;
+                dbg('Auth resolved via polling', { uid });
+                try { recordUserLogin(uid); updateUserPresence(); } catch { /* non-critical */ }
+                if (pendingVerseRefs) {
+                    dbg('Loading interactions for', pendingVerseRefs.length, 'pending verses');
+                    const refs = pendingVerseRefs;
+                    pendingVerseRefs = null;
+                    await loadInteractions(refs);
+                }
+                return;
             }
-        } else {
-            currentUserId = null;
+            await sleep(200);
         }
-    });
+        dbg('Auth polling timed out — user not signed in');
+        authResolvedAtLeastOnce = true;
+    })();
 
     setVisible('psalms-loading', true);
     setVisible('psalms-content', false);
@@ -479,21 +502,14 @@ async function init() {
         // Update hero header
         const display = psalmsInfo.display || psalmsInfo.ref;
         if (refDisplay) refDisplay.textContent = display;
-        const refMeta = document.getElementById('psalms-ref-meta');
-        if (refMeta) {
-            refMeta.innerHTML = '';
-            if (psalmsInfo.hebrewDay) {
-                const dayChip = document.createElement('span');
-                dayChip.className = 'psalms-ref-chip psalms-ref-chip--day';
-                dayChip.textContent = `Day ${psalmsInfo.hebrewDay}`;
-                refMeta.appendChild(dayChip);
-            }
-            if (psalmsInfo.combined) {
-                const combinedChip = document.createElement('span');
-                combinedChip.className = 'psalms-ref-chip psalms-ref-chip--combined';
-                combinedChip.textContent = '29th & 30th Portions Combined';
-                refMeta.appendChild(combinedChip);
-            }
+
+        if (psalmsInfo.hebrewDay) {
+            const dayEl = document.getElementById('psalms-hero-day');
+            if (dayEl) { dayEl.textContent = `Day ${psalmsInfo.hebrewDay}`; dayEl.style.display = ''; }
+        }
+        if (psalmsInfo.combined) {
+            const combEl = document.getElementById('psalms-hero-combined');
+            if (combEl) { combEl.textContent = '29th & 30th portions combined'; combEl.style.display = ''; }
         }
         if (heRefDisplay && psalmsInfo.displayHe) heRefDisplay.textContent = psalmsInfo.displayHe;
 
@@ -520,7 +536,7 @@ async function init() {
         setupHebrewWordSelection();
 
         // Load community reaction counts (visible even without personal data)
-        getReactionCountsForBook('Psalms').then(counts => {
+        getGlobalReactionCountsForBook('Psalms').then(counts => {
             Object.assign(verseReactionCounts, counts);
             document.querySelectorAll('.verse-container[data-ref]').forEach(el => {
                 updateVerseReactionUI(el, el.dataset.ref);

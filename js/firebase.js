@@ -45,7 +45,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+// If another SDK (e.g. compat) already created the app, reuse it.
+const _isNewApp = getApps().length === 0;
+const app = _isNewApp ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 const locationHost = (typeof window !== 'undefined' && window.location) ? window.location.hostname : '';
 const userAgent = (typeof navigator !== 'undefined' && navigator.userAgent) ? navigator.userAgent : '';
@@ -62,14 +64,19 @@ try {
   db = getFirestore(app);
 }
 
-// Set persistence to LOCAL so user stays logged in even after browser closes
-setPersistence(auth, browserLocalPersistence)
-  .then(() => {
-    console.log('Persistence enabled - users will stay logged in');
-  })
-  .catch((error) => {
-    console.error('Persistence setup error:', error);
-  });
+// Set persistence to LOCAL so user stays logged in even after browser closes.
+// ONLY do this when we created the app — calling setPersistence on an app
+// already initialized by the compat SDK resets the auth state and causes
+// all onAuthStateChanged listeners to briefly fire with null.
+if (_isNewApp) {
+  setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+      console.log('Persistence enabled - users will stay logged in');
+    })
+    .catch((error) => {
+      console.error('Persistence setup error:', error);
+    });
+}
 
 // ========================================
 // CHAVRUTA CONTEXT
