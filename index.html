@@ -735,15 +735,11 @@
                 signingOut = false;
             });
         }
-        // If bfcache restores this page while a user is still in memory, sign them out
+        // If bfcache restores this page while user is still logged in,
+        // send them to the dashboard — don't sign them out.
         window.addEventListener('pageshow', function(evt) {
             if (evt.persisted && auth.currentUser) {
-                signingOut = true;
-                auth.signOut().then(function() {
-                    signingOut = false;
-                }).catch(function() {
-                    signingOut = false;
-                });
+                window.location.replace('/dashboard');
             }
         });
 

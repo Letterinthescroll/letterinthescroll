@@ -467,7 +467,8 @@ function initAuth(onAuthReady) {
   // to restore it. Without this, the overlay flashes on every page navigation.
   const hasSessionHint = Boolean(
     sessionStorage.getItem('headerUserCache') ||
-    localStorage.getItem('dashGroupsCache')
+    localStorage.getItem('dashGroupsCache') ||
+    localStorage.getItem('lastActiveChavrutaId')
   );
 
   onAuthStateChanged(auth, (user) => {
@@ -494,10 +495,10 @@ function initAuth(onAuthReady) {
       const publicPaths = ['', '/', '/invite', '/join', '/about'];
       const isPublic = publicPaths.includes(path);
       if (!isPublic) {
-        // Firebase fires null initially while loading persisted session.
-        // Give it enough time to restore before showing the login overlay.
-        // Use a longer delay if we have evidence of a prior session.
-        const delay = hasSessionHint ? 5000 : 1500;
+        // Firebase fires null initially while loading persisted session from
+        // IndexedDB. Give it enough time to restore before showing the overlay.
+        // Use a generous delay if we have any evidence of a prior session.
+        const delay = hasSessionHint ? 8000 : 3000;
         if (!authRedirectTimer) {
           authRedirectTimer = setTimeout(() => {
             if (!currentUser) {
