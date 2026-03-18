@@ -261,6 +261,18 @@ const _PORTIONS = [
     { ref: 'Psalms 145-150',   display: 'Psalms 145–150'      },           // Day 30
 ];
 
+/** Returns the portion info for a specific day (1-30). */
+export function getPsalmsPortionForDay(day) {
+    const idx = Math.min(Math.max(day, 1), 30);
+    const p = _PORTIONS[idx];
+    return p ? { ...p, hebrewDay: idx } : null;
+}
+
+/** Returns all 30 daily Psalms portions as an array indexed 0→day1…29→day30. */
+export function getAllPsalmsPortions() {
+    return _PORTIONS.slice(1); // indices 0–29 correspond to days 1–30
+}
+
 /**
  * Get today's Hebrew day (1–30) and whether the current month has 29 or 30 days.
  * Uses Intl.DateTimeFormat with the Hebrew calendar — no external library needed.

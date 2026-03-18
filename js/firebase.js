@@ -1246,6 +1246,56 @@ async function getGlobalBookmarkCountsForVerses(verseRefs) {
   }
 }
 
+async function getGlobalVerseInteractors(verseRef, interactionType) {
+  const MAX_USERS = 20;
+  try {
+    const isIndexError = (error) => {
+      if (!error) return false;
+      if (error.code === 'failed-precondition') return true;
+      const message = typeof error.message === 'string' ? error.message.toLowerCase() : '';
+      return message.includes('index');
+    };
+
+    const col = interactionType === 'bookmark'
+      ? collection(db, 'globalBookmarks')
+      : collection(db, 'globalReactions');
+
+    const baseConstraints = interactionType === 'bookmark'
+      ? [where('verseRef', '==', verseRef)]
+      : [where('verseRef', '==', verseRef), where('reactionType', '==', interactionType)];
+
+    let snapshot;
+    try {
+      snapshot = await getDocs(query(col, ...baseConstraints, orderBy('timestamp', 'desc'), limit(MAX_USERS)));
+    } catch (error) {
+      if (isIndexError(error)) {
+        snapshot = await getDocs(query(col, ...baseConstraints, limit(MAX_USERS)));
+      } else {
+        throw error;
+      }
+    }
+
+    const userPromises = [];
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      if (data.userId) {
+        userPromises.push(
+          getUserInfo(data.userId).then(userInfo => ({
+            user: userInfo,
+            timestamp: data.timestamp
+          }))
+        );
+      }
+    });
+
+    const userResults = await Promise.all(userPromises);
+    return userResults.filter(r => r.user !== null);
+  } catch (error) {
+    console.error(`Error fetching global ${interactionType} interactors for ${verseRef}:`, error);
+    return [];
+  }
+}
+
 // ========================================
 // DAILY QUOTE BOOKMARKS (synchronized across user's chavrutot)
 // ========================================
@@ -1699,6 +1749,18 @@ async function getUserInfo(userId) {
     console.error('Error getting user info:', error);
     return null;
   }
+}
+
+/** Returns the user's Gregorian birthday string (YYYY-MM-DD) from their profile, or null. */
+async function getUserBirthday(userId) {
+  if (!userId) return null;
+  try {
+    const snap = await getDoc(doc(db, 'users', userId));
+    if (snap.exists()) {
+      return snap.data().birthDateGregorian || null;
+    }
+    return null;
+  } catch { return null; }
 }
 
 // Reads from chavruta's presence subcollection, returns users active in last 3 weeks
@@ -2183,6 +2245,8 @@ export {
   isGlobalVerseBookmarked,
   getUserGlobalBookmarks,
   getGlobalBookmarkCountsForVerses,
+  getGlobalVerseInteractors,
+  getUserBirthday,
   addDailyQuoteBookmark,
   removeDailyQuoteBookmark,
   isDailyQuoteBookmarked,

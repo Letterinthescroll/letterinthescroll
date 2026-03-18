@@ -466,6 +466,260 @@
             .psalms-sig-card-essence { font-size: 1.05rem; }
         }
 
+        /* ── Portion selector ─────────────────────────────────────────── */
+        .psalms-portion-selector-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .psalms-daily-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.45rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(240, 194, 84, 0.7);
+            background: rgba(3, 17, 27, 0.6);
+            color: #f0c254;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 1px 8px rgba(0,0,0,0.25), inset 0 1px 0 rgba(240,194,84,0.08);
+            transition: background 0.18s, border-color 0.18s, color 0.18s, opacity 0.18s, box-shadow 0.18s;
+        }
+        .psalms-daily-btn:hover {
+            background: rgba(3, 17, 27, 0.75);
+            border-color: rgba(240, 194, 84, 0.9);
+            box-shadow: 0 2px 14px rgba(0,0,0,0.3), 0 0 12px rgba(240,194,84,0.18);
+        }
+
+        .psalms-birthday-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.45rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(52, 211, 153, 0.7);
+            background: rgba(3, 17, 27, 0.6);
+            color: #6ee7b7;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 1px 8px rgba(0,0,0,0.25), inset 0 1px 0 rgba(52,211,153,0.08);
+            transition: background 0.18s, border-color 0.18s, color 0.18s, box-shadow 0.18s;
+        }
+        .psalms-birthday-btn:hover,
+        .psalms-birthday-btn.open {
+            background: rgba(3, 17, 27, 0.75);
+            border-color: rgba(52, 211, 153, 0.9);
+            color: #a7f3d0;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.3), 0 0 14px rgba(52, 211, 153, 0.22);
+        }
+
+        /* Birthday popover */
+        .psalms-birthday-popover {
+            border-radius: 1.1rem;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(2, 20, 12, 0.8), 0 0 0 1px rgba(52, 211, 153, 0.12), 0 0 40px rgba(52, 211, 153, 0.06);
+        }
+        .bday-pop-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 55% at 50% 0%, rgba(52, 211, 153, 0.22) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .bday-pop-inner {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(160deg, #031a0e 0%, #04131e 55%, #021510 100%);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            border-radius: 1.1rem;
+            padding: 1.3rem 1.25rem 1.1rem;
+            text-align: center;
+        }
+        .bday-pop-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(110, 231, 183, 0.7);
+            margin-bottom: 0.85rem;
+        }
+        .bday-pop-psalm-label {
+            font-size: 0.66rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(110, 231, 183, 0.4);
+            margin-bottom: 0.05rem;
+        }
+        .bday-pop-psalm-num {
+            font-family: 'Fraunces', serif;
+            font-size: 3.8rem;
+            font-weight: 700;
+            line-height: 1;
+            background: linear-gradient(135deg, #6ee7b7 0%, #34d399 45%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 0 16px rgba(52, 211, 153, 0.4));
+        }
+        .bday-pop-desc {
+            font-size: 0.72rem;
+            color: rgba(167, 243, 208, 0.5);
+            line-height: 1.55;
+            margin-bottom: 1rem;
+        }
+        .bday-pop-read-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            width: 100%;
+            padding: 0.62rem 1rem;
+            border-radius: 0.7rem;
+            border: 1px solid rgba(52, 211, 153, 0.35);
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.2) 0%, rgba(16, 185, 129, 0.15) 100%);
+            color: #6ee7b7;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.18s, border-color 0.18s, box-shadow 0.18s;
+            margin-bottom: 0.7rem;
+        }
+        .bday-pop-read-btn:hover {
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.32) 0%, rgba(16, 185, 129, 0.25) 100%);
+            border-color: rgba(52, 211, 153, 0.55);
+            box-shadow: 0 0 18px rgba(52, 211, 153, 0.22);
+        }
+        .bday-pop-footer {
+            font-size: 0.67rem;
+            color: rgba(110, 231, 183, 0.32);
+        }
+        .bday-pop-settings-link {
+            color: rgba(110, 231, 183, 0.5);
+            text-decoration: underline;
+        }
+        .bday-pop-settings-link:hover { color: rgba(110, 231, 183, 0.8); }
+
+        .psalms-portion-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.45rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(15, 183, 213, 0.65);
+            background: rgba(3, 17, 27, 0.6);
+            color: #b3f0f9;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 1px 8px rgba(0,0,0,0.25), inset 0 1px 0 rgba(15,183,213,0.08);
+            transition: background 0.18s, border-color 0.18s, color 0.18s, box-shadow 0.18s;
+        }
+        .psalms-portion-btn:hover,
+        .psalms-portion-btn.open {
+            background: rgba(3, 17, 27, 0.75);
+            border-color: rgba(15, 183, 213, 0.9);
+            color: #d7f5fa;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.3), 0 0 12px rgba(15,183,213,0.18);
+        }
+        .psalms-portion-chevron {
+            transition: transform 0.2s;
+        }
+        .psalms-portion-btn.open .psalms-portion-chevron {
+            transform: rotate(180deg);
+        }
+
+        .psalms-portion-dropdown {
+            max-height: 320px;
+            overflow-y: auto;
+            background: #04131e;
+            border: 1px solid rgba(15, 123, 143, 0.3);
+            border-radius: 0.9rem;
+            box-shadow: 0 16px 40px rgba(4, 19, 30, 0.7), 0 0 0 1px rgba(15, 123, 143, 0.1);
+            padding: 0.4rem;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(15,123,143,0.35) transparent;
+        }
+
+        .psalms-portion-option {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: none;
+            border-radius: 0.55rem;
+            background: transparent;
+            color: rgba(215, 235, 240, 0.75);
+            font-size: 0.8rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            white-space: nowrap;
+        }
+        .psalms-portion-option:hover {
+            background: rgba(15, 123, 143, 0.18);
+            color: #d7f5fa;
+        }
+        .psalms-portion-option.active {
+            background: rgba(15, 123, 143, 0.28);
+            color: #d7f5fa;
+            font-weight: 700;
+        }
+        .psalms-portion-option.today {
+            color: rgba(240, 194, 84, 0.9);
+        }
+        .psalms-portion-option.today:hover,
+        .psalms-portion-option.active.today {
+            color: #f0c254;
+        }
+        .psalms-portion-option-day {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            color: inherit;
+            opacity: 0.65;
+            min-width: 2.5rem;
+            flex-shrink: 0;
+        }
+        .psalms-portion-option-ref {
+            flex: 1;
+            font-size: 0.8rem;
+        }
+        .psalms-portion-today-badge {
+            font-size: 0.62rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #f0c254;
+            background: rgba(207, 154, 50, 0.15);
+            border: 1px solid rgba(207, 154, 50, 0.3);
+            border-radius: 999px;
+            padding: 0.1rem 0.45rem;
+            flex-shrink: 0;
+        }
+
         /* ── Animations ───────────────────────────────────────────────── */
         .fade-in {
             animation: fadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -572,7 +826,11 @@
                 <span id="psalms-hero-day" class="psalms-hero-day" style="display:none"></span>
             </div>
             <div id="psalms-hero-combined" class="psalms-hero-combined" style="display:none"></div>
-            <button type="button" id="psalms-significance-btn" class="hidden" aria-label="Read today's significance">
+
+            <!-- Portion selector dropdown (populated by psalms.js) -->
+            <div id="psalms-portion-selector-wrap" class="psalms-portion-selector-wrap"></div>
+
+            <button type="button" id="psalms-significance-btn" class="hidden" aria-label="Read today's significance" style="margin-top:0.5rem;">
                 <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
                 </svg>

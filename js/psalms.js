@@ -1,5 +1,5 @@
 // Daily Psalms (Tehillim) page module
-import { fetchDailyPsalms, fetchParshaText } from './api.js';
+import { fetchDailyPsalms, fetchParshaText, getPsalmsPortionForDay, getAllPsalmsPortions } from './api.js';
 import {
     getCurrentUserId,
     submitGlobalReaction,
@@ -10,13 +10,17 @@ import {
     removeGlobalBookmark,
     isGlobalVerseBookmarked,
     getUserGlobalBookmarks,
+    getGlobalVerseInteractors,
+    getUserBirthday,
     recordUserLogin,
     updateUserPresence,
     markUserOffline
 } from './firebase.js';
 import {
     showInfoPanel,
-    showKeywordDefinition
+    showKeywordDefinition,
+    resolveDisplayName,
+    formatRelativeTime
 } from './ui.js';
 
 // ─── State ───────────────────────────────────────────────────────────────────
@@ -30,6 +34,16 @@ let authResolvedAtLeastOnce = false;
 
 // Verse refs pending interactions load (if auth fires after data loads)
 let pendingVerseRefs = null;
+
+// Tooltip cache for "who reacted" hover dropdowns
+const verseInteractorsCache = new Map(); // key: `${verseRef}__${interactionType}`
+const INTERACTORS_CACHE_TTL = 60000; // 1 minute
+let activeTooltipFetch = null;
+
+// Portion selector state
+let todayHebrewDay = null;  // set once on init
+let currentPortionDay = null; // day currently displayed
+let userBirthdayDob = null;  // YYYY-MM-DD from Firestore profile
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -144,6 +158,105 @@ function showSignificanceCard(entry) {
     });
 }
 
+// ─── Reaction tooltip helpers ─────────────────────────────────────────────────
+
+function isDesktopHoverEnabled() {
+    return window.matchMedia('(hover: hover) and (pointer: fine)').matches
+        && window.matchMedia('(min-width: 768px)').matches;
+}
+
+function buildInteractorsTooltipText(interactors, interactionType) {
+    if (!interactors || interactors.length === 0) return '';
+    const verbs = { emphasize: 'exclaimed', heart: 'liked', bookmark: 'bookmarked' };
+    const verb = verbs[interactionType] || 'interacted with';
+    const lines = interactors.slice(0, 10).map(({ user, timestamp }) => {
+        return `${resolveDisplayName(user)} • ${formatRelativeTime(timestamp)}`;
+    });
+    if (interactors.length > 10) lines.push(`and ${interactors.length - 10} more...`);
+    return interactors.length === 1 ? lines[0] : `${interactors.length} ${verb} this:\n${lines.join('\n')}`;
+}
+
+async function loadAndShowInteractorTooltip(button, verseRef, interactionType) {
+    if (!button || !verseRef) return;
+    const cacheKey = `${verseRef}__${interactionType}`;
+    const cached = verseInteractorsCache.get(cacheKey);
+    const now = Date.now();
+
+    if (cached && (now - cached.fetchedAt < INTERACTORS_CACHE_TTL)) {
+        applyTooltipToButton(button, cached.users, interactionType);
+        return;
+    }
+
+    if (activeTooltipFetch === cacheKey) return;
+
+    const loadingTimeout = setTimeout(() => {
+        if (button.matches(':hover')) {
+            button.classList.add('status-tooltip');
+            button.setAttribute('data-tooltip', 'Loading...');
+        }
+    }, 100);
+
+    try {
+        activeTooltipFetch = cacheKey;
+        const interactors = await getGlobalVerseInteractors(verseRef, interactionType);
+        clearTimeout(loadingTimeout);
+        verseInteractorsCache.set(cacheKey, { users: interactors, fetchedAt: now });
+        if (button.matches(':hover')) {
+            applyTooltipToButton(button, interactors, interactionType);
+        }
+    } catch (error) {
+        clearTimeout(loadingTimeout);
+        console.error('Error loading interactors:', error);
+    } finally {
+        activeTooltipFetch = null;
+    }
+}
+
+function applyTooltipToButton(button, interactors, interactionType) {
+    if (!button) return;
+    if (!interactors || interactors.length === 0) {
+        button.removeAttribute('data-tooltip');
+        button.classList.remove('status-tooltip');
+        return;
+    }
+    button.classList.add('status-tooltip');
+    button.setAttribute('data-tooltip', buildInteractorsTooltipText(interactors, interactionType));
+}
+
+function setupTooltipBehavior(button, verseRef, interactionType) {
+    let hoverTimeout = null;
+    button.removeAttribute('title');
+
+    button.addEventListener('mouseenter', () => {
+        if (!isDesktopHoverEnabled()) return;
+        const rect = button.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        button.classList.remove('tooltip-align-left', 'tooltip-align-right');
+        if (cx < window.innerWidth * 0.3) button.classList.add('tooltip-align-left');
+        else if (cx > window.innerWidth * 0.7) button.classList.add('tooltip-align-right');
+
+        if (hoverTimeout) clearTimeout(hoverTimeout);
+        hoverTimeout = setTimeout(() => {
+            loadAndShowInteractorTooltip(button, verseRef, interactionType);
+            hoverTimeout = null;
+        }, 300);
+    });
+
+    button.addEventListener('mouseleave', () => {
+        if (hoverTimeout) { clearTimeout(hoverTimeout); hoverTimeout = null; }
+    });
+}
+
+function attachInteractionTooltips(container, verseRef) {
+    if (!container || !verseRef || !isDesktopHoverEnabled()) return;
+    const emphasizeBtn = container.querySelector('.emphasize-btn');
+    const heartBtn = container.querySelector('.heart-btn');
+    const bookmarkBtn = container.querySelector('.bookmark-btn');
+    if (emphasizeBtn) setupTooltipBehavior(emphasizeBtn, verseRef, 'emphasize');
+    if (heartBtn) setupTooltipBehavior(heartBtn, verseRef, 'heart');
+    if (bookmarkBtn) setupTooltipBehavior(bookmarkBtn, verseRef, 'bookmark');
+}
+
 // ─── Verse element ────────────────────────────────────────────────────────────
 
 function createVerseElement(englishText, hebrewText, verseRef, verseNumber) {
@@ -212,6 +325,9 @@ function createVerseElement(englishText, hebrewText, verseRef, verseNumber) {
     reactionsSection.appendChild(heartBtn);
     reactionsSection.appendChild(bookmarkBtn);
     container.appendChild(reactionsSection);
+
+    // Attach hover tooltips showing who reacted (desktop only)
+    attachInteractionTooltips(container, verseRef);
 
     return container;
 }
@@ -283,6 +399,9 @@ async function handleReactionClick(verseRef, reactionType, btn) {
             userReactions[verseRef] = userReactions[verseRef].filter(r => r !== reactionType);
         }
 
+        // Invalidate tooltip cache for this reaction type
+        verseInteractorsCache.delete(`${verseRef}__${reactionType}`);
+
         const el = document.querySelector(`[data-ref="${CSS.escape(verseRef)}"]`);
         if (el) updateVerseReactionUI(el, verseRef);
     } catch (err) {
@@ -320,6 +439,9 @@ async function handleBookmarkClick(verseRef, bookmarkBtn) {
             verseBookmarkCounts[verseRef] = (verseBookmarkCounts[verseRef] || 0) + 1;
             dbg('Bookmark added:', verseRef);
         }
+
+        // Invalidate tooltip cache for bookmark
+        verseInteractorsCache.delete(`${verseRef}__bookmark`);
 
         applyBookmarkStateToAll();
     } catch (err) {
@@ -454,6 +576,390 @@ async function loadInteractions(verseRefs) {
     applyBookmarkStateToAll();
 }
 
+// ─── Portion selector ─────────────────────────────────────────────────────────
+
+// ─── Birthday helpers (module-level so waitForAuth can call them) ─────────────
+
+function getBirthdayPsalmNumberFromDob(dob) {
+    const today = new Date();
+    const birth = new Date(dob + 'T12:00:00'); // noon to avoid timezone issues
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+    return ((Math.max(0, age) % 150) + 1); // psalm = year of life currently being lived
+}
+
+function renderBirthdayPopoverContent(popover, dob, psalmNum) {
+    if (dob && psalmNum) {
+        const dobFormatted = new Date(dob + 'T12:00:00').toLocaleDateString(undefined, {
+            month: 'long', day: 'numeric', year: 'numeric'
+        });
+        popover.innerHTML = `
+            <div class="bday-pop-glow" aria-hidden="true"></div>
+            <div class="bday-pop-inner">
+                <div class="bday-pop-eyebrow">
+                    <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                    </svg>
+                    Your Birthday Portion
+                </div>
+                <div class="bday-pop-psalm-label">Psalm</div>
+                <div class="bday-pop-psalm-num">${psalmNum}</div>
+                <div class="bday-pop-desc">Read every day during your current year of life</div>
+                <button class="bday-pop-read-btn" id="psalms-birthday-read-btn">
+                    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    </svg>
+                    Read Psalm ${psalmNum}
+                </button>
+                <div class="bday-pop-footer">${dobFormatted} · <a href="/settings#birthday" class="bday-pop-settings-link">Edit in Settings</a></div>
+            </div>
+        `;
+        popover.querySelector('#psalms-birthday-read-btn').addEventListener('click', () => {
+            popover.style.display = 'none';
+            document.getElementById('psalms-birthday-btn')?.classList.remove('open');
+            loadBirthdayPortion(psalmNum);
+        });
+    } else {
+        // Birthday not in profile — direct them to settings
+        popover.innerHTML = `
+            <div class="bday-pop-inner">
+                <div class="bday-pop-eyebrow">
+                    <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                    </svg>
+                    Birthday Portion
+                </div>
+                <div class="bday-pop-desc" style="margin:0.9rem 0 1rem;">Add your date of birth in Settings to unlock the Psalm for your current year of life.</div>
+                <a href="/settings#birthday" class="bday-pop-read-btn" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:0.4rem;">
+                    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    Go to Settings
+                </a>
+            </div>
+        `;
+    }
+}
+
+function buildPortionSelector(todayDay) {
+    const wrap = document.getElementById('psalms-portion-selector-wrap');
+    if (!wrap) return;
+
+    const portions = getAllPsalmsPortions(); // array of 30, index 0 = day 1
+
+    // "Daily Portion" button — always navigates to today's day
+    const dailyBtn = document.createElement('button');
+    dailyBtn.type = 'button';
+    dailyBtn.id = 'psalms-daily-btn';
+    dailyBtn.className = 'psalms-daily-btn';
+    dailyBtn.innerHTML = `
+        <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        Daily Portion
+    `;
+    dailyBtn.addEventListener('click', () => {
+        closeSelector();
+        closeBirthdayPopover();
+        if (currentPortionDay !== todayHebrewDay) loadPortion(todayHebrewDay);
+    });
+    wrap.appendChild(dailyBtn);
+
+    // Birthday Portion button
+    const birthdayBtn = document.createElement('button');
+    birthdayBtn.type = 'button';
+    birthdayBtn.id = 'psalms-birthday-btn';
+    birthdayBtn.className = 'psalms-birthday-btn';
+    birthdayBtn.innerHTML = `
+        <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+        </svg>
+        Birthday Portion
+    `;
+    birthdayBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // Close the portion dropdown if open
+        dropdown.style.display = 'none';
+        btn.classList.remove('open');
+        openBirthdayPopover();
+    });
+    wrap.appendChild(birthdayBtn);
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'psalms-portion-btn';
+    btn.className = 'psalms-portion-btn';
+    btn.setAttribute('aria-haspopup', 'listbox');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = `
+        <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+        Browse Portions
+        <svg class="psalms-portion-chevron" width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+        </svg>
+    `;
+    wrap.appendChild(btn);
+
+    // Dropdown lives on body to escape hero's overflow:hidden
+    const dropdown = document.createElement('div');
+    dropdown.id = 'psalms-portion-dropdown';
+    dropdown.className = 'psalms-portion-dropdown';
+    dropdown.setAttribute('role', 'listbox');
+    dropdown.style.cssText = 'display:none;position:fixed;z-index:9000;';
+    document.body.appendChild(dropdown);
+
+    portions.forEach((portion, idx) => {
+        const day = idx + 1;
+        const opt = document.createElement('button');
+        opt.type = 'button';
+        opt.className = 'psalms-portion-option' + (day === todayDay ? ' today' : '') + (day === currentPortionDay ? ' active' : '');
+        opt.setAttribute('role', 'option');
+        opt.setAttribute('aria-selected', day === currentPortionDay ? 'true' : 'false');
+        opt.dataset.day = day;
+        opt.innerHTML = `<span class="psalms-portion-option-day">Day ${day}</span><span class="psalms-portion-option-ref">${portion.display}</span>${day === todayDay ? '<span class="psalms-portion-today-badge">Today</span>' : ''}`;
+        opt.addEventListener('click', () => {
+            closeSelector();
+            if (day !== currentPortionDay) loadPortion(day);
+        });
+        dropdown.appendChild(opt);
+    });
+
+    function positionDropdown() {
+        const rect = btn.getBoundingClientRect();
+        dropdown.style.top = (rect.bottom + 8) + 'px';
+        // Wide enough for "Day XX | Psalms XXX–XXX | Today" on one line
+        const dropW = 310;
+        let left = rect.left + rect.width / 2 - dropW / 2;
+        left = Math.max(8, Math.min(left, window.innerWidth - dropW - 8));
+        dropdown.style.left = left + 'px';
+        dropdown.style.width = dropW + 'px';
+    }
+
+    function openSelector() {
+        positionDropdown();
+        dropdown.style.display = 'block';
+        btn.setAttribute('aria-expanded', 'true');
+        btn.classList.add('open');
+        // Scroll active option into view
+        setTimeout(() => {
+            const activeOpt = dropdown.querySelector('.psalms-portion-option.active');
+            if (activeOpt) activeOpt.scrollIntoView({ block: 'nearest' });
+        }, 0);
+    }
+
+    function closeSelector() {
+        dropdown.style.display = 'none';
+        btn.setAttribute('aria-expanded', 'false');
+        btn.classList.remove('open');
+    }
+
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeBirthdayPopover();
+        dropdown.style.display === 'none' ? openSelector() : closeSelector();
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!wrap.contains(e.target) && !dropdown.contains(e.target)) closeSelector();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeSelector();
+    });
+
+    window.addEventListener('scroll', () => {
+        if (dropdown.style.display !== 'none') positionDropdown();
+    }, { passive: true });
+
+    // ── Birthday popover ───────────────────────────────────────────────────
+    const birthdayPopover = document.createElement('div');
+    birthdayPopover.id = 'psalms-birthday-popover';
+    birthdayPopover.className = 'psalms-birthday-popover';
+    birthdayPopover.style.cssText = 'display:none;position:fixed;z-index:9000;';
+    document.body.appendChild(birthdayPopover);
+
+    function positionBirthdayPopover() {
+        const rect = birthdayBtn.getBoundingClientRect();
+        birthdayPopover.style.top = (rect.bottom + 10) + 'px';
+        const popW = 280;
+        let left = rect.left + rect.width / 2 - popW / 2;
+        left = Math.max(8, Math.min(left, window.innerWidth - popW - 8));
+        birthdayPopover.style.left = left + 'px';
+        birthdayPopover.style.width = popW + 'px';
+    }
+
+    function openBirthdayPopover() {
+        // Use profile birthday (fetched at auth time), no localStorage
+        renderBirthdayPopoverContent(birthdayPopover, userBirthdayDob,
+            userBirthdayDob ? getBirthdayPsalmNumberFromDob(userBirthdayDob) : null);
+        positionBirthdayPopover();
+        birthdayPopover.style.display = 'block';
+        birthdayBtn.classList.add('open');
+    }
+
+    function closeBirthdayPopover() {
+        birthdayPopover.style.display = 'none';
+        birthdayBtn.classList.remove('open');
+    }
+
+    document.addEventListener('click', (e) => {
+        if (!wrap.contains(e.target) && !birthdayPopover.contains(e.target)) {
+            closeBirthdayPopover();
+        }
+    });
+
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeBirthdayPopover();
+    });
+
+    window.addEventListener('scroll', () => {
+        if (birthdayPopover.style.display !== 'none') positionBirthdayPopover();
+    }, { passive: true });
+}
+
+function updatePortionSelectorActive(day) {
+    document.querySelectorAll('.psalms-portion-option').forEach(opt => {
+        const isActive = parseInt(opt.dataset.day) === day;
+        opt.classList.toggle('active', isActive);
+        opt.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+    // Dim the Daily Portion button when already on today's day
+    const dailyBtn = document.getElementById('psalms-daily-btn');
+    if (dailyBtn) {
+        dailyBtn.style.opacity = day === todayHebrewDay ? '0.45' : '1';
+        dailyBtn.style.pointerEvents = day === todayHebrewDay ? 'none' : '';
+    }
+}
+
+async function loadBirthdayPortion(psalmNumber) {
+    // Clear state
+    verseReactionCounts = {};
+    userReactions = {};
+    bookmarkedVerses = new Set();
+    verseBookmarkCounts = {};
+    verseInteractorsCache.clear();
+    pendingVerseRefs = null;
+    currentPortionDay = null; // not a standard 30-day portion
+
+    history.pushState({ birthdayPsalm: psalmNumber }, '', `${window.location.pathname}?birthday=${psalmNumber}`);
+
+    const refDisplay = document.getElementById('psalms-ref-display');
+    const dayEl = document.getElementById('psalms-hero-day');
+    const combEl = document.getElementById('psalms-hero-combined');
+    if (refDisplay) refDisplay.textContent = `Psalm ${psalmNumber} — Birthday Portion`;
+    if (dayEl) dayEl.style.display = 'none';
+    if (combEl) combEl.style.display = 'none';
+
+    // Deactivate all portion options since this is outside the 30-day cycle
+    updatePortionSelectorActive(null);
+
+    setVisible('psalms-content', false);
+    setVisible('psalms-loading', true);
+    setVisible('psalms-error', false);
+
+    try {
+        const textData = await fetchParshaText(`Psalms ${psalmNumber}`);
+        if (!textData) throw new Error('Could not load Psalm text.');
+
+        setVisible('psalms-loading', false);
+        setVisible('psalms-content', true);
+
+        const verseRefs = renderVerses(textData, `Psalms ${psalmNumber}`, null);
+        setupHebrewWordSelection();
+
+        getGlobalReactionCountsForBook('Psalms').then(counts => {
+            Object.assign(verseReactionCounts, counts);
+            document.querySelectorAll('.verse-container[data-ref]').forEach(el => {
+                updateVerseReactionUI(el, el.dataset.ref);
+            });
+        }).catch(() => {});
+
+        if (currentUserId && verseRefs.length > 0) {
+            await loadInteractions(verseRefs);
+        } else if (verseRefs.length > 0) {
+            pendingVerseRefs = verseRefs;
+        }
+    } catch (err) {
+        console.error('Birthday portion load error:', err);
+        setVisible('psalms-loading', false);
+        setVisible('psalms-error', true);
+        const errText = document.getElementById('psalms-error-text');
+        if (errText) errText.textContent = err.message || 'Could not load this Psalm. Please try again.';
+    }
+}
+
+async function loadPortion(portionDay) {
+    const portion = getPsalmsPortionForDay(portionDay);
+    if (!portion) return;
+
+    currentPortionDay = portionDay;
+
+    // Update URL without page reload so back button / sharing works
+    const url = portionDay === todayHebrewDay
+        ? window.location.pathname
+        : `${window.location.pathname}?day=${portionDay}`;
+    history.pushState({ portionDay }, '', url);
+
+    // Update hero display
+    const refDisplay = document.getElementById('psalms-ref-display');
+    const heRefDisplay = document.getElementById('psalms-ref-display-he');
+    const dayEl = document.getElementById('psalms-hero-day');
+    const combEl = document.getElementById('psalms-hero-combined');
+    if (refDisplay) refDisplay.textContent = portion.display;
+    if (heRefDisplay) heRefDisplay.textContent = '';
+    if (dayEl) { dayEl.textContent = `Day ${portionDay}`; dayEl.style.display = ''; }
+    if (combEl) combEl.style.display = 'none';
+
+    // Update selector UI
+    updatePortionSelectorActive(portionDay);
+
+    // Clear state and show loading
+    verseReactionCounts = {};
+    userReactions = {};
+    bookmarkedVerses = new Set();
+    verseBookmarkCounts = {};
+    verseInteractorsCache.clear();
+    pendingVerseRefs = null;
+
+    setVisible('psalms-content', false);
+    setVisible('psalms-loading', true);
+    setVisible('psalms-error', false);
+
+    try {
+        const textData = await fetchParshaText(portion.ref);
+        if (!textData) throw new Error('Could not load Psalms text.');
+
+        setVisible('psalms-loading', false);
+        setVisible('psalms-content', true);
+
+        const verseRefs = renderVerses(textData, portion.ref, portion.ps119 || null);
+        setupHebrewWordSelection();
+
+        // Load community counts
+        getGlobalReactionCountsForBook('Psalms').then(counts => {
+            Object.assign(verseReactionCounts, counts);
+            document.querySelectorAll('.verse-container[data-ref]').forEach(el => {
+                updateVerseReactionUI(el, el.dataset.ref);
+            });
+        }).catch(() => {});
+
+        if (currentUserId && verseRefs.length > 0) {
+            await loadInteractions(verseRefs);
+        } else if (verseRefs.length > 0) {
+            pendingVerseRefs = verseRefs;
+        }
+    } catch (err) {
+        console.error('Portion load error:', err);
+        setVisible('psalms-loading', false);
+        setVisible('psalms-error', true);
+        const errText = document.getElementById('psalms-error-text');
+        if (errText) errText.textContent = err.message || 'Could not load this portion. Please try again.';
+    }
+}
+
 // ─── Main init ────────────────────────────────────────────────────────────────
 
 async function init() {
@@ -474,6 +980,18 @@ async function init() {
                 authResolvedAtLeastOnce = true;
                 dbg('Auth resolved via polling', { uid });
                 try { recordUserLogin(uid); updateUserPresence(); } catch { /* non-critical */ }
+                // Fetch birthday from Firestore profile (used by Birthday Portion button)
+                getUserBirthday(uid).then(dob => {
+                    if (dob) {
+                        userBirthdayDob = dob;
+                        // If the birthday popover is already open, re-render it with the real data
+                        const popover = document.getElementById('psalms-birthday-popover');
+                        if (popover && popover.style.display !== 'none') {
+                            const psalmNum = getBirthdayPsalmNumberFromDob(dob);
+                            renderBirthdayPopoverContent(popover, dob, psalmNum);
+                        }
+                    }
+                }).catch(() => {});
                 if (pendingVerseRefs) {
                     dbg('Loading interactions for', pendingVerseRefs.length, 'pending verses');
                     const refs = pendingVerseRefs;
@@ -492,6 +1010,15 @@ async function init() {
     setVisible('psalms-content', false);
     setVisible('psalms-error', false);
 
+    // Handle browser back/forward navigation between portions
+    window.addEventListener('popstate', (e) => {
+        if (e.state?.birthdayPsalm) {
+            loadBirthdayPortion(e.state.birthdayPsalm);
+        } else {
+            const day = e.state?.portionDay || todayHebrewDay;
+            if (day && day !== currentPortionDay) loadPortion(day);
+        }
+    });
 
     try {
         const psalmsInfo = await fetchDailyPsalms();
@@ -499,7 +1026,31 @@ async function init() {
             throw new Error("Could not determine today's Psalms portion.");
         }
 
-        // Update hero header
+        todayHebrewDay = psalmsInfo.hebrewDay || 1;
+
+        // Check URL params: ?birthday=N or ?day=N
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlBirthday = parseInt(urlParams.get('birthday'));
+        const urlDay = parseInt(urlParams.get('day'));
+        const startDay = (urlDay >= 1 && urlDay <= 30) ? urlDay : todayHebrewDay;
+        currentPortionDay = startDay;
+
+        // Build the portion selector dropdown now that we know today's day
+        buildPortionSelector(todayHebrewDay);
+
+        // If URL has a birthday psalm, load it
+        if (urlBirthday >= 1 && urlBirthday <= 150) {
+            await loadBirthdayPortion(urlBirthday);
+            return;
+        }
+
+        // If user requested a non-today portion, load it via loadPortion
+        if (startDay !== todayHebrewDay) {
+            await loadPortion(startDay);
+            return;
+        }
+
+        // ── Load today's portion ──────────────────────────────────────────
         const display = psalmsInfo.display || psalmsInfo.ref;
         if (refDisplay) refDisplay.textContent = display;
 
@@ -512,6 +1063,8 @@ async function init() {
             if (combEl) { combEl.textContent = '29th & 30th portions combined'; combEl.style.display = ''; }
         }
         if (heRefDisplay && psalmsInfo.displayHe) heRefDisplay.textContent = psalmsInfo.displayHe;
+
+        updatePortionSelectorActive(todayHebrewDay);
 
         // Load significance and wire up the modal
         if (psalmsInfo.hebrewDay) {

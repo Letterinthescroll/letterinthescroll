@@ -1624,16 +1624,47 @@ select {
 
 /* Dynamic Verse Background Colors */
 
+/* Reaction left-border lines — ::before pseudo-element so hover box-shadow can't override */
+.verse-container[data-emphasize]:not([data-emphasize="0"])::before,
+.verse-container[data-heart]:not([data-heart="0"])::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    border-radius: inherit;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.verse-container[data-emphasize]:not([data-emphasize="0"])::before {
+    background: rgba(245, 158, 11, 0.85);
+}
+
+.verse-container[data-heart]:not([data-heart="0"])::before {
+    background: rgba(219, 39, 119, 0.85);
+}
+
+/* When both reactions exist, widen and split the stripe */
+.verse-container[data-emphasize]:not([data-emphasize="0"])[data-heart]:not([data-heart="0"])::before {
+    background: linear-gradient(to right, rgba(245, 158, 11, 0.85) 50%, rgba(219, 39, 119, 0.75) 50%);
+    width: 12px;
+}
+
+/* Subtle border glow stays on the container itself — independent of the left line */
 .verse-container[data-emphasize]:not([data-emphasize="0"]) {
-    box-shadow: inset 6px 0 0 rgba(245, 158, 11, 0.85), inset 0 0 0 1px rgba(245, 158, 11, 0.22);
+    box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.22);
 }
 
 .verse-container[data-heart]:not([data-heart="0"]) {
-    box-shadow: inset 6px 0 0 rgba(219, 39, 119, 0.85), inset 0 0 0 1px rgba(219, 39, 119, 0.18);
+    box-shadow: inset 0 0 0 1px rgba(219, 39, 119, 0.18);
 }
 
 .verse-container[data-emphasize]:not([data-emphasize="0"])[data-heart]:not([data-heart="0"]) {
-    box-shadow: inset 6px 0 0 rgba(245, 158, 11, 0.82), inset 12px 0 0 rgba(219, 39, 119, 0.6), inset 0 0 0 1px rgba(109, 40, 217, 0.22);
+    box-shadow: inset 0 0 0 1px rgba(109, 40, 217, 0.22);
 }
 
 /* Amber gradient for emphasize - intensity increases with each reaction */
