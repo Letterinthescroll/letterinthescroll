@@ -3766,9 +3766,10 @@
                 revealDashboardShell();
 
                 // Skip re-render if the group list hasn't changed (avoids DOM flicker)
-                const idKey = list.map(g => g.id).sort().join(',');
+                // Include member/pending counts so approval changes trigger a re-render
+                const idKey = list.map(g => g.id + ':' + (g.members||[]).length + ':' + (g.pendingMembers||[]).length).sort().join(',');
                 if (lastRenderedGroupIds === idKey && list.length > 0) {
-                    dlog('Skipping re-render — same group IDs');
+                    dlog('Skipping re-render — same group IDs and member counts');
                     return;
                 }
                 lastRenderedGroupIds = idKey;
@@ -4736,6 +4737,14 @@
                 members: FieldValue.arrayUnion(uid),
                 pendingMembers: FieldValue.arrayRemove(uid)
             });
+            // Immediately update local data and re-render without waiting for onSnapshot
+            const c = userChavrutas.find(g => g.id === id);
+            if (c) {
+                if (!(c.members||[]).includes(uid)) c.members = [...(c.members||[]), uid];
+                c.pendingMembers = (c.pendingMembers||[]).filter(u => u !== uid);
+                lastRenderedGroupIds = null; // force next render
+                await renderChavrutas(userChavrutas);
+            }
             showBanner(n + ' has been added to the group!', 'success');
         } catch { alert('Failed to approve member.'); }
     }
