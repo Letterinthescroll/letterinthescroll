@@ -308,13 +308,26 @@
 
         /* ── Responsive ───────────────────────────────────────────────── */
         @media (max-width: 768px) {
-            /* Hero */
-            .psalms-hero { padding: 2rem 1rem 1.6rem; }
-            .psalms-hero-eyebrow { font-size: 0.65rem; padding: 0.26rem 0.7rem; margin-bottom: 0.8rem; }
-            .psalms-hero-hebrew { font-size: clamp(2.4rem, 11vw, 3.2rem); margin-bottom: 0.2rem; }
-            .psalms-hero-title { font-size: 1.05rem; margin-bottom: 0.7rem; }
-            .psalms-hero-ref-row { gap: 0.35rem; }
-            #psalms-ref-display { font-size: 0.88rem; padding: 0.32rem 0.8rem; }
+            /* Hero — compact on mobile */
+            .psalms-hero { padding: 0.7rem 1rem 0.65rem; }
+            .psalms-hero-eyebrow { display: none; }
+            .psalms-hero-hebrew { font-size: clamp(1.5rem, 7vw, 2rem); margin-bottom: 0.1rem; }
+            .psalms-hero-title { font-size: 0.82rem; margin-bottom: 0.4rem; }
+            /* Ref row — stack vertically so Day + Combined don't jostle the pill */
+            .psalms-hero-ref-row { flex-direction: column; gap: 0.4rem; align-items: center; }
+            #psalms-ref-display { font-size: 0.9rem; padding: 0.34rem 0.9rem; }
+            /* Day badge: hide the inline bullet and style it as its own pill */
+            .psalms-hero-day::before { display: none; }
+            .psalms-hero-day {
+                font-size: 0.7rem;
+                letter-spacing: 0.04em;
+                color: rgba(210, 230, 255, 0.72);
+                background: rgba(200, 220, 255, 0.07);
+                border: 1px solid rgba(200, 220, 255, 0.15);
+                border-radius: 999px;
+                padding: 0.2rem 0.72rem;
+            }
+            #psalms-hero-combined { margin-top: 0.1rem; font-size: 0.58rem; letter-spacing: 0.09em; }
 
             /* Portion selector — full-width stacked column */
             .psalms-portion-selector-wrap {
@@ -371,10 +384,10 @@
         }
 
         @media (max-width: 480px) {
-            .psalms-hero { padding: 1.7rem 0.9rem 1.4rem; }
-            .psalms-hero-hebrew { font-size: 2.2rem; }
-            .psalms-hero-title { font-size: 0.98rem; }
-            #psalms-ref-display { font-size: 0.82rem; }
+            .psalms-hero { padding: 0.5rem 0.85rem 0.45rem; }
+            .psalms-hero-hebrew { font-size: 1.3rem; }
+            .psalms-hero-title { font-size: 0.75rem; }
+            #psalms-ref-display { font-size: 0.74rem; }
             .psalms-portion-selector-wrap { width: 100%; }
             .psalms-main { padding: 1rem 0.75rem 3.5rem; }
             /* Decoration lines distract on tiny screens */
