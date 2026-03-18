@@ -517,6 +517,7 @@ function openStudyRoomPickerModal(chavrutas = []) {
             return;
         }
         sessionStorage.setItem('activeChavrutaId', selectedId);
+        localStorage.setItem('lastActiveChavrutaId', selectedId);
         document.documentElement.removeAttribute('data-readonly');
         _studyRoomResolved = true;
         closeStudyRoomPickerModal();
@@ -579,6 +580,7 @@ async function enforceStudyRoomSelection(user) {
 
         if (requestedChavrutaId && chavrutaIds.has(requestedChavrutaId)) {
             sessionStorage.setItem('activeChavrutaId', requestedChavrutaId);
+            localStorage.setItem('lastActiveChavrutaId', requestedChavrutaId);
             document.documentElement.removeAttribute('data-readonly');
             closeStudyRoomPickerModal();
             _studyRoomResolved = true;
@@ -588,6 +590,7 @@ async function enforceStudyRoomSelection(user) {
         if (chavrutas.length === 1) {
             const onlyRoomId = chavrutas[0].id;
             sessionStorage.setItem('activeChavrutaId', onlyRoomId);
+            localStorage.setItem('lastActiveChavrutaId', onlyRoomId);
             document.documentElement.removeAttribute('data-readonly');
             closeStudyRoomPickerModal();
             _studyRoomResolved = true;
@@ -595,16 +598,19 @@ async function enforceStudyRoomSelection(user) {
             return false;
         }
 
-        // Multiple rooms — check if user already picked one this session
-        const storedChavrutaId = sessionStorage.getItem('activeChavrutaId');
+        // Multiple rooms — check sessionStorage first, then localStorage fallback
+        const storedChavrutaId = sessionStorage.getItem('activeChavrutaId')
+            || localStorage.getItem('lastActiveChavrutaId');
         if (storedChavrutaId && chavrutaIds.has(storedChavrutaId)) {
+            sessionStorage.setItem('activeChavrutaId', storedChavrutaId);
+            localStorage.setItem('lastActiveChavrutaId', storedChavrutaId);
             document.documentElement.removeAttribute('data-readonly');
             closeStudyRoomPickerModal();
             _studyRoomResolved = true;
             return false;
         }
 
-        // No valid stored selection: require user choice.
+        // No stored selection at all: require user choice.
         sessionStorage.removeItem('activeChavrutaId');
         document.documentElement.setAttribute('data-readonly', 'true');
         openStudyRoomPickerModal(chavrutas);

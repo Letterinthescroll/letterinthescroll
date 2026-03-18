@@ -65,10 +65,13 @@ try {
 }
 
 // Set persistence to LOCAL so user stays logged in even after browser closes.
-// ONLY do this when we created the app — calling setPersistence on an app
-// already initialized by the compat SDK resets the auth state and causes
-// all onAuthStateChanged listeners to briefly fire with null.
-if (_isNewApp) {
+// ONLY do this when we created the app AND the compat SDK is not already on the
+// page. Calling setPersistence when the compat SDK already manages auth causes
+// onAuthStateChanged to briefly fire with null, breaking all active Firestore
+// snapshot listeners (seen as "Missing or insufficient permissions" errors on
+// the dashboard when mitzvah-dash.js imports this module).
+const _compatAlreadyPresent = typeof window !== 'undefined' && Boolean(window.firebase);
+if (_isNewApp && !_compatAlreadyPresent) {
   setPersistence(auth, browserLocalPersistence)
     .then(() => {
       console.log('Persistence enabled - users will stay logged in');
