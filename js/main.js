@@ -518,6 +518,7 @@ function openStudyRoomPickerModal(chavrutas = []) {
         }
         sessionStorage.setItem('activeChavrutaId', selectedId);
         localStorage.setItem('lastActiveChavrutaId', selectedId);
+        try { sessionStorage.removeItem('presenceCache'); } catch (_) {}
         document.documentElement.removeAttribute('data-readonly');
         _studyRoomResolved = true;
         closeStudyRoomPickerModal();
@@ -566,6 +567,14 @@ async function enforceStudyRoomSelection(user) {
         }));
 
         _userChavrutas = chavrutas;
+        // Persist slim chavruta list so header-loader.js can offer the nav picker on any page.
+        try {
+            const slim = chavrutas.map(c => ({ id: c.id, name: c.name || 'Study Group' }));
+            localStorage.setItem('userChavrutaList', JSON.stringify(slim));
+        } catch (_) {}
+        // Refresh the context bar now that _userChavrutas is populated (fixes race
+        // where a concurrent auth call ran updateChavrutaContextBar with an empty list).
+        updateChavrutaContextBar();
 
         if (!chavrutas.length) {
             sessionStorage.removeItem('activeChavrutaId');
@@ -578,12 +587,20 @@ async function enforceStudyRoomSelection(user) {
         const requestedChavrutaId = params.get('chavruta');
         const chavrutaIds = new Set(chavrutas.map((room) => room.id));
 
-        if (requestedChavrutaId && chavrutaIds.has(requestedChavrutaId)) {
+        // Always respect an explicit URL param — it was set by the user's own
+        // choice (dashboard modal or study picker). Trust it unconditionally so that
+        // even a momentarily stale Firestore cache doesn't revert to a previous group.
+        if (requestedChavrutaId) {
             sessionStorage.setItem('activeChavrutaId', requestedChavrutaId);
-            localStorage.setItem('lastActiveChavrutaId', requestedChavrutaId);
-            document.documentElement.removeAttribute('data-readonly');
+            // Always persist to localStorage so next visit (no URL param) keeps this choice.
+            try { localStorage.setItem('lastActiveChavrutaId', requestedChavrutaId); } catch (_) {}
+            if (chavrutaIds.has(requestedChavrutaId)) {
+                document.documentElement.removeAttribute('data-readonly');
+            }
             closeStudyRoomPickerModal();
             _studyRoomResolved = true;
+            // Refresh bar now that sessionStorage is guaranteed correct for this param.
+            updateChavrutaContextBar();
             return false;
         }
 
@@ -3387,15 +3404,21 @@ function updateChavrutaContextBar() {
     const switchBtn = document.getElementById('chavruta-switch-btn');
     if (!bar || !nameEl) return;
 
+    // URL param is always authoritative — sync sessionStorage to match it
+    const urlParam = new URLSearchParams(window.location.search).get('chavruta');
+    if (urlParam && sessionStorage.getItem('activeChavrutaId') !== urlParam) {
+        sessionStorage.setItem('activeChavrutaId', urlParam);
+        try { localStorage.setItem('lastActiveChavrutaId', urlParam); } catch (_) {}
+    }
+
     const activeId = sessionStorage.getItem('activeChavrutaId');
     if (!activeId || !_userChavrutas.length) {
-        bar.classList.add('hidden');
+        bar.style.display = 'none';
         return;
     }
 
     const active = _userChavrutas.find(c => c.id === activeId);
     nameEl.textContent = active ? (active.name || 'Study Group') : 'Study Group';
-    bar.classList.remove('hidden');
     bar.style.display = 'flex';
 
     // Only show switch button if user has multiple groups

@@ -561,14 +561,15 @@
                             />
                         </div>
                         <div>
-                            <label for="create-birthday" class="block text-sm font-semibold text-gray-700 mb-1.5">Date of Birth <span class="text-gray-400 font-normal">(optional)</span></label>
+                            <label for="create-birthday" class="block text-sm font-semibold text-gray-700 mb-1.5">Date of Birth</label>
                             <input
                                 type="date"
                                 id="create-birthday"
+                                required
                                 autocomplete="bday"
                                 class="input-field w-full px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900"
                             />
-                            <p class="text-xs text-gray-400 mt-1">Used to calculate your personal daily Psalm from the Hebrew calendar.</p>
+                            <p class="text-xs text-gray-400 mt-1">Used to calculate your personal daily Psalm and celebrate your Hebrew birthday.</p>
                         </div>
                         <button id="create-account-btn" onclick="handleCreateAccount()" class="w-full py-3 btn-gold text-white rounded-xl transition-all font-semibold shadow-md hover:shadow-lg text-sm">
                             Create Account
@@ -1259,6 +1260,10 @@
                 showError('Passwords do not match.');
                 return;
             }
+            if (!birthdayStr) {
+                showError('Please enter your date of birth.');
+                return;
+            }
             if (inviteCode && inviteCode.length !== INVITE_CODE_LENGTH) {
                 showError('Invite codes must be exactly 16 letters/numbers.');
                 return;
@@ -1274,17 +1279,15 @@
                 await user.updateProfile({ displayName: displayName });
                 await syncUserProfile(user, displayName, true);
 
-                // Save birthday if provided
-                if (birthdayStr) {
-                    const hebBday = gregorianToHebrew(birthdayStr);
-                    if (hebBday) {
-                        try {
-                            await db.collection('users').doc(user.uid).set(
-                                { birthDateGregorian: birthdayStr, ...hebBday },
-                                { merge: true }
-                            );
-                        } catch (_) {}
-                    }
+                // Save birthday
+                const hebBday = gregorianToHebrew(birthdayStr);
+                if (hebBday) {
+                    try {
+                        await db.collection('users').doc(user.uid).set(
+                            { birthDateGregorian: birthdayStr, ...hebBday },
+                            { merge: true }
+                        );
+                    } catch (_) {}
                 }
 
                 showSuccess('Account created successfully. Redirecting...');

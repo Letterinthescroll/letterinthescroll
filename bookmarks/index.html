@@ -250,13 +250,6 @@
             border-left-color: #b7871e;
         }
 
-        .meta-pill--go {
-            background: rgba(22, 40, 94, 0.07);
-            border-color: rgba(22, 40, 94, 0.2);
-            color: #16285e;
-            margin-left: auto;
-        }
-
         /* ── Quote bookmark cards ── */
         .quote-card {
             border-left-color: #2f56ab;
@@ -511,9 +504,7 @@
                         </div>
                         <p class="bookmark-body">${escapeHtml(text)}</p>
                         <div class="bookmark-meta">
-                            <span class="meta-pill">Universal Bookmark</span>
                             ${book ? `<span class="meta-pill">${escapeHtml(book)}</span>` : ''}
-                            ${url ? '<span class="meta-pill meta-pill--go">Go to verse →</span>' : ''}
                         </div>
                     </${tag}>
                 `;

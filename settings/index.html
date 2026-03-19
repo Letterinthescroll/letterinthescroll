@@ -273,6 +273,40 @@
                                     class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
                                 <p class="text-xs text-slate-400 mt-1">Enter your Gregorian (English) birthday — we'll calculate the Hebrew date automatically.</p>
                             </div>
+                            <div>
+                                <label for="birthday-timezone" class="block text-sm font-semibold text-slate-700 mb-1.5">Place of Birth (for timezone)</label>
+                                <select id="birthday-timezone"
+                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800 bg-white">
+                                    <option value="">— Select your birth region —</option>
+                                    <optgroup label="Americas">
+                                        <option value="America/New_York">Eastern US/Canada (New York, Toronto)</option>
+                                        <option value="America/Chicago">Central US/Canada (Chicago, Dallas)</option>
+                                        <option value="America/Denver">Mountain US/Canada (Denver, Calgary)</option>
+                                        <option value="America/Los_Angeles">Pacific US/Canada (Los Angeles, Vancouver)</option>
+                                        <option value="America/Sao_Paulo">Brazil (São Paulo, Rio)</option>
+                                        <option value="America/Argentina/Buenos_Aires">Argentina (Buenos Aires)</option>
+                                    </optgroup>
+                                    <optgroup label="Europe">
+                                        <option value="Europe/London">UK / Ireland (London, Dublin)</option>
+                                        <option value="Europe/Paris">Western Europe (Paris, Berlin, Rome)</option>
+                                        <option value="Europe/Athens">Eastern Europe (Athens, Kyiv, Bucharest)</option>
+                                        <option value="Europe/Moscow">Russia (Moscow)</option>
+                                    </optgroup>
+                                    <optgroup label="Middle East &amp; Africa">
+                                        <option value="Asia/Jerusalem">Israel (Jerusalem, Tel Aviv)</option>
+                                        <option value="Europe/Istanbul">Turkey (Istanbul)</option>
+                                        <option value="Asia/Dubai">Gulf States (Dubai, Riyadh)</option>
+                                        <option value="Africa/Johannesburg">South Africa (Johannesburg)</option>
+                                    </optgroup>
+                                    <optgroup label="Asia &amp; Oceania">
+                                        <option value="Asia/Kolkata">India (Mumbai, Delhi)</option>
+                                        <option value="Asia/Shanghai">China (Shanghai, Beijing)</option>
+                                        <option value="Asia/Tokyo">Japan / Korea (Tokyo, Seoul)</option>
+                                        <option value="Australia/Sydney">Australia (Sydney, Melbourne)</option>
+                                    </optgroup>
+                                </select>
+                                <p class="text-xs text-slate-400 mt-1">Ensures your birthday celebration triggers at the right time regardless of where you are now.</p>
+                            </div>
                             <div id="birthday-hebrew-preview" class="hidden p-4 bg-blue-50 border border-blue-100 rounded-xl">
                                 <p class="text-xs font-bold uppercase tracking-widest text-blue-600/70 mb-1">Hebrew Calendar Date</p>
                                 <p id="birthday-hebrew-text" class="text-sm font-semibold text-slate-700"></p>
@@ -407,6 +441,11 @@
                     updateHebrewPreview(uData.birthDateGregorian);
                 }
             }
+            // Pre-fill timezone if saved
+            if (uData.birthTimezone) {
+                const tzInput = document.getElementById('birthday-timezone');
+                if (tzInput) tzInput.value = uData.birthTimezone;
+            }
         } catch(e) { console.error('Error loading user data:', e); }
 
         // Show Google notice if applicable
@@ -533,14 +572,15 @@
         const heb = gregorianToHebrew(dateStr);
         if (!heb) { showMsg(msg, 'Could not calculate Hebrew date. Please try a different date.', 'error'); return; }
 
+        const timezone = (document.getElementById('birthday-timezone')?.value || '').trim();
+
         setLoading(btn, true, 'Saving…');
         hideMsg(msg);
 
         try {
-            await db.collection('users').doc(currentUser.uid).set(
-                { birthDateGregorian: dateStr, ...heb },
-                { merge: true }
-            );
+            const payload = { birthDateGregorian: dateStr, ...heb };
+            if (timezone) payload.birthTimezone = timezone;
+            await db.collection('users').doc(currentUser.uid).set(payload, { merge: true });
             updateHebrewPreview(dateStr);
             showMsg(msg, '✓ Birthday saved successfully.', 'success');
         } catch (err) {

@@ -2744,7 +2744,7 @@
             </div>
         </section>
 
-        <section class="section-card dash-section-shell fade-up fd3">
+        <section id="chavrutas-section" class="section-card dash-section-shell fade-up fd3">
             <div class="dash-section-header">
                 <div class="dash-section-title-row">
                     <div class="dash-section-bar"></div>
@@ -3040,7 +3040,7 @@
 </main>
 
 <!-- ═══ CONFIRM MODAL ═══ -->
-<div id="confirm-modal" class="dash-modal hidden">
+<div id="confirm-modal" class="dash-modal" style="display:none">
     <div class="dash-modal-card" role="dialog" aria-modal="true">
         <div class="flex items-center justify-center w-11 h-11 rounded-2xl bg-red-50 text-red-500 mb-4 mx-auto">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
@@ -3054,7 +3054,7 @@
     </div>
 </div>
 
-<div id="study-room-modal" class="dash-modal hidden">
+<div id="study-room-modal" class="dash-modal" style="display:none">
     <div class="dash-modal-card" role="dialog" aria-modal="true">
         <div class="flex items-start justify-between gap-3">
             <div>
@@ -3194,6 +3194,8 @@
     let currentUser = null, confirmResolve = null;
     const nameCache = {};
     const memberActivityCache = {};
+    const birthdayCache = {}; // uid → {birthDateGregorian, hebrewBirthMonth, hebrewBirthDay}
+    let bdayShownThisLoad = false; // in-memory flag — resets on every page load so celebration re-appears throughout the birthday
     let chavUnsubs  = [];
     let userChavrutas = [];
     let latestDailyQuote = null;
@@ -3281,6 +3283,7 @@
         if (event.persisted) {
             dashboardShellRevealed = false;
             revealDashboardShell();
+            closeStudyRoomModal();
         }
     });
 
@@ -3585,13 +3588,28 @@
         } catch (e) { /* ignore */ }
         try { sessionStorage.setItem('headerUserCache', JSON.stringify({ firstName: firstName, email: user.email || '', uid: user.uid })); } catch(_) {}
 
-        // Personal Daily Psalm — read Hebrew birthday from userSnap (now accessible)
+        // Personal Daily Psalm & birthday — read from userSnap (now accessible)
         try {
             const uData = (userSnap && userSnap.exists) ? (userSnap.data() || {}) : {};
             if (uData.hebrewBirthYear && uData.hebrewBirthMonth && uData.hebrewBirthDay) {
                 computeAndShowPersonalPsalm({ year: uData.hebrewBirthYear, month: uData.hebrewBirthMonth, day: uData.hebrewBirthDay });
             }
-            // Notify user if birthday (or other info) hasn't been filled in yet
+            // Cache current user's birthday so group card can show their banner
+            birthdayCache[user.uid] = {
+                birthDateGregorian: uData.birthDateGregorian || null,
+                hebrewBirthMonth: uData.hebrewBirthMonth || 0,
+                hebrewBirthDay: uData.hebrewBirthDay || 0,
+                birthTimezone: uData.birthTimezone || null
+            };
+            // Celebrate if it's the user's birthday today
+            checkAndCelebrateUserBirthday(uData, firstName);
+            // If it's the user's birthday, re-render group cards so the birthday banner appears.
+            // (Cards may have been rendered before birthdayCache was populated.)
+            if (isMemberBirthdayToday(user.uid) && userChavrutas.length > 0) {
+                const grid = document.getElementById('chavrutas-grid');
+                if (grid) grid.innerHTML = userChavrutas.map(cardHTML).join('');
+            }
+            // Notify user if birthday hasn't been filled in yet
             if (!uData.birthDateGregorian) {
                 showMissingInfoToast();
             }
@@ -3691,6 +3709,299 @@
                 sessionStorage.setItem('missingInfoDismissed', '1');
             }, 400);
         }, 12000);
+    }
+
+    /* ════ BIRTHDAY SYSTEM ════ */
+    function getTodayHebrewMonthDay(timezone) {
+        try {
+            const now = new Date();
+            const opts = { calendar: 'hebrew', numberingSystem: 'latn', day: 'numeric', month: 'numeric' };
+            if (timezone) opts.timeZone = timezone;
+            const fmt = new Intl.DateTimeFormat('en-US', opts);
+            const parts = {};
+            fmt.formatToParts(now).forEach(p => { parts[p.type] = p.value; });
+            return { month: parseInt(parts.month, 10), day: parseInt(parts.day, 10) };
+        } catch { return null; }
+    }
+
+    function getTodayGregorianMonthDay(timezone) {
+        try {
+            const now = new Date();
+            const opts = { month: 'numeric', day: 'numeric' };
+            if (timezone) opts.timeZone = timezone;
+            const parts = {};
+            new Intl.DateTimeFormat('en-US', opts).formatToParts(now).forEach(p => { parts[p.type] = p.value; });
+            return { month: parseInt(parts.month, 10), day: parseInt(parts.day, 10) };
+        } catch { return null; }
+    }
+
+    function isGregorianBirthdayToday(dateStr, timezone) {
+        if (!dateStr) return false;
+        try {
+            const [, m, d] = dateStr.split('-').map(Number);
+            const today = getTodayGregorianMonthDay(timezone);
+            if (today) return today.month === m && today.day === d;
+            const now = new Date();
+            return now.getMonth() + 1 === m && now.getDate() === d;
+        } catch { return false; }
+    }
+
+    function isHebrewBirthdayToday(hebMonth, hebDay, timezone) {
+        if (!hebMonth || !hebDay) return false;
+        const h = getTodayHebrewMonthDay(timezone);
+        return !!(h && h.month === hebMonth && h.day === hebDay);
+    }
+
+    function isMemberBirthdayToday(uid) {
+        const b = birthdayCache[uid];
+        if (!b) return false;
+        const tz = b.birthTimezone || null;
+        return isGregorianBirthdayToday(b.birthDateGregorian, tz) || isHebrewBirthdayToday(b.hebrewBirthMonth, b.hebrewBirthDay, tz);
+    }
+
+    function launchBirthdayConfetti() {
+        // Inject keyframes for burst animation
+        if (!document.getElementById('bday-canvas-kf')) {
+            const s = document.createElement('style');
+            s.id = 'bday-canvas-kf';
+            s.textContent = `
+                @keyframes bdayLights{
+                    0%  { background: radial-gradient(ellipse at 15% 20%,rgba(200,154,53,0.22),transparent 40%), radial-gradient(ellipse at 85% 75%,rgba(47,86,171,0.22),transparent 40%), radial-gradient(ellipse at 50% 50%,rgba(231,76,60,0.12),transparent 45%); }
+                    33% { background: radial-gradient(ellipse at 80% 15%,rgba(200,154,53,0.18),transparent 40%), radial-gradient(ellipse at 20% 80%,rgba(47,86,171,0.18),transparent 40%), radial-gradient(ellipse at 60% 40%,rgba(39,167,105,0.12),transparent 45%); }
+                    66% { background: radial-gradient(ellipse at 40% 85%,rgba(200,154,53,0.15),transparent 40%), radial-gradient(ellipse at 70% 25%,rgba(155,89,182,0.15),transparent 40%), radial-gradient(ellipse at 30% 50%,rgba(47,86,171,0.1),transparent 45%); }
+                    100%{ background: transparent; }
+                }
+                @keyframes bdayBannerPulse {
+                    0%,100% { box-shadow: 0 20px 60px rgba(200,154,53,0.35), 0 0 0 0 rgba(200,154,53,0); }
+                    50%      { box-shadow: 0 24px 80px rgba(200,154,53,0.5), 0 0 40px 8px rgba(200,154,53,0.18); }
+                }
+                @keyframes bdayStarSpin {
+                    from { transform: rotate(0deg) scale(1); }
+                    50%  { transform: rotate(180deg) scale(1.2); }
+                    to   { transform: rotate(360deg) scale(1); }
+                }
+                @keyframes bdayBounceIn {
+                    0%   { opacity:0; transform: translateY(-22px) scale(0.92); }
+                    60%  { transform: translateY(6px) scale(1.03); }
+                    80%  { transform: translateY(-4px) scale(0.98); }
+                    100% { opacity:1; transform: translateY(0) scale(1); }
+                }`;
+            document.head.appendChild(s);
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9998;';
+        document.body.appendChild(canvas);
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const ctx = canvas.getContext('2d');
+
+        const COLORS = [
+            '#c89a35','#f1c40f','#ffd700','#ff9800','#ffcc02', // golds
+            '#2f56ab','#3498db','#00bcd4','#0ef','#4fc3f7',    // blues/cyans
+            '#e74c3c','#e91e63','#ff5722','#ff4081','#ff6b9d', // reds/pinks
+            '#27a769','#4caf50','#00e676','#b2ff59',            // greens
+            '#9b59b6','#673ab7','#ce93d8','#ea80fc',            // purples
+            '#ffffff','#fffde7','#fff9c4','#f8bbd0'             // whites/pastels
+        ];
+
+        // Mixed shapes: 0=rect, 1=circle, 2=star, 3=ribbon, 4=heart
+        function drawHeart(cx, cy, r, ctx) {
+            ctx.beginPath();
+            ctx.moveTo(cx, cy + r * 0.3);
+            ctx.bezierCurveTo(cx, cy - r * 0.3, cx - r, cy - r * 0.3, cx - r, cy + r * 0.1);
+            ctx.bezierCurveTo(cx - r, cy + r * 0.7, cx, cy + r, cx, cy + r);
+            ctx.bezierCurveTo(cx, cy + r, cx + r, cy + r * 0.7, cx + r, cy + r * 0.1);
+            ctx.bezierCurveTo(cx + r, cy - r * 0.3, cx, cy - r * 0.3, cx, cy + r * 0.3);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function makeParticle(fromTop) {
+            const shape = Math.floor(Math.random() * 5);
+            return {
+                x: Math.random() * canvas.width,
+                y: fromTop ? -Math.random() * canvas.height * 0.4 - 10 : Math.random() * canvas.height * -0.8,
+                w: Math.random() * 16 + 5,
+                h: Math.random() * 10 + 3,
+                r: Math.random() * 8 + 3,   // radius for circle/star/heart
+                color: COLORS[Math.floor(Math.random() * COLORS.length)],
+                vx: (Math.random() - 0.5) * 5,
+                vy: Math.random() * 6 + 1.5,
+                rot: Math.random() * Math.PI * 2,
+                vr: (Math.random() - 0.5) * 0.22,
+                shape,
+                sway: Math.random() * 0.1 + 0.02,
+                swayOff: Math.random() * Math.PI * 2,
+                opacity: 0.88 + Math.random() * 0.12
+            };
+        }
+
+        function drawStar(cx, cy, r, ctx) {
+            ctx.beginPath();
+            for (let i = 0; i < 5; i++) {
+                const a = (i * 4 * Math.PI) / 5 - Math.PI / 2;
+                const ai = a + (2 * Math.PI) / 5;
+                if (i === 0) ctx.moveTo(cx + r * Math.cos(a), cy + r * Math.sin(a));
+                else ctx.lineTo(cx + r * Math.cos(a), cy + r * Math.sin(a));
+                ctx.lineTo(cx + (r * 0.4) * Math.cos(ai), cy + (r * 0.4) * Math.sin(ai));
+            }
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // 600 continuous particles + 150 initial burst + second wave at 1.2s
+        const particles = Array.from({length: 600}, () => makeParticle(false));
+        // Burst wave 1: 150 extra particles from top with high speed
+        for (let i = 0; i < 150; i++) {
+            const p = makeParticle(true);
+            p.vy = Math.random() * 10 + 5;
+            p.vx = (Math.random() - 0.5) * 10;
+            particles.push(p);
+        }
+
+        let start = null;
+        const DUR = 13000;
+        // Schedule a second burst wave at 1.2 seconds
+        setTimeout(() => {
+            for (let i = 0; i < 100; i++) {
+                const p = makeParticle(true);
+                p.vy = Math.random() * 9 + 4;
+                p.vx = (Math.random() - 0.5) * 9;
+                particles.push(p);
+            }
+        }, 1200);
+
+        function draw(ts) {
+            if (!start) start = ts;
+            const t = ts - start;
+            const progress = t / DUR;
+            // Fade starts at 75%, gone at 100%
+            const fade = progress > 0.75 ? Math.max(0, 1 - (progress - 0.75) / 0.25) : 1;
+            // Spawn density: full for first 7s, then winding down
+            const spawnRate = progress < 0.54 ? 1 : Math.max(0, 1 - (progress - 0.54) / 0.46);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(p => {
+                p.x += p.vx + Math.sin(t * p.sway + p.swayOff) * 0.8;
+                p.y += p.vy;
+                p.rot += p.vr;
+                // Respawn at top while still spawning
+                if (p.y > canvas.height + p.h) {
+                    if (Math.random() < spawnRate) {
+                        const np = makeParticle(true);
+                        Object.assign(p, np);
+                    } else {
+                        p.y = canvas.height + 200; // park off screen
+                    }
+                }
+
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rot);
+                ctx.globalAlpha = fade * p.opacity;
+                ctx.fillStyle = p.color;
+
+                if (p.shape === 0) {
+                    // Rectangle confetti
+                    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                } else if (p.shape === 1) {
+                    // Circle dot
+                    ctx.beginPath();
+                    ctx.arc(0, 0, p.r, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (p.shape === 2) {
+                    // Star
+                    drawStar(0, 0, p.r, ctx);
+                } else if (p.shape === 3) {
+                    // Ribbon / streamer (tall narrow rectangle)
+                    ctx.fillRect(-p.h / 2, -p.w * 1.5, p.h, p.w * 3);
+                } else {
+                    // Heart
+                    drawHeart(-p.r * 0.5, -p.r * 0.65, p.r * 0.55, ctx);
+                }
+                ctx.restore();
+            });
+
+            if (t < DUR) requestAnimationFrame(draw);
+            else canvas.remove();
+        }
+        requestAnimationFrame(draw);
+
+        // Sweeping colour-wash light overlay
+        const lights = document.createElement('div');
+        lights.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9997;animation:bdayLights 5s ease-in-out forwards;';
+        document.body.appendChild(lights);
+        setTimeout(() => lights.remove(), 5000);
+    }
+
+    function showBirthdayCelebration(name, isHebrewOnly) {
+        // Per-page-load guard: prevents duplicate fires when auth state changes multiple times,
+        // but resets on every new page load so the celebration re-appears all day long.
+        if (bdayShownThisLoad) return;
+        bdayShownThisLoad = true;
+
+        // Inject keyframes if not yet present
+        if (!document.getElementById('bday-canvas-kf')) launchBirthdayConfetti();
+        else launchBirthdayConfetti();
+
+        const stars = '\u2728\u2B50\u2728';
+        const eyebrow = isHebrewOnly ? '\uD83D\uDD4D Hebrew Birthday Today \uD83D\uDD4D' : '\uD83C\uDF82 Happy Birthday! \uD83C\uDF82';
+        const headLine = isHebrewOnly
+            ? `Today is your Hebrew Birthday, ${escHTML(name)}! \uD83C\uDF89`
+            : `Happy Birthday, ${escHTML(name)}! \uD83C\uDF89`;
+        const msg = isHebrewOnly
+            ? 'Today marks your Hebrew birthday — one of the most powerful days of the year for your soul. May this year bring you deep Torah wisdom, boundless joy, and every blessing!'
+            : 'Today is YOUR day! Wishing you a birthday overflowing with Torah learning, happiness, and beautiful moments. May this new year be the most meaningful yet!';
+
+        const banner = document.createElement('section');
+        banner.id = 'birthday-banner';
+        banner.style.cssText = [
+            'position:relative', 'overflow:hidden', 'border-radius:1.5rem',
+            'background:linear-gradient(135deg,#0d1f52 0%,#16285e 30%,#2f56ab 65%,#c89a35 100%)',
+            'padding:2rem 1.75rem 2rem 2rem', 'color:#fff',
+            'box-shadow:0 24px 70px rgba(22,40,94,0.4)',
+            'animation:bdayBounceIn 0.7s cubic-bezier(0.22,1,0.36,1) both, bdayBannerPulse 3s ease-in-out 0.8s 3'
+        ].join(';');
+
+        banner.innerHTML = `
+            <!-- Decorative blobs -->
+            <div style="position:absolute;top:-80px;right:-60px;width:260px;height:260px;background:radial-gradient(circle,rgba(200,154,53,0.5),transparent 60%);border-radius:50%;pointer-events:none;animation:bdayStarSpin 8s linear infinite;"></div>
+            <div style="position:absolute;bottom:-60px;left:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(155,89,182,0.35),transparent 60%);border-radius:50%;pointer-events:none;"></div>
+            <div style="position:absolute;top:50%;left:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(39,167,105,0.25),transparent 60%);border-radius:50%;pointer-events:none;transform:translateY(-50%);"></div>
+            <!-- Content -->
+            <div style="position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;">
+                <div style="flex:1;min-width:0;">
+                    <p style="font-size:0.68rem;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin:0 0 0.5rem;">${escHTML(eyebrow)}</p>
+                    <h2 style="font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;line-height:1.1;margin:0 0 0.75rem;text-shadow:0 2px 18px rgba(200,154,53,0.4);">${headLine}</h2>
+                    <p style="font-size:0.92rem;color:rgba(241,245,255,0.9);max-width:55ch;line-height:1.6;margin:0 0 1.1rem;">${escHTML(msg)}</p>
+                    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                        <span style="background:rgba(200,154,53,0.22);border:1px solid rgba(200,154,53,0.45);color:#fbbf24;font-size:0.72rem;font-weight:700;padding:0.3rem 0.75rem;border-radius:999px;letter-spacing:0.05em;">\uD83C\uDF89 Today's your birthday!</span>
+                        <span style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.85);font-size:0.72rem;font-weight:700;padding:0.3rem 0.75rem;border-radius:999px;letter-spacing:0.05em;">Keep learning today</span>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('birthday-banner').remove()"
+                    style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-size:1.2rem;line-height:1;cursor:pointer;padding:0.35rem 0.5rem;flex-shrink:0;border-radius:0.6rem;transition:background 0.15s,color 0.15s;"
+                    title="Dismiss">&times;</button>
+            </div>`;
+
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            const ref = document.getElementById('auto-join-banner');
+            if (ref && ref.nextSibling) mainContent.insertBefore(banner, ref.nextSibling);
+            else mainContent.insertBefore(banner, mainContent.firstChild);
+        }
+    }
+
+    function checkAndCelebrateUserBirthday(uData, name) {
+        if (!uData) return;
+        const tz = uData.birthTimezone || null;
+        const isGreg = isGregorianBirthdayToday(uData.birthDateGregorian, tz);
+        const isHeb  = isHebrewBirthdayToday(uData.hebrewBirthMonth, uData.hebrewBirthDay, tz);
+        if (isGreg || isHeb) {
+            showBirthdayCelebration(name || 'Friend', isHeb && !isGreg);
+        }
     }
 
     /* ════ INVITE CODE ════ */
@@ -3823,9 +4134,17 @@
         chavUnsubs.push(unsub);
     }
 
+    function saveChavrutaListForNavPicker(list) {
+        try {
+            const slim = (list || []).map(c => ({ id: c.id, name: c.name || 'Study Group' }));
+            localStorage.setItem('userChavrutaList', JSON.stringify(slim));
+        } catch (_) {}
+    }
+
     /* ════ RENDER (sync — from cache, no fetches) ════ */
     function renderChavrutasSync(list) {
         userChavrutas = Array.isArray(list) ? list.slice() : [];
+        saveChavrutaListForNavPicker(userChavrutas);
         const grid    = document.getElementById('chavrutas-grid');
         const empty   = document.getElementById('empty-state');
         const countEl = document.getElementById('chavruta-count');
@@ -3840,6 +4159,7 @@
     /* ════ RENDER (async — from Firestore with fresh data) ════ */
     async function renderChavrutas(list) {
         userChavrutas = Array.isArray(list) ? list.slice() : [];
+        saveChavrutaListForNavPicker(userChavrutas);
         const grid    = document.getElementById('chavrutas-grid');
         const empty   = document.getElementById('empty-state');
         const countEl = document.getElementById('chavruta-count');
@@ -3877,20 +4197,26 @@
         const heroBtn = document.getElementById('hero-study-btn');
         const exploreLink = document.getElementById('explore-study-link');
         const headerLink = document.getElementById('go-to-weekly');
-        const allLinks = [heroBtn, exploreLink, headerLink].filter(Boolean);
+        // explore-study-link always navigates directly; the study page handles chavruta selection.
+        // Only hero/header buttons open the dashboard modal.
+        const modalLinks = [heroBtn, headerLink].filter(Boolean);
 
         if (userChavrutas.length === 1) {
             const url = '/study?chavruta=' + userChavrutas[0].id;
-            allLinks.forEach(el => { el.href = url; el.setAttribute('title', 'Enter your study room'); });
+            modalLinks.forEach(el => { el.href = url; el.setAttribute('title', 'Enter your study room'); });
+            if (exploreLink) { exploreLink.href = url; exploreLink.setAttribute('title', 'Enter your study room'); }
             return;
         }
 
         if (userChavrutas.length > 1) {
-            allLinks.forEach(el => { el.href = '#'; el.setAttribute('title', 'Choose a study room'); });
+            modalLinks.forEach(el => { el.href = 'javascript:void(0)'; el.setAttribute('title', 'Choose a study room'); });
+            // Explore link navigates to /study directly; study page will prompt for chavruta selection
+            if (exploreLink) { exploreLink.href = '/study'; exploreLink.setAttribute('title', 'Open study room'); }
             return;
         }
 
-        allLinks.forEach(el => { el.href = 'study.html'; el.setAttribute('title', 'Open study room'); });
+        modalLinks.forEach(el => { el.href = 'study.html'; el.setAttribute('title', 'Open study room'); });
+        if (exploreLink) { exploreLink.href = '/study'; exploreLink.setAttribute('title', 'Open study room'); }
     }
 
     function openStudyRoomModal() {
@@ -3910,18 +4236,30 @@
             const membersCount = (room.members || []).length;
             const maxMembers = room.maxMembers || 8;
             return `
-                <a href="/study?chavruta=${room.id}" class="block w-full rounded-2xl border border-slate-200 bg-slate-50/70 hover:bg-slate-100 transition-colors px-4 py-3">
+                <button type="button" data-chavruta-id="${escHTML(room.id)}" class="block w-full text-left rounded-2xl border border-slate-200 bg-slate-50/70 hover:bg-slate-100 transition-colors px-4 py-3">
                     <div class="text-sm font-bold text-slate-800">${escHTML(room.name || 'Study Room')}</div>
                     <div class="text-xs text-slate-500 mt-0.5">${membersCount}/${maxMembers} members</div>
-                </a>
+                </button>
             `;
         }).join('');
 
-        modal.classList.remove('hidden');
+        options.onclick = function(e) {
+            const btn = e.target.closest('button[data-chavruta-id]');
+            if (!btn) return;
+            const id = btn.getAttribute('data-chavruta-id');
+            // Set storage BEFORE navigating so the study page picks it up immediately
+            sessionStorage.setItem('activeChavrutaId', id);
+            localStorage.setItem('lastActiveChavrutaId', id);
+            try { sessionStorage.removeItem('presenceCache'); } catch(_){}
+            window.location.href = '/study?chavruta=' + encodeURIComponent(id);
+        };
+
+        modal.style.display = '';
     }
 
     function closeStudyRoomModal() {
-        document.getElementById('study-room-modal')?.classList.add('hidden');
+        const modal = document.getElementById('study-room-modal');
+        if (modal) modal.style.display = 'none';
     }
 
     // ── Shared avatar color system (consistent across status bar + chat) ──
@@ -4094,12 +4432,24 @@
             return activityTimestampMs(actB) - activityTimestampMs(actA);
         });
 
+        // Birthday banner for group card
+        const birthdayMems = mems.filter(uid => isMemberBirthdayToday(uid));
+        const birthdayBanner = birthdayMems.length ? `
+            <div style="background:linear-gradient(135deg,rgba(200,154,53,0.13),rgba(200,154,53,0.06));border:1px solid rgba(200,154,53,0.35);border-radius:0.75rem;padding:0.55rem 0.85rem;display:flex;align-items:center;gap:0.55rem;font-size:0.77rem;color:#92650a;font-weight:700;">
+                <span style="font-size:1.05rem;">🎂</span>
+                <span>${birthdayMems.length === 1
+                    ? escHTML(formatDisplayName(nameCache[birthdayMems[0]] || birthdayMems[0].slice(0,8))) + ' has a birthday today!'
+                    : birthdayMems.map(u => escHTML(formatDisplayName(nameCache[u] || u.slice(0,8)))).join(' &amp; ') + ' have birthdays today!'
+                }</span>
+            </div>` : '';
+
         const membersViewRows = membersWithActivity.map(uid => {
             const n = formatDisplayName(nameCache[uid] || uid.slice(0,8));
             const act = memberActivityCache[uid];
             const me = uid === currentUser.uid;
             const isLdr = uid === c.leader;
             const isCoLdr = coLeaders.includes(uid);
+            const isBday = isMemberBirthdayToday(uid);
             const dotCol = activityDotColor(act);
             const online = isTrulyOnline(act);
             const dotPulse = online ? 'animation:pulse 2s infinite;' : '';
@@ -4111,6 +4461,7 @@
             if (isLdr) badges += '<span style="display:inline-block;padding:1px 6px;font-size:9px;font-weight:700;color:#92400e;background:#fef3c7;border:1px solid #fde68a;border-radius:999px;margin-left:4px;">Leader</span>';
             if (isCoLdr) badges += '<span style="display:inline-block;padding:1px 6px;font-size:9px;font-weight:700;color:#6d28d9;background:#ede9fe;border:1px solid #c4b5fd;border-radius:999px;margin-left:4px;">Co-Leader</span>';
             if (me) badges += '<span style="display:inline-block;padding:1px 6px;font-size:9px;font-weight:600;color:#1e40af;background:#dbeafe;border:1px solid #bfdbfe;border-radius:999px;margin-left:4px;">You</span>';
+            if (isBday) badges += '<span style="display:inline-block;padding:1px 6px;font-size:9px;font-weight:700;color:#854d0e;background:#fef9c3;border:1px solid #fde047;border-radius:999px;margin-left:4px;">🎂 Birthday</span>';
 
             return `<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:${me?'rgba(239,246,255,0.7)':'white'};border-radius:10px;border:1px solid rgba(0,0,0,0.05);">
                 <div style="position:relative;flex-shrink:0;">
@@ -4142,6 +4493,7 @@
                     ${canManage && pending.length ? `<span class="ml-1.5 bg-amber-400 text-amber-900 text-[10px] font-bold px-1.5 py-0.5 rounded-full">${pending.length} pending</span>` : ''}
                 </div>
             </div>
+            ${birthdayBanner ? `<div class="px-4 pt-3 pb-0">${birthdayBanner}</div>` : ''}
             <div class="px-5 py-4 space-y-2.5 chavruta-actions">
                 <a href="/study?chavruta=${c.id}"
                    class="flex items-center justify-center gap-2 w-full py-3 rounded-2xl font-bold text-white text-sm shadow-lg"
@@ -4189,11 +4541,17 @@
                     const d = s.data();
                     nameCache[uid] = d.displayName||d.firstName||d.email||uid.slice(0,8);
                     memberActivityCache[uid] = { lastSeen: d.lastSeen||null, lastLogin: d.lastLogin||null, isOnline: !!d.isOnline };
+                    birthdayCache[uid] = { birthDateGregorian: d.birthDateGregorian||null, hebrewBirthMonth: d.hebrewBirthMonth||0, hebrewBirthDay: d.hebrewBirthDay||0, birthTimezone: d.birthTimezone||null };
                 } else {
                     nameCache[uid] = uid.slice(0,8);
                     memberActivityCache[uid] = { lastSeen: null, lastLogin: null, isOnline: false };
+                    birthdayCache[uid] = { birthDateGregorian: null, hebrewBirthMonth: 0, hebrewBirthDay: 0, birthTimezone: null };
                 }
-            } catch { nameCache[uid]=uid.slice(0,8); memberActivityCache[uid]={ lastSeen:null, lastLogin:null, isOnline:false }; }
+            } catch {
+                nameCache[uid]=uid.slice(0,8);
+                memberActivityCache[uid]={ lastSeen:null, lastLogin:null, isOnline:false };
+                birthdayCache[uid]={ birthDateGregorian:null, hebrewBirthMonth:0, hebrewBirthDay:0, birthTimezone:null };
+            }
         }));
     }
 
@@ -4814,12 +5172,12 @@
         return new Promise(res=>{
             document.getElementById('confirm-title').textContent=title;
             document.getElementById('confirm-message').textContent=msg;
-            document.getElementById('confirm-modal').classList.remove('hidden');
+            document.getElementById('confirm-modal').style.display='';
             confirmResolve=res;
         });
     }
     function closeConfirmModal(val){
-        document.getElementById('confirm-modal').classList.add('hidden');
+        document.getElementById('confirm-modal').style.display='none';
         if(confirmResolve){confirmResolve(val); confirmResolve=null;}
     }
 
@@ -4844,18 +5202,12 @@
         headerStudyBtn.addEventListener('click', handleStudyEntryClick);
     }
 
-    const exploreStudyLink = document.getElementById('explore-study-link');
-    if (exploreStudyLink) {
-        exploreStudyLink.addEventListener('click', handleStudyEntryClick);
-    }
+    // explore-study-link navigates directly to /study — no modal trigger needed here.
 
     const studyRoomModal = document.getElementById('study-room-modal');
     if (studyRoomModal) {
-        studyRoomModal.addEventListener('click', (event) => {
-            if (event.target === studyRoomModal) {
-                closeStudyRoomModal();
-            }
-        });
+        // No backdrop-click-to-close: prevents a touch tap opening the modal
+        // and the finger-lift immediately dismissing it via the backdrop.
     }
 
     document.addEventListener('dailyQuoteRendered', (event) => {
