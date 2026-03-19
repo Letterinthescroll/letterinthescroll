@@ -2750,8 +2750,9 @@ select {
 }
 
 .header-title {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
     font-size: clamp(1.2rem, 1.8vw, 1.45rem);
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1.15;
     margin: 0;
     color: #e2e8f0;
@@ -7243,4 +7244,10 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
         opacity: 0;
         transform: translateX(40px);
     }
+}
+
+/* Footer removed sitewide */
+footer,
+.page-footer {
+    display: none !important;
 }

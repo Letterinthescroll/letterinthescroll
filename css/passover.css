@@ -312,6 +312,12 @@ html, body { margin: 0; padding: 0; }
 }
 .pes-landing-footer a:hover { color: rgba(219,234,254,0.9); }
 
+/* Footer removed sitewide */
+footer,
+.page-footer {
+    display: none !important;
+}
+
 /* ─────────────────────────────────────────────────────────────────────
    STORY PAGE  (passover-story.html)
    ───────────────────────────────────────────────────────────────────── */

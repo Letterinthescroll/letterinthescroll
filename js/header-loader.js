@@ -167,6 +167,14 @@
         var mount = document.getElementById('shared-header-mount');
         if (!mount) return;
 
+        // Ensure Cormorant Garamond is available for the header title
+        if (!document.querySelector('link[href*="Cormorant+Garamond"]')) {
+            var fontLink = document.createElement('link');
+            fontLink.rel = 'stylesheet';
+            fontLink.href = 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap';
+            document.head.appendChild(fontLink);
+        }
+
         var navHtml = buildNavHtml();
         var headerHtml = loadTemplate().replace(NAV_TOKEN, navHtml);
         mount.outerHTML = headerHtml;
@@ -330,5 +338,77 @@
 
         overlay.appendChild(card);
         document.body.appendChild(overlay);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════
+       Shared Footer — injected at the bottom of every page
+       ══════════════════════════════════════════════════════════════════════ */
+    function mountFooter() {
+        if (document.querySelector('footer.footer-main')) return;
+
+        var FOOTER_URL = '/includes/footer.html';
+        var CACHE_KEY_FOOTER = 'cachedFooterTemplate_v3';
+
+        // Clear old cache keys
+        try { sessionStorage.removeItem('cachedFooterTemplate'); } catch(_){}
+        try { sessionStorage.removeItem('cachedFooterTemplate_v2'); } catch(_){}
+
+        function inject(html) {
+            var temp = document.createElement('div');
+            temp.innerHTML = html;
+            var footer = temp.firstElementChild;
+            if (!footer) return;
+            document.body.appendChild(footer);
+            // Re-execute inline scripts (they don't run when inserted via innerHTML)
+            var scripts = footer.querySelectorAll('script');
+            scripts.forEach(function(s) {
+                var ns = document.createElement('script');
+                ns.textContent = s.textContent;
+                s.parentNode.replaceChild(ns, s);
+            });
+            // Re-activate style blocks
+            var styles = footer.querySelectorAll('style');
+            styles.forEach(function(st) {
+                var ns = document.createElement('style');
+                ns.textContent = st.textContent;
+                st.parentNode.replaceChild(ns, st);
+            });
+        }
+
+        try {
+            var cached = sessionStorage.getItem(CACHE_KEY_FOOTER);
+            if (cached && cached.indexOf('<footer') !== -1) {
+                inject(cached);
+                return;
+            }
+        } catch (_) {}
+
+        fetch(FOOTER_URL).then(function(r) {
+            if (!r.ok) throw new Error(r.status);
+            return r.text();
+        }).then(function(html) {
+            try { sessionStorage.setItem(CACHE_KEY_FOOTER, html); } catch (_) {}
+            inject(html);
+        }).catch(function(err) {
+            // Fallback: try XHR
+            try {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', FOOTER_URL, true);
+                xhr.onload = function() {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        try { sessionStorage.setItem(CACHE_KEY_FOOTER, xhr.responseText); } catch (_) {}
+                        inject(xhr.responseText);
+                    }
+                };
+                xhr.send(null);
+            } catch (_) {}
+        });
+    }
+
+    // Mount footer after DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', mountFooter);
+    } else {
+        mountFooter();
     }
 })();

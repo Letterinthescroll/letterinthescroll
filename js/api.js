@@ -318,11 +318,15 @@ export async function fetchDailyPsalms() {
         const day = Math.min(Math.max(hebrewDay, 1), 30);
 
         // Validate cache by Hebrew day — busts automatically when the day rolls over.
+        // Also bust if the cached result is missing the isRoshChodesh field (old format).
         const cached = getCachedDailyPsalms();
-        if (cached && cached.hebrewDay === day) return cached;
+        if (cached && cached.hebrewDay === day && 'isRoshChodesh' in cached) return cached;
 
         // 29-day month: on the 29th, combine day-29 and day-30 portions
         const combined = (day === 29 && daysInMonth === 29);
+
+        // Rosh Chodesh: 1st of the month, or 30th of a 30-day month
+        const isRoshChodesh = (hebrewDay === 1) || (hebrewDay === 30 && daysInMonth === 30);
 
         let result;
         if (combined) {
@@ -334,7 +338,8 @@ export async function fetchDailyPsalms() {
                 displayNote: '(29th & 30th combined)',
                 hebrewDay: day,
                 daysInMonth,
-                combined: true
+                combined: true,
+                isRoshChodesh
             };
         } else {
             const p = _PORTIONS[day];
@@ -344,7 +349,8 @@ export async function fetchDailyPsalms() {
                 ps119: p.ps119 || null,
                 hebrewDay: day,
                 daysInMonth,
-                combined: false
+                combined: false,
+                isRoshChodesh
             };
         }
 

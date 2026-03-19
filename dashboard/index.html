@@ -2997,7 +2997,7 @@
         </div><!-- /.mc-wrap -->
 
         <!-- ═══ NEWSLETTER SIGNUP ═══ -->
-        <section id="dash-nl-section" class="section-card dash-section-shell fade-up fd5" style="padding:0;overflow:hidden;border:none;background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%)">
+        <section id="dash-nl-section" class="section-card dash-section-shell fade-up fd5" style="padding:0;overflow:hidden;border:1px solid rgba(30,64,175,0.25);background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%);border-radius:1.25rem;margin-bottom:0.5rem;">
             <div class="relative px-6 sm:px-10 py-8 sm:py-10 text-center">
                 <p class="text-amber-300 text-xs font-bold uppercase tracking-widest mb-2">Weekly Dvar Torah</p>
                 <h2 style="font-family:'Fraunces',serif" class="text-2xl sm:text-3xl font-bold text-white mb-2">Torah straight to your inbox</h2>
@@ -3035,9 +3035,9 @@
             </div>
         </section>
 
-        <p class="dash-footer-quote fade-up fd5">"When two sit together and words of Torah pass between them, the Divine Presence rests between them." — Pirkei Avot 3:2</p>
     </div>
 </main>
+
 
 <!-- ═══ CONFIRM MODAL ═══ -->
 <div id="confirm-modal" class="dash-modal" style="display:none">
@@ -3850,10 +3850,10 @@
             ctx.fill();
         }
 
-        // 600 continuous particles + 150 initial burst + second wave at 1.2s
-        const particles = Array.from({length: 600}, () => makeParticle(false));
-        // Burst wave 1: 150 extra particles from top with high speed
-        for (let i = 0; i < 150; i++) {
+        // 200 continuous particles + 60 initial burst + second wave at 1.2s
+        const particles = Array.from({length: 200}, () => makeParticle(false));
+        // Burst wave 1: 60 extra particles from top with high speed
+        for (let i = 0; i < 60; i++) {
             const p = makeParticle(true);
             p.vy = Math.random() * 10 + 5;
             p.vx = (Math.random() - 0.5) * 10;
@@ -3861,10 +3861,10 @@
         }
 
         let start = null;
-        const DUR = 13000;
+        const DUR = 10000;
         // Schedule a second burst wave at 1.2 seconds
         setTimeout(() => {
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 40; i++) {
                 const p = makeParticle(true);
                 p.vy = Math.random() * 9 + 4;
                 p.vx = (Math.random() - 0.5) * 9;

@@ -939,7 +939,7 @@ body.shabbat-mode .bracha-finder {
     border-color: rgba(180, 130, 80, 0.2) !important;
 }
 
-/* Footer — keep dark */
+/* Footer — keep legacy footers dark */
 body.shabbat-mode footer {
     background: #3d2815 !important;
 }

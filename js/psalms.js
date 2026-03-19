@@ -452,6 +452,46 @@ async function handleBookmarkClick(verseRef, bookmarkBtn) {
 
 // ─── Rendering ────────────────────────────────────────────────────────────────
 
+/**
+ * Append Psalm 104 to the bottom of the current reading for Rosh Chodesh.
+ * Shows a green divider banner so the user knows why it's included.
+ */
+function appendRoshChodeshPsalm(data, allVerseRefs) {
+    const container = document.getElementById('psalms-verses');
+    if (!container) return;
+
+    // Green Rosh Chodesh divider
+    const banner = document.createElement('div');
+    banner.style.cssText = 'margin:2.5rem 0 1.5rem;padding:0.7rem 1.2rem;border-radius:12px;' +
+        'background:linear-gradient(135deg,#ecfdf5 0%,#d1fae5 100%);border:1px solid #a7f3d0;' +
+        'text-align:center;display:flex;align-items:center;justify-content:center;gap:0.5rem;';
+    banner.innerHTML = '<span style="font-weight:700;color:#065f46;font-size:0.92rem;">Psalm 104 — for Rosh Chodesh</span>' +
+        '<span style="font-size:0.78rem;color:#047857;opacity:0.8;">(Barchi Nafshi)</span>';
+    container.appendChild(banner);
+
+    // Chapter header
+    const header = document.createElement('div');
+    header.className = 'psalms-chapter-header';
+    header.innerHTML = '<div class="psalms-chapter-decoration" aria-hidden="true"></div>' +
+        '<span class="psalms-chapter-label" style="color:#059669;">Psalm 104</span>' +
+        '<div class="psalms-chapter-decoration" aria-hidden="true"></div>';
+    container.appendChild(header);
+
+    // Render verses
+    const englishText = Array.isArray(data.text) ? data.text : [data.text];
+    const hebrewText = Array.isArray(data.he) ? data.he : [data.he];
+    const flat = Array.isArray(englishText[0]) ? englishText.flat() : englishText;
+    const flatHe = Array.isArray(hebrewText[0]) ? hebrewText.flat() : hebrewText;
+
+    flat.forEach((verseText, idx) => {
+        if (!verseText || String(verseText).trim() === '') return;
+        const verseNum = idx + 1;
+        const verseRef = `Psalms 104:${verseNum}`;
+        allVerseRefs.push(verseRef);
+        container.appendChild(createVerseElement(verseText, flatHe[idx] || '', verseRef, verseNum));
+    });
+}
+
 function renderVerses(data, psalmRef, ps119Part) {
     const container = document.getElementById('psalms-verses');
     if (!container) return [];
@@ -1143,6 +1183,14 @@ async function init() {
             const combEl = document.getElementById('psalms-hero-combined');
             if (combEl) { combEl.textContent = '29th & 30th portions combined'; combEl.style.display = ''; }
         }
+        if (psalmsInfo.isRoshChodesh && !psalmsInfo.ref.includes('104')) {
+            const combEl = document.getElementById('psalms-hero-combined');
+            if (combEl) {
+                combEl.textContent = '+ Psalm 104 for Rosh Chodesh';
+                combEl.style.display = '';
+                combEl.style.color = '#059669';
+            }
+        }
         if (heRefDisplay && psalmsInfo.displayHe) heRefDisplay.textContent = psalmsInfo.displayHe;
 
         updatePortionSelectorActive(todayHebrewDay);
@@ -1165,6 +1213,14 @@ async function init() {
         setVisible('psalms-content', true);
 
         const verseRefs = renderVerses(textData, psalmsInfo.ref, psalmsInfo.ps119);
+
+        // Rosh Chodesh: append Psalm 104 if not already in today's portion
+        if (psalmsInfo.isRoshChodesh && !psalmsInfo.ref.includes('104')) {
+            try {
+                const ps104Data = await fetchParshaText('Psalms 104');
+                if (ps104Data) appendRoshChodeshPsalm(ps104Data, verseRefs);
+            } catch (e) { console.error('Could not load Rosh Chodesh Psalm 104:', e); }
+        }
 
         // Set up Hebrew word selection → Sefaria definition lookup
         setupHebrewWordSelection();

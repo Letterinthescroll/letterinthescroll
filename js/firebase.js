@@ -498,11 +498,26 @@ function initAuth(onAuthReady) {
         // Firebase fires null initially while loading persisted session from
         // IndexedDB. Give it enough time to restore before showing the overlay.
         // Use a generous delay if we have any evidence of a prior session.
-        const delay = hasSessionHint ? 8000 : 3000;
+        // Mobile devices can be very slow to restore from IndexedDB, so be generous.
+        const delay = hasSessionHint ? 12000 : 5000;
         if (!authRedirectTimer) {
           authRedirectTimer = setTimeout(() => {
             if (!currentUser) {
-              showLoginRequiredOverlayAndRedirect();
+              // Double-check session hints — if they still exist, the session
+              // is likely restoring slowly, so wait a bit longer.
+              const stillHasHint = Boolean(
+                sessionStorage.getItem('headerUserCache') ||
+                localStorage.getItem('dashGroupsCache') ||
+                localStorage.getItem('lastActiveChavrutaId')
+              );
+              if (stillHasHint) {
+                // Give it one final chance
+                setTimeout(() => {
+                  if (!currentUser) showLoginRequiredOverlayAndRedirect();
+                }, 5000);
+              } else {
+                showLoginRequiredOverlayAndRedirect();
+              }
             }
           }, delay);
         }

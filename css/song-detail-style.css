@@ -30,12 +30,9 @@ html {
 .song-detail-body {
     min-height: 100vh;
     color: var(--sd-ink);
-    font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
-    background:
-        radial-gradient(1400px 720px at -12% -12%, rgba(24, 89, 166, 0.2), transparent 64%),
-        radial-gradient(1000px 580px at 112% -18%, rgba(197, 139, 42, 0.2), transparent 62%),
-        radial-gradient(880px 520px at 50% 118%, rgba(13, 127, 133, 0.13), transparent 65%),
-        linear-gradient(170deg, var(--sd-bg-1) 0%, var(--sd-bg-2) 50%, var(--sd-bg-3) 100%);
+    font-family: system-ui, -apple-system, sans-serif;
+    background: linear-gradient(170deg, var(--sd-bg-1) 0%, var(--sd-bg-2) 50%, var(--sd-bg-3) 100%);
+    background-attachment: fixed;
 }
 
 .song-detail-main {
@@ -148,18 +145,14 @@ html {
     border-radius: var(--sd-radius-lg);
     overflow: hidden;
     border: 1px solid var(--sd-line);
-    background: linear-gradient(170deg, rgba(255, 255, 255, 0.93), rgba(247, 252, 255, 0.87));
+    background: linear-gradient(170deg, rgba(255, 255, 255, 0.97), rgba(247, 252, 255, 0.95));
     box-shadow: var(--sd-shadow-lg);
-    backdrop-filter: blur(6px);
 }
 
 .song-hero {
     padding: 2rem 2rem 1.5rem;
     border-bottom: 1px solid var(--sd-line);
-    background:
-        radial-gradient(620px 220px at 100% 0%, rgba(13, 127, 133, 0.13), transparent 70%),
-        radial-gradient(600px 250px at 0% 100%, rgba(197, 139, 42, 0.13), transparent 72%),
-        linear-gradient(160deg, #f9fcff 0%, #f2f8ff 52%, #fef9ef 100%);
+    background: linear-gradient(160deg, #f9fcff 0%, #f2f8ff 52%, #fef9ef 100%);
 }
 
 .song-hero-top {
@@ -460,12 +453,14 @@ html {
 
 .lyrics-stage {
     margin-top: 0.95rem;
+    contain: content;
 }
 
 .lyrics-lines {
     display: flex;
     flex-direction: column;
     gap: 0.72rem;
+    transform: translateZ(0);
 }
 
 .lyrics-line {
@@ -475,23 +470,8 @@ html {
     align-items: start;
     border-radius: 0.95rem;
     border: 1px solid rgba(28, 63, 111, 0.13);
-    background:
-        radial-gradient(600px 200px at 0% 0%, rgba(13, 127, 133, 0.06), transparent 60%),
-        rgba(255, 255, 255, 0.94);
+    background: rgba(255, 255, 255, 0.94);
     padding: 0.82rem;
-    animation: lyric-rise 0.5s ease both;
-    animation-delay: calc(var(--line-order, 0) * 22ms);
-}
-
-@keyframes lyric-rise {
-    from {
-        transform: translateY(8px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
 }
 
 .lyrics-line-index {
@@ -623,10 +603,7 @@ html {
 .poem-shell {
     border-radius: 1.4rem;
     border: 1px solid rgba(160, 110, 60, 0.15);
-    background:
-        radial-gradient(ellipse 90% 70% at 15% 5%, rgba(255, 248, 235, 0.6), transparent),
-        radial-gradient(ellipse 80% 60% at 90% 95%, rgba(245, 230, 200, 0.4), transparent),
-        linear-gradient(168deg, #fffdf8 0%, #fbf5e8 40%, #f7ecd8 100%);
+    background: linear-gradient(168deg, #fffdf8 0%, #fbf5e8 40%, #f7ecd8 100%);
     padding: 2.5rem 3rem;
     box-shadow:
         0 1px 0 rgba(160, 110, 60, 0.06),
@@ -725,11 +702,7 @@ html {
 }
 
 body.poem-mode.song-detail-body {
-    background:
-        radial-gradient(1200px 650px at -8% -8%, rgba(160, 110, 60, 0.12), transparent 60%),
-        radial-gradient(900px 500px at 108% -10%, rgba(197, 150, 70, 0.14), transparent 55%),
-        radial-gradient(600px 400px at 50% 100%, rgba(180, 120, 50, 0.06), transparent 60%),
-        linear-gradient(175deg, #fdf8ef 0%, #f8eed9 45%, #faf4e8 100%);
+    background: linear-gradient(175deg, #fdf8ef 0%, #f8eed9 45%, #faf4e8 100%);
 }
 
 body.poem-mode .song-type-chip {
@@ -778,10 +751,7 @@ body.poem-mode .lyrics-stage {
 }
 
 body.poem-mode .song-hero {
-    background:
-        radial-gradient(700px 250px at 100% 0%, rgba(197, 150, 70, 0.12), transparent 70%),
-        radial-gradient(600px 280px at 0% 100%, rgba(160, 100, 40, 0.08), transparent 72%),
-        linear-gradient(164deg, #fffcf6 0%, #faf3e2 48%, #f7ebd3 100%);
+    background: linear-gradient(164deg, #fffcf6 0%, #faf3e2 48%, #f7ebd3 100%);
 }
 
 body.poem-mode .song-hero-title {
@@ -800,23 +770,6 @@ body.poem-mode .song-section-title svg {
     color: #a06828;
 }
 
-.song-footer {
-    margin-top: 2.2rem;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.92);
-    background: linear-gradient(135deg, #0d2349, #1b3e77, #0d7f85);
-    padding: 1.8rem 1rem;
-}
-
-.song-footer p {
-    margin: 0;
-}
-
-.song-footer-sub {
-    margin-top: 0.35rem !important;
-    font-size: 0.74rem;
-    color: rgba(255, 255, 255, 0.62);
-}
 
 @media (min-width: 960px) {
     .song-content-grid {

@@ -116,12 +116,12 @@ function renderEntries(entries) {
     return;
   }
 
-  // Use a single innerHTML write to minimize reflows
-  const html = [];
+  // Build all cards as a single HTML string for one fast DOM write
+  let html = "";
   for (let i = 0; i < entries.length; i++) {
-    html.push(buildSongCard(entries[i]));
+    html += buildSongCard(entries[i]);
   }
-  container.innerHTML = html.join("");
+  container.innerHTML = html;
 }
 
 function getTypeCounts(entries) {
