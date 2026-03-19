@@ -878,6 +878,8 @@
             border-radius: 1.2rem;
             transform: translate3d(0, 0, 0.01px);
             overflow: visible;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Fast fade-in, slow fade-out */
@@ -962,6 +964,12 @@
             background: rgba(255, 255, 255, 0.94);
             box-shadow: var(--shadow-sm);
             overflow: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .chavruta-card .chavruta-actions {
+            flex: 1;
         }
 
         .chavruta-card > div:nth-child(1) {
