@@ -997,18 +997,19 @@ async function getUserBookmarks(userId) {
   }
 
   try {
-    const allDocs = await queryAcrossChavrutas(userId, 'bookmarks', [
-      where('userId', '==', userId)
+    // Query both legacy chavruta-scoped bookmarks AND the globalBookmarks collection
+    // (psalms/tehilim bookmarks are saved to globalBookmarks)
+    const [legacyDocs, globalSnap] = await Promise.all([
+      queryAcrossChavrutas(userId, 'bookmarks', [where('userId', '==', userId)]),
+      getDocs(query(collection(db, 'globalBookmarks'), where('userId', '==', userId)))
     ]);
+
     const bookmarksByVerseRef = new Map();
 
-    allDocs.forEach((docSnap) => {
+    function mergeDoc(docSnap) {
       const data = docSnap.data();
       const verseRef = data.verseRef;
-      if (!verseRef) {
-        return;
-      }
-
+      if (!verseRef) return;
       const next = {
         id: docSnap.id,
         verseRef,
@@ -1016,20 +1017,19 @@ async function getUserBookmarks(userId) {
         timestamp: data.timestamp,
         verseText: data.verseText || null
       };
-
       const existing = bookmarksByVerseRef.get(verseRef);
       if (!existing || getTimestampMillis(next.timestamp) > getTimestampMillis(existing.timestamp)) {
         bookmarksByVerseRef.set(verseRef, next);
       } else if (existing && !existing.verseText && next.verseText) {
         bookmarksByVerseRef.set(verseRef, { ...existing, verseText: next.verseText });
       }
-    });
+    }
+
+    legacyDocs.forEach(mergeDoc);
+    globalSnap.forEach(mergeDoc);
 
     const bookmarks = Array.from(bookmarksByVerseRef.values());
-    bookmarks.sort((a, b) => {
-      return getTimestampMillis(b.timestamp) - getTimestampMillis(a.timestamp);
-    });
-
+    bookmarks.sort((a, b) => getTimestampMillis(b.timestamp) - getTimestampMillis(a.timestamp));
     return bookmarks;
   } catch (error) {
     console.error('Error getting user bookmarks:', error);

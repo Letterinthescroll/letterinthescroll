@@ -235,6 +235,28 @@
             letter-spacing: 0.02em;
         }
 
+        /* ── Clickable bookmark cards ── */
+        .bookmark-card-link {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .bookmark-card-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.13);
+            border-left-color: #b7871e;
+        }
+
+        .meta-pill--go {
+            background: rgba(22, 40, 94, 0.07);
+            border-color: rgba(22, 40, 94, 0.2);
+            color: #16285e;
+            margin-left: auto;
+        }
+
         /* ── Quote bookmark cards ── */
         .quote-card {
             border-left-color: #2f56ab;
@@ -451,6 +473,18 @@
             return `<div class="empty-state">${escapeHtml(message)}</div>`;
         }
 
+        function getVerseUrl(verseRef) {
+            if (!verseRef) return null;
+            const match = verseRef.trim().match(/^([\w\s]+)\s+(\d+):(\d+)$/);
+            if (!match) return null;
+            const book = match[1].trim();
+            const chapter = parseInt(match[2], 10);
+            if (book === 'Psalms') {
+                return '/psalms/?psalm=' + chapter + '&scrollTo=' + encodeURIComponent(verseRef);
+            }
+            return '/study/?verse=' + encodeURIComponent(verseRef);
+        }
+
         function renderVerseBookmarks(bookmarks) {
             if (!bookmarks || bookmarks.length === 0) {
                 return `<div class="empty-state">
@@ -465,10 +499,12 @@
                 const reference = bookmark.verseRef || 'Unknown verse';
                 const text = truncateText(bookmark.verseText || 'Verse text will appear after you open the study room where this verse was bookmarked.');
                 const dateStr = formatDate(bookmark.timestamp);
-                // Extract book name for a subtle accent
                 const book = reference.split(' ')[0] || '';
+                const url = getVerseUrl(reference);
+                const tag = url ? 'a' : 'article';
+                const attrs = url ? `href="${escapeHtml(url)}"` : '';
                 return `
-                    <article class="bookmark-card">
+                    <${tag} class="bookmark-card${url ? ' bookmark-card-link' : ''}" ${attrs}>
                         <div class="bookmark-card-head">
                             <h3 class="bookmark-title">${escapeHtml(reference)}</h3>
                             <span class="bookmark-date">${escapeHtml(dateStr)}</span>
@@ -477,8 +513,9 @@
                         <div class="bookmark-meta">
                             <span class="meta-pill">Universal Bookmark</span>
                             ${book ? `<span class="meta-pill">${escapeHtml(book)}</span>` : ''}
+                            ${url ? '<span class="meta-pill meta-pill--go">Go to verse →</span>' : ''}
                         </div>
-                    </article>
+                    </${tag}>
                 `;
             }).join('');
         }

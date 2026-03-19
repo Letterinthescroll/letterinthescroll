@@ -3551,13 +3551,19 @@
                 showBanner('Invite link is invalid. Ask for a new 16-character code.', 'error');
             } else {
                 try {
-                    await joinByCode(iCode);
-                    showBanner('Joined via invite link!', 'success');
+                    const result = await joinByCode(iCode);
+                    if (result === 'already_member') {
+                        showBanner('You\'re already in this group!', 'info');
+                    } else if (result === 'pending') {
+                        showBanner('Join request sent! Waiting for the leader\'s approval.', 'info');
+                    } else {
+                        showBanner('Joined successfully!', 'success');
+                    }
                 } catch (e) {
                     showBanner(e.message || 'Could not join.', 'error');
                 }
             }
-            window.history.replaceState({}, '', 'dashboard.html');
+            window.history.replaceState({}, '', '/dashboard');
         }
 
         // Display name — prefer Firestore displayName (set in Settings)
@@ -4647,16 +4653,19 @@
         const snap=await db.collection('chavrutas').where('inviteCode','==',normalizedCode).limit(1).get();
         if(snap.empty) throw new Error('Code not found. Double-check and try again.');
         const doc=snap.docs[0], data=doc.data();
-        if((data.members||[]).includes(currentUser.uid)) throw new Error('You are already in this group.');
+        if((data.members||[]).includes(currentUser.uid)) {
+            sessionStorage.setItem('activeChavrutaId', doc.id);
+            return 'already_member';
+        }
         if((data.pendingMembers||[]).includes(currentUser.uid)) throw new Error('Your request to join is pending approval.');
         if((data.members||[]).length>=(data.maxMembers||8)) throw new Error('This group is full.');
 
         if (data.requireApproval) {
-            // Add to pending list instead of members
             await db.collection('chavrutas').doc(doc.id).update({pendingMembers:FieldValue.arrayUnion(currentUser.uid)});
             return 'pending';
         }
         await db.collection('chavrutas').doc(doc.id).update({members:FieldValue.arrayUnion(currentUser.uid)});
+        sessionStorage.setItem('activeChavrutaId', doc.id);
         return 'joined';
     }
 
@@ -4666,7 +4675,11 @@
             const doc=await db.collection('chavrutas').doc(id).get();
             if(!doc.exists){showBanner('Group not found.','error');return;}
             const d=doc.data();
-            if((d.members||[]).includes(currentUser.uid)){showBanner('You are already in "'+d.name+'".','info');return;}
+            if((d.members||[]).includes(currentUser.uid)){
+                sessionStorage.setItem('activeChavrutaId', id);
+                showBanner('Welcome to "'+d.name+'"!','info');
+                return;
+            }
             if((d.pendingMembers||[]).includes(currentUser.uid)){showBanner('Your request to join "'+d.name+'" is pending approval.','info');return;}
             if((d.members||[]).length>=(d.maxMembers||8)){showBanner('"'+d.name+'" is full.','warning');return;}
             if (d.requireApproval) {
@@ -4675,6 +4688,7 @@
                 return;
             }
             await db.collection('chavrutas').doc(id).update({members:FieldValue.arrayUnion(currentUser.uid)});
+            sessionStorage.setItem('activeChavrutaId', id);
             showBanner('Joined "'+d.name+'" successfully!','success');
         } catch { showBanner('Could not auto-join.','error'); }
     }

@@ -286,6 +286,18 @@
             box-shadow: 0 4px 16px rgba(8, 70, 88, 0.1);
         }
 
+        #psalms-verses .verse-container.verse-nav-highlight {
+            border-color: #c89a35;
+            box-shadow: 0 0 0 3px rgba(200, 154, 53, 0.25), 0 4px 20px rgba(200, 154, 53, 0.2);
+            animation: verseNavPulse 2.6s ease-out forwards;
+        }
+
+        @keyframes verseNavPulse {
+            0%   { box-shadow: 0 0 0 4px rgba(200, 154, 53, 0.4), 0 4px 20px rgba(200, 154, 53, 0.25); }
+            60%  { box-shadow: 0 0 0 3px rgba(200, 154, 53, 0.25), 0 4px 20px rgba(200, 154, 53, 0.18); }
+            100% { box-shadow: none; }
+        }
+
         #psalms-verses .hebrew-text {
             font-size: 1.2rem;
             line-height: 1.85;

@@ -820,6 +820,13 @@ async function init() {
             openBookmarksPanel('quotes');
         }
 
+        // Handle ?verse=VERSE_REF from bookmark navigation (e.g. "Leviticus 5:3")
+        const verseParam = new URLSearchParams(window.location.search).get('verse');
+        if (verseParam) {
+            window.history.replaceState(null, '', window.location.pathname);
+            await loadVerseFromBookmark(verseParam);
+        }
+
         console.log('✅ Application initialized successfully');
 
     } catch (error) {
@@ -3221,11 +3228,13 @@ function updateHeaderUserDropdown(user, userProfile) {
 
     // Detect skeleton placeholder (has no real menu button)
     const isSkeleton = dropdownContainer && !dropdownContainer.querySelector('#header-user-menu-btn');
+    // Detect pill pre-rendered by header-loader.js (has the button but no dropdown panel yet)
+    const isPreRendered = dropdownContainer && !document.getElementById('header-user-dropdown');
 
     if (user) {
-        if (!dropdownContainer || isSkeleton) {
-            // Remove skeleton or old logout button
-            if (isSkeleton && dropdownContainer) {
+        if (!dropdownContainer || isSkeleton || isPreRendered) {
+            // Remove skeleton or pre-rendered pill so the real dropdown replaces it
+            if ((isSkeleton || isPreRendered) && dropdownContainer) {
                 dropdownContainer.remove();
             }
             if (oldLogoutBtn && oldLogoutBtn.parentElement === headerActions) {

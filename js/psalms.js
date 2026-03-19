@@ -834,6 +834,79 @@ function updatePortionSelectorActive(day) {
     }
 }
 
+function scrollToVerseRef(verseRef, attempt) {
+    if (!verseRef) return;
+    const el = document.querySelector('[data-ref="' + verseRef.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"]');
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('verse-nav-highlight');
+        setTimeout(() => el.classList.remove('verse-nav-highlight'), 2600);
+    } else if ((attempt || 0) < 15) {
+        setTimeout(() => scrollToVerseRef(verseRef, (attempt || 0) + 1), 120);
+    }
+}
+
+async function loadSpecificPsalm(psalmNumber, scrollToRef) {
+    // Reset state
+    verseReactionCounts = {};
+    userReactions = {};
+    bookmarkedVerses = new Set();
+    verseBookmarkCounts = {};
+    verseInteractorsCache.clear();
+    pendingVerseRefs = null;
+    currentPortionDay = null;
+
+    history.pushState({ psalm: psalmNumber }, '', `${window.location.pathname}?psalm=${psalmNumber}`);
+
+    const refDisplay = document.getElementById('psalms-ref-display');
+    const dayEl = document.getElementById('psalms-hero-day');
+    const combEl = document.getElementById('psalms-hero-combined');
+    if (refDisplay) refDisplay.textContent = `Psalm ${psalmNumber}`;
+    if (dayEl) dayEl.style.display = 'none';
+    if (combEl) combEl.style.display = 'none';
+
+    updatePortionSelectorActive(null);
+
+    setVisible('psalms-content', false);
+    setVisible('psalms-loading', true);
+    setVisible('psalms-error', false);
+
+    try {
+        const textData = await fetchParshaText(`Psalms ${psalmNumber}`);
+        if (!textData) throw new Error('Could not load Psalm text.');
+
+        setVisible('psalms-loading', false);
+        setVisible('psalms-content', true);
+
+        const verseRefs = renderVerses(textData, `Psalms ${psalmNumber}`, null);
+        setupHebrewWordSelection();
+
+        getGlobalReactionCountsForBook('Psalms').then(counts => {
+            Object.assign(verseReactionCounts, counts);
+            document.querySelectorAll('.verse-container[data-ref]').forEach(el => {
+                updateVerseReactionUI(el, el.dataset.ref);
+            });
+        }).catch(() => {});
+
+        if (currentUserId && verseRefs.length > 0) {
+            await loadInteractions(verseRefs);
+        } else if (verseRefs.length > 0) {
+            pendingVerseRefs = verseRefs;
+        }
+
+        // Scroll to the specific verse if requested
+        if (scrollToRef) {
+            scrollToVerseRef(scrollToRef);
+        }
+    } catch (err) {
+        console.error('Psalm load error:', err);
+        setVisible('psalms-loading', false);
+        setVisible('psalms-error', true);
+        const errText = document.getElementById('psalms-error-text');
+        if (errText) errText.textContent = err.message || 'Could not load this Psalm. Please try again.';
+    }
+}
+
 async function loadBirthdayPortion(psalmNumber) {
     // Clear state
     verseReactionCounts = {};
@@ -1028,15 +1101,23 @@ async function init() {
 
         todayHebrewDay = psalmsInfo.hebrewDay || 1;
 
-        // Check URL params: ?birthday=N or ?day=N
+        // Check URL params: ?birthday=N or ?day=N or ?psalm=N (from bookmark navigation)
         const urlParams = new URLSearchParams(window.location.search);
         const urlBirthday = parseInt(urlParams.get('birthday'));
         const urlDay = parseInt(urlParams.get('day'));
+        const urlPsalm = parseInt(urlParams.get('psalm'));
+        const urlScrollTo = urlParams.get('scrollTo') || '';
         const startDay = (urlDay >= 1 && urlDay <= 30) ? urlDay : todayHebrewDay;
         currentPortionDay = startDay;
 
         // Build the portion selector dropdown now that we know today's day
         buildPortionSelector(todayHebrewDay);
+
+        // If URL has a specific psalm to navigate to (from bookmarks), load it
+        if (urlPsalm >= 1 && urlPsalm <= 150) {
+            await loadSpecificPsalm(urlPsalm, urlScrollTo);
+            return;
+        }
 
         // If URL has a birthday psalm, load it
         if (urlBirthday >= 1 && urlBirthday <= 150) {
