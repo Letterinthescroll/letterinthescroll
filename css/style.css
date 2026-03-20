@@ -7404,8 +7404,8 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
 /* Nav columns */
 .footer-nav {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10rem;
+    grid-template-columns: repeat(3, auto);
+    gap: 3rem;
     flex-shrink: 0;
 }
 
@@ -7416,6 +7416,7 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
     gap: 0.15rem;
     flex-shrink: 0;
     max-width: 200px;
+    margin-left: auto;
 }
 
 .footer-support-text {
@@ -7595,11 +7596,18 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
         align-items: center;
         text-align: center;
         max-width: 280px;
+        margin-left: 0;
+        width: 100%;
     }
 
     .footer-support-text {
         max-width: 280px;
         text-align: center;
+    }
+
+    .footer-support-btn {
+        margin: 0 auto;
+        justify-content: center;
     }
 
     .footer-support-chazak {
