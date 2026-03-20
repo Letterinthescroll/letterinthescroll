@@ -7339,6 +7339,8 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
+    width: 320px;
+    flex-shrink: 0;
 }
 
 .footer-logo-link {
@@ -7406,6 +7408,47 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
     gap: 10rem;
     flex-shrink: 0;
 }
+
+/* ── Footer support column ───────────────────────────────────────── */
+.footer-support-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex-shrink: 0;
+    max-width: 200px;
+}
+
+.footer-support-text {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.45);
+    line-height: 1.6;
+    max-width: 200px;
+    margin-bottom: 0.6rem;
+}
+
+.footer-support-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 8px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, rgba(200, 154, 53, 0.25), rgba(200, 154, 53, 0.15));
+    border: 1px solid rgba(212, 175, 55, 0.3) !important;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+    white-space: nowrap;
+}
+.footer-support-btn:hover {
+    background: linear-gradient(135deg, rgba(200, 154, 53, 0.4), rgba(200, 154, 53, 0.25));
+    border-color: rgba(212, 175, 55, 0.5) !important;
+}
+.footer-support-btn svg {
+    stroke: rgba(212, 175, 55, 0.8);
+}
+
 
 
 .footer-nav-heading {
@@ -7548,6 +7591,21 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
         align-items: center;
     }
 
+    .footer-support-col {
+        align-items: center;
+        text-align: center;
+        max-width: 280px;
+    }
+
+    .footer-support-text {
+        max-width: 280px;
+        text-align: center;
+    }
+
+    .footer-support-chazak {
+        text-align: center;
+    }
+
     .footer-nav-list {
         align-items: center;
     }
@@ -7564,6 +7622,7 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
         padding: 1rem 0 1.2rem;
     }
     .footer-verse { text-align: center; }
+
 }
 
 @media (max-width: 480px) {

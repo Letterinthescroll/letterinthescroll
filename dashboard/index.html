@@ -613,14 +613,6 @@
             margin-bottom: 0.68rem;
         }
 
-        .manage-success-msg {
-            display: inline-block;
-            margin-left: 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #16a34a;
-            transition: opacity 0.4s ease;
-        }
 
         .dash-form-stack {
             display: flex;
@@ -5169,35 +5161,29 @@
     }
 
     /* ════ RENAME / TRANSFER / REGEN ════ */
-    function showInlineSuccess(btn, message) {
-        let msg = btn.parentElement.querySelector('.manage-success-msg');
-        if (!msg) {
-            msg = document.createElement('span');
-            msg.className = 'manage-success-msg';
-            btn.parentElement.appendChild(msg);
-        }
-        msg.textContent = message;
-        msg.style.opacity = '1';
-        clearTimeout(msg._fadeTimer);
-        msg._fadeTimer = setTimeout(() => { msg.style.opacity = '0'; }, 3000);
+    function flashGreen(btn) {
+        const orig = btn.style.background;
+        btn.style.background = '#16a34a';
+        clearTimeout(btn._greenTimer);
+        btn._greenTimer = setTimeout(() => { btn.style.background = orig; }, 1500);
     }
     async function renameChavruta(id,btn){
         const n=document.getElementById('ren-'+id)?.value?.trim();
         if(!n||n.length<2){alert('Name must be at least 2 characters.');return;}
-        try{ await db.collection('chavrutas').doc(id).update({name:n}); showInlineSuccess(btn,'Group renamed!'); } catch { alert('Failed to rename.'); }
+        try{ await db.collection('chavrutas').doc(id).update({name:n}); flashGreen(btn); } catch { alert('Failed to rename.'); }
     }
     async function resizeChavruta(id,btn){
         const sel=document.getElementById('resize-'+id);
         if(!sel) return;
         const newMax=+sel.value;
         if(newMax<1||newMax>30){alert('Invalid size.');return;}
-        try{ await db.collection('chavrutas').doc(id).update({maxMembers:newMax}); showInlineSuccess(btn,'Group resized!'); } catch { alert('Failed to resize group.'); }
+        try{ await db.collection('chavrutas').doc(id).update({maxMembers:newMax}); flashGreen(btn); } catch { alert('Failed to resize group.'); }
     }
     async function transferLeadership(id,name,btn){
         const uid=document.getElementById('trf-'+id)?.value; if(!uid) return;
         const n=nameCache[uid]||'the selected member';
         if(!await showConfirm('Transfer Leadership','Transfer leadership of "'+name+'" to '+n+'?')) return;
-        try{ await db.collection('chavrutas').doc(id).update({leader:uid}); showInlineSuccess(btn,'Leadership transferred!'); } catch { alert('Failed to transfer.'); }
+        try{ await db.collection('chavrutas').doc(id).update({leader:uid}); flashGreen(btn); } catch { alert('Failed to transfer.'); }
     }
     async function regenerateCode(id){
         if(!await showConfirm('Regenerate Code','The old code will stop working. Continue?')) return;
