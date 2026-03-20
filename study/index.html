@@ -61,7 +61,7 @@
             text-align: right;
         }
         #study-progress-icon { flex-shrink: 0; color: #93c5fd; opacity: 0.8; }
-        body { padding-bottom: 52px; }
+        /* padding-bottom handled by footer; no extra gap needed */
 
         /* ── Daily Tehillim banner card ──────────────────────────────── */
         #daily-tehillim-mini {
@@ -644,7 +644,34 @@
         var label = document.getElementById('study-progress-label');
         if (!wrap || !fill || !label) return;
 
+        var lastPct = -1;
+        var isVisible = false;
+        var rafId = 0;
+
+        // Detect zoom: compare visual viewport width to layout viewport width.
+        // When the user pinch-zooms or Ctrl+zooms, scale drops below 1.
+        function isZoomed() {
+            if (window.visualViewport) {
+                return Math.abs(window.visualViewport.scale - 1) > 0.05;
+            }
+            // Desktop fallback: compare window.outerWidth to innerWidth
+            // (innerWidth shrinks when browser zoom increases)
+            var ratio = window.outerWidth / window.innerWidth;
+            return Math.abs(ratio - 1) > 0.15;
+        }
+
         function updateProgress() {
+            rafId = 0;
+
+            // If the page is zoomed in, hide the bar and bail out
+            if (isZoomed()) {
+                if (isVisible) {
+                    isVisible = false;
+                    wrap.classList.remove('visible');
+                }
+                return;
+            }
+
             var text = document.getElementById('parsha-text');
             if (!text || text.children.length === 0) return;
 
@@ -653,16 +680,36 @@
             if (docHeight <= 0) return;
 
             var pct = Math.round(Math.min(100, Math.max(0, (scrollTop / docHeight) * 100)));
-            fill.style.width = pct + '%';
-            label.textContent = pct + '%';
-            wrap.setAttribute('aria-valuenow', pct);
-            wrap.classList.toggle('visible', scrollTop > 250 && pct < 98);
+
+            if (pct !== lastPct) {
+                lastPct = pct;
+                fill.style.width = pct + '%';
+                label.textContent = pct + '%';
+                wrap.setAttribute('aria-valuenow', pct);
+            }
+
+            var shouldShow = scrollTop > 250 && pct < 98;
+            if (shouldShow !== isVisible) {
+                isVisible = shouldShow;
+                wrap.classList.toggle('visible', shouldShow);
+            }
         }
 
-        window.addEventListener('scroll', updateProgress, { passive: true });
+        function scheduleUpdate() {
+            if (!rafId) rafId = requestAnimationFrame(updateProgress);
+        }
+
+        window.addEventListener('scroll', scheduleUpdate, { passive: true });
+        window.addEventListener('resize', scheduleUpdate, { passive: true });
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', scheduleUpdate, { passive: true });
+            window.visualViewport.addEventListener('scroll', scheduleUpdate, { passive: true });
+        }
         var target = document.getElementById('parsha-text');
-        if (target) new MutationObserver(updateProgress).observe(target, { childList: true, subtree: true });
+        if (target) new MutationObserver(scheduleUpdate).observe(target, { childList: true, subtree: true });
     })();
     </script>
+    <div id="shared-footer-mount"></div>
+    <script src="/js/footer-loader.js"></script>
 </body>
 </html>

@@ -304,7 +304,7 @@
             color: #1a1035;
         }
 
-        /* ── Sefaria credit footer ─────────────────────────────────────── */
+        /* ── Psalm cycle note ──────────────────────────────────────────── */
         .psalms-sefaria-credit {
             text-align: center;
             margin-top: 3rem;
@@ -978,11 +978,7 @@
         <div id="psalms-content" class="hidden fade-in">
             <div id="psalms-verses"></div>
 
-            <p class="psalms-sefaria-credit">
-                Hebrew and English text provided by
-                <a href="https://www.sefaria.org" target="_blank" rel="noopener">Sefaria.org</a>
-                · Monthly Psalms cycle
-            </p>
+            <p class="psalms-sefaria-credit">Monthly Psalms cycle for daily reflection.</p>
         </div>
 
     </main>
@@ -1212,5 +1208,7 @@ void main(){vec4 o=vec4(0.0);mainImage(o,gl_FragCoord.xy);fragColor=o;}`;
         if (target) observer.observe(target, { childList: true, subtree: true });
     })();
     </script>
+    <div id="shared-footer-mount"></div>
+    <script src="/js/footer-loader.js"></script>
 </body>
 </html>

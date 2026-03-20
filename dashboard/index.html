@@ -54,6 +54,9 @@
            shadows aren't cut off at the viewport edges.  No scrollbar
            appears because all content is max-width constrained and
            decorative pseudo-elements use position:fixed. */
+        html:has(.dashboard-body) {
+            background: #edf5ff !important;
+        }
         html:has(.dashboard-body),
         html:has(.dashboard-body) body,
         .dashboard-body main {
@@ -6311,5 +6314,8 @@
         }
     })();
     </script>
+
+    <div id="shared-footer-mount"></div>
+    <script src="/js/footer-loader.js"></script>
 </body>
 </html>
