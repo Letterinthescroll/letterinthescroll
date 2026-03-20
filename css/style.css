@@ -5189,12 +5189,95 @@ body.torah-text-size-xlarge #parsha-text .english-text {
     word-break: break-word;
 }
 
-.mitzvah-message-reactions {
+.mitzvah-message-footer {
     display: flex;
-    gap: 0.65rem;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
     margin-top: 0.75rem;
     padding-top: 0.75rem;
     border-top: 1px solid rgba(59, 130, 246, 0.12);
+}
+
+.mitzvah-message-reactions {
+    display: flex;
+    gap: 0.65rem;
+}
+
+.mitzvah-message-actions {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.mitzvah-action-btn {
+    background: none;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    border-radius: 6px;
+    padding: 0.2rem 0.55rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    color: #64748b;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.mitzvah-action-btn:hover {
+    background: rgba(241, 245, 249, 0.9);
+    color: #334155;
+    border-color: rgba(148, 163, 184, 0.55);
+}
+
+.mitzvah-action-delete:hover {
+    background: rgba(254, 226, 226, 0.8);
+    color: #b91c1c;
+    border-color: rgba(239, 68, 68, 0.35);
+}
+
+.mitzvah-action-save {
+    background: rgba(59, 130, 246, 0.1);
+    color: #2563eb;
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.mitzvah-action-save:hover {
+    background: rgba(59, 130, 246, 0.2);
+}
+
+.mitzvah-action-save:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.mitzvah-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.mitzvah-edit-textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 60px;
+    border-radius: 8px;
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    padding: 0.55rem 0.7rem;
+    font-size: 0.9rem;
+    font-family: inherit;
+    line-height: 1.5;
+    color: #111827;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.mitzvah-edit-textarea:focus {
+    outline: none;
+    border-color: rgba(59, 130, 246, 0.6);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+}
+
+.mitzvah-edit-actions {
+    display: flex;
+    gap: 0.4rem;
+    justify-content: flex-end;
 }
 
 .mitzvah-chat__composer {
@@ -5509,7 +5592,7 @@ body.torah-text-size-xlarge #parsha-text .english-text {
     display: flex;
     gap: 0.35rem;
     flex-wrap: wrap;
-    padding: 0.85rem 1.4rem 0;
+    padding: 0.85rem 1.4rem 0.65rem;
 }
 
 .mc-tab {

@@ -1901,7 +1901,7 @@ async function refreshMitzvahCompletionStatus(challengeId) {
 
     let hadError = false;
     try {
-        const status = await getMitzvahCompletionStatus(userId, challengeId);
+        const status = await getMitzvahCompletionStatus(challengeId, userId);
         currentMitzvahCompletion = Boolean(status.completed);
         console.log('[Mitzvah Completion] Status loaded:', {
             userId,
@@ -2723,10 +2723,10 @@ async function handleMitzvahChatSubmit() {
                     username,
                     submissionEmail
                 });
-                await setMitzvahCompletionStatus(userId, challengeId, true);
+                await setMitzvahCompletionStatus(challengeId, userId, true);
                 currentMitzvahCompletion = true;
                 updateMitzvahChecklistUI('Challenge marked as completed!');
-                await updateMitzvahLeaderboard(userId, username, 1, submissionEmail);
+                await updateMitzvahLeaderboard(challengeId, userId, username);
                 applyLocalMitzvahLeaderboardIncrement(userId, username, 1);
                 console.log('[Mitzvah Reflection] Leaderboard incremented successfully');
             } catch (error) {

@@ -904,6 +904,8 @@ async function loadSpecificPsalm(psalmNumber, scrollToRef) {
     if (refDisplay) refDisplay.textContent = `Psalm ${psalmNumber}`;
     if (dayEl) dayEl.style.display = 'none';
     if (combEl) combEl.style.display = 'none';
+    const titleEl = document.querySelector('.psalms-hero-title');
+    if (titleEl) titleEl.textContent = 'Daily Psalms';
 
     updatePortionSelectorActive(null);
 
@@ -965,6 +967,8 @@ async function loadBirthdayPortion(psalmNumber) {
     if (refDisplay) refDisplay.textContent = `Psalm ${psalmNumber} — Birthday Portion`;
     if (dayEl) dayEl.style.display = 'none';
     if (combEl) combEl.style.display = 'none';
+    const titleEl = document.querySelector('.psalms-hero-title');
+    if (titleEl) titleEl.textContent = 'Daily Psalms';
 
     // Deactivate all portion options since this is outside the 30-day cycle
     updatePortionSelectorActive(null);
@@ -1025,6 +1029,8 @@ async function loadPortion(portionDay) {
     if (heRefDisplay) heRefDisplay.textContent = '';
     if (dayEl) { dayEl.textContent = `Day ${portionDay}`; dayEl.style.display = ''; }
     if (combEl) combEl.style.display = 'none';
+    const titleEl = document.querySelector('.psalms-hero-title');
+    if (titleEl) titleEl.textContent = `Daily Psalms — Day ${portionDay}`;
 
     // Update selector UI
     updatePortionSelectorActive(portionDay);
@@ -1178,6 +1184,8 @@ async function init() {
         if (psalmsInfo.hebrewDay) {
             const dayEl = document.getElementById('psalms-hero-day');
             if (dayEl) { dayEl.textContent = `Day ${psalmsInfo.hebrewDay}`; dayEl.style.display = ''; }
+            const titleEl = document.querySelector('.psalms-hero-title');
+            if (titleEl) titleEl.textContent = `Daily Psalms — Day ${psalmsInfo.hebrewDay}`;
         }
         if (psalmsInfo.combined) {
             const combEl = document.getElementById('psalms-hero-combined');

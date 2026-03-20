@@ -1997,6 +1997,36 @@ async function submitMitzvahReflection(parshaName, text, userId, username) {
   }
 }
 
+async function editMitzvahReflection(reflectionId, newText) {
+  if (!reflectionId || !newText) {
+    throw new Error('Missing required fields to edit reflection');
+  }
+  const trimmed = newText.trim();
+  if (!trimmed) {
+    throw new Error('Reflection message cannot be empty');
+  }
+  try {
+    const reflectionRef = chavrutaDoc('mitzvah-data', reflectionId);
+    await setDoc(reflectionRef, { message: trimmed, updatedAt: serverTimestamp() }, { merge: true });
+  } catch (error) {
+    console.error('Error editing mitzvah reflection:', error);
+    throw error;
+  }
+}
+
+async function deleteMitzvahReflection(reflectionId) {
+  if (!reflectionId) {
+    throw new Error('Missing reflection ID');
+  }
+  try {
+    const reflectionRef = chavrutaDoc('mitzvah-data', reflectionId);
+    await deleteDoc(reflectionRef);
+  } catch (error) {
+    console.error('Error deleting mitzvah reflection:', error);
+    throw error;
+  }
+}
+
 async function submitMitzvahReflectionReaction(parshaName, reflectionId, reactionType, userId) {
   if (!reflectionId || !reactionType || !userId) {
     throw new Error('Missing required fields for reaction');
@@ -2092,31 +2122,55 @@ async function updateMitzvahLeaderboard(parshaName, userId, displayName) {
       ? displayName.trim()
       : 'Friend';
 
-    // Count all completions for this user in this chavruta
-    const completionsQuery = query(
-      chavrutaCollection('mitzvah-data'),
-      where('type', '==', 'completion'),
-      where('userId', '==', userId),
-      where('completed', '==', true)
-    );
-    const snapshot = await getDocs(completionsQuery);
-    const total = snapshot.size;
+    // Read the existing leaderboard entry to get the current count
+    let currentTotal = 0;
+    try {
+      const existing = await getDoc(leaderboardRef);
+      if (existing.exists()) {
+        currentTotal = existing.data().totalCompleted || 0;
+      }
+    } catch (_) {}
+
+    const total = currentTotal + 1;
 
     const payload = {
       type: 'leaderboard',
       userId,
       username: resolvedName,
       totalCompleted: total,
+      lastCompletedAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     };
-
-    if (total > 0) {
-      payload.lastCompletedAt = serverTimestamp();
-    }
 
     await setDoc(leaderboardRef, payload, { merge: true });
   } catch (error) {
     console.error('Error updating mitzvah leaderboard:', error);
+  }
+}
+
+async function decrementMitzvahLeaderboard(userId) {
+  if (!userId) {
+    return;
+  }
+
+  try {
+    const leaderboardRef = chavrutaDoc('mitzvah-data', `leaderboard__${userId}`);
+    const existing = await getDoc(leaderboardRef);
+    if (!existing.exists()) return;
+
+    const currentTotal = existing.data().totalCompleted || 0;
+    const newTotal = Math.max(0, currentTotal - 1);
+
+    if (newTotal <= 0) {
+      await deleteDoc(leaderboardRef);
+    } else {
+      await setDoc(leaderboardRef, {
+        totalCompleted: newTotal,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+    }
+  } catch (error) {
+    console.error('Error decrementing mitzvah leaderboard:', error);
   }
 }
 
@@ -2316,10 +2370,13 @@ export {
   listenForMitzvahReflections,
   stopListeningForMitzvahReflections,
   submitMitzvahReflection,
+  editMitzvahReflection,
+  deleteMitzvahReflection,
   submitMitzvahReflectionReaction,
   getMitzvahCompletionStatus,
   setMitzvahCompletionStatus,
   updateMitzvahLeaderboard,
+  decrementMitzvahLeaderboard,
   recalculateMitzvahLeaderboard,
   getMitzvahLeaderboard,
   getChavrutaBasicInfo,

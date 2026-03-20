@@ -11,8 +11,13 @@ import {
     listenForMitzvahReflections,
     stopListeningForMitzvahReflections,
     submitMitzvahReflection,
+    editMitzvahReflection,
+    deleteMitzvahReflection,
     submitMitzvahReflectionReaction,
     getMitzvahCompletionStatus,
+    setMitzvahCompletionStatus,
+    updateMitzvahLeaderboard,
+    decrementMitzvahLeaderboard,
     getMitzvahLeaderboard,
     formatTimeAgo
 } from './firebase.js';
@@ -79,7 +84,8 @@ function renderMessages(messages) {
     messages.forEach(msg => {
         const wrapper = document.createElement('div');
         wrapper.classList.add('mitzvah-chat-message');
-        if (msg.userId && currentUserId && msg.userId === currentUserId) {
+        const isOwn = msg.userId && currentUserId && msg.userId === currentUserId;
+        if (isOwn) {
             wrapper.classList.add('mitzvah-chat-message--self');
         }
 
@@ -104,6 +110,10 @@ function renderMessages(messages) {
         wrapper.appendChild(meta);
         wrapper.appendChild(body);
 
+        // Footer row: reactions + actions
+        const footerRow = document.createElement('div');
+        footerRow.classList.add('mitzvah-message-footer');
+
         // Reaction buttons
         const reactions = msg.reactions || {};
         const reactRow = document.createElement('div');
@@ -124,10 +134,112 @@ function renderMessages(messages) {
             reactRow.appendChild(btn);
         });
 
-        wrapper.appendChild(reactRow);
+        footerRow.appendChild(reactRow);
+
+        // Edit / Delete actions for own messages
+        if (isOwn && msg.id) {
+            const actions = document.createElement('div');
+            actions.classList.add('mitzvah-message-actions');
+
+            const editBtn = document.createElement('button');
+            editBtn.className = 'mitzvah-action-btn mitzvah-action-edit';
+            editBtn.setAttribute('aria-label', 'Edit reflection');
+            editBtn.textContent = 'Edit';
+            editBtn.addEventListener('click', () => startEditReflection(wrapper, msg));
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'mitzvah-action-btn mitzvah-action-delete';
+            deleteBtn.setAttribute('aria-label', 'Delete reflection');
+            deleteBtn.textContent = 'Delete';
+            deleteBtn.addEventListener('click', () => handleDeleteReflection(msg.id));
+
+            actions.appendChild(editBtn);
+            actions.appendChild(deleteBtn);
+            footerRow.appendChild(actions);
+        }
+
+        wrapper.appendChild(footerRow);
         container.appendChild(wrapper);
     });
     container.scrollTop = container.scrollHeight;
+}
+
+function startEditReflection(wrapper, msg) {
+    // Prevent opening multiple editors
+    if (wrapper.querySelector('.mitzvah-edit-form')) return;
+
+    const body = wrapper.querySelector('.mitzvah-chat-message__body');
+    const originalText = msg.message || '';
+    body.style.display = 'none';
+
+    const form = document.createElement('div');
+    form.classList.add('mitzvah-edit-form');
+
+    const textarea = document.createElement('textarea');
+    textarea.classList.add('mitzvah-edit-textarea');
+    textarea.value = originalText;
+    textarea.rows = 3;
+
+    const btnRow = document.createElement('div');
+    btnRow.classList.add('mitzvah-edit-actions');
+
+    const saveBtn = document.createElement('button');
+    saveBtn.className = 'mitzvah-action-btn mitzvah-action-save';
+    saveBtn.textContent = 'Save';
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.className = 'mitzvah-action-btn mitzvah-action-cancel';
+    cancelBtn.textContent = 'Cancel';
+
+    btnRow.appendChild(saveBtn);
+    btnRow.appendChild(cancelBtn);
+    form.appendChild(textarea);
+    form.appendChild(btnRow);
+
+    // Insert form after the body
+    body.parentNode.insertBefore(form, body.nextSibling);
+    textarea.focus();
+
+    cancelBtn.addEventListener('click', () => {
+        form.remove();
+        body.style.display = '';
+    });
+
+    saveBtn.addEventListener('click', async () => {
+        const newText = textarea.value.trim();
+        if (!newText) return;
+        if (newText === originalText) { form.remove(); body.style.display = ''; return; }
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving…';
+        try {
+            await editMitzvahReflection(msg.id, newText);
+            // The live listener will re-render, but update locally for instant feedback
+            body.textContent = newText;
+            form.remove();
+            body.style.display = '';
+        } catch (err) {
+            console.error('[mitzvah-dash] Error editing reflection:', err);
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Save';
+        }
+    });
+}
+
+async function handleDeleteReflection(reflectionId) {
+    if (!confirm('Delete this reflection?')) return;
+    try {
+        await deleteMitzvahReflection(reflectionId);
+        // Undo completion and remove from leaderboard
+        if (currentUserId && challengeId) {
+            await setMitzvahCompletionStatus(challengeId, currentUserId, false);
+            await decrementMitzvahLeaderboard(currentUserId);
+            currentCompletion = false;
+            updateChecklistUI();
+            getMitzvahLeaderboard(challengeId).then(lb => renderLeaderboard(lb)).catch(() => {});
+        }
+    } catch (err) {
+        console.error('[mitzvah-dash] Error deleting reflection:', err);
+    }
 }
 
 function renderLeaderboard(leaderboard) {
@@ -239,7 +351,7 @@ async function switchChavruta(newId) {
     if (currentUserId) {
         currentCompletion = false;
         updateAuthUI();
-        getMitzvahCompletionStatus(currentUserId, challengeId)
+        getMitzvahCompletionStatus(challengeId, currentUserId)
             .then(s => { currentCompletion = Boolean(s.completed); updateAuthUI(); })
             .catch(() => {});
     }
@@ -304,6 +416,15 @@ async function loadAndRender() {
 
     section.classList.remove('hidden');
 
+    // Wait for auth before any Firestore calls — the modular SDK's
+    // onAuthStateChanged must fire so Firestore has an auth token.
+    await authReady;
+
+    if (!currentUserId) {
+        // User is not signed in; UI is already in guest mode via updateAuthUI.
+        return;
+    }
+
     const chavrutaReady = await ensureChavrutaActive();
     if (!chavrutaReady) {
         if (g('mitzvah-chat-input')) {
@@ -323,11 +444,11 @@ async function loadAndRender() {
 
     getMitzvahLeaderboard(challengeId).then(lb => renderLeaderboard(lb)).catch(() => {});
 
-    if (currentUserId) {
-        getMitzvahCompletionStatus(currentUserId, challengeId)
-            .then(s => { currentCompletion = Boolean(s.completed); updateAuthUI(); })
-            .catch(() => {});
-    }
+    getMitzvahCompletionStatus(challengeId, currentUserId)
+        .then(s => { currentCompletion = Boolean(s.completed); updateAuthUI(); })
+        .catch(() => {});
+
+    firestoreBootDone = true;
 }
 
 // ─── Event handlers ───────────────────────────────────────────────────────────
@@ -348,6 +469,11 @@ async function handleChatSubmit() {
         const welcomeText = document.getElementById('welcome-heading')?.textContent || '';
         const username = welcomeText.replace(/^Shalom,?\s*/i, '').replace(/!$/, '').trim();
         await submitMitzvahReflection(challengeId, message, currentUserId, username);
+        // Mark as completed and update leaderboard (only if not already completed)
+        if (!currentCompletion) {
+            await setMitzvahCompletionStatus(challengeId, currentUserId, true);
+            await updateMitzvahLeaderboard(challengeId, currentUserId, username);
+        }
         if (chatInput)  { chatInput.value = ''; chatInput.disabled = false; }
         if (chatSubmit) chatSubmit.disabled = false;
         if (statusEl)   {
@@ -402,13 +528,28 @@ function setupEventListeners() {
     }
 }
 
-// ─── Auth listener ────────────────────────────────────────────────────────────
+// ─── Auth gate ────────────────────────────────────────────────────────────────
+// Firestore rules require authentication. We must wait for onAuthStateChanged
+// to fire before making any Firestore requests, otherwise the modular SDK
+// sends queries without an auth token and gets permission-denied.
+
+let authReadyResolve;
+const authReady = new Promise(resolve => { authReadyResolve = resolve; });
+let firestoreBootDone = false; // tracks whether loadAndRender completed Firestore setup
 
 initAuth(async user => {
     currentUserId = user ? user.uid : null;
+    authReadyResolve();
     updateAuthUI();
-    if (user && challengeId) {
-        getMitzvahCompletionStatus(currentUserId, challengeId)
+
+    // If loadAndRender already finished its Firestore setup, a re-auth
+    // (e.g. sign-out then sign-in) needs to restart listeners.
+    if (firestoreBootDone && user && challengeId) {
+        await ensureChavrutaActive();
+        if (reflectionsUnsub) { try { reflectionsUnsub(); } catch {} reflectionsUnsub = null; }
+        reflectionsUnsub = listenForMitzvahReflections(challengeId, msgs => renderMessages(msgs));
+        getMitzvahLeaderboard(challengeId).then(lb => renderLeaderboard(lb)).catch(() => {});
+        getMitzvahCompletionStatus(challengeId, currentUserId)
             .then(s => { currentCompletion = Boolean(s.completed); updateAuthUI(); })
             .catch(() => {});
         loadAllChavrutaNames();
