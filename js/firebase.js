@@ -447,7 +447,11 @@ function showLoginRequiredOverlayAndRedirect() {
     if (cta) {
       cta.addEventListener('click', () => {
         // If auth restored while the overlay was visible, just dismiss it
-        if (auth.currentUser) {
+        const compatCurrent = typeof window !== 'undefined'
+          && window.firebase
+          && typeof window.firebase.auth === 'function'
+          && window.firebase.auth().currentUser;
+        if (auth.currentUser || compatCurrent) {
           window.__loginRedirectPending = false;
           overlay.remove();
           document.body?.classList.remove('login-required-pending');
@@ -487,14 +491,28 @@ function initAuth(onAuthReady) {
       console.log('User authenticated:', user.email);
       if (onAuthReady) onAuthReady(user);
     } else {
-      currentUser = null;
-      console.log('No user authenticated');
+      // The modular SDK may fire null transiently while the compat SDK
+      // (used on the dashboard) still holds a valid session.  Only clear
+      // our module-level variable when we're confident no SDK has a user.
+      const compatUser = typeof window !== 'undefined'
+        && window.firebase
+        && typeof window.firebase.auth === 'function'
+        && window.firebase.auth().currentUser;
+      if (!compatUser) {
+        currentUser = null;
+      }
+      console.log('No user authenticated (modular SDK)');
       // Redirect unauthenticated users away from protected app pages.
       // Login and invite onboarding routes are public.
       const path = window.location.pathname.replace(/\/+$/, '') || '/';
       const publicPaths = ['', '/', '/invite', '/join', '/about'];
       const isPublic = publicPaths.includes(path);
       if (!isPublic) {
+        // If the compat SDK (dashboard) already has a user, skip the
+        // redirect/overlay logic entirely — the session is fine.
+        if (compatUser) {
+          return;
+        }
         // Firebase fires null initially while loading persisted session from
         // IndexedDB. Give it enough time to restore before showing the overlay.
         // Use a generous delay if we have any evidence of a prior session.
@@ -502,7 +520,16 @@ function initAuth(onAuthReady) {
         const delay = hasSessionHint ? 12000 : 5000;
         if (!authRedirectTimer) {
           authRedirectTimer = setTimeout(() => {
-            if (!currentUser) {
+            // Check all possible auth sources — the module-level variable,
+            // the modular SDK's auth object, AND the compat SDK (used by
+            // the dashboard's inline script).  Any one having a user means
+            // the session is alive; showing the overlay would be wrong.
+            const compatUser = typeof window !== 'undefined'
+              && window.firebase
+              && typeof window.firebase.auth === 'function'
+              && window.firebase.auth().currentUser;
+            const isAuthenticated = currentUser || auth.currentUser || compatUser;
+            if (!isAuthenticated) {
               // Double-check session hints — if they still exist, the session
               // is likely restoring slowly, so wait a bit longer.
               const stillHasHint = Boolean(
@@ -513,7 +540,13 @@ function initAuth(onAuthReady) {
               if (stillHasHint) {
                 // Give it one final chance
                 setTimeout(() => {
-                  if (!currentUser) showLoginRequiredOverlayAndRedirect();
+                  const laterCompatUser = typeof window !== 'undefined'
+                    && window.firebase
+                    && typeof window.firebase.auth === 'function'
+                    && window.firebase.auth().currentUser;
+                  if (!currentUser && !auth.currentUser && !laterCompatUser) {
+                    showLoginRequiredOverlayAndRedirect();
+                  }
                 }, 5000);
               } else {
                 showLoginRequiredOverlayAndRedirect();

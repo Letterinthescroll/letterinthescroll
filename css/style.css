@@ -7445,12 +7445,19 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
     .footer-quote { max-width: none; text-align: center; font-size: 0.92rem; }
 
     .footer-nav {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: 1fr 1fr;
         gap: 1.5rem;
         text-align: center;
         justify-items: center;
         width: 100%;
     }
+
+    /* Learn = 1st child → top-left */
+    .footer-nav-col:nth-child(1) { order: 1; }
+    /* Account = 3rd child → top-right */
+    .footer-nav-col:nth-child(3) { order: 2; }
+    /* Holidays = 2nd child → bottom, full width */
+    .footer-nav-col:nth-child(2) { order: 3; grid-column: 1 / -1; }
 
     .footer-nav-col {
         display: flex;
@@ -7480,9 +7487,6 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
     .footer-nav {
         grid-template-columns: 1fr 1fr;
         gap: 1.5rem 1rem;
-    }
-    .footer-nav-col:last-child {
-        grid-column: 1 / -1;
     }
 }
 

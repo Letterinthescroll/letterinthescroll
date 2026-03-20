@@ -1344,7 +1344,8 @@
                 margin-bottom: 0.28rem;
                 letter-spacing: 0.13em;
             }
-            .dt-hebrew { font-size: 1.05rem; margin-bottom: 0.1rem; }
+            .dt-hebrew { font-size: 1.05rem; margin-bottom: 0.45rem; }
+            .dt-action-row { max-width: 65%; margin-left: auto; margin-right: auto; gap: 0.75rem; }
             /* Hide decorative/secondary elements to keep card compact */
             .dt-rule { display: none !important; }
             .dt-subtitle { display: none !important; }
@@ -1408,7 +1409,7 @@
             }
         }
 
-        /* ── Tehillim action row: portion-badge + CTA side by side on mobile ── */
+        /* ── Tehillim action row: stacked on mobile ── */
         .dt-action-row {
             display: flex;
             flex-direction: column;
@@ -1416,19 +1417,24 @@
         }
         @media (max-width: 768px) {
             .dt-action-row {
-                flex-direction: row;
-                gap: 0.45rem;
+                flex-direction: column;
+                gap: 0.35rem;
                 width: 100%;
                 align-items: stretch;
                 margin-bottom: 0.36rem;
             }
-            .dt-action-row .dt-portion-row,
-            .dt-action-row .dt-cta {
-                flex: 1;
+            .dt-action-row .dt-portion-row {
                 justify-content: center;
-                align-self: stretch;
                 height: auto;
-                min-height: 1.92rem;
+                min-height: 1.7rem;
+                margin-bottom: 0;
+                box-sizing: border-box;
+                font-size: 0.85em;
+            }
+            .dt-action-row .dt-cta {
+                justify-content: center;
+                height: auto;
+                min-height: 1.7rem;
                 margin-bottom: 0;
                 box-sizing: border-box;
             }
@@ -1436,7 +1442,7 @@
         @media (max-width: 480px) {
             .dt-action-row .dt-portion-row,
             .dt-action-row .dt-cta {
-                min-height: 1.74rem;
+                min-height: 1.55rem;
             }
         }
 
