@@ -179,7 +179,7 @@
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
             gap: 1.5rem;
             max-width: 1100px;
-            margin: 0 auto;
+            margin: 2rem auto 0;
             padding: 0 1.5rem 1.5rem;
             position: relative;
             z-index: 1;
@@ -522,10 +522,7 @@
 
         <p class="hol-status" id="hol-api-status"></p>
 
-        <!-- ── Holidays with content ─────────────────────────────────── -->
-        <p class="hol-section-label">Holidays with Content</p>
-
-        <div class="hol-grid">
+        <div class="hol-grid" id="hol-grid">
 
             <!-- Purim -->
             <article class="hol-card hol-card--purim">
@@ -862,6 +859,34 @@
             }
         }
 
+        function sortCardsByUpcoming() {
+            var grid = document.getElementById('hol-grid');
+            if (!grid) return;
+            var cards = Array.from(grid.querySelectorAll('.hol-card'));
+
+            function getSortKey(card) {
+                var dateEl = card.querySelector('[data-holiday]');
+                var name = dateEl ? dateEl.getAttribute('data-holiday') : '';
+                var best = findBestDate(name);
+                if (!best) return 99999;
+                var eveningDays = daysUntil(best.beginsEveningDate);
+                var fullDays = daysUntil(best.fullDayDate);
+                // Currently in progress (evening started, full day not over)
+                if (eveningDays <= 0 && fullDays >= 0) return -1;
+                // Upcoming
+                if (eveningDays > 0) return eveningDays;
+                // Already fully passed — push to end
+                return 10000 + Math.abs(fullDays);
+            }
+
+            cards.sort(function (a, b) {
+                return getSortKey(a) - getSortKey(b);
+            });
+
+            // Re-append in sorted order
+            cards.forEach(function (card) { grid.appendChild(card); });
+        }
+
         const HOLIDAY_KEYS = [
             'Purim', 'Passover', 'Shavuot', 'Rosh Hashana',
             'Yom Kippur', 'Sukkot', 'Chanukah', 'Tu BiShvat', "Lag B'Omer",
@@ -875,6 +900,9 @@
 
             populateShabbat();
             HOLIDAY_KEYS.forEach(populateCard);
+
+            // ── Sort cards by next upcoming date ──────────────────────
+            sortCardsByUpcoming();
 
             const allYears = DATA.holidays.flatMap(holiday =>
                 Object.keys(holiday.dates || {}).map(year => Number(year)).filter(Number.isFinite)

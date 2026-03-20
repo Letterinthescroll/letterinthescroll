@@ -243,9 +243,13 @@
     document.addEventListener('click', function (e) {
         var a = e.target.closest && e.target.closest('a[href]');
         if (!a) return;
+        // Only block navigation if we're exactly on this page (not a sub-page)
         if (a.getAttribute('aria-current') === 'page') {
-            e.preventDefault();
-            return;
+            var linkHref = a.getAttribute('href').replace(/\/$/, '');
+            if (path === linkHref) {
+                e.preventDefault();
+                return;
+            }
         }
 
         // ── Chavruta picker: intercept Study nav on non-study pages ──────

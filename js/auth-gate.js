@@ -301,12 +301,47 @@
 
     function checkAuth() {
         var auth = firebase.auth();
-        // onAuthStateChanged fires once immediately with cached state
+
+        // If we have a cached user session, the user is likely signed in.
+        // Don't show the overlay until we're certain the user is actually
+        // signed out — Firebase may fire onAuthStateChanged(null) briefly
+        // while restoring auth from IndexedDB after a dynamic SDK load.
+        var hasCachedSession = false;
+        try { hasCachedSession = !!sessionStorage.getItem('headerUserCache'); } catch (_) {}
+
+        var resolved = false;
         var unsubscribe = auth.onAuthStateChanged(function (user) {
-            unsubscribe(); // only need the first callback
-            if (!user) {
+            if (resolved) return;
+            if (user) {
+                // User is signed in — nothing to do
+                resolved = true;
+                unsubscribe();
+                // Remove the overlay if it was somehow shown
+                var overlay = document.getElementById('login-required-overlay');
+                if (overlay) overlay.remove();
+                document.body.classList.remove('login-required-pending');
+                return;
+            }
+            if (!hasCachedSession) {
+                // No cached session and Firebase says no user — show overlay
+                resolved = true;
+                unsubscribe();
                 showLoginRequiredOverlayAndRedirect();
             }
+            // If we have a cached session but Firebase says null, wait —
+            // the real auth state will arrive shortly from IndexedDB.
         });
+
+        // Safety timeout: if Firebase hasn't resolved with a real user
+        // after 4 seconds despite a cached session, show the overlay.
+        if (hasCachedSession) {
+            setTimeout(function () {
+                if (!resolved) {
+                    resolved = true;
+                    unsubscribe();
+                    showLoginRequiredOverlayAndRedirect();
+                }
+            }, 4000);
+        }
     }
 })();
