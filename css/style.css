@@ -7436,6 +7436,10 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
     .footer-brand {
         align-items: center;
         text-align: center;
+        width: 100%;
+    }
+    .footer-logo-link {
+        justify-content: center;
     }
     .footer-tagline { max-width: none; }
     .footer-quote { max-width: none; text-align: center; font-size: 0.92rem; }
@@ -7444,6 +7448,18 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
         grid-template-columns: repeat(3, 1fr);
         gap: 1.5rem;
         text-align: center;
+        justify-items: center;
+        width: 100%;
+    }
+
+    .footer-nav-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-nav-list {
+        align-items: center;
     }
 
     .footer-nav-list li a:hover {
