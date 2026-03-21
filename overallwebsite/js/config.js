@@ -5,6 +5,16 @@ export const API_CONFIG = {
     HEBREW_VERSION: 'Miqra_according_to_the_Masorah'
 };
 
+// Double Parsha Pairs — combined during regular (non-leap) years
+export const DOUBLE_PARSHA_PAIRS = [
+    ['Vayakhel', 'Pekudei'],
+    ['Tazria', 'Metzora'],
+    ['Achrei Mot', 'Kedoshim'],
+    ['Behar', 'Bechukotai'],
+    ['Matot', 'Masei'],
+    ['Nitzavim', 'Vayeilech']
+];
+
 // Torah Parshas Data
 export const TORAH_PARSHAS = [
     // Bereshit (Genesis)

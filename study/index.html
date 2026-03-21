@@ -17,8 +17,202 @@
     <!-- Mobile-only overrides for subtle online friends bar -->
     <link rel="stylesheet" href="/css/mobile-overrides.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* ── Study reading progress bar ─────────────────────────────── */
+        #study-progress-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            padding: 0.5rem 1.25rem 0.65rem;
+            background: rgba(8, 15, 35, 0.9);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(59, 130, 246, 0.22);
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+        }
+        #study-progress-wrap.visible { transform: translateY(0); }
+        #study-progress-track {
+            flex: 1;
+            height: 5px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        #study-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #2563eb, #60a5fa);
+            border-radius: 999px;
+            transition: width 0.1s linear;
+        }
+        #study-progress-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            color: rgba(147, 197, 253, 0.85);
+            white-space: nowrap;
+            min-width: 3rem;
+            text-align: right;
+        }
+        #study-progress-icon { flex-shrink: 0; color: #93c5fd; opacity: 0.8; }
+        /* padding-bottom handled by footer; no extra gap needed */
+
+        /* ── Daily Tehillim banner card ──────────────────────────────── */
+        #daily-tehillim-mini {
+            margin-bottom: 1.75rem;
+            border-radius: 1.3rem;
+            background: linear-gradient(118deg, #f5f9ff 0%, #edf3ff 30%, #e8f2ff 65%, #f0f6ff 100%);
+            border: 1px solid rgba(70, 135, 215, 0.2);
+            padding: 0.85rem 1.75rem 0.85rem 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1.4rem;
+            overflow: hidden;
+            position: relative;
+            box-shadow:
+                0 1px 10px rgba(55, 110, 200, 0.08),
+                0 5px 24px rgba(0, 0, 0, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        }
+        /* Left blue stripe */
+        #daily-tehillim-mini::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #4a90d8 0%, #6aaee0 48%, #3278c2 100%);
+            border-radius: 1.3rem 0 0 1.3rem;
+        }
+        /* Dual soft glow */
+        #daily-tehillim-mini::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 220px 150px at 6% 50%, rgba(60, 130, 220, 0.09), transparent 70%),
+                radial-gradient(ellipse 280px 180px at 100% 0%, rgba(80, 150, 240, 0.07), transparent 65%);
+            pointer-events: none;
+        }
+        .dt-mini-glow, .dt-mini-glow2 { display: none; }
+
+        /* Circular open-book icon badge */
+        .dt-mini-icon {
+            position: relative;
+            z-index: 1;
+            flex-shrink: 0;
+            width: 52px; height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, rgba(70, 135, 220, 0.14), rgba(70, 135, 220, 0.05));
+            border: 1px solid rgba(60, 125, 210, 0.26);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(32, 88, 175, 0.88);
+            box-shadow: 0 2px 12px rgba(55, 115, 200, 0.14);
+        }
+
+        .dt-mini-content {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .dt-mini-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.32rem;
+            font-size: 0.58rem;
+            font-weight: 800;
+            letter-spacing: 0.17em;
+            text-transform: uppercase;
+            color: rgba(40, 95, 180, 0.68);
+            margin-bottom: 0.18rem;
+        }
+        .dt-mini-eyebrow svg { opacity: 0.7; flex-shrink: 0; }
+        .dt-mini-main {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            min-width: 0;
+        }
+        .dt-mini-hebrew {
+            font-family: 'Ezra SIL', 'SBL Hebrew', 'Frank Ruhl Libre', serif;
+            font-size: 2.1rem;
+            color: #0d1e3a;
+            line-height: 1.05;
+            letter-spacing: 0.02em;
+            text-shadow: 0 1px 8px rgba(55, 115, 200, 0.14);
+            margin-bottom: 0.08rem;
+        }
+        .dt-mini-ref {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: rgba(25, 70, 155, 0.82);
+            letter-spacing: 0.015em;
+        }
+        .dt-mini-action { display: none; }
+        .dt-mini-btn {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.42rem;
+            padding: 0.7rem 1.45rem;
+            background: linear-gradient(135deg, #3178c8 0%, #2562b0 100%);
+            color: #f0f6ff;
+            font-weight: 800;
+            font-size: 0.78rem;
+            border-radius: 0.9rem;
+            text-decoration: none;
+            white-space: nowrap;
+            letter-spacing: 0.03em;
+            flex-shrink: 0;
+            border: none;
+            box-shadow:
+                0 3px 14px rgba(38, 90, 175, 0.28),
+                inset 0 1px 0 rgba(165, 210, 255, 0.2);
+            transition: background 0.18s, box-shadow 0.18s, transform 0.15s;
+        }
+        .dt-mini-btn:hover {
+            background: linear-gradient(135deg, #3d88da 0%, #2d6ec0 100%);
+            box-shadow: 0 5px 20px rgba(38, 90, 175, 0.38);
+            transform: translateY(-1.5px);
+        }
+        .dt-mini-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+        @media (max-width: 540px) {
+            #daily-tehillim-mini {
+                padding: 1.1rem 1.1rem 1.1rem 1.35rem;
+                gap: 0.9rem;
+                border-radius: 1.1rem;
+            }
+            .dt-mini-icon { width: 44px; height: 44px; }
+            .dt-mini-hebrew { font-size: 1.7rem; }
+            .dt-mini-btn { padding: 0.62rem 1.1rem; font-size: 0.74rem; }
+        }
+    </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
+
+    <!-- Reading progress bar (blue) -->
+    <div id="study-progress-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Reading progress">
+        <svg id="study-progress-icon" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+        <div id="study-progress-track">
+            <div id="study-progress-fill"></div>
+        </div>
+        <span id="study-progress-label">0%</span>
+    </div>
+
     <!-- Chavruta context setup - must run before modules load -->
     <script>
     (function() {
@@ -26,7 +220,13 @@
         var params = new URLSearchParams(window.location.search);
         var chavrutaParam = params.get('chavruta');
         if (chavrutaParam) {
+            // If switching to a different chavruta, clear stale presence cache
+            var prev = sessionStorage.getItem('activeChavrutaId');
+            if (prev && prev !== chavrutaParam) {
+                try { sessionStorage.removeItem('presenceCache'); } catch(e){}
+            }
             sessionStorage.setItem('activeChavrutaId', chavrutaParam);
+            try { localStorage.setItem('lastActiveChavrutaId', chavrutaParam); } catch(e){}
         }
         // If no chavruta context, allow read-only mode (verses still display)
         if (!sessionStorage.getItem('activeChavrutaId')) {
@@ -111,7 +311,7 @@
     </script>
 
     <!-- Chavruta Context Bar -->
-    <div id="chavruta-context-bar" class="hidden" style="background:linear-gradient(135deg,#f0f4ff 0%,#e8effe 100%);border-bottom:1px solid rgba(30,64,175,0.12);padding:0.45rem 1rem;display:flex;align-items:center;justify-content:center;gap:0.65rem;font-size:0.82rem;color:#1e3a5f;">
+    <div id="chavruta-context-bar" style="background:linear-gradient(135deg,#f0f4ff 0%,#e8effe 100%);border-bottom:1px solid rgba(30,64,175,0.12);padding:0.45rem 1rem;display:none;align-items:center;justify-content:center;gap:0.65rem;font-size:0.82rem;color:#1e3a5f;">
         <svg style="width:16px;height:16px;flex-shrink:0;opacity:0.6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
         </svg>
@@ -143,7 +343,7 @@
                         </svg>
                         Parsha Chat
                     </button>
-                    <button id="show-significance" class="px-4 py-2.5 bg-gradient-to-r from-amber-700 to-stone-600 text-white rounded-lg hover:from-amber-800 hover:to-stone-700 transition-all font-medium shadow-md hover:shadow-lg flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
+                    <button id="show-significance" class="px-4 py-2.5 bg-gradient-to-r from-violet-600 to-purple-700 text-white rounded-lg hover:from-violet-700 hover:to-purple-800 transition-all font-medium shadow-md hover:shadow-lg flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
@@ -185,7 +385,7 @@
                     Parsha Chat
                 </button>
 
-                <button id="show-significance-mobile" class="w-full px-4 py-2.5 bg-gradient-to-r from-amber-700 to-stone-600 text-white rounded-lg hover:from-amber-800 hover:to-stone-700 transition-all font-medium shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
+                <button id="show-significance-mobile" class="w-full px-4 py-2.5 bg-gradient-to-r from-violet-600 to-purple-700 text-white rounded-lg hover:from-violet-700 hover:to-purple-800 transition-all font-medium shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
@@ -228,87 +428,31 @@
                 <span id="error-text">Something went wrong.</span>
             </div>
 
-            <!-- Text Display -->
-            <div id="mitzvah-challenge-section" class="mitzvah-challenge hidden">
-                <div class="mitzvah-card">
-                    <div class="mitzvah-card__header" id="mitzvah-toggle-header" style="cursor: pointer;">
-                        <div class="mitzvah-card__title-row">
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <h2 id="mitzvah-challenge-heading" class="mitzvah-card__title">Weekly Mitzvah Challenge</h2>
-                                <svg id="mitzvah-toggle-icon" class="mitzvah-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                            <span id="mitzvah-countdown" class="mitzvah-card__countdown"></span>
-                        </div>
+            <!-- Daily Tehillim banner -->
+            <div id="daily-tehillim-mini">
+                <div class="dt-mini-icon" aria-hidden="true">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    </svg>
+                </div>
+                <div class="dt-mini-content">
+                    <div class="dt-mini-eyebrow">
+                        <svg width="9" height="9" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 3v1m0 16v1M4.22 4.22l.7.7m12.16 12.16l.7.7M3 12h1m16 0h1M4.22 19.78l.7-.7M18.36 5.64l.7-.7"/>
+                        </svg>
+                        Daily Tehillim
                     </div>
-
-                    <div id="mitzvah-collapsible-content" class="mitzvah-collapsible-content" style="display: none;">
-                    <div class="mitzvah-card__body">
-                        <section class="mitzvah-card__section">
-                            <h3 class="mitzvah-card__section-title">The Mitzvah</h3>
-                            <div id="mitzvah-challenge-mitzvah" class="mitzvah-card__mitzvah"></div>
-                            <div id="mitzvah-challenge-explanation" class="mitzvah-card__text"></div>
-                        </section>
-                        <section class="mitzvah-card__section">
-                            <h3 class="mitzvah-card__section-title">Why It Connects to This Parsha</h3>
-                            <div id="mitzvah-challenge-connection" class="mitzvah-card__text"></div>
-                        </section>
-                        <section class="mitzvah-card__section">
-                            <h3 class="mitzvah-card__section-title">Your Weekly Challenge</h3>
-                            <div id="mitzvah-challenge-action" class="mitzvah-card__text"></div>
-                        </section>
-                    </div>
-
-                    <div class="mitzvah-card__divider"></div>
-
-                    <div class="mitzvah-card__grid">
-                        <div class="mitzvah-chat">
-                            <div class="mitzvah-chat__header">
-                                <h3 class="mitzvah-card__subheading">Reflection Chat</h3>
-                                <p id="mitzvah-chat-auth" class="mitzvah-chat__auth">Sign in to share your reflection.</p>
-                            </div>
-
-                            <div class="mitzvah-checklist-compact">
-                                <label class="mitzvah-checklist__label-compact">
-                                    <input type="checkbox" id="mitzvah-challenge-checkbox" class="mitzvah-checklist__input" disabled>
-                                    <span class="mitzvah-checklist__text-compact">I completed this week's mitzvah challenge</span>
-                                </label>
-                                <p id="mitzvah-checklist-helper" class="mitzvah-checklist__helper-compact"></p>
-                            </div>
-
-                            <div id="mitzvah-chat-messages" class="mitzvah-chat__messages">
-                                <p class="mitzvah-chat-empty">Share how the mitzvah went this week.</p>
-                            </div>
-                            <div class="mitzvah-chat__composer">
-                                <textarea id="mitzvah-chat-input" class="mitzvah-chat__input" rows="3" placeholder="How did the mitzvah go for you this week?" disabled></textarea>
-                                <div class="mitzvah-chat__actions">
-                                    <button id="mitzvah-chat-submit" class="mitzvah-chat__submit" disabled>Share Reflection</button>
-                                    <span class="mitzvah-chat__hint">Press Ctrl/Cmd + Enter to submit</span>
-                                </div>
-                                <p id="mitzvah-chat-status" class="mitzvah-chat__status"></p>
-                            </div>
-                        </div>
-
-                        <div class="mitzvah-leaderboard">
-                            <div class="mitzvah-leaderboard__header">
-                                <h3 class="mitzvah-card__subheading">Mitzvah Leaderboard</h3>
-                                <p class="mitzvah-leaderboard__subtitle">Most weekly challenges completed</p>
-                            </div>
-                            <div id="mitzvah-leaderboard-list" class="mitzvah-leaderboard__list">
-                                <p class="mitzvah-leaderboard__empty">Loading leaderboard…</p>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="dt-mini-main">
+                        <span class="dt-mini-hebrew" dir="rtl">תְּהִלִּים</span>
+                        <span id="study-dt-ref" class="dt-mini-ref">Loading…</span>
                     </div>
                 </div>
-            </div>
-
-            <div id="mitzvah-challenge-locked" class="mitzvah-locked hidden">
-                <div class="mitzvah-locked__card">
-                    <h3 id="mitzvah-locked-heading" class="mitzvah-locked__title">Weekly Challenge Locked</h3>
-                    <p id="mitzvah-locked-message" class="mitzvah-locked__text">Return when this parsha arrives to unlock its mitzvah challenge.</p>
-                </div>
+                <a href="/psalms" class="dt-mini-btn">
+                    Read Today
+                    <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
             </div>
 
             <div id="text-size-anchor" class="mb-2"></div>
@@ -435,42 +579,137 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-blue-900 text-white py-6 mt-12 border-t-4 border-blue-700">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-sm">Torah text provided by <a href="https://www.sefaria.org" target="_blank" class="underline hover:text-blue-300">Sefaria.org</a></p>
-            <p class="text-xs text-blue-300 mt-2">May your study be meaningful</p>
-        </div>
-    </footer>
 
     <script src="/js/shabbat.js"></script>
     <script type="module" src="/js/main.js"></script>
     <script src="/js/daily-inspiration.js"></script>
     <script src="/js/text-size-control.js"></script>
 
-    <script>
-        // Mitzvah Challenge Collapse/Expand Functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggleHeader = document.getElementById('mitzvah-toggle-header');
-            const collapsibleContent = document.getElementById('mitzvah-collapsible-content');
-            const toggleIcon = document.getElementById('mitzvah-toggle-icon');
-
-            if (toggleHeader && collapsibleContent && toggleIcon) {
-                toggleHeader.addEventListener('click', function() {
-                    const isExpanded = collapsibleContent.style.display !== 'none';
-
-                    if (isExpanded) {
-                        // Collapse
-                        collapsibleContent.style.display = 'none';
-                        toggleIcon.classList.remove('expanded');
-                    } else {
-                        // Expand
-                        collapsibleContent.style.display = 'block';
-                        toggleIcon.classList.add('expanded');
-                    }
-                });
-            }
-        });
-    </script>
     <script src="/js/sidebar-nav.js"></script>
+    <script>
+    /* Load daily psalms ref into mini-card using Hebrew calendar */
+    (function() {
+        var CACHE_KEY = 'sefaria_psalms_v1';
+        var TTL = 24 * 60 * 60 * 1000;
+        var PORTIONS = [
+            null,
+            'Psalms 1–9','Psalms 10–17','Psalms 18–22','Psalms 23–28','Psalms 29–34',
+            'Psalms 35–38','Psalms 39–43','Psalms 44–48','Psalms 49–54','Psalms 55–59',
+            'Psalms 60–65','Psalms 66–68','Psalms 69–71','Psalms 72–76','Psalms 77–78',
+            'Psalms 79–82','Psalms 83–87','Psalms 88–89','Psalms 90–96','Psalms 97–103',
+            'Psalms 104–105','Psalms 106–107','Psalms 108–112','Psalms 113–118',
+            'Psalm 119 (א–ל)','Psalm 119 (מ–ת)',
+            'Psalms 120–134','Psalms 135–139','Psalms 140–144','Psalms 145–150'
+        ];
+        function cacheGet(k) {
+            try { var o = JSON.parse(localStorage.getItem(k)); return o && Date.now() < o.expires ? o.data : null; } catch(e) { return null; }
+        }
+        function apply(display) {
+            var el = document.getElementById('study-dt-ref');
+            if (el && display) el.textContent = display;
+        }
+        var c = cacheGet(CACHE_KEY);
+        if (c && (c.display || c.displayEn)) { apply(c.display || c.displayEn); return; }
+        try {
+            var fmt = new Intl.DateTimeFormat('en-US-u-ca-hebrew', { day: 'numeric', month: 'numeric', year: 'numeric' });
+            var now = new Date();
+            var tp = {}; fmt.formatToParts(now).forEach(function(p){ tp[p.type]=p.value; });
+            var hDay = parseInt(tp.day,10), hMonth = parseInt(tp.month,10);
+            var probe = new Date(now); probe.setDate(now.getDate()+(30-hDay));
+            var pp = {}; fmt.formatToParts(probe).forEach(function(p){ pp[p.type]=p.value; });
+            var daysInMonth = (parseInt(pp.month,10)===hMonth)?30:29;
+            var day = Math.min(Math.max(hDay,1),30);
+            var display = (day===29 && daysInMonth===29) ? 'Psalms 140–150' : PORTIONS[day];
+            var res = { display: display, hebrewDay: day };
+            try { localStorage.setItem(CACHE_KEY, JSON.stringify({ data: res, expires: Date.now()+TTL })); } catch(e) {}
+            apply(display);
+        } catch(e) {
+            fetch('https://www.sefaria.org/api/calendars').then(function(r){return r.ok?r.json():null;})
+                .then(function(data){
+                    if (!data||!data.calendar_items) return;
+                    var item = data.calendar_items.find(function(i){
+                        var en=(i.title&&i.title.en||'').toLowerCase();
+                        return en==='daily psalms'||en.indexOf('psalm')!==-1;
+                    });
+                    if (item) apply(item.displayValue&&item.displayValue.en);
+                }).catch(function(){});
+        }
+    })();
+    </script>
+
+    <script>
+    (function() {
+        var wrap  = document.getElementById('study-progress-wrap');
+        var fill  = document.getElementById('study-progress-fill');
+        var label = document.getElementById('study-progress-label');
+        if (!wrap || !fill || !label) return;
+
+        var lastPct = -1;
+        var isVisible = false;
+        var rafId = 0;
+
+        // Detect zoom: compare visual viewport width to layout viewport width.
+        // When the user pinch-zooms or Ctrl+zooms, scale drops below 1.
+        function isZoomed() {
+            if (window.visualViewport) {
+                return Math.abs(window.visualViewport.scale - 1) > 0.05;
+            }
+            // Desktop fallback: compare window.outerWidth to innerWidth
+            // (innerWidth shrinks when browser zoom increases)
+            var ratio = window.outerWidth / window.innerWidth;
+            return Math.abs(ratio - 1) > 0.15;
+        }
+
+        function updateProgress() {
+            rafId = 0;
+
+            // If the page is zoomed in, hide the bar and bail out
+            if (isZoomed()) {
+                if (isVisible) {
+                    isVisible = false;
+                    wrap.classList.remove('visible');
+                }
+                return;
+            }
+
+            var text = document.getElementById('parsha-text');
+            if (!text || text.children.length === 0) return;
+
+            var scrollTop = window.scrollY || document.documentElement.scrollTop;
+            var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            if (docHeight <= 0) return;
+
+            var pct = Math.round(Math.min(100, Math.max(0, (scrollTop / docHeight) * 100)));
+
+            if (pct !== lastPct) {
+                lastPct = pct;
+                fill.style.width = pct + '%';
+                label.textContent = pct + '%';
+                wrap.setAttribute('aria-valuenow', pct);
+            }
+
+            var shouldShow = scrollTop > 250 && pct < 98;
+            if (shouldShow !== isVisible) {
+                isVisible = shouldShow;
+                wrap.classList.toggle('visible', shouldShow);
+            }
+        }
+
+        function scheduleUpdate() {
+            if (!rafId) rafId = requestAnimationFrame(updateProgress);
+        }
+
+        window.addEventListener('scroll', scheduleUpdate, { passive: true });
+        window.addEventListener('resize', scheduleUpdate, { passive: true });
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', scheduleUpdate, { passive: true });
+            window.visualViewport.addEventListener('scroll', scheduleUpdate, { passive: true });
+        }
+        var target = document.getElementById('parsha-text');
+        if (target) new MutationObserver(scheduleUpdate).observe(target, { childList: true, subtree: true });
+    })();
+    </script>
+    <div id="shared-footer-mount"></div>
+    <script src="/js/footer-loader.js"></script>
 </body>
 </html>

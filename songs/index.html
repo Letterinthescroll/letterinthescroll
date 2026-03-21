@@ -15,8 +15,185 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/shabbat.css">
     <link rel="stylesheet" href="/css/mobile-overrides.css">
-    <link rel="stylesheet" href="/css/songs-style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap"></noscript>
+    <style>
+        /* ── Critical CSS inlined for instant render ── */
+        html { scroll-behavior: auto !important; }
+        .songs-body {
+            font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+            color: #102039;
+            min-height: 100vh;
+            background: #f4f8ff;
+        }
+        .songs-body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(180deg, #f4f8ff 0%, #f9f2e6 47%, #edf5ff 100%);
+            will-change: transform;
+        }
+        .songs-hero {
+            max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem 1.5rem;
+            display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem;
+        }
+        .songs-hero-eyebrow {
+            font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.18em; color: #0f7b8f; margin-bottom: 0.4rem;
+        }
+        .songs-hero-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 700;
+            color: #102039; line-height: 1.2; margin: 0 0 0.5rem;
+        }
+        .songs-hero-desc { font-size: 0.95rem; color: #456188; line-height: 1.6; max-width: 520px; margin: 0; }
+        .songs-hero-stat {
+            display: flex; flex-direction: column; align-items: center;
+            background: #fff; border: 1px solid rgba(25,61,108,0.14); border-radius: 1.05rem;
+            padding: 1rem 1.4rem; box-shadow: 0 4px 12px rgba(17,44,84,0.07); flex-shrink: 0;
+        }
+        .songs-hero-stat-num { font-size: 1.6rem; font-weight: 700; color: #1f3f76; }
+        .songs-hero-stat-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #667c9c; }
+        .songs-main { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+        .songs-toolbar {
+            display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;
+        }
+        .songs-type-tabs { display: flex; gap: 0.3rem; }
+        .songs-type-tab {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            border: 1px solid rgba(25,61,108,0.14); border-radius: 999px;
+            padding: 0.38rem 0.85rem; font-weight: 700; font-size: 0.78rem;
+            color: #456188; background: #fff; cursor: pointer; transition: all 0.12s;
+        }
+        .songs-type-tab:hover { border-color: rgba(25,61,108,0.3); }
+        .songs-type-tab.active { background: #1f3f76; color: #fff; border-color: #1f3f76; }
+        .songs-tab-badge {
+            display: inline-block; min-width: 1.3em; text-align: center;
+            border-radius: 999px; padding: 0 0.3rem; font-size: 0.68rem; font-weight: 800;
+            background: rgba(25,61,108,0.08); color: #456188;
+        }
+        .songs-type-tab.active .songs-tab-badge { background: rgba(255,255,255,0.2); color: #fff; }
+        .songs-search-wrap {
+            flex: 1; min-width: 180px; display: flex; align-items: center; gap: 0.5rem;
+            border: 1px solid rgba(25,61,108,0.14); border-radius: 999px;
+            padding: 0.3rem 0.6rem 0.3rem 0.85rem; background: #fff;
+            box-shadow: 0 2px 6px rgba(17,44,84,0.04); transition: border-color 0.12s;
+        }
+        .songs-search-wrap:focus-within { border-color: #1f3f76; }
+        .songs-search-icon { width: 1rem; height: 1rem; flex-shrink: 0; color: #667c9c; }
+        .songs-search-input {
+            flex: 1; border: none; outline: none; background: transparent;
+            font-family: inherit; font-weight: 500; font-size: 0.88rem; color: #102039; padding: 0.4rem 0;
+        }
+        .songs-search-clear {
+            border: none; background: rgba(25,61,108,0.08); border-radius: 999px;
+            padding: 0.3rem 0.75rem; font-weight: 700; font-size: 0.75rem;
+            color: #456188; cursor: pointer; transition: background 0.12s;
+        }
+        .songs-search-clear:hover { background: rgba(25,61,108,0.14); }
+        .songs-filter-row { margin-bottom: 1.5rem; }
+        .songs-pill {
+            display: inline-flex; align-items: center; gap: 0.4rem; border-radius: 999px;
+            padding: 0.35rem 0.9rem; background: #1f3f76; color: #fff;
+            font-weight: 700; font-size: 0.75rem; letter-spacing: 0.02em;
+        }
+        .songs-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.1rem; transform: translateZ(0);
+        }
+        .song-card {
+            position: relative; background: #fff;
+            border: 1px solid rgba(25,61,108,0.14); border-radius: 1.05rem;
+            overflow: hidden; contain: layout style paint;
+            content-visibility: auto; contain-intrinsic-size: auto 260px;
+            box-shadow: 0 4px 12px rgba(17,44,84,0.07);
+            will-change: transform;
+        }
+        @media (hover: hover) {
+            .song-card { transition: transform 0.18s ease; }
+            .song-card:hover { transform: translateY(-3px); }
+        }
+        .song-card-link {
+            display: flex; flex-direction: column; gap: 0.75rem;
+            padding: 1.25rem 1.35rem; text-decoration: none; color: inherit; height: 100%;
+        }
+        .song-header { display: flex; flex-direction: column; gap: 0.4rem; }
+        .song-meta-row { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; }
+        .song-meta-chip {
+            display: inline-flex; align-items: center; border-radius: 999px;
+            padding: 0.2rem 0.55rem; font-size: 0.65rem; font-weight: 800;
+            letter-spacing: 0.08em; text-transform: uppercase;
+        }
+        .song-meta-chip-song { background: rgba(15,123,143,0.1); color: #0f7b8f; }
+        .song-meta-chip-poem { background: rgba(47,159,132,0.1); color: #2f9f84; }
+        .song-meta-date { font-size: 0.68rem; color: #667c9c; font-weight: 600; }
+        .song-title {
+            font-size: 1.2rem; font-weight: 600; color: #102039;
+            display: flex; flex-wrap: wrap; gap: 0.3rem 0.6rem; align-items: baseline; line-height: 1.35;
+        }
+        .song-title-hebrew { font-size: 1.05rem; color: #1f3f76; direction: rtl; }
+        .song-artist { font-size: 0.85rem; color: #667c9c; font-weight: 500; }
+        .song-overview {
+            font-size: 0.88rem; line-height: 1.6; color: #456188;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .song-card-cta {
+            display: flex; align-items: center; justify-content: space-between;
+            padding-top: 0.65rem; margin-top: auto; border-top: 1px solid rgba(25,61,108,0.14);
+        }
+        .song-card-cta-text { font-weight: 700; color: #0f7b8f; font-size: 0.82rem; }
+        .song-card-cta-icon { width: 1.1rem; height: 1.1rem; color: #0f7b8f; }
+        .song-card-poem { background: linear-gradient(165deg, #fff 60%, #f0fdf4); border-color: rgba(47,159,132,0.2); }
+        .song-card-poem .song-title { font-family: Georgia, "Times New Roman", serif; font-size: 1.25rem; color: #134e4a; }
+        .song-card-poem .song-card-cta-text, .song-card-poem .song-card-cta-icon { color: #2f9f84; }
+        .apple-music-section {
+            background: #fff; border: 1px solid rgba(25,61,108,0.14); border-radius: 1.05rem;
+            padding: 1.25rem 1.5rem; margin-top: 1.5rem; box-shadow: 0 4px 12px rgba(17,44,84,0.07);
+            content-visibility: auto; contain-intrinsic-size: 540px;
+        }
+        .apple-music-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .apple-music-info { flex: 1; }
+        .apple-music-title { font-size: 1rem; font-weight: 600; color: #102039; margin: 0 0 0.2rem; }
+        .apple-music-desc { font-size: 0.82rem; color: #667c9c; margin: 0; line-height: 1.5; }
+        .apple-music-btn {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.5rem 1rem; background: #1f3f76; color: #fff;
+            font-weight: 700; font-size: 0.8rem; border-radius: 999px;
+            text-decoration: none; white-space: nowrap; flex-shrink: 0; transition: background 0.15s;
+        }
+        .apple-music-btn:hover { background: #16335f; }
+        .apple-music-embed { border-radius: 0.75rem; overflow: hidden; border: 1px solid rgba(25,61,108,0.14); }
+        .apple-music-embed iframe { display: block; }
+        .apple-music-placeholder {
+            height: 360px; display: flex; align-items: center; justify-content: center;
+            background: #f7fbff; cursor: pointer; font-weight: 700; font-size: 0.88rem; color: #0f7b8f;
+        }
+        .apple-music-placeholder:hover { background: #eef5ff; }
+        .songs-loading, .songs-empty {
+            grid-column: 1 / -1; text-align: center; padding: 2rem; font-weight: 600;
+            color: #456188; background: #fff; border: 1px solid rgba(25,61,108,0.14); border-radius: 1.05rem;
+        }
+        @media (max-width: 640px) {
+            .songs-hero { flex-direction: column; align-items: flex-start; padding: 1.75rem 1rem 1rem; }
+            .songs-hero-title { font-size: 1.5rem; }
+            .songs-hero-stat { flex-direction: row; gap: 0.5rem; padding: 0.6rem 1rem; }
+            .songs-hero-stat-num { font-size: 1.2rem; }
+            .songs-main { padding: 0 1rem 2rem; }
+            .songs-toolbar { flex-direction: column; align-items: stretch; }
+            .songs-type-tabs { justify-content: center; }
+            .songs-grid { grid-template-columns: 1fr; }
+            .song-card-link { padding: 1.1rem; }
+            .apple-music-row { flex-wrap: wrap; }
+            .apple-music-btn { width: 100%; justify-content: center; }
+            .apple-music-placeholder { height: 300px; }
+            .song-card-poem .song-title { font-size: 1.15rem; }
+        }
+        @media (min-width: 900px) {
+            .songs-hero { padding: 3rem 1.5rem 2rem; }
+        }
+    </style>
 </head>
 <body class="songs-body" data-header-fallback="true">
 
@@ -62,7 +239,6 @@
             <div class="songs-loading">Loading entries...</div>
         </section>
 
-
         <!-- Apple Music -->
         <section class="apple-music-section">
             <div class="apple-music-row">
@@ -82,15 +258,13 @@
         </section>
     </main>
 
-    <footer class="songs-footer">
-        <p>May these songs and poems deepen your faith</p>
-        <p class="songs-footer-sub">A Letter in the Scroll</p>
-    </footer>
 
     <script src="/js/shabbat.js"></script>
     <script src="/js/songs.js"></script>
     <script src="/js/header-fallback.js"></script>
     <script src="/js/sidebar-nav.js"></script>
     <script type="module" src="/js/page-auth.js"></script>
+    <div id="shared-footer-mount"></div>
+    <script src="/js/footer-loader.js"></script>
 </body>
 </html>

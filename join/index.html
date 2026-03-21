@@ -38,6 +38,7 @@
     <meta name="twitter:image" content="https://www.aletterinthescroll.com/media/images/chavruta-invite-card-1200x630-v7.jpg">
     <meta name="twitter:image:alt" content="You've been invited to join a Chavruta — Accept Invitation">
 
+    <link rel="stylesheet" href="/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -391,9 +392,6 @@
         </section>
     </main>
 
-    <footer class="join-footer">
-        <a href="/">A Letter in the Scroll</a> &mdash; Interactive Torah Study
-    </footer>
 
     <script>
         (function () {
@@ -438,6 +436,30 @@
                 loginCta.href = loginTarget.toString();
                 inviteCodeEl.hidden = false;
                 inviteCodeText.textContent = inviteCode;
+
+                // If the user is already logged in, skip this page and go straight to the dashboard
+                var CDN = 'https://www.gstatic.com/firebasejs/10.7.1';
+                function loadScript(src, cb) {
+                    var s = document.createElement('script'); s.src = src; s.onload = cb;
+                    document.head.appendChild(s);
+                }
+                loadScript(CDN + '/firebase-app-compat.js', function () {
+                    loadScript(CDN + '/firebase-auth-compat.js', function () {
+                        if (!firebase.apps.length) {
+                            firebase.initializeApp({
+                                apiKey: 'AIzaSyCpDtcBpKvjLwihnL2bizxBFxXD6Qn8Lb4',
+                                authDomain: 'letterinthescroll.firebaseapp.com',
+                                projectId: 'letterinthescroll'
+                            });
+                        }
+                        var unsub = firebase.auth().onAuthStateChanged(function (user) {
+                            unsub();
+                            if (user) {
+                                window.location.replace('/dashboard?invite=' + encodeURIComponent(inviteCode));
+                            }
+                        });
+                    });
+                });
                 return;
             }
 

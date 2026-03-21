@@ -8,19 +8,18 @@
     <link rel="apple-touch-icon" href="/media/images/Icon.png">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="A Letter in the Scroll">
-    <meta property="og:title" content="A Letter in the Scroll">
-    <meta property="og:description" content="Interactive Weekly Torah Portion Study and Discussion. Explore the Parsha with commentary, insights, and community.">
+    <meta property="og:title" content="Dashboard — A Letter in the Scroll">
+    <meta property="og:description" content="Study Torah together with your chavruta. Access weekly parsha, daily inspiration, prayers, songs, and your study groups.">
     <meta property="og:image" content="https://www.aletterinthescroll.com/media/images/welcome.jpg">
     <meta property="og:url" content="https://www.aletterinthescroll.com/dashboard">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="A Letter in the Scroll">
-    <meta name="twitter:description" content="Interactive Weekly Torah Portion Study and Discussion. Explore the Parsha with commentary, insights, and community.">
+    <meta name="twitter:title" content="Dashboard — A Letter in the Scroll">
+    <meta name="twitter:description" content="Study Torah together with your chavruta. Access weekly parsha, daily inspiration, prayers, songs, and your study groups.">
     <meta name="twitter:image" content="https://www.aletterinthescroll.com/media/images/welcome.jpg">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/shabbat.css">
     <link rel="stylesheet" href="/css/mobile-overrides.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script defer src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
     <style>
         :root {
@@ -55,6 +54,9 @@
            shadows aren't cut off at the viewport edges.  No scrollbar
            appears because all content is max-width constrained and
            decorative pseudo-elements use position:fixed. */
+        html:has(.dashboard-body) {
+            background: #edf5ff !important;
+        }
         html:has(.dashboard-body),
         html:has(.dashboard-body) body,
         .dashboard-body main {
@@ -242,6 +244,11 @@
             isolation: isolate;
             color: #eff6ff;
             margin-bottom: 0.3rem;
+            /* Reserve space so the card doesn't jump when the quote loads */
+            min-height: 320px;
+            /* Stretch inner glass to full height */
+            display: flex;
+            flex-direction: column;
         }
 
         #daily-inspiration::before,
@@ -278,6 +285,8 @@
             box-shadow: none;
             padding: clamp(1.3rem, 3.1vw, 2.15rem) clamp(1.1rem, 4vw, 2.6rem);
             transition: background .3s ease, border-color .3s ease, box-shadow .3s ease;
+            /* Always fill the full height of the outer container */
+            flex: 1;
         }
 
         .dash-hero-eyebrow {
@@ -357,6 +366,8 @@
             line-height: 1.55;
             color: rgba(218, 234, 255, 0.86);
             letter-spacing: 0.01em;
+            /* Reserve one line of height so the card doesn't jump when text appears */
+            min-height: calc(0.73rem * 1.55);
         }
 
         .dash-hero-source {
@@ -602,6 +613,7 @@
             margin-bottom: 0.68rem;
         }
 
+
         .dash-form-stack {
             display: flex;
             flex-direction: column;
@@ -813,6 +825,40 @@
             gap: 0.95rem;
         }
 
+        /* ── Skeleton / shimmer loading cards ── */
+        @keyframes shimmer {
+            0%   { background-position: -600px 0; }
+            100% { background-position: 600px 0; }
+        }
+
+        .group-skeleton {
+            border-radius: 1.2rem;
+            background: #fff;
+            border: 1px solid rgba(20, 40, 100, 0.07);
+            box-shadow: 0 4px 12px rgba(17, 44, 84, 0.06);
+            padding: 1.2rem 1.3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .skel-line {
+            border-radius: 6px;
+            background: linear-gradient(90deg, #eef1f8 25%, #f8f9fc 50%, #eef1f8 75%);
+            background-size: 600px 100%;
+            animation: shimmer 1.4s ease-in-out infinite;
+        }
+
+        .skel-title   { height: 18px; width: 55%; }
+        .skel-sub     { height: 12px; width: 35%; }
+        .skel-body    { height: 12px; width: 80%; }
+        .skel-body-sm { height: 12px; width: 60%; }
+        .skel-avatar-row { display: flex; gap: 6px; margin-top: 4px; }
+        .skel-avatar  { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+            background: linear-gradient(90deg, #eef1f8 25%, #f8f9fc 50%, #eef1f8 75%);
+            background-size: 600px 100%;
+            animation: shimmer 1.4s ease-in-out infinite; }
+
         @media (min-width: 700px) {
             #chavrutas-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -825,21 +871,112 @@
             }
         }
 
+        /* ── chavruta card – BorderGlow (React Bits port) ──────────────────── */
+        .chavruta-glow-host {
+            --edge-proximity:    0;
+            --cursor-x:          50%;
+            --cursor-y:          50%;
+            --edge-sensitivity:  15;
+            --color-sensitivity: 35;
+            position: relative;
+            border-radius: 1.2rem;
+            transform: translate3d(0, 0, 0.01px);
+            overflow: visible;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Fast fade-in, slow fade-out */
+        .chavruta-glow-host > .cg-border,
+        .chavruta-glow-host > .cg-edge {
+            transition: opacity 0.25s ease-out;
+        }
+        .chavruta-glow-host:not(:hover) > .cg-border,
+        .chavruta-glow-host:not(:hover) > .cg-edge {
+            opacity: 0 !important;
+            transition: opacity 0.75s ease-in-out;
+        }
+
+        /* Colored mesh-gradient border ring ────────────────────────────────
+           3-layer mask: radial spotlight ∩ ring strip.
+           • Layer 3 (full) subtract Layer 2 (content-box) = 1.5px ring strip
+           • ring intersect Layer 1 (spotlight at cursor) = ring only near cursor
+           Corners work correctly because content-box follows border-radius.  */
+        .chavruta-glow-host > .cg-border {
+            position: absolute;
+            inset: -1.5px;
+            border-radius: calc(1.2rem + 1.5px);
+            padding: 1.5px;
+            background:
+                radial-gradient(at 80% 55%, #8b5cf6 0px, transparent 50%),
+                radial-gradient(at 69% 34%, #f59e0b 0px, transparent 50%),
+                radial-gradient(at  8%  6%, #3b82f6 0px, transparent 50%),
+                radial-gradient(at 41% 38%, #a855f7 0px, transparent 50%),
+                radial-gradient(at 86% 85%, #fbbf24 0px, transparent 50%),
+                radial-gradient(at 82% 18%, #6366f1 0px, transparent 50%),
+                radial-gradient(at 51%  4%, #f59e0b 0px, transparent 50%),
+                linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+            mask:
+                radial-gradient(circle 90px at var(--cursor-x, 50%) var(--cursor-y, 50%),
+                    black 0%, transparent 100%),
+                linear-gradient(white 0 0) content-box,
+                linear-gradient(white 0 0);
+            mask-composite: intersect, subtract;
+            -webkit-mask:
+                radial-gradient(circle 90px at var(--cursor-x, 50%) var(--cursor-y, 50%),
+                    black 0%, transparent 100%),
+                linear-gradient(white 0 0) content-box,
+                linear-gradient(white 0 0);
+            -webkit-mask-composite: source-in, xor;
+            pointer-events: none;
+            z-index: 2;
+            opacity: calc(
+                (var(--edge-proximity) - var(--color-sensitivity)) /
+                (100 - var(--color-sensitivity))
+            );
+        }
+
+        /* Directional outer glow ────────────────────────────────────────────
+           Golden box-shadow radiates from card edge, masked to cursor spot.
+           border-radius ensures corners glow smoothly.                      */
+        .chavruta-glow-host > .cg-edge {
+            position: absolute;
+            inset: 0;
+            border-radius: 1.2rem;
+            pointer-events: none;
+            z-index: 2;
+            box-shadow:
+                0 0 0   1px hsl(38deg 95% 58% / 75%),
+                0 0 8px 0   hsl(38deg 95% 58% / 50%),
+                0 0 18px 0  hsl(38deg 95% 58% / 32%),
+                0 0 36px 0  hsl(38deg 95% 58% / 18%),
+                0 0 70px 2px hsl(38deg 95% 58% / 9%);
+            mask-image: radial-gradient(
+                circle 110px at var(--cursor-x, 50%) var(--cursor-y, 50%),
+                black 0%, black 15%, transparent 80%
+            );
+            opacity: calc(
+                (var(--edge-proximity) - var(--edge-sensitivity)) /
+                (100 - var(--edge-sensitivity))
+            );
+        }
+
         .chavruta-card {
+            position: relative;
             border-radius: 1.2rem;
             border: 1px solid var(--line) !important;
             background: rgba(255, 255, 255, 0.94);
             box-shadow: var(--shadow-sm);
             overflow: hidden;
-            transition: transform .24s ease, box-shadow .24s ease;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .chavruta-card .chavruta-actions {
+            flex: 1;
         }
 
-        .chavruta-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 16px 28px rgba(19, 48, 83, 0.16);
-        }
-
-        .chavruta-card > div:first-child {
+        .chavruta-card > div:nth-child(1) {
             background: linear-gradient(136deg, #153260 0%, #176a89 100%) !important;
         }
 
@@ -933,7 +1070,7 @@
 
         .dash-explore-card {
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -959,8 +1096,9 @@
         .dash-explore-card::before {
             content: '';
             position: absolute;
-            inset: auto -10% -58% -10%;
+            inset: auto 0 0 0;
             height: 75%;
+            border-radius: 0 0 1rem 1rem;
             background: radial-gradient(ellipse, rgba(255, 255, 255, 0.5), transparent 70%);
             pointer-events: none;
             opacity: 0.65;
@@ -1026,6 +1164,360 @@
         .tone-bookmarks .dash-explore-icon {
             background: linear-gradient(145deg, #dce8f6, #eef4ff);
             color: #2a5a8e;
+        }
+
+        .tone-psalms .dash-explore-icon {
+            background: linear-gradient(145deg, #d0f2f6, #e8fbfd);
+            color: #0a5c6e;
+        }
+
+        /* ── Daily Tehillim section card — redesigned ───────────────── */
+        #daily-tehillim-card {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(160deg,
+                #031728 0%,
+                #052640 28%,
+                #073b5e 58%,
+                #085270 82%,
+                #096070 100%
+            );
+            border: 1px solid rgba(15, 123, 143, 0.32);
+            border-radius: var(--radius-xl);
+            padding: 1.4rem 1.5rem 1.25rem;
+            text-align: center;
+        }
+
+        /* Teal glow — upper-right */
+        #daily-tehillim-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 480px 260px at 92% -10%, rgba(15, 160, 180, 0.22), transparent 65%),
+                radial-gradient(ellipse 300px 220px at -8% 110%,  rgba(207, 154, 50, 0.18), transparent 60%);
+            pointer-events: none;
+        }
+
+        /* Subtle star-dot texture overlay */
+        #daily-tehillim-card::after {
+            content: '✦';
+            position: absolute;
+            font-size: 5rem;
+            color: rgba(255, 255, 255, 0.025);
+            right: 1.8rem;
+            bottom: 0.6rem;
+            pointer-events: none;
+            user-select: none;
+            line-height: 1;
+        }
+
+        .dt-body {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Eyebrow */
+        .dt-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(240, 194, 84, 0.88);
+            background: rgba(240, 194, 84, 0.08);
+            border: 1px solid rgba(240, 194, 84, 0.2);
+            border-radius: 999px;
+            padding: 0.28rem 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Hebrew title */
+        .dt-hebrew {
+            font-family: 'Ezra SIL', 'SBL Hebrew', 'Frank Ruhl Libre', serif;
+            font-size: clamp(1.9rem, 4vw, 2.6rem);
+            font-weight: 400;
+            color: #ffffff;
+            line-height: 1.1;
+            letter-spacing: 0.02em;
+            display: block;
+            margin-bottom: 0.4rem;
+            text-shadow:
+                0 3px 28px rgba(15, 160, 180, 0.55),
+                0 0  60px rgba(207, 154, 50, 0.22);
+        }
+
+        /* Gold rule */
+        .dt-rule {
+            width: 4.5rem;
+            height: 2px;
+            margin: 0 auto 0.6rem;
+            background: linear-gradient(90deg, transparent, rgba(207, 154, 50, 0.7), transparent);
+            border-radius: 999px;
+        }
+
+        /* Subtitle */
+        .dt-subtitle {
+            font-family: 'Fraunces', serif;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            color: rgba(160, 225, 235, 0.7);
+            text-transform: uppercase;
+            margin-bottom: 0.9rem;
+        }
+
+        /* Portion info row */
+        .dt-portion-row {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            border-radius: 1rem;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .dt-day-badge {
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(160, 225, 235, 0.82);
+            border-right: 1px solid rgba(255,255,255,0.15);
+            padding-right: 0.6rem;
+            white-space: nowrap;
+        }
+
+        .dt-chapters {
+            font-size: 1rem;
+            font-weight: 700;
+            color: rgba(240, 194, 84, 0.97);
+            letter-spacing: 0.01em;
+        }
+
+        /* CTA */
+        .dt-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.62rem 1.4rem;
+            background: linear-gradient(135deg, #cf9a32 0%, #b7871e 100%);
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.82rem;
+            border-radius: 0.9rem;
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+            box-shadow: 0 4px 18px rgba(170, 110, 10, 0.4);
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+        }
+
+        .dt-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 26px rgba(170, 110, 10, 0.52);
+            background: linear-gradient(135deg, #daa83a 0%, #c4941f 100%);
+        }
+
+        .dt-cta svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+        /* Note for combined day (29+30) */
+        .dt-note {
+            font-size: 0.7rem;
+            color: rgba(160, 225, 235, 0.62);
+            margin-top: 0.55rem;
+            letter-spacing: 0.02em;
+        }
+
+        @media (max-width: 768px) {
+            #daily-tehillim-card {
+                padding: 0.58rem 0.72rem 0.56rem;
+                border-radius: 0.95rem;
+            }
+            #daily-tehillim-card::after { display: none; }
+            .dt-eyebrow {
+                font-size: 0.5rem;
+                padding: 0.16rem 0.55rem;
+                margin-bottom: 0.28rem;
+                letter-spacing: 0.13em;
+            }
+            .dt-hebrew { font-size: 1.05rem; margin-bottom: 0.45rem; }
+            .dt-action-row { max-width: 65%; margin-left: auto; margin-right: auto; gap: 0.75rem; }
+            /* Hide decorative/secondary elements to keep card compact */
+            .dt-rule { display: none !important; }
+            .dt-subtitle { display: none !important; }
+            .dt-sig { display: none !important; }
+            .dt-extras { display: none !important; }
+            .dt-personal-row { display: none !important; }
+            /* Portion row: compact */
+            .dt-portion-row {
+                height: 1.92rem;
+                padding: 0.22rem 0.52rem;
+                margin-bottom: 0.36rem;
+                gap: 0.32rem;
+                border-radius: 0.68rem;
+                box-sizing: border-box;
+            }
+            .dt-day-badge {
+                font-size: 0.5rem;
+                padding-right: 0.34rem;
+                letter-spacing: 0.08em;
+            }
+            .dt-chapters { font-size: 0.74rem; }
+            /* CTA: smaller */
+            .dt-cta {
+                height: 1.92rem;
+                padding: 0 0.78rem;
+                font-size: 0.64rem;
+                border-radius: 0.62rem;
+                gap: 0.3rem;
+                box-sizing: border-box;
+            }
+            .dt-cta svg { width: 12px; height: 12px; }
+            .dt-note {
+                font-size: 0.52rem;
+                margin-top: 0.2rem;
+                line-height: 1.25;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #daily-tehillim-card {
+                padding: 0.52rem 0.62rem 0.5rem;
+            }
+            .dt-hebrew { font-size: 0.98rem; }
+            .dt-portion-row {
+                height: 1.74rem;
+                padding: 0.2rem 0.45rem;
+                gap: 0.28rem;
+            }
+            .dt-day-badge { font-size: 0.47rem; }
+            .dt-chapters { font-size: 0.68rem; }
+            .dt-cta {
+                height: 1.74rem;
+                padding: 0 0.64rem;
+                font-size: 0.6rem;
+            }
+            .dt-note {
+                font-size: 0.49rem;
+                max-width: 23ch;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        /* ── Tehillim action row: stacked on mobile ── */
+        .dt-action-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        @media (max-width: 768px) {
+            .dt-action-row {
+                flex-direction: column;
+                gap: 0.35rem;
+                width: 100%;
+                align-items: stretch;
+                margin-bottom: 0.36rem;
+            }
+            .dt-action-row .dt-portion-row {
+                justify-content: center;
+                height: auto;
+                min-height: 1.7rem;
+                margin-bottom: 0;
+                box-sizing: border-box;
+                font-size: 0.85em;
+            }
+            .dt-action-row .dt-cta {
+                justify-content: center;
+                height: auto;
+                min-height: 1.7rem;
+                margin-bottom: 0;
+                box-sizing: border-box;
+            }
+        }
+        @media (max-width: 480px) {
+            .dt-action-row .dt-portion-row,
+            .dt-action-row .dt-cta {
+                min-height: 1.55rem;
+            }
+        }
+
+        /* ── New Tehillim card elements ── */
+        .dt-sig {
+            font-size: 0.74rem;
+            line-height: 1.55;
+            color: rgba(160, 225, 235, 0.78);
+            font-style: italic;
+            margin: 0.1rem 0 0.55rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .dt-sig:not(:empty)::before {
+            content: 'About This Portion: ';
+            font-style: normal;
+            font-weight: 800;
+            font-size: 0.62rem;
+            letter-spacing: 0.06em;
+            color: rgba(160, 225, 235, 0.55);
+            text-transform: uppercase;
+        }
+
+        .dt-extras {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            margin-bottom: 0.5rem;
+            justify-content: center;
+        }
+
+        .dt-extra-badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            color: rgba(240, 194, 84, 0.92);
+            background: rgba(240, 194, 84, 0.1);
+            border: 1px solid rgba(240, 194, 84, 0.3);
+            border-radius: 999px;
+            padding: 0.18rem 0.6rem;
+            cursor: default;
+        }
+
+        .dt-personal-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.11);
+            border-radius: 0.6rem;
+            padding: 0.38rem 0.75rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .dt-personal-label {
+            font-size: 0.62rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(160, 225, 235, 0.72);
+        }
+
+        .dt-personal-num {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: rgba(240, 194, 84, 0.97);
         }
 
         .dash-footer-quote {
@@ -1157,9 +1649,10 @@
                ══════════════════════════════════════════ */
 
             #daily-inspiration {
-                all: unset !important;
                 display: block !important;
                 position: relative !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
                 border-radius: 10px !important;
                 background: linear-gradient(135deg, #0f2347 0%, #1a3a6e 60%, #1e4f7a 100%) !important;
                 border: none !important;
@@ -1168,6 +1661,8 @@
                 padding: 0 !important;
                 color: #e8f0ff !important;
                 overflow: hidden !important;
+                min-height: 0 !important;
+                flex: none !important;
             }
 
             #daily-inspiration::before,
@@ -1177,6 +1672,8 @@
                 all: unset !important;
                 display: flex !important;
                 flex-direction: column !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
                 padding: 8px 10px 7px !important;
                 padding-right: 28px !important;
                 box-shadow: none !important;
@@ -1308,7 +1805,7 @@
             }
 
             .dash-welcome {
-                padding: 0.92rem;
+                display: none !important;
             }
 
             .dash-btn-primary {
@@ -1979,6 +2476,181 @@
                 transition: none !important;
             }
         }
+
+        /* ── Aceternity-style animated gradient background for #daily-inspiration
+           Pure CSS — no WebGL, no CDN dependency, no timing issues.
+           Five blurred colour blobs rotate/drift with mix-blend-mode:hard-light,
+           creating a living, glowing background that matches the design palette. */
+        @keyframes di-moveVertical {
+            0%   { transform: translateY(-50%); }
+            50%  { transform: translateY(50%); }
+            100% { transform: translateY(-50%); }
+        }
+        @keyframes di-moveInCircle {
+            0%   { transform: rotate(0deg); }
+            50%  { transform: rotate(180deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes di-moveHorizontal {
+            0%   { transform: translateX(-50%) translateY(-10%); }
+            50%  { transform: translateX(50%) translateY(10%); }
+            100% { transform: translateX(-50%) translateY(-10%); }
+        }
+
+        .di-grad-bg {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .di-blob {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            filter: blur(48px);
+            mix-blend-mode: hard-light;
+            top: calc(50% - 40%);
+            left: calc(50% - 40%);
+            opacity: 0.85;
+        }
+        /* Bright royal blue — drifts vertically */
+        .di-b1 {
+            background: rgb(18, 113, 255);
+            transform-origin: center center;
+            animation: di-moveVertical 30s ease infinite;
+        }
+        /* Gold/amber — sweeps in wide circle */
+        .di-b2 {
+            background: rgb(207, 154, 50);
+            transform-origin: calc(50% - 400px);
+            animation: di-moveInCircle 20s reverse infinite;
+        }
+        /* Cyan/teal — slow wide orbit */
+        .di-b3 {
+            background: rgb(15, 185, 210);
+            transform-origin: calc(50% + 400px);
+            animation: di-moveInCircle 40s linear infinite;
+        }
+        /* Deep blue — horizontal sweep */
+        .di-b4 {
+            background: rgb(31, 78, 200);
+            transform-origin: calc(50% - 200px) calc(50% - 300px);
+            animation: di-moveHorizontal 40s ease infinite;
+            opacity: 0.65;
+        }
+        /* Warm gold — off-axis circle */
+        .di-b5 {
+            background: rgb(185, 140, 30);
+            transform-origin: calc(50% - 800px) calc(50% + 200px);
+            animation: di-moveInCircle 20s ease infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .di-blob { animation: none; }
+        }
+        @media (max-width: 640px) {
+            /* On mobile the section is a compact mini-card; hide blobs */
+            .di-grad-bg { display: none; }
+        }
+
+        /* ── Welcome subtitle cycling transition ───────────────────────────── */
+        #dash-rotating-sub {
+            transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* ── chavruta action panel base ─────────────────────────────────────── */
+        .chavruta-actions {
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ── Aceternity GlowingEffect — proper implementation ───────────────
+           Uses background-attachment:fixed so all cards share one viewport-
+           spanning gradient field. The CSS mask uses mask-composite:intersect
+           with padding-box/border-box clip — this correctly follows
+           border-radius curves and avoids the XOR corner-clipping bug. */
+
+        @property --start {
+            syntax: '<number>';
+            inherits: true;
+            initial-value: 0;
+        }
+
+        .glow-border {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: 0;
+            background: none !important;
+        }
+
+        .glow-border::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            /* 1px transparent border defines the ring that the mask reveals */
+            border: 1px solid transparent;
+
+            /* Multi-colour gradient — same colours as Aceternity source.
+               background-attachment:fixed → all cards read from the same
+               viewport-coordinate gradient, creating a seamless shared field. */
+            background:
+                radial-gradient(circle,              #dd7bbb 10%, transparent 20%),
+                radial-gradient(circle at 40% 40%,   #d79f1e  5%, transparent 15%),
+                radial-gradient(circle at 60% 60%,   #5a922c 10%, transparent 20%),
+                radial-gradient(circle at 40% 60%,   #4c7894 10%, transparent 20%),
+                repeating-conic-gradient(
+                    from 236.84deg at 50% 50%,
+                    #dd7bbb  0%,
+                    #d79f1e  5%,
+                    #5a922c 10%,
+                    #4c7894 15%,
+                    #dd7bbb 20%
+                );
+            background-attachment: fixed;
+
+            opacity: var(--active, 0);
+            /* @property lets the browser interpolate --start as a number */
+            transition: opacity 300ms ease, --start 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+
+            /* Show only the 80° arc centred on --start, clipped to border ring */
+            mask-image:
+                linear-gradient(#0000, #0000),
+                conic-gradient(
+                    from calc((var(--start, 0) - 40) * 1deg),
+                    transparent 0deg,
+                    white,
+                    transparent 80deg
+                );
+            mask-clip: padding-box, border-box;
+            mask-composite: intersect;
+        }
+
+        /* ── Hero row: daily-inspiration (70%) + daily-tehillim (30%) ── */
+        .dash-hero-row {
+            display: flex;
+            gap: 1.15rem;
+            align-items: stretch;
+        }
+        .dash-hero-row > #daily-inspiration {
+            flex: 7;
+            min-width: 0;
+            margin-bottom: 0;
+        }
+        .dash-hero-row > #daily-tehillim-card {
+            flex: 3;
+            min-width: 0;
+        }
+        @media (max-width: 768px) {
+            .dash-hero-row {
+                display: contents;
+            }
+        }
     </style>
 </head>
 <body class="dashboard-body min-h-screen">
@@ -2002,28 +2674,80 @@
             </div>
         </section>
 
+        <div class="dash-hero-row">
         <section id="daily-inspiration" class="fade-up fd1">
+            <div class="di-grad-bg" aria-hidden="true">
+                <div class="di-blob di-b1"></div>
+                <div class="di-blob di-b2"></div>
+                <div class="di-blob di-b3"></div>
+                <div class="di-blob di-b4"></div>
+                <div class="di-blob di-b5"></div>
+            </div>
             <div class="dash-hero-inner daily-inspiration-content">
                 <div class="dash-hero-eyebrow">Today's Teaching</div>
                 <p data-quote-hebrew class="dash-hero-hebrew"></p>
                 <p data-quote-translation class="dash-hero-translation"></p>
                 <div class="dash-hero-reflection-box">
-                    <svg class="dash-hero-reflection-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
                     <p data-quote-reflection class="dash-hero-reflection"></p>
                 </div>
                 <div class="dash-hero-actions">
                     <span data-quote-source class="dash-hero-source"></span>
                     <div id="quote-bookmark-target"></div>
                 </div>
+                <p id="daily-quote-community-line" class="dash-community-line"></p>
             </div>
         </section>
+
+        <!-- ═══ DAILY TEHILLIM ═══ -->
+        <section id="daily-tehillim-card" class="fade-up fd2" aria-label="Daily Tehillim">
+            <div class="dt-body">
+                <div class="dt-eyebrow">
+                    <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 3v1m0 16v1M4.22 4.22l.7.7m12.16 12.16l.7.7M3 12h1m16 0h1M4.22 19.78l.7-.7M18.36 5.64l.7-.7"/>
+                    </svg>
+                    Daily Tehillim
+                </div>
+
+                <span class="dt-hebrew" dir="rtl">תְּהִלִּים</span>
+
+                <div class="dt-rule" aria-hidden="true"></div>
+
+                <p class="dt-subtitle">Psalms &middot; Monthly Cycle</p>
+
+                <p id="dt-sig" class="dt-sig"></p>
+
+                <div id="dt-extras" class="dt-extras"></div>
+
+                <div id="dt-personal-row" class="dt-personal-row hidden">
+                    <span class="dt-personal-label">Your Daily Psalm</span>
+                    <strong id="dt-personal-num" class="dt-personal-num"></strong>
+                </div>
+
+                <div class="dt-action-row">
+                    <div class="dt-portion-row">
+                        <span class="dt-day-badge" id="dt-day-badge">Day —</span>
+                        <span class="dt-chapters" id="dt-ref-text">Loading…</span>
+                    </div>
+
+                    <a href="/psalms" class="dt-cta">
+                        Begin Reading
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <p class="dt-note hidden" id="dt-combined-note">Portions 29 &amp; 30 recited together today</p>
+            </div>
+        </section>
+        </div><!-- /.dash-hero-row -->
 
         <section class="dash-welcome fade-up fd2">
             <div class="dash-welcome-left">
                 <div id="user-avatar-initial" class="dash-avatar"></div>
                 <div>
                     <h1 id="welcome-heading" class="dash-welcome-name">Shalom!</h1>
-                    <p class="dash-welcome-sub">Choose a study group below, or explore the site.</p>
+                    <p id="dash-rotating-sub" class="dash-welcome-sub">Choose a study group below, or explore the site.</p>
                 </div>
             </div>
             <div class="dash-welcome-actions">
@@ -2037,7 +2761,7 @@
             </div>
         </section>
 
-        <section class="section-card dash-section-shell fade-up fd3">
+        <section id="chavrutas-section" class="section-card dash-section-shell fade-up fd3">
             <div class="dash-section-header">
                 <div class="dash-section-title-row">
                     <div class="dash-section-bar"></div>
@@ -2108,7 +2832,30 @@
                 <p class="dash-empty-copy">Click <strong>+ New Group</strong> above to create one, or switch to <strong>Join with Code</strong> if a friend invited you.</p>
             </div>
 
-            <div id="chavrutas-grid"></div>
+            <div id="chavrutas-grid">
+                <!-- Loading skeleton — replaced by real cards once Firestore responds -->
+                <div class="group-skeleton">
+                    <div class="skel-line skel-title"></div>
+                    <div class="skel-line skel-sub"></div>
+                    <div class="skel-line skel-body"></div>
+                    <div class="skel-line skel-body-sm"></div>
+                    <div class="skel-avatar-row">
+                        <div class="skel-avatar"></div>
+                        <div class="skel-avatar"></div>
+                        <div class="skel-avatar"></div>
+                    </div>
+                </div>
+                <div class="group-skeleton">
+                    <div class="skel-line skel-title" style="width:45%"></div>
+                    <div class="skel-line skel-sub" style="width:30%"></div>
+                    <div class="skel-line skel-body" style="width:75%"></div>
+                    <div class="skel-line skel-body-sm" style="width:50%"></div>
+                    <div class="skel-avatar-row">
+                        <div class="skel-avatar"></div>
+                        <div class="skel-avatar"></div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section class="section-card dash-section-shell fade-up fd4">
@@ -2120,6 +2867,7 @@
             </div>
             <div class="dash-explore-grid">
                 <a href="/study" id="explore-study-link" class="dash-explore-card tone-study">
+                    <div class="glow-border" aria-hidden="true"></div>
                     <div class="dash-explore-icon">
                         <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     </div>
@@ -2127,6 +2875,7 @@
                     <span class="dash-explore-sub">Torah study room</span>
                 </a>
                 <a href="/holidays" class="dash-explore-card tone-holiday">
+                    <div class="glow-border" aria-hidden="true"></div>
                     <div class="dash-explore-icon">
                         <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" ry="2" stroke-width="2"></rect><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3v4M8 3v4M3 11h18"></path></svg>
                     </div>
@@ -2134,6 +2883,7 @@
                     <span class="dash-explore-sub">Yom Tov guides</span>
                 </a>
                 <a href="/prayers" class="dash-explore-card tone-prayer">
+                    <div class="glow-border" aria-hidden="true"></div>
                     <div class="dash-explore-icon">
                         <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3l2.4 4.9L20 9l-4 3.9.9 5.6L12 16l-4.9 2.5.9-5.6L4 9l5.6-1.1L12 3z"></path></svg>
                     </div>
@@ -2141,6 +2891,7 @@
                     <span class="dash-explore-sub">Daily tefillot</span>
                 </a>
                 <a href="/songs" class="dash-explore-card tone-songs">
+                    <div class="glow-border" aria-hidden="true"></div>
                     <div class="dash-explore-icon">
                         <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13"></path><circle cx="6" cy="18" r="3" stroke-width="2"></circle><circle cx="18" cy="16" r="3" stroke-width="2"></circle></svg>
                     </div>
@@ -2148,13 +2899,23 @@
                     <span class="dash-explore-sub">Shabbat and zmirot</span>
                 </a>
                 <a href="/bookmarks" class="dash-explore-card tone-bookmarks">
+                    <div class="glow-border" aria-hidden="true"></div>
                     <div class="dash-explore-icon">
                         <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
                     </div>
                     <span class="dash-explore-label">Bookmarks</span>
                     <span class="dash-explore-sub">Your saved items</span>
                 </a>
+                <a href="/psalms" class="dash-explore-card tone-psalms">
+                    <div class="glow-border" aria-hidden="true"></div>
+                    <div class="dash-explore-icon">
+                        <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1M4.22 4.22l.7.7m12.16 12.16l.7.7M3 12h1m16 0h1M4.22 19.78l.7-.7M18.36 5.64l.7-.7"/></svg>
+                    </div>
+                    <span class="dash-explore-label">Daily Psalms</span>
+                    <span class="dash-explore-sub">Tehillim — Chabad cycle</span>
+                </a>
                 <a href="/about" class="dash-explore-card tone-about">
+                    <div class="glow-border" aria-hidden="true"></div>
                     <div class="dash-explore-icon">
                         <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
@@ -2164,8 +2925,96 @@
             </div>
         </section>
 
+        <!-- ═══ WEEKLY MITZVAH CHALLENGE ═══ -->
+        <div id="mitzvah-challenge-section" class="mc-wrap hidden fade-up fd5">
+            <div class="mc-card">
+
+                <!-- Header (collapsible toggle) -->
+                <div class="mc-header" id="mitzvah-toggle-header">
+                    <div class="mc-header-left">
+                        <span class="mc-eyebrow">Weekly Challenge</span>
+                        <h2 id="mitzvah-challenge-heading" class="mc-title">Weekly Mitzvah Challenge</h2>
+                    </div>
+                    <div class="mc-header-right">
+                        <span id="mitzvah-countdown" class="mc-countdown"></span>
+                        <svg id="mitzvah-toggle-icon" class="mc-chevron expanded" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Collapsible body -->
+                <div id="mitzvah-collapsible-content" style="display: block;">
+
+                    <!-- Chavruta switcher tabs -->
+                    <div id="mitzvah-chavruta-tabs" class="mc-tabs hidden"></div>
+
+                    <!-- The Mitzvah — featured section -->
+                    <div class="mc-section--featured">
+                        <p class="mc-section-label">The Mitzvah</p>
+                        <div id="mitzvah-challenge-mitzvah" class="mc-mitzvah-title"></div>
+                        <div id="mitzvah-challenge-explanation" class="mc-mitzvah-text"></div>
+                    </div>
+
+                    <!-- Two-column: Parsha connection + Your challenge -->
+                    <div class="mc-two-col">
+                        <div class="mc-section">
+                            <p class="mc-section-label">Why It Connects to This Parsha</p>
+                            <div id="mitzvah-challenge-connection" class="mc-section-text"></div>
+                        </div>
+                        <div class="mc-section">
+                            <p class="mc-section-label">Your Weekly Challenge</p>
+                            <div id="mitzvah-challenge-action" class="mc-section-text"></div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom: completion + chat + leaderboard -->
+                    <div class="mc-bottom-grid">
+
+                        <!-- Completion checkbox (full width) -->
+                        <div class="mc-completion">
+                            <label class="mc-completion-label">
+                                <input type="checkbox" id="mitzvah-challenge-checkbox" class="mc-completion-check" disabled>
+                                <span class="mc-completion-text">I completed this week's mitzvah challenge</span>
+                            </label>
+                            <p id="mitzvah-checklist-helper" class="mc-completion-helper"></p>
+                        </div>
+
+                        <!-- Reflection chat -->
+                        <div class="mc-chat">
+                            <div class="mc-chat-header">
+                                <h3 class="mc-chat-title">Reflection Chat</h3>
+                                <p id="mitzvah-chat-auth" class="mc-chat-auth">Sign in to share your reflection.</p>
+                            </div>
+                            <div id="mitzvah-chat-messages" class="mc-messages">
+                                <p class="mc-messages-empty">Share how the mitzvah went this week.</p>
+                            </div>
+                            <div class="mc-composer">
+                                <textarea id="mitzvah-chat-input" class="mc-composer-input" rows="2" placeholder="How did the mitzvah go for you this week?" disabled></textarea>
+                                <div class="mc-composer-actions">
+                                    <button id="mitzvah-chat-submit" class="mc-send-btn" disabled>Share Reflection</button>
+                                    <span class="mc-composer-hint">Ctrl/Cmd + Enter to submit</span>
+                                </div>
+                                <p id="mitzvah-chat-status" class="mc-chat-status"></p>
+                            </div>
+                        </div>
+
+                        <!-- Leaderboard -->
+                        <div class="mc-leaderboard">
+                            <h3 class="mc-leaderboard-title">Mitzvah Leaderboard</h3>
+                            <p class="mc-leaderboard-sub">Most weekly challenges completed</p>
+                            <div id="mitzvah-leaderboard-list" class="mc-leaderboard-list">
+                                <p class="mc-leaderboard-empty">Loading leaderboard…</p>
+                            </div>
+                        </div>
+
+                    </div><!-- /.mc-bottom-grid -->
+                </div><!-- /#mitzvah-collapsible-content -->
+            </div><!-- /.mc-card -->
+        </div><!-- /.mc-wrap -->
+
         <!-- ═══ NEWSLETTER SIGNUP ═══ -->
-        <section id="dash-nl-section" class="section-card dash-section-shell fade-up fd5" style="padding:0;overflow:hidden;border:none;background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%)">
+        <section id="dash-nl-section" class="section-card dash-section-shell fade-up fd5" style="padding:0;overflow:hidden;border:1px solid rgba(30,64,175,0.25);background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%);border-radius:1.25rem;margin-bottom:0.5rem;">
             <div class="relative px-6 sm:px-10 py-8 sm:py-10 text-center">
                 <p class="text-amber-300 text-xs font-bold uppercase tracking-widest mb-2">Weekly Dvar Torah</p>
                 <h2 style="font-family:'Fraunces',serif" class="text-2xl sm:text-3xl font-bold text-white mb-2">Torah straight to your inbox</h2>
@@ -2203,12 +3052,12 @@
             </div>
         </section>
 
-        <p class="dash-footer-quote fade-up fd5">"When two sit together and words of Torah pass between them, the Divine Presence rests between them." — Pirkei Avot 3:2</p>
     </div>
 </main>
 
+
 <!-- ═══ CONFIRM MODAL ═══ -->
-<div id="confirm-modal" class="dash-modal hidden">
+<div id="confirm-modal" class="dash-modal" style="display:none">
     <div class="dash-modal-card" role="dialog" aria-modal="true">
         <div class="flex items-center justify-center w-11 h-11 rounded-2xl bg-red-50 text-red-500 mb-4 mx-auto">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
@@ -2222,7 +3071,7 @@
     </div>
 </div>
 
-<div id="study-room-modal" class="dash-modal hidden">
+<div id="study-room-modal" class="dash-modal" style="display:none">
     <div class="dash-modal-card" role="dialog" aria-modal="true">
         <div class="flex items-start justify-between gap-3">
             <div>
@@ -2290,33 +3139,23 @@
 </aside>
 
 <!-- ═══ SCRIPTS ═══ -->
-<script src="/js/auth-gate.js"></script>
 <script src="/js/daily-inspiration.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script>
-    // ── Instant header dropdown from cache ──
-    (function() {
-        try {
-            var c = JSON.parse(sessionStorage.getItem('headerUserCache'));
-            if (c && c.firstName && c.email) {
-                var ha = document.getElementById('header-actions');
-                if (ha && !document.getElementById('header-user-dropdown-container')) {
-                    // Will be replaced by buildDashboardHeaderDropdown once auth fires
-                    var sk = document.createElement('div');
-                    sk.id = 'header-user-dropdown-container';
-                    sk.style.cssText = 'position:relative;display:flex;align-items:center;';
-                    var ini = c.firstName.charAt(0).toUpperCase();
-                    sk.innerHTML = '<button class="header-user-pill" style="pointer-events:none;" aria-hidden="true"><div class="header-user-avatar">' + ini + '</div><span class="header-btn-text">' + c.firstName + '</span></button>';
-                    ha.appendChild(sk);
-                }
-            }
-        } catch(_) {}
-    })();
-
     const loadingStateEl = document.getElementById('loading-state');
     const mainContentEl = document.getElementById('main-content');
+
+    function readCachedHeaderUser() {
+        try {
+            const cached = JSON.parse(sessionStorage.getItem('headerUserCache'));
+            if (cached && cached.uid && cached.firstName) {
+                return cached;
+            }
+        } catch (_) {}
+        return null;
+    }
 
     function showStartupFailure(message) {
         const textEl = loadingStateEl?.querySelector('.dash-loading-text');
@@ -2335,15 +3174,17 @@
 
     /* ── Firebase ── */
     try {
-        firebase.initializeApp({
-            apiKey:"AIzaSyCpDtcBpKvjLwihnL2bizxBFxXD6Qn8Lb4",
-            authDomain:"letterinthescroll.firebaseapp.com",
-            projectId:"letterinthescroll",
-            storageBucket:"letterinthescroll.firebasestorage.app",
-            messagingSenderId:"625129870318",
-            appId:"1:625129870318:web:a654e97b734faa3b4df4ff",
-            measurementId:"G-LYSXTDEPVG"
-        });
+        if (!firebase.apps.length) {
+            firebase.initializeApp({
+                apiKey:"AIzaSyCpDtcBpKvjLwihnL2bizxBFxXD6Qn8Lb4",
+                authDomain:"letterinthescroll.firebaseapp.com",
+                projectId:"letterinthescroll",
+                storageBucket:"letterinthescroll.firebasestorage.app",
+                messagingSenderId:"625129870318",
+                appId:"1:625129870318:web:a654e97b734faa3b4df4ff",
+                measurementId:"G-LYSXTDEPVG"
+            });
+        }
     } catch (error) {
         if (!String(error).includes('already exists')) {
             showStartupFailure('Could not initialize app services. Please refresh and try again.');
@@ -2352,18 +3193,62 @@
     }
     const auth = firebase.auth();
     const db   = firebase.firestore();
+    const isLocalDevHost = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+    const isSafariBrowser = /^((?!chrome|android).)*safari/i.test(navigator.userAgent || '');
+    if (isLocalDevHost || isSafariBrowser) {
+        try {
+            db.settings({
+                experimentalForceLongPolling: true,
+                experimentalAutoDetectLongPolling: true,
+                useFetchStreams: false,
+                merge: true
+            });
+        } catch (_) { /* settings already applied */ }
+    }
     const FieldValue = firebase.firestore.FieldValue;
 
     /* ── State ── */
     let currentUser = null, confirmResolve = null;
     const nameCache = {};
     const memberActivityCache = {};
+    const birthdayCache = {}; // uid → {birthDateGregorian, hebrewBirthMonth, hebrewBirthDay}
+    let bdayShownThisLoad = false; // in-memory flag — resets on every page load so celebration re-appears throughout the birthday
     let chavUnsubs  = [];
     let userChavrutas = [];
     let latestDailyQuote = null;
     let dailyQuoteToggleInFlight = false;
     let dashboardShellRevealed = false;
+    let mitzvahDashModuleQueued = false;
+    let chavrutaLoadStartedForUid = null;
     const INVITE_CODE_LENGTH = 16;
+    const DASH_QUOTE_SUMMARY_CACHE_PREFIX = 'dashQuoteSummaryCache';
+    const DASH_QUOTE_SUMMARY_CACHE_TTL_MS = 300000;
+
+    function dlog(...args) { console.log('%c[Dashboard]', 'color:#1f3f76;font-weight:bold', ...args); }
+
+    function queueMitzvahDashModuleLoad() {
+        if (mitzvahDashModuleQueued) {
+            return;
+        }
+        mitzvahDashModuleQueued = true;
+
+        const inject = () => {
+            if (document.querySelector('script[data-mitzvah-dash-module="1"]')) {
+                return;
+            }
+            const script = document.createElement('script');
+            script.type = 'module';
+            script.src = '/js/mitzvah-dash.js';
+            script.dataset.mitzvahDashModule = '1';
+            document.body.appendChild(script);
+        };
+
+        if (typeof window.requestIdleCallback === 'function') {
+            window.requestIdleCallback(inject, { timeout: 2800 });
+        } else {
+            setTimeout(inject, 900);
+        }
+    }
 
     function revealDashboardShell() {
         if (dashboardShellRevealed) {
@@ -2379,19 +3264,43 @@
         if (!dashboardShellRevealed) {
             revealDashboardShell();
         }
-    }, 3000);
+    }, 1200);
 
     // Fast reveal: if we have cached user info, show shell immediately
     // while waiting for Firebase Auth to fully resolve.
-    if (sessionStorage.getItem('headerUserCache') || auth.currentUser) {
+    if (readCachedHeaderUser() || auth.currentUser) {
         revealDashboardShell();
     }
+
+    // Early group + community line restore — populates UI from cache before auth fires.
+    // This makes returning to the dashboard feel instant after visiting Tehillim / Study.
+    (function earlyRestoreGroups() {
+        try {
+            var hc = readCachedHeaderUser();
+            if (!hc || !hc.uid) return;
+            var raw = localStorage.getItem('dashGroupsCache');
+            if (!raw) return;
+            var c = JSON.parse(raw);
+            if (!c || c.uid !== hc.uid || (Date.now() - c.ts) > 300000) return;
+            if (!c.groups || !c.groups.length) return;
+            if (c.names) Object.assign(nameCache, c.names);
+            dlog('earlyRestoreGroups: rendering', c.groups.length, 'cached groups');
+            renderChavrutasSync(c.groups);
+            // Also restore the bookmark community line text
+            var cachedLine = sessionStorage.getItem('dashQuoteLineCached');
+            if (cachedLine) {
+                var lineEl = ensureDailyQuoteCommunityLine();
+                if (lineEl) lineEl.textContent = cachedLine;
+            }
+        } catch(e) { /* cache miss — safe to ignore */ }
+    })();
 
     // Restore dashboard when page is loaded from bfcache (back/forward nav).
     window.addEventListener('pageshow', (event) => {
         if (event.persisted) {
             dashboardShellRevealed = false;
             revealDashboardShell();
+            closeStudyRoomModal();
         }
     });
 
@@ -2512,6 +3421,62 @@
         logoutBtn.addEventListener('click', () => signOutUser());
     }
 
+    function syncDashboardHeaderDropdown(firstName, email) {
+        const normalizedName = (firstName || '').trim();
+        const normalizedEmail = (email || '').trim();
+        const existingName = document.querySelector('#header-user-dropdown-container .header-btn-text')?.textContent?.trim() || '';
+        const existingEmail = document.querySelector('#header-user-dropdown .header-dropdown-email')?.textContent?.trim() || '';
+        const hasFunctionalMenu = Boolean(document.getElementById('header-user-menu-btn') && document.getElementById('header-user-dropdown'));
+
+        if (hasFunctionalMenu && existingName === normalizedName && existingEmail === normalizedEmail) {
+            return;
+        }
+
+        buildDashboardHeaderDropdown(normalizedName || 'Friend', normalizedEmail);
+    }
+
+    function applyCachedDashboardHeaderDropdown() {
+        const cached = readCachedHeaderUser();
+        if (!cached || !cached.firstName) {
+            return;
+        }
+        const mount = () => syncDashboardHeaderDropdown(cached.firstName, cached.email || '');
+        if (document.getElementById('header-actions')) {
+            mount();
+            return;
+        }
+        document.addEventListener('shared-header:ready', mount, { once: true });
+    }
+    applyCachedDashboardHeaderDropdown();
+
+    function applyDashboardIdentity(firstName) {
+        const normalized = (firstName || 'Friend').trim() || 'Friend';
+        const heading = document.getElementById('welcome-heading');
+        if (heading) {
+            heading.textContent = 'Shalom, ' + normalized + '!';
+        }
+        const greetEl = document.getElementById('user-greeting');
+        if (greetEl) {
+            greetEl.textContent = normalized;
+        }
+        const avatarEl = document.getElementById('user-avatar-initial');
+        if (avatarEl) {
+            avatarEl.textContent = normalized.charAt(0).toUpperCase();
+        }
+    }
+
+    function startGroupsForUserFast(user) {
+        if (!user || !user.uid) {
+            return;
+        }
+        if (chavrutaLoadStartedForUid === user.uid) {
+            return;
+        }
+        chavrutaLoadStartedForUid = user.uid;
+        currentUser = user;
+        loadChavrutas();
+    }
+
     function sanitizeInviteCode(rawValue) {
         if (typeof rawValue !== 'string') {
             return '';
@@ -2542,8 +3507,14 @@
     }
 
     /* ════ AUTH ════ */
+    dlog('auth.currentUser at script time:', auth.currentUser?.uid || 'null');
+    if (auth.currentUser) {
+        startGroupsForUserFast(auth.currentUser);
+    }
+
     let authRedirectTimer = null;
     auth.onAuthStateChanged(async user => {
+        dlog('onAuthStateChanged fired', { uid: user?.uid || 'null', email: user?.email || 'null' });
         if (!user) {
             // Firebase fires null initially while loading session from IndexedDB.
             // Delay redirect so the real auth state can arrive and cancel it.
@@ -2557,41 +3528,34 @@
                     } else {
                         window.location.href = '/';
                     }
-                }, 2000);
+                }, 6000);
             }
             return;
         }
         if (authRedirectTimer) { clearTimeout(authRedirectTimer); authRedirectTimer = null; }
         currentUser = user;
         revealDashboardShell();
+        startGroupsForUserFast(user);
+        queueMitzvahDashModuleLoad();
 
-        // Display name — prefer Firestore displayName (set in Settings)
-        let firstName = '';
-        try {
-            const userSnap = await db.collection('users').doc(user.uid).get();
-            if (userSnap.exists) {
-                const data = userSnap.data();
-                firstName = data.displayName || data.firstName || data.username || '';
-                if (firstName && firstName.includes(' ')) firstName = firstName.split(' ')[0];
-            }
-        } catch (e) { /* ignore */ }
+        const cachedHeader = readCachedHeaderUser();
+        let firstName = (cachedHeader && cachedHeader.uid === user.uid && cachedHeader.firstName)
+            ? cachedHeader.firstName
+            : '';
         if (!firstName) {
-            // Fallback: use auth displayName or email prefix
-            const raw = user.displayName || user.email || '';
-            firstName = raw.split(' ')[0].split('@')[0];
+            const raw = user.displayName || user.email || 'Friend';
+            firstName = raw.split(' ')[0].split('@')[0] || 'Friend';
         }
-        document.getElementById('welcome-heading').textContent = 'Shalom, ' + firstName + '!';
-        const greetEl = document.getElementById('user-greeting');
-        if (greetEl) greetEl.textContent = firstName;
-        
-        const avatarEl = document.getElementById('user-avatar-initial');
-        if (avatarEl) avatarEl.textContent = firstName.charAt(0).toUpperCase();
+        applyDashboardIdentity(firstName);
 
-        // Build header user dropdown (same as page-auth.js)
-        buildDashboardHeaderDropdown(firstName, user.email || '');
+        // Build header user dropdown immediately so it remains interactive
+        // even while Firestore profile/groups data are still loading.
+        syncDashboardHeaderDropdown(firstName, user.email || (cachedHeader && cachedHeader.email) || '');
 
-        // Cache for instant rendering on next page load
-        try { sessionStorage.setItem('headerUserCache', JSON.stringify({ firstName: firstName, email: user.email || '' })); } catch(_) {}
+        // Cache for instant rendering on next page load (include uid so we can validate localStorage group cache)
+        try { sessionStorage.setItem('headerUserCache', JSON.stringify({ firstName: firstName, email: user.email || '', uid: user.uid })); } catch(_) {}
+
+        refreshDailyQuoteBookmarkState();
 
         // Hide newsletter section if this user already subscribed (covers cross-device / cleared storage)
         hideNewsletterIfSubscribed(user.email);
@@ -2607,16 +3571,66 @@
                 showBanner('Invite link is invalid. Ask for a new 16-character code.', 'error');
             } else {
                 try {
-                    await joinByCode(iCode);
-                    showBanner('Joined via invite link!', 'success');
+                    const result = await joinByCode(iCode);
+                    if (result === 'already_member') {
+                        showBanner('You\'re already in this group!', 'info');
+                    } else if (result === 'pending') {
+                        showBanner('Join request sent! Waiting for the leader\'s approval.', 'info');
+                    } else {
+                        showBanner('Joined successfully!', 'success');
+                    }
                 } catch (e) {
                     showBanner(e.message || 'Could not join.', 'error');
                 }
             }
-            window.history.replaceState({}, '', 'dashboard.html');
+            window.history.replaceState({}, '', '/dashboard');
         }
 
-        loadChavrutas();
+        // Display name — prefer Firestore displayName (set in Settings)
+        let userSnap = null;
+        try {
+            userSnap = await db.collection('users').doc(user.uid).get();
+            if (userSnap.exists) {
+                const data = userSnap.data();
+                const profileName = data.displayName || data.firstName || data.username || '';
+                const profileFirst = profileName && profileName.includes(' ')
+                    ? profileName.split(' ')[0]
+                    : profileName;
+                if (profileFirst && profileFirst !== firstName) {
+                    firstName = profileFirst;
+                    applyDashboardIdentity(firstName);
+                    syncDashboardHeaderDropdown(firstName, user.email || '');
+                }
+            }
+        } catch (e) { /* ignore */ }
+        try { sessionStorage.setItem('headerUserCache', JSON.stringify({ firstName: firstName, email: user.email || '', uid: user.uid })); } catch(_) {}
+
+        // Personal Daily Psalm & birthday — read from userSnap (now accessible)
+        try {
+            const uData = (userSnap && userSnap.exists) ? (userSnap.data() || {}) : {};
+            if (uData.hebrewBirthYear && uData.hebrewBirthMonth && uData.hebrewBirthDay) {
+                computeAndShowPersonalPsalm({ year: uData.hebrewBirthYear, month: uData.hebrewBirthMonth, day: uData.hebrewBirthDay });
+            }
+            // Cache current user's birthday so group card can show their banner
+            birthdayCache[user.uid] = {
+                birthDateGregorian: uData.birthDateGregorian || null,
+                hebrewBirthMonth: uData.hebrewBirthMonth || 0,
+                hebrewBirthDay: uData.hebrewBirthDay || 0,
+                birthTimezone: uData.birthTimezone || null
+            };
+            // Celebrate if it's the user's birthday today
+            checkAndCelebrateUserBirthday(uData, firstName);
+            // If it's the user's birthday, re-render group cards so the birthday banner appears.
+            // (Cards may have been rendered before birthdayCache was populated.)
+            if (isMemberBirthdayToday(user.uid) && userChavrutas.length > 0) {
+                const grid = document.getElementById('chavrutas-grid');
+                if (grid) grid.innerHTML = userChavrutas.map(cardHTML).join('');
+            }
+            // Notify user if birthday hasn't been filled in yet
+            if (!uData.birthDateGregorian) {
+                showMissingInfoToast();
+            }
+        } catch(_) {}
         refreshDailyQuoteBookmarkState();
     });
 
@@ -2644,6 +3658,367 @@
         inner.className = cls + ' rounded-2xl px-5 py-3.5 flex items-center gap-3 shadow-sm';
         msgEl.textContent = msg;
         document.getElementById('auto-join-banner').classList.remove('hidden');
+    }
+
+    /* ════ MISSING INFO TOAST ════ */
+    function showMissingInfoToast() {
+        // Don't show again if dismissed this session
+        if (sessionStorage.getItem('missingInfoDismissed')) return;
+
+        let toast = document.getElementById('missing-info-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'missing-info-toast';
+            toast.style.cssText = [
+                'position:fixed',
+                'bottom:1.2rem',
+                'left:50%',
+                'transform:translateX(-50%)',
+                'z-index:9999',
+                'display:flex',
+                'align-items:center',
+                'gap:0.75rem',
+                'background:linear-gradient(135deg,#16285e,#2f56ab)',
+                'color:#fff',
+                'font-family:Manrope,sans-serif',
+                'font-size:0.82rem',
+                'font-weight:600',
+                'border-radius:999px',
+                'padding:0.65rem 1.1rem 0.65rem 1.0rem',
+                'box-shadow:0 8px 28px rgba(22,40,94,0.32)',
+                'cursor:pointer',
+                'white-space:nowrap',
+                'max-width:calc(100vw - 2rem)',
+                'animation:toastSlideUp 0.38s cubic-bezier(0.22,1,0.36,1) both',
+            ].join(';');
+            toast.innerHTML = `
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="flex-shrink:0;opacity:0.85">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Fill out some missing information from your account</span>
+                <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="opacity:0.7;flex-shrink:0">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                </svg>`;
+
+            // Inject keyframe if not already present
+            if (!document.getElementById('toast-keyframes')) {
+                const style = document.createElement('style');
+                style.id = 'toast-keyframes';
+                style.textContent = '@keyframes toastSlideUp{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}';
+                document.head.appendChild(style);
+            }
+
+            toast.addEventListener('click', () => {
+                window.location.href = '/settings/?section=birthday';
+            });
+
+            document.body.appendChild(toast);
+        }
+        toast.style.display = 'flex';
+
+        // Auto-dismiss after 12 s and mark as dismissed for this session
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.4s ease';
+            setTimeout(() => {
+                if (toast.parentNode) toast.parentNode.removeChild(toast);
+                sessionStorage.setItem('missingInfoDismissed', '1');
+            }, 400);
+        }, 12000);
+    }
+
+    /* ════ BIRTHDAY SYSTEM ════ */
+    function getTodayHebrewMonthDay(timezone) {
+        try {
+            const now = new Date();
+            const opts = { calendar: 'hebrew', numberingSystem: 'latn', day: 'numeric', month: 'numeric' };
+            if (timezone) opts.timeZone = timezone;
+            const fmt = new Intl.DateTimeFormat('en-US', opts);
+            const parts = {};
+            fmt.formatToParts(now).forEach(p => { parts[p.type] = p.value; });
+            return { month: parseInt(parts.month, 10), day: parseInt(parts.day, 10) };
+        } catch { return null; }
+    }
+
+    function getTodayGregorianMonthDay(timezone) {
+        try {
+            const now = new Date();
+            const opts = { month: 'numeric', day: 'numeric' };
+            if (timezone) opts.timeZone = timezone;
+            const parts = {};
+            new Intl.DateTimeFormat('en-US', opts).formatToParts(now).forEach(p => { parts[p.type] = p.value; });
+            return { month: parseInt(parts.month, 10), day: parseInt(parts.day, 10) };
+        } catch { return null; }
+    }
+
+    function isGregorianBirthdayToday(dateStr, timezone) {
+        if (!dateStr) return false;
+        try {
+            const [, m, d] = dateStr.split('-').map(Number);
+            const today = getTodayGregorianMonthDay(timezone);
+            if (today) return today.month === m && today.day === d;
+            const now = new Date();
+            return now.getMonth() + 1 === m && now.getDate() === d;
+        } catch { return false; }
+    }
+
+    function isHebrewBirthdayToday(hebMonth, hebDay, timezone) {
+        if (!hebMonth || !hebDay) return false;
+        const h = getTodayHebrewMonthDay(timezone);
+        return !!(h && h.month === hebMonth && h.day === hebDay);
+    }
+
+    function isMemberBirthdayToday(uid) {
+        const b = birthdayCache[uid];
+        if (!b) return false;
+        const tz = b.birthTimezone || null;
+        return isGregorianBirthdayToday(b.birthDateGregorian, tz) || isHebrewBirthdayToday(b.hebrewBirthMonth, b.hebrewBirthDay, tz);
+    }
+
+    function launchBirthdayConfetti() {
+        // Inject keyframes for burst animation
+        if (!document.getElementById('bday-canvas-kf')) {
+            const s = document.createElement('style');
+            s.id = 'bday-canvas-kf';
+            s.textContent = `
+                @keyframes bdayLights{
+                    0%  { background: radial-gradient(ellipse at 15% 20%,rgba(200,154,53,0.22),transparent 40%), radial-gradient(ellipse at 85% 75%,rgba(47,86,171,0.22),transparent 40%), radial-gradient(ellipse at 50% 50%,rgba(231,76,60,0.12),transparent 45%); }
+                    33% { background: radial-gradient(ellipse at 80% 15%,rgba(200,154,53,0.18),transparent 40%), radial-gradient(ellipse at 20% 80%,rgba(47,86,171,0.18),transparent 40%), radial-gradient(ellipse at 60% 40%,rgba(39,167,105,0.12),transparent 45%); }
+                    66% { background: radial-gradient(ellipse at 40% 85%,rgba(200,154,53,0.15),transparent 40%), radial-gradient(ellipse at 70% 25%,rgba(155,89,182,0.15),transparent 40%), radial-gradient(ellipse at 30% 50%,rgba(47,86,171,0.1),transparent 45%); }
+                    100%{ background: transparent; }
+                }
+                @keyframes bdayBannerPulse {
+                    0%,100% { box-shadow: 0 20px 60px rgba(200,154,53,0.35), 0 0 0 0 rgba(200,154,53,0); }
+                    50%      { box-shadow: 0 24px 80px rgba(200,154,53,0.5), 0 0 40px 8px rgba(200,154,53,0.18); }
+                }
+                @keyframes bdayStarSpin {
+                    from { transform: rotate(0deg) scale(1); }
+                    50%  { transform: rotate(180deg) scale(1.2); }
+                    to   { transform: rotate(360deg) scale(1); }
+                }
+                @keyframes bdayBounceIn {
+                    0%   { opacity:0; transform: translateY(-22px) scale(0.92); }
+                    60%  { transform: translateY(6px) scale(1.03); }
+                    80%  { transform: translateY(-4px) scale(0.98); }
+                    100% { opacity:1; transform: translateY(0) scale(1); }
+                }`;
+            document.head.appendChild(s);
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9998;';
+        document.body.appendChild(canvas);
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const ctx = canvas.getContext('2d');
+
+        const COLORS = [
+            '#c89a35','#f1c40f','#ffd700','#ff9800','#ffcc02', // golds
+            '#2f56ab','#3498db','#00bcd4','#0ef','#4fc3f7',    // blues/cyans
+            '#e74c3c','#e91e63','#ff5722','#ff4081','#ff6b9d', // reds/pinks
+            '#27a769','#4caf50','#00e676','#b2ff59',            // greens
+            '#9b59b6','#673ab7','#ce93d8','#ea80fc',            // purples
+            '#ffffff','#fffde7','#fff9c4','#f8bbd0'             // whites/pastels
+        ];
+
+        // Mixed shapes: 0=rect, 1=circle, 2=star, 3=ribbon, 4=heart
+        function drawHeart(cx, cy, r, ctx) {
+            ctx.beginPath();
+            ctx.moveTo(cx, cy + r * 0.3);
+            ctx.bezierCurveTo(cx, cy - r * 0.3, cx - r, cy - r * 0.3, cx - r, cy + r * 0.1);
+            ctx.bezierCurveTo(cx - r, cy + r * 0.7, cx, cy + r, cx, cy + r);
+            ctx.bezierCurveTo(cx, cy + r, cx + r, cy + r * 0.7, cx + r, cy + r * 0.1);
+            ctx.bezierCurveTo(cx + r, cy - r * 0.3, cx, cy - r * 0.3, cx, cy + r * 0.3);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function makeParticle(fromTop) {
+            const shape = Math.floor(Math.random() * 5);
+            return {
+                x: Math.random() * canvas.width,
+                y: fromTop ? -Math.random() * canvas.height * 0.4 - 10 : Math.random() * canvas.height * -0.8,
+                w: Math.random() * 16 + 5,
+                h: Math.random() * 10 + 3,
+                r: Math.random() * 8 + 3,   // radius for circle/star/heart
+                color: COLORS[Math.floor(Math.random() * COLORS.length)],
+                vx: (Math.random() - 0.5) * 5,
+                vy: Math.random() * 6 + 1.5,
+                rot: Math.random() * Math.PI * 2,
+                vr: (Math.random() - 0.5) * 0.22,
+                shape,
+                sway: Math.random() * 0.1 + 0.02,
+                swayOff: Math.random() * Math.PI * 2,
+                opacity: 0.88 + Math.random() * 0.12
+            };
+        }
+
+        function drawStar(cx, cy, r, ctx) {
+            ctx.beginPath();
+            for (let i = 0; i < 5; i++) {
+                const a = (i * 4 * Math.PI) / 5 - Math.PI / 2;
+                const ai = a + (2 * Math.PI) / 5;
+                if (i === 0) ctx.moveTo(cx + r * Math.cos(a), cy + r * Math.sin(a));
+                else ctx.lineTo(cx + r * Math.cos(a), cy + r * Math.sin(a));
+                ctx.lineTo(cx + (r * 0.4) * Math.cos(ai), cy + (r * 0.4) * Math.sin(ai));
+            }
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // 200 continuous particles + 60 initial burst + second wave at 1.2s
+        const particles = Array.from({length: 200}, () => makeParticle(false));
+        // Burst wave 1: 60 extra particles from top with high speed
+        for (let i = 0; i < 60; i++) {
+            const p = makeParticle(true);
+            p.vy = Math.random() * 10 + 5;
+            p.vx = (Math.random() - 0.5) * 10;
+            particles.push(p);
+        }
+
+        let start = null;
+        const DUR = 10000;
+        // Schedule a second burst wave at 1.2 seconds
+        setTimeout(() => {
+            for (let i = 0; i < 40; i++) {
+                const p = makeParticle(true);
+                p.vy = Math.random() * 9 + 4;
+                p.vx = (Math.random() - 0.5) * 9;
+                particles.push(p);
+            }
+        }, 1200);
+
+        function draw(ts) {
+            if (!start) start = ts;
+            const t = ts - start;
+            const progress = t / DUR;
+            // Fade starts at 75%, gone at 100%
+            const fade = progress > 0.75 ? Math.max(0, 1 - (progress - 0.75) / 0.25) : 1;
+            // Spawn density: full for first 7s, then winding down
+            const spawnRate = progress < 0.54 ? 1 : Math.max(0, 1 - (progress - 0.54) / 0.46);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(p => {
+                p.x += p.vx + Math.sin(t * p.sway + p.swayOff) * 0.8;
+                p.y += p.vy;
+                p.rot += p.vr;
+                // Respawn at top while still spawning
+                if (p.y > canvas.height + p.h) {
+                    if (Math.random() < spawnRate) {
+                        const np = makeParticle(true);
+                        Object.assign(p, np);
+                    } else {
+                        p.y = canvas.height + 200; // park off screen
+                    }
+                }
+
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rot);
+                ctx.globalAlpha = fade * p.opacity;
+                ctx.fillStyle = p.color;
+
+                if (p.shape === 0) {
+                    // Rectangle confetti
+                    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                } else if (p.shape === 1) {
+                    // Circle dot
+                    ctx.beginPath();
+                    ctx.arc(0, 0, p.r, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (p.shape === 2) {
+                    // Star
+                    drawStar(0, 0, p.r, ctx);
+                } else if (p.shape === 3) {
+                    // Ribbon / streamer (tall narrow rectangle)
+                    ctx.fillRect(-p.h / 2, -p.w * 1.5, p.h, p.w * 3);
+                } else {
+                    // Heart
+                    drawHeart(-p.r * 0.5, -p.r * 0.65, p.r * 0.55, ctx);
+                }
+                ctx.restore();
+            });
+
+            if (t < DUR) requestAnimationFrame(draw);
+            else canvas.remove();
+        }
+        requestAnimationFrame(draw);
+
+        // Sweeping colour-wash light overlay
+        const lights = document.createElement('div');
+        lights.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9997;animation:bdayLights 5s ease-in-out forwards;';
+        document.body.appendChild(lights);
+        setTimeout(() => lights.remove(), 5000);
+    }
+
+    function showBirthdayCelebration(name, isHebrewOnly) {
+        // Per-page-load guard: prevents duplicate fires when auth state changes multiple times,
+        // but resets on every new page load so the celebration re-appears all day long.
+        if (bdayShownThisLoad) return;
+        bdayShownThisLoad = true;
+
+        // Inject keyframes if not yet present
+        if (!document.getElementById('bday-canvas-kf')) launchBirthdayConfetti();
+        else launchBirthdayConfetti();
+
+        const stars = '\u2728\u2B50\u2728';
+        const eyebrow = isHebrewOnly ? '\uD83D\uDD4D Hebrew Birthday Today \uD83D\uDD4D' : '\uD83C\uDF82 Happy Birthday! \uD83C\uDF82';
+        const headLine = isHebrewOnly
+            ? `Today is your Hebrew Birthday, ${escHTML(name)}! \uD83C\uDF89`
+            : `Happy Birthday, ${escHTML(name)}! \uD83C\uDF89`;
+        const msg = isHebrewOnly
+            ? 'Today marks your Hebrew birthday — one of the most powerful days of the year for your soul. May this year bring you deep Torah wisdom, boundless joy, and every blessing!'
+            : 'Today is YOUR day! Wishing you a birthday overflowing with Torah learning, happiness, and beautiful moments. May this new year be the most meaningful yet!';
+
+        const banner = document.createElement('section');
+        banner.id = 'birthday-banner';
+        banner.style.cssText = [
+            'position:relative', 'overflow:hidden', 'border-radius:1.5rem',
+            'background:linear-gradient(135deg,#0d1f52 0%,#16285e 30%,#2f56ab 65%,#c89a35 100%)',
+            'padding:2rem 1.75rem 2rem 2rem', 'color:#fff',
+            'box-shadow:0 24px 70px rgba(22,40,94,0.4)',
+            'animation:bdayBounceIn 0.7s cubic-bezier(0.22,1,0.36,1) both, bdayBannerPulse 3s ease-in-out 0.8s 3'
+        ].join(';');
+
+        banner.innerHTML = `
+            <!-- Decorative blobs -->
+            <div style="position:absolute;top:-80px;right:-60px;width:260px;height:260px;background:radial-gradient(circle,rgba(200,154,53,0.5),transparent 60%);border-radius:50%;pointer-events:none;animation:bdayStarSpin 8s linear infinite;"></div>
+            <div style="position:absolute;bottom:-60px;left:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(155,89,182,0.35),transparent 60%);border-radius:50%;pointer-events:none;"></div>
+            <div style="position:absolute;top:50%;left:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(39,167,105,0.25),transparent 60%);border-radius:50%;pointer-events:none;transform:translateY(-50%);"></div>
+            <!-- Content -->
+            <div style="position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;">
+                <div style="flex:1;min-width:0;">
+                    <p style="font-size:0.68rem;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin:0 0 0.5rem;">${escHTML(eyebrow)}</p>
+                    <h2 style="font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;line-height:1.1;margin:0 0 0.75rem;text-shadow:0 2px 18px rgba(200,154,53,0.4);">${headLine}</h2>
+                    <p style="font-size:0.92rem;color:rgba(241,245,255,0.9);max-width:55ch;line-height:1.6;margin:0 0 1.1rem;">${escHTML(msg)}</p>
+                    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                        <span style="background:rgba(200,154,53,0.22);border:1px solid rgba(200,154,53,0.45);color:#fbbf24;font-size:0.72rem;font-weight:700;padding:0.3rem 0.75rem;border-radius:999px;letter-spacing:0.05em;">\uD83C\uDF89 Today's your birthday!</span>
+                        <span style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.85);font-size:0.72rem;font-weight:700;padding:0.3rem 0.75rem;border-radius:999px;letter-spacing:0.05em;">Keep learning today</span>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('birthday-banner').remove()"
+                    style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-size:1.2rem;line-height:1;cursor:pointer;padding:0.35rem 0.5rem;flex-shrink:0;border-radius:0.6rem;transition:background 0.15s,color 0.15s;"
+                    title="Dismiss">&times;</button>
+            </div>`;
+
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            const ref = document.getElementById('auto-join-banner');
+            if (ref && ref.nextSibling) mainContent.insertBefore(banner, ref.nextSibling);
+            else mainContent.insertBefore(banner, mainContent.firstChild);
+        }
+    }
+
+    function checkAndCelebrateUserBirthday(uData, name) {
+        if (!uData) return;
+        const tz = uData.birthTimezone || null;
+        const isGreg = isGregorianBirthdayToday(uData.birthDateGregorian, tz);
+        const isHeb  = isHebrewBirthdayToday(uData.hebrewBirthMonth, uData.hebrewBirthDay, tz);
+        if (isGreg || isHeb) {
+            showBirthdayCelebration(name || 'Friend', isHeb && !isGreg);
+        }
     }
 
     /* ════ INVITE CODE ════ */
@@ -2710,29 +4085,83 @@
     }
 
     /* ════ LOAD CHAVRUTAS ════ */
+    let lastRenderedGroupIds = null; // skip redundant re-renders
     function loadChavrutas() {
+        dlog('loadChavrutas called', { uid: currentUser?.uid });
         chavUnsubs.forEach(u=>u()); chavUnsubs=[];
 
         // Instantly show cached data while Firestore loads
         const restoredFromCache = restoreFromCache();
+        dlog('restoreFromCache:', restoredFromCache);
         if (restoredFromCache) revealDashboardShell();
 
-        const unsub = db.collection('chavrutas')
-            .where('members','array-contains',currentUser.uid)
+        const groupsQuery = db.collection('chavrutas')
+            .where('members','array-contains',currentUser.uid);
+
+        // onSnapshot fires immediately with cached data, then again when server responds.
+        // No need for a separate .get() call — it just causes race conditions.
+        const unsub = groupsQuery
             .onSnapshot(async snap => {
                 const list = snap.docs.map(d=>({id:d.id,...d.data()}));
+                dlog('onSnapshot fired', { groupCount: list.length, ids: list.map(g=>g.id), fromCache: snap.metadata.fromCache });
+
                 revealDashboardShell();
+
+                // Skip re-render if the group list hasn't changed (avoids DOM flicker)
+                // Include member/pending counts so approval changes trigger a re-render
+                const idKey = list.map(g => g.id + ':' + (g.members||[]).length + ':' + (g.pendingMembers||[]).length).sort().join(',');
+                if (lastRenderedGroupIds === idKey && list.length > 0) {
+                    dlog('Skipping re-render — same group IDs and member counts');
+                    return;
+                }
+                lastRenderedGroupIds = idKey;
+
+                dlog('Rendering', list.length, 'groups');
                 await renderChavrutas(list);
-            }, err => {
+                dlog('renderChavrutas complete');
+            }, async err => {
+                dlog('onSnapshot ERROR:', err.message || err);
                 revealDashboardShell();
-                if (!restoredFromCache) renderChavrutas([]);
+
+                // If groups are already visible on screen, don't wipe them —
+                // just retry the listener silently.
+                const grid = document.getElementById('chavrutas-grid');
+                const alreadyHasCards = grid && grid.children.length > 0;
+
+                try {
+                    const fallbackSnap = await db.collection('chavrutas')
+                        .where('members', 'array-contains', currentUser.uid)
+                        .get();
+                    const fallbackList = fallbackSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+                    dlog('Fallback query returned', fallbackList.length, 'groups');
+                    await renderChavrutas(fallbackList);
+                } catch (fallbackErr) {
+                    dlog('Fallback query also failed:', fallbackErr.message);
+                    // Only show empty state if nothing is displayed yet
+                    if (!restoredFromCache && !alreadyHasCards) renderChavrutas([]);
+                }
+                // Retry real-time listener after a short delay.
+                setTimeout(() => {
+                    if (currentUser) {
+                        dlog('Retrying loadChavrutas…');
+                        loadChavrutas();
+                    }
+                }, 5000);
             });
         chavUnsubs.push(unsub);
+    }
+
+    function saveChavrutaListForNavPicker(list) {
+        try {
+            const slim = (list || []).map(c => ({ id: c.id, name: c.name || 'Study Group' }));
+            localStorage.setItem('userChavrutaList', JSON.stringify(slim));
+        } catch (_) {}
     }
 
     /* ════ RENDER (sync — from cache, no fetches) ════ */
     function renderChavrutasSync(list) {
         userChavrutas = Array.isArray(list) ? list.slice() : [];
+        saveChavrutaListForNavPicker(userChavrutas);
         const grid    = document.getElementById('chavrutas-grid');
         const empty   = document.getElementById('empty-state');
         const countEl = document.getElementById('chavruta-count');
@@ -2747,6 +4176,7 @@
     /* ════ RENDER (async — from Firestore with fresh data) ════ */
     async function renderChavrutas(list) {
         userChavrutas = Array.isArray(list) ? list.slice() : [];
+        saveChavrutaListForNavPicker(userChavrutas);
         const grid    = document.getElementById('chavrutas-grid');
         const empty   = document.getElementById('empty-state');
         const countEl = document.getElementById('chavruta-count');
@@ -2770,35 +4200,40 @@
 
         // Render immediately with whatever names are already cached
         grid.innerHTML = list.map(cardHTML).join('');
+        saveGroupsCache(list);
 
         // If there are uncached names, fetch them in background and re-render cards
         if (uncachedUids.length > 0) {
             await fetchNames(uncachedUids);
             grid.innerHTML = list.map(cardHTML).join('');
+            saveGroupsCache(list);
         }
-
-        // Save to cache for next page load
-        saveGroupsCache(list);
     }
 
     function configureHeroStudyButton() {
         const heroBtn = document.getElementById('hero-study-btn');
         const exploreLink = document.getElementById('explore-study-link');
         const headerLink = document.getElementById('go-to-weekly');
-        const allLinks = [heroBtn, exploreLink, headerLink].filter(Boolean);
+        // explore-study-link always navigates directly; the study page handles chavruta selection.
+        // Only hero/header buttons open the dashboard modal.
+        const modalLinks = [heroBtn, headerLink].filter(Boolean);
 
         if (userChavrutas.length === 1) {
             const url = '/study?chavruta=' + userChavrutas[0].id;
-            allLinks.forEach(el => { el.href = url; el.setAttribute('title', 'Enter your study room'); });
+            modalLinks.forEach(el => { el.href = url; el.setAttribute('title', 'Enter your study room'); });
+            if (exploreLink) { exploreLink.href = url; exploreLink.setAttribute('title', 'Enter your study room'); }
             return;
         }
 
         if (userChavrutas.length > 1) {
-            allLinks.forEach(el => { el.href = '#'; el.setAttribute('title', 'Choose a study room'); });
+            modalLinks.forEach(el => { el.href = 'javascript:void(0)'; el.setAttribute('title', 'Choose a study room'); });
+            // Explore link navigates to /study directly; study page will prompt for chavruta selection
+            if (exploreLink) { exploreLink.href = '/study'; exploreLink.setAttribute('title', 'Open study room'); }
             return;
         }
 
-        allLinks.forEach(el => { el.href = 'study.html'; el.setAttribute('title', 'Open study room'); });
+        modalLinks.forEach(el => { el.href = 'study.html'; el.setAttribute('title', 'Open study room'); });
+        if (exploreLink) { exploreLink.href = '/study'; exploreLink.setAttribute('title', 'Open study room'); }
     }
 
     function openStudyRoomModal() {
@@ -2818,18 +4253,30 @@
             const membersCount = (room.members || []).length;
             const maxMembers = room.maxMembers || 8;
             return `
-                <a href="/study?chavruta=${room.id}" class="block w-full rounded-2xl border border-slate-200 bg-slate-50/70 hover:bg-slate-100 transition-colors px-4 py-3">
+                <button type="button" data-chavruta-id="${escHTML(room.id)}" class="block w-full text-left rounded-2xl border border-slate-200 bg-slate-50/70 hover:bg-slate-100 transition-colors px-4 py-3">
                     <div class="text-sm font-bold text-slate-800">${escHTML(room.name || 'Study Room')}</div>
                     <div class="text-xs text-slate-500 mt-0.5">${membersCount}/${maxMembers} members</div>
-                </a>
+                </button>
             `;
         }).join('');
 
-        modal.classList.remove('hidden');
+        options.onclick = function(e) {
+            const btn = e.target.closest('button[data-chavruta-id]');
+            if (!btn) return;
+            const id = btn.getAttribute('data-chavruta-id');
+            // Set storage BEFORE navigating so the study page picks it up immediately
+            sessionStorage.setItem('activeChavrutaId', id);
+            localStorage.setItem('lastActiveChavrutaId', id);
+            try { sessionStorage.removeItem('presenceCache'); } catch(_){}
+            window.location.href = '/study?chavruta=' + encodeURIComponent(id);
+        };
+
+        modal.style.display = '';
     }
 
     function closeStudyRoomModal() {
-        document.getElementById('study-room-modal')?.classList.add('hidden');
+        const modal = document.getElementById('study-room-modal');
+        if (modal) modal.style.display = 'none';
     }
 
     // ── Shared avatar color system (consistent across status bar + chat) ──
@@ -2965,7 +4412,7 @@
                             <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1.5">Rename Group</label>
                             <div class="flex gap-2">
                                 <input type="text" id="ren-${c.id}" value="${escHTML(c.name)}" maxlength="50" class="flex-1 px-3 py-2 border-2 border-slate-200 rounded-xl text-sm focus:border-blue-500 focus:outline-none transition-all text-slate-800">
-                                <button onclick="renameChavruta('${c.id}')" class="px-4 py-2 text-xs font-bold text-white rounded-xl transition-all" style="background:linear-gradient(135deg,#16285e,#2f56ab)">Save</button>
+                                <button onclick="renameChavruta('${c.id}',this)" class="px-4 py-2 text-xs font-bold text-white rounded-xl transition-all" style="background:linear-gradient(135deg,#16285e,#2f56ab)">Save</button>
                             </div>
                         </div>
                         <div>
@@ -2974,14 +4421,14 @@
                                 <select id="resize-${c.id}" class="flex-1 px-3 py-2 border-2 border-slate-200 rounded-xl text-sm bg-white text-slate-700 focus:border-blue-500 focus:outline-none">
                                     ${[2,3,4,5,6,7,8,10,12,15,20,25,30].filter(n=>n>=count).map(n=>`<option value="${n}"${n===max?' selected':''}>${n} people${n===30?' (Party)':''}</option>`).join('')}
                                 </select>
-                                <button onclick="resizeChavruta('${c.id}')" class="px-4 py-2 text-xs font-bold text-white rounded-xl transition-all" style="background:linear-gradient(135deg,#16285e,#2f56ab)">Resize</button>
+                                <button onclick="resizeChavruta('${c.id}',this)" class="px-4 py-2 text-xs font-bold text-white rounded-xl transition-all" style="background:linear-gradient(135deg,#16285e,#2f56ab)">Resize</button>
                             </div>
                             ${count>=max?'<p class="text-[10px] text-amber-500 mt-1.5 font-medium">Group is full! Increase the size to allow more members.</p>':''}
                         </div>
                         ${transferOpts?`<div>
                             <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1.5">Transfer Leadership</label>
                             <select id="trf-${c.id}" class="w-full px-3 py-2 border-2 border-slate-200 rounded-xl text-sm bg-white text-slate-700 focus:border-blue-500 focus:outline-none mb-2">${transferOpts}</select>
-                            <button onclick="transferLeadership('${c.id}','${escHTML(c.name)}')" class="w-full py-2 text-xs font-semibold text-amber-700 hover:text-white hover:bg-amber-500 border border-amber-300 rounded-xl transition-all">Transfer Leadership</button>
+                            <button onclick="transferLeadership('${c.id}','${escHTML(c.name)}',this)" class="w-full py-2 text-xs font-semibold text-amber-700 hover:text-white hover:bg-amber-500 border border-amber-300 rounded-xl transition-all">Transfer Leadership</button>
                         </div>`:''}
                         <div class="border-t border-slate-100 pt-3">
                             <p class="text-[10px] font-bold uppercase tracking-widest text-red-300 mb-2">Danger Zone</p>
@@ -3002,12 +4449,24 @@
             return activityTimestampMs(actB) - activityTimestampMs(actA);
         });
 
+        // Birthday banner for group card
+        const birthdayMems = mems.filter(uid => isMemberBirthdayToday(uid));
+        const birthdayBanner = birthdayMems.length ? `
+            <div style="background:linear-gradient(135deg,rgba(200,154,53,0.13),rgba(200,154,53,0.06));border:1px solid rgba(200,154,53,0.35);border-radius:0.75rem;padding:0.55rem 0.85rem;display:flex;align-items:center;gap:0.55rem;font-size:0.77rem;color:#92650a;font-weight:700;">
+                <span style="font-size:1.05rem;">🎂</span>
+                <span>${birthdayMems.length === 1
+                    ? escHTML(formatDisplayName(nameCache[birthdayMems[0]] || birthdayMems[0].slice(0,8))) + ' has a birthday today!'
+                    : birthdayMems.map(u => escHTML(formatDisplayName(nameCache[u] || u.slice(0,8)))).join(' &amp; ') + ' have birthdays today!'
+                }</span>
+            </div>` : '';
+
         const membersViewRows = membersWithActivity.map(uid => {
             const n = formatDisplayName(nameCache[uid] || uid.slice(0,8));
             const act = memberActivityCache[uid];
             const me = uid === currentUser.uid;
             const isLdr = uid === c.leader;
             const isCoLdr = coLeaders.includes(uid);
+            const isBday = isMemberBirthdayToday(uid);
             const dotCol = activityDotColor(act);
             const online = isTrulyOnline(act);
             const dotPulse = online ? 'animation:pulse 2s infinite;' : '';
@@ -3019,6 +4478,7 @@
             if (isLdr) badges += '<span style="display:inline-block;padding:1px 6px;font-size:9px;font-weight:700;color:#92400e;background:#fef3c7;border:1px solid #fde68a;border-radius:999px;margin-left:4px;">Leader</span>';
             if (isCoLdr) badges += '<span style="display:inline-block;padding:1px 6px;font-size:9px;font-weight:700;color:#6d28d9;background:#ede9fe;border:1px solid #c4b5fd;border-radius:999px;margin-left:4px;">Co-Leader</span>';
             if (me) badges += '<span style="display:inline-block;padding:1px 6px;font-size:9px;font-weight:600;color:#1e40af;background:#dbeafe;border:1px solid #bfdbfe;border-radius:999px;margin-left:4px;">You</span>';
+            if (isBday) badges += '<span style="display:inline-block;padding:1px 6px;font-size:9px;font-weight:700;color:#854d0e;background:#fef9c3;border:1px solid #fde047;border-radius:999px;margin-left:4px;">🎂 Birthday</span>';
 
             return `<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:${me?'rgba(239,246,255,0.7)':'white'};border-radius:10px;border:1px solid rgba(0,0,0,0.05);">
                 <div style="position:relative;flex-shrink:0;">
@@ -3035,7 +4495,10 @@
             </div>`;
         }).join('');
 
-        return `<div class="chavruta-card fade-up">
+        return `<div class="chavruta-glow-host fade-up">
+            <div class="cg-border" aria-hidden="true"></div>
+            <div class="cg-edge"   aria-hidden="true"></div>
+            <div class="chavruta-card">
             <div class="px-5 pt-5 pb-4" style="background:linear-gradient(135deg,#16285e 0%,#2f56ab 100%)">
                 <div class="flex items-start justify-between mb-3">
                     <h3 class="font-semibold text-white text-base leading-snug pr-2">${escHTML(c.name)}</h3>
@@ -3047,9 +4510,10 @@
                     ${canManage && pending.length ? `<span class="ml-1.5 bg-amber-400 text-amber-900 text-[10px] font-bold px-1.5 py-0.5 rounded-full">${pending.length} pending</span>` : ''}
                 </div>
             </div>
-            <div class="px-5 py-4 space-y-2.5">
+            ${birthdayBanner ? `<div class="px-4 pt-3 pb-0">${birthdayBanner}</div>` : ''}
+            <div class="px-5 py-4 space-y-2.5 chavruta-actions">
                 <a href="/study?chavruta=${c.id}"
-                   class="flex items-center justify-center gap-2 w-full py-3 rounded-2xl font-bold text-white text-sm shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 transform"
+                   class="flex items-center justify-center gap-2 w-full py-3 rounded-2xl font-bold text-white text-sm shadow-lg"
                    style="background:linear-gradient(135deg,#b7871e,#c89a35)">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                     Enter Study Room
@@ -3069,6 +4533,7 @@
                     </div>
                 </div>
                 ${settingsContent}
+            </div>
             </div>
         </div>`;
     }
@@ -3093,11 +4558,17 @@
                     const d = s.data();
                     nameCache[uid] = d.displayName||d.firstName||d.email||uid.slice(0,8);
                     memberActivityCache[uid] = { lastSeen: d.lastSeen||null, lastLogin: d.lastLogin||null, isOnline: !!d.isOnline };
+                    birthdayCache[uid] = { birthDateGregorian: d.birthDateGregorian||null, hebrewBirthMonth: d.hebrewBirthMonth||0, hebrewBirthDay: d.hebrewBirthDay||0, birthTimezone: d.birthTimezone||null };
                 } else {
                     nameCache[uid] = uid.slice(0,8);
                     memberActivityCache[uid] = { lastSeen: null, lastLogin: null, isOnline: false };
+                    birthdayCache[uid] = { birthDateGregorian: null, hebrewBirthMonth: 0, hebrewBirthDay: 0, birthTimezone: null };
                 }
-            } catch { nameCache[uid]=uid.slice(0,8); memberActivityCache[uid]={ lastSeen:null, lastLogin:null, isOnline:false }; }
+            } catch {
+                nameCache[uid]=uid.slice(0,8);
+                memberActivityCache[uid]={ lastSeen:null, lastLogin:null, isOnline:false };
+                birthdayCache[uid]={ birthDateGregorian:null, hebrewBirthMonth:0, hebrewBirthDay:0, birthTimezone:null };
+            }
         }));
     }
 
@@ -3235,6 +4706,58 @@
         return null;
     }
 
+    function getDailyQuoteSummaryCacheKey(userId, quoteId) {
+        if (!userId || quoteId == null) {
+            return null;
+        }
+        return `${DASH_QUOTE_SUMMARY_CACHE_PREFIX}::${userId}::${String(quoteId)}`;
+    }
+
+    function readDailyQuoteSummaryCache(userId, quoteId) {
+        const key = getDailyQuoteSummaryCacheKey(userId, quoteId);
+        if (!key) {
+            return null;
+        }
+        try {
+            const raw = sessionStorage.getItem(key) || localStorage.getItem(key);
+            if (!raw) {
+                return null;
+            }
+            const parsed = JSON.parse(raw);
+            const ts = Number(parsed && parsed.ts);
+            const summary = parsed && parsed.summary;
+            if (!ts || !summary || (Date.now() - ts) > DASH_QUOTE_SUMMARY_CACHE_TTL_MS) {
+                sessionStorage.removeItem(key);
+                localStorage.removeItem(key);
+                return null;
+            }
+            const userIds = Array.isArray(summary.userIds) ? summary.userIds.map((id) => String(id)) : [];
+            const names = Array.isArray(summary.names) ? summary.names.map((name) => formatDisplayName(name)) : [];
+            return {
+                count: Number(summary.count) || userIds.length || 0,
+                userIds,
+                names
+            };
+        } catch (_) {
+            return null;
+        }
+    }
+
+    function writeDailyQuoteSummaryCache(userId, quoteId, summary) {
+        const key = getDailyQuoteSummaryCacheKey(userId, quoteId);
+        if (!key || !summary) {
+            return;
+        }
+        const normalized = {
+            count: Number(summary.count) || 0,
+            userIds: Array.isArray(summary.userIds) ? summary.userIds.map((id) => String(id)) : [],
+            names: Array.isArray(summary.names) ? summary.names.map((name) => formatDisplayName(name)) : []
+        };
+        const payload = JSON.stringify({ ts: Date.now(), summary: normalized });
+        try { sessionStorage.setItem(key, payload); } catch (_) {}
+        try { localStorage.setItem(key, payload); } catch (_) {}
+    }
+
     async function getDailyQuoteBookmarkSummary(quoteId) {
         // Query each chavruta the user belongs to individually
         // (collectionGroup queries fail because rules deny reading other chavrutas)
@@ -3278,10 +4801,15 @@
     }
 
     function applyDailyQuoteSummaryUI(summary) {
+        const normalizedSummary = {
+            count: Number(summary && summary.count) || 0,
+            userIds: Array.isArray(summary && summary.userIds) ? summary.userIds.map((id) => String(id)) : [],
+            names: Array.isArray(summary && summary.names) ? summary.names.map((name) => formatDisplayName(name)) : []
+        };
         const button = document.querySelector('[data-quote-bookmark]');
         const badge = document.querySelector('.daily-quote-bookmark-count');
         const line = ensureDailyQuoteCommunityLine();
-        const isMine = Boolean(currentUser && summary.userIds.includes(currentUser.uid));
+        const isMine = Boolean(currentUser && normalizedSummary.userIds.includes(currentUser.uid));
 
         if (button) {
             button.classList.toggle('is-active', isMine);
@@ -3290,20 +4818,22 @@
         }
 
         if (badge) {
-            badge.textContent = summary.count > 0 ? String(summary.count) : '';
-            badge.classList.toggle('has-count', summary.count > 0);
+            badge.textContent = normalizedSummary.count > 0 ? String(normalizedSummary.count) : '';
+            badge.classList.toggle('has-count', normalizedSummary.count > 0);
         }
 
         if (line) {
-            if (summary.count === 0) {
+            if (normalizedSummary.count === 0) {
                 line.textContent = 'No one has bookmarked this teaching yet.';
             } else {
-                const label = summary.count === 1 ? 'bookmark' : 'bookmarks';
-                line.textContent = `${summary.count} ${label} across your chavrutot: ${summary.names.join(', ')}`;
+                const label = normalizedSummary.count === 1 ? 'bookmark' : 'bookmarks';
+                line.textContent = `${normalizedSummary.count} ${label} across your chavrutot: ${normalizedSummary.names.join(', ')}`;
             }
+            // Cache community line text for instant restore next visit
+            try { sessionStorage.setItem('dashQuoteLineCached', line.textContent); } catch(_) {}
         }
 
-        applyDailyQuoteTint(summary.count);
+        applyDailyQuoteTint(normalizedSummary.count);
     }
 
     async function refreshDailyQuoteBookmarkState(forcedQuoteId = null) {
@@ -3320,9 +4850,21 @@
             return;
         }
 
+        const cachedSummary = readDailyQuoteSummaryCache(currentUser.uid, quoteId);
+        if (cachedSummary) {
+            applyDailyQuoteSummaryUI(cachedSummary);
+        }
+
+        // Don't update UI from the network until chavrutas are known — avoids showing
+        // "No one bookmarked" before the Firestore snapshot has returned.
+        if (userChavrutas.length === 0 && forcedQuoteId === null) {
+            return;
+        }
+
         try {
             const summary = await getDailyQuoteBookmarkSummary(quoteId);
             applyDailyQuoteSummaryUI(summary);
+            writeDailyQuoteSummaryCache(currentUser.uid, quoteId, summary);
         } catch (error) {
             console.error('Failed to refresh daily quote bookmarks:', error);
         }
@@ -3387,7 +4929,7 @@
                     timestamp: FieldValue.serverTimestamp()
                 };
 
-                // Delete first to avoid update-denied (rules allow create, not update)
+                // Delete first (doc may not exist — silence that error only)
                 await Promise.all(
                     userChavrutas.map((room) =>
                         db.collection('chavrutas')
@@ -3399,6 +4941,8 @@
                     )
                 );
 
+                // Create the bookmark — let errors propagate so the outer catch
+                // can show a "Could not save" banner instead of silently failing.
                 await Promise.all(
                     userChavrutas.map((room) =>
                         db.collection('chavrutas')
@@ -3406,7 +4950,6 @@
                             .collection('dailyQuoteBookmarks')
                             .doc(bookmarkDocId)
                             .set(bookmarkPayload)
-                            .catch(() => null)
                     )
                 );
             }
@@ -3485,16 +5028,19 @@
         const snap=await db.collection('chavrutas').where('inviteCode','==',normalizedCode).limit(1).get();
         if(snap.empty) throw new Error('Code not found. Double-check and try again.');
         const doc=snap.docs[0], data=doc.data();
-        if((data.members||[]).includes(currentUser.uid)) throw new Error('You are already in this group.');
+        if((data.members||[]).includes(currentUser.uid)) {
+            sessionStorage.setItem('activeChavrutaId', doc.id);
+            return 'already_member';
+        }
         if((data.pendingMembers||[]).includes(currentUser.uid)) throw new Error('Your request to join is pending approval.');
         if((data.members||[]).length>=(data.maxMembers||8)) throw new Error('This group is full.');
 
         if (data.requireApproval) {
-            // Add to pending list instead of members
             await db.collection('chavrutas').doc(doc.id).update({pendingMembers:FieldValue.arrayUnion(currentUser.uid)});
             return 'pending';
         }
         await db.collection('chavrutas').doc(doc.id).update({members:FieldValue.arrayUnion(currentUser.uid)});
+        sessionStorage.setItem('activeChavrutaId', doc.id);
         return 'joined';
     }
 
@@ -3504,7 +5050,11 @@
             const doc=await db.collection('chavrutas').doc(id).get();
             if(!doc.exists){showBanner('Group not found.','error');return;}
             const d=doc.data();
-            if((d.members||[]).includes(currentUser.uid)){showBanner('You are already in "'+d.name+'".','info');return;}
+            if((d.members||[]).includes(currentUser.uid)){
+                sessionStorage.setItem('activeChavrutaId', id);
+                showBanner('Welcome to "'+d.name+'"!','info');
+                return;
+            }
             if((d.pendingMembers||[]).includes(currentUser.uid)){showBanner('Your request to join "'+d.name+'" is pending approval.','info');return;}
             if((d.members||[]).length>=(d.maxMembers||8)){showBanner('"'+d.name+'" is full.','warning');return;}
             if (d.requireApproval) {
@@ -3513,6 +5063,7 @@
                 return;
             }
             await db.collection('chavrutas').doc(id).update({members:FieldValue.arrayUnion(currentUser.uid)});
+            sessionStorage.setItem('activeChavrutaId', id);
             showBanner('Joined "'+d.name+'" successfully!','success');
         } catch { showBanner('Could not auto-join.','error'); }
     }
@@ -3583,6 +5134,14 @@
                 members: FieldValue.arrayUnion(uid),
                 pendingMembers: FieldValue.arrayRemove(uid)
             });
+            // Immediately update local data and re-render without waiting for onSnapshot
+            const c = userChavrutas.find(g => g.id === id);
+            if (c) {
+                if (!(c.members||[]).includes(uid)) c.members = [...(c.members||[]), uid];
+                c.pendingMembers = (c.pendingMembers||[]).filter(u => u !== uid);
+                lastRenderedGroupIds = null; // force next render
+                await renderChavrutas(userChavrutas);
+            }
             showBanner(n + ' has been added to the group!', 'success');
         } catch { alert('Failed to approve member.'); }
     }
@@ -3602,23 +5161,29 @@
     }
 
     /* ════ RENAME / TRANSFER / REGEN ════ */
-    async function renameChavruta(id){
+    function flashGreen(btn) {
+        const orig = btn.style.background;
+        btn.style.background = '#16a34a';
+        clearTimeout(btn._greenTimer);
+        btn._greenTimer = setTimeout(() => { btn.style.background = orig; }, 1500);
+    }
+    async function renameChavruta(id,btn){
         const n=document.getElementById('ren-'+id)?.value?.trim();
         if(!n||n.length<2){alert('Name must be at least 2 characters.');return;}
-        try{ await db.collection('chavrutas').doc(id).update({name:n}); } catch { alert('Failed to rename.'); }
+        try{ await db.collection('chavrutas').doc(id).update({name:n}); flashGreen(btn); } catch { alert('Failed to rename.'); }
     }
-    async function resizeChavruta(id){
+    async function resizeChavruta(id,btn){
         const sel=document.getElementById('resize-'+id);
         if(!sel) return;
         const newMax=+sel.value;
         if(newMax<1||newMax>30){alert('Invalid size.');return;}
-        try{ await db.collection('chavrutas').doc(id).update({maxMembers:newMax}); } catch { alert('Failed to resize group.'); }
+        try{ await db.collection('chavrutas').doc(id).update({maxMembers:newMax}); flashGreen(btn); } catch { alert('Failed to resize group.'); }
     }
-    async function transferLeadership(id,name){
+    async function transferLeadership(id,name,btn){
         const uid=document.getElementById('trf-'+id)?.value; if(!uid) return;
         const n=nameCache[uid]||'the selected member';
         if(!await showConfirm('Transfer Leadership','Transfer leadership of "'+name+'" to '+n+'?')) return;
-        try{ await db.collection('chavrutas').doc(id).update({leader:uid}); } catch { alert('Failed to transfer.'); }
+        try{ await db.collection('chavrutas').doc(id).update({leader:uid}); flashGreen(btn); } catch { alert('Failed to transfer.'); }
     }
     async function regenerateCode(id){
         if(!await showConfirm('Regenerate Code','The old code will stop working. Continue?')) return;
@@ -3630,12 +5195,12 @@
         return new Promise(res=>{
             document.getElementById('confirm-title').textContent=title;
             document.getElementById('confirm-message').textContent=msg;
-            document.getElementById('confirm-modal').classList.remove('hidden');
+            document.getElementById('confirm-modal').style.display='';
             confirmResolve=res;
         });
     }
     function closeConfirmModal(val){
-        document.getElementById('confirm-modal').classList.add('hidden');
+        document.getElementById('confirm-modal').style.display='none';
         if(confirmResolve){confirmResolve(val); confirmResolve=null;}
     }
 
@@ -3660,18 +5225,12 @@
         headerStudyBtn.addEventListener('click', handleStudyEntryClick);
     }
 
-    const exploreStudyLink = document.getElementById('explore-study-link');
-    if (exploreStudyLink) {
-        exploreStudyLink.addEventListener('click', handleStudyEntryClick);
-    }
+    // explore-study-link navigates directly to /study — no modal trigger needed here.
 
     const studyRoomModal = document.getElementById('study-room-modal');
     if (studyRoomModal) {
-        studyRoomModal.addEventListener('click', (event) => {
-            if (event.target === studyRoomModal) {
-                closeStudyRoomModal();
-            }
-        });
+        // No backdrop-click-to-close: prevents a touch tap opening the modal
+        // and the finger-lift immediately dismissing it via the backdrop.
     }
 
     document.addEventListener('dailyQuoteRendered', (event) => {
@@ -4320,6 +5879,69 @@
         } catch (e) { /* ignore — worst case the section stays visible */ }
     }
 
+    let dashCaptchaWidgetId = null;
+    let dashCaptchaLoaderPromise = null;
+
+    function ensureDashRecaptchaLoaded() {
+        if (window.grecaptcha && typeof window.grecaptcha.render === 'function') {
+            return Promise.resolve(window.grecaptcha);
+        }
+
+        if (dashCaptchaLoaderPromise) {
+            return dashCaptchaLoaderPromise;
+        }
+
+        dashCaptchaLoaderPromise = new Promise((resolve, reject) => {
+            const waitForApi = () => {
+                const startedAt = Date.now();
+                (function poll() {
+                    if (window.grecaptcha && typeof window.grecaptcha.render === 'function') {
+                        resolve(window.grecaptcha);
+                        return;
+                    }
+                    if ((Date.now() - startedAt) > 12000) {
+                        reject(new Error('Timed out while loading reCAPTCHA.'));
+                        return;
+                    }
+                    setTimeout(poll, 90);
+                })();
+            };
+
+            const existingScript = document.querySelector('script[data-dash-recaptcha="1"]');
+            if (existingScript) {
+                waitForApi();
+                return;
+            }
+
+            const script = document.createElement('script');
+            script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+            script.async = true;
+            script.defer = true;
+            script.dataset.dashRecaptcha = '1';
+            script.onload = waitForApi;
+            script.onerror = () => reject(new Error('Could not load reCAPTCHA script.'));
+            document.head.appendChild(script);
+        });
+
+        return dashCaptchaLoaderPromise;
+    }
+
+    async function ensureDashRecaptchaWidget() {
+        const recaptcha = await ensureDashRecaptchaLoaded();
+        const widgetEl = document.querySelector('#dash-nl-captcha-wrap .g-recaptcha');
+        if (!widgetEl) {
+            return null;
+        }
+        if (dashCaptchaWidgetId !== null) {
+            return dashCaptchaWidgetId;
+        }
+        dashCaptchaWidgetId = recaptcha.render(widgetEl, {
+            sitekey: widgetEl.getAttribute('data-sitekey') || '',
+            theme: widgetEl.getAttribute('data-theme') || 'dark'
+        });
+        return dashCaptchaWidgetId;
+    }
+
     async function handleDashNewsletterSignup(e) {
         e.preventDefault();
         var email = document.getElementById('dash-nl-email').value.trim().toLowerCase();
@@ -4343,9 +5965,25 @@
         var captchaWrap = document.getElementById('dash-nl-captcha-wrap');
         if (captchaWrap.classList.contains('hidden')) {
             captchaWrap.classList.remove('hidden');
+            ensureDashRecaptchaWidget().catch(() => {
+                errEl.textContent = 'Could not load verification. Please try again.';
+                errEl.classList.remove('hidden');
+            });
             return;
         }
-        if (!grecaptcha.getResponse()) {
+        try {
+            await ensureDashRecaptchaWidget();
+        } catch (_) {
+            errEl.textContent = 'Could not load verification. Please try again.';
+            errEl.classList.remove('hidden');
+            return;
+        }
+        if (!(window.grecaptcha && typeof window.grecaptcha.getResponse === 'function')) {
+            errEl.textContent = 'Could not load verification. Please try again.';
+            errEl.classList.remove('hidden');
+            return;
+        }
+        if (!window.grecaptcha.getResponse(dashCaptchaWidgetId !== null ? dashCaptchaWidgetId : undefined)) {
             errEl.textContent = 'Please check the "I\'m not a robot" box.';
             errEl.classList.remove('hidden');
             return;
@@ -4370,7 +6008,9 @@
             console.error('Newsletter signup error:', err);
             errEl.textContent = 'Something went wrong. Please try again.';
             errEl.classList.remove('hidden');
-            grecaptcha.reset();
+            if (window.grecaptcha && typeof window.grecaptcha.reset === 'function') {
+                window.grecaptcha.reset(dashCaptchaWidgetId !== null ? dashCaptchaWidgetId : undefined);
+            }
         } finally {
             btn.disabled = false;
             btn.textContent = 'Subscribe';
@@ -4379,5 +6019,323 @@
 </script>
     <script src="/js/sidebar-nav.js"></script>
     <script src="/js/shabbat.js"></script>
+
+
+    <script>
+    /* ── Card glow effects — event delegation ───────────────────────────────
+       Uses document-level delegation so dynamically injected chavruta cards
+       (loaded async from Firebase) are handled without re-attachment.
+       Walks ancestor chain so nested elements (.chavruta-actions inside
+       .chavruta-card) both activate independently. */
+    var GLOW_SEL = '.dash-explore-card';
+
+    // Activate all matching ancestors when pointer enters any descendant
+    document.addEventListener('pointerover', function (e) {
+      var el = e.target;
+      while (el && el !== document.documentElement) {
+        if (el.matches && el.matches(GLOW_SEL)) {
+          el.style.setProperty('--active', '1');
+        }
+        el = el.parentElement;
+      }
+    });
+
+    // Deactivate only matching ancestors that the pointer actually left
+    document.addEventListener('pointerout', function (e) {
+      var related = e.relatedTarget;
+      var el = e.target;
+      while (el && el !== document.documentElement) {
+        if (el.matches && el.matches(GLOW_SEL)) {
+          if (!related || !el.contains(related)) {
+            el.style.setProperty('--active', '0');
+          }
+        }
+        el = el.parentElement;
+      }
+    });
+
+    // Update angle + inner-glow position for each matching ancestor independently
+    document.addEventListener('pointermove', function (e) {
+      var el = e.target;
+      while (el && el !== document.documentElement) {
+        if (el.matches && el.matches(GLOW_SEL)) {
+          var rect = el.getBoundingClientRect();
+          var angle = Math.atan2(e.clientY - (rect.top  + rect.height / 2),
+                                 e.clientX - (rect.left + rect.width  / 2)) * (180 / Math.PI) + 90;
+          el.style.setProperty('--start',  angle);
+          el.style.setProperty('--glow-x', (e.clientX - rect.left) + 'px');
+          el.style.setProperty('--glow-y', (e.clientY - rect.top)  + 'px');
+        }
+        el = el.parentElement;
+      }
+    });
+
+    /* ── Chavruta card BorderGlow — React Bits algorithm ────────────────────
+       --edge-proximity: 0 (center) → 100 (edge), controls overall opacity.
+       --cursor-x/y:     % position within card, drives radial spotlight mask
+       so the ring and outer glow follow the cursor precisely.              */
+    document.addEventListener('pointermove', function (e) {
+      var el = e.target;
+      while (el && el !== document.documentElement) {
+        if (el.matches && el.matches('.chavruta-glow-host')) {
+          var rect = el.getBoundingClientRect();
+          var x  = e.clientX - rect.left;
+          var y  = e.clientY - rect.top;
+          var cx = rect.width  / 2;
+          var cy = rect.height / 2;
+          var dx = x - cx;
+          var dy = y - cy;
+          var kx = dx !== 0 ? cx / Math.abs(dx) : Infinity;
+          var ky = dy !== 0 ? cy / Math.abs(dy) : Infinity;
+          var edge = Math.min(Math.max(1 / Math.min(kx, ky), 0), 1);
+          el.style.setProperty('--edge-proximity', (edge * 100).toFixed(2));
+          el.style.setProperty('--cursor-x', (x / rect.width  * 100).toFixed(2) + '%');
+          el.style.setProperty('--cursor-y', (y / rect.height * 100).toFixed(2) + '%');
+          break;
+        }
+        el = el.parentElement;
+      }
+    });
+
+    /* ── Welcome subtitle cycling phrases ───────────────────────────────────
+       Rotates every 4 seconds with a smooth spring-eased fade+slide. */
+    (function initRotating() {
+      var el = document.getElementById('dash-rotating-sub');
+      if (!el) return;
+
+      var phrases = [
+        'Choose a study group below, or explore the site.',
+        'Your weekly parsha awaits — open it with your chavruta.',
+        'Ready to learn? Your study room is one click away.',
+        'Explore prayers, songs, and holiday guides any time.',
+        'The scroll is alive. Your letter belongs in it.',
+      ];
+
+      var idx = 0;
+
+      setInterval(function () {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-6px)';
+
+        setTimeout(function () {
+          idx = (idx + 1) % phrases.length;
+          el.textContent = phrases[idx];
+          el.style.transform = 'translateY(6px)';
+
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              el.style.opacity = '1';
+              el.style.transform = 'translateY(0)';
+            });
+          });
+        }, 380);
+      }, 4200);
+    })();
+
+    /* ── Personal Daily Psalm helpers ─────────────────────────────────────── */
+    function computeAndShowPersonalPsalm(birthday) {
+        try {
+            // Use numberingSystem:'latn' to force Arabic digits on all platforms —
+            // Safari returns Hebrew letters (e.g. "תשפ״ד") for year:'numeric' with ca-hebrew.
+            var fmtNum = new Intl.DateTimeFormat('en-US', {
+                calendar: 'hebrew',
+                numberingSystem: 'latn',
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric'
+            });
+            var now = new Date();
+            var parts = {};
+            fmtNum.formatToParts(now).forEach(function(p) { parts[p.type] = p.value; });
+            var curYear  = parseInt(parts.year,  10);
+            var curMonth = parseInt(parts.month, 10);
+            var curDay   = parseInt(parts.day,   10);
+
+            if (!curYear || !curMonth || !curDay) return;
+
+            var age = curYear - birthday.year;
+            if (curMonth < birthday.month || (curMonth === birthday.month && curDay < birthday.day)) age--;
+            var psalm = age + 1;
+
+            if (psalm >= 1 && psalm <= 150) {
+                var row = document.getElementById('dt-personal-row');
+                var num = document.getElementById('dt-personal-num');
+                if (row) row.classList.remove('hidden');
+                if (num) num.textContent = 'Psalm ' + psalm;
+            }
+        } catch(e) {}
+    }
+
+    /* ── Daily Tehillim card — full Hebrew-calendar logic ──────────────────── */
+    (function loadDailyTehillim() {
+        var CACHE_KEY = 'tehillim_v3';
+        var TTL = 22 * 60 * 60 * 1000; // 22h so it refreshes before next day
+
+        var PORTIONS = [
+            null,
+            { c: 'Psalms 1–9',       s: 'The Foundation of Faith: Torah study over sin. Portrays the coronation of the Anointed King and God\'s kindness in giving Torah to mortals.' },
+            { c: 'Psalms 10–17',     s: 'Navigating Distress: Addresses the arrogance of the wicked and inner refinement through suffering. Ends with David\'s plea to be guarded as the "apple of God\'s eye".' },
+            { c: 'Psalms 18–22',     s: 'Deliverance and Song: David\'s epic rescue from Saul, the prayer for a day of distress, and the profound cry of faith from the depths of abandonment.' },
+            { c: 'Psalms 23–28',     s: 'Trust and Light: The timeless "The Lord is my shepherd" and "The Lord is my light," used as a spiritual shield against fear.' },
+            { c: 'Psalms 29–34',     s: 'Power and Forgiveness: The Voice of God over the waters, the dedication of the Holy Temple, and the joy of complete repentance.' },
+            { c: 'Psalms 35–38',     s: 'Victory over Evil: David pleads for help against those who return evil for good. Focuses on the eventual downfall of the wicked.' },
+            { c: 'Psalms 39–43',     s: 'The Thirsting Soul: Reflects on the brevity of human life. Contains the famous longing of the soul like a "deer crying for water" in exile.' },
+            { c: 'Psalms 44–48',     s: 'National Redemption: Laments the bitterness of exile, prophesies future wars, and the ultimate beauty of a rebuilt Mount Zion.' },
+            { c: 'Psalms 49–54',     s: 'Ethics and Repentance: Rebukes those who trust in wealth. Includes David\'s historic confession after the incident with Bathsheba.' },
+            { c: 'Psalms 55–59',     s: 'Betrayal and Shelter: David\'s prayers while fleeing Jerusalem, teaching trust even when surrounded by enemies and treacherous friends.' },
+            { c: 'Psalms 60–65',     s: 'Restoration and Thirst: Prayers for national restoration and the soul\'s intense thirst for God in the "desolate and dry land" of Judea.' },
+            { c: 'Psalms 66–68',     s: 'Universal Praise: A vision of the entire earth singing to God. Recalls the giving of the Torah at Sinai and God\'s fatherly protection of orphans.' },
+            { c: 'Psalms 69–71',     s: 'Plea of the Elderly: A desperate cry for help in "deep waters". David prays that God will not forsake him in his old age.' },
+            { c: 'Psalms 72–76',     s: 'The King\'s Justice: David\'s prayer for Solomon\'s reign. Struggles with the "prosperity of the wicked" and finds comfort in the Sanctuary.' },
+            { c: 'Psalms 77–78',     s: 'Miracles of Old: A spiritual meditation on God\'s wonders. Recounts Jewish history from Egypt to the Davidic kingdom.' },
+            { c: 'Psalms 79–82',     s: 'Mourning and Justice: Mourns the destruction of Jerusalem. Features the "Vine from Egypt" allegory and calls for justice for the poor.' },
+            { c: 'Psalms 83–87',     s: 'The Glory of Zion: A prayer against national conspiracies. Praises the holiness of the Temple courtyards and Jerusalem\'s unique scholars.' },
+            { c: 'Psalms 88–89',     s: 'Covenant and Darkness: The most somber psalm — a soul in the "lowest pit". Recalls the eternal covenant and lovingkindness promised to King David.' },
+            { c: 'Psalms 90–96',     s: 'The Prayer of Moses: Reflects on the eternity of God vs. the transience of man. Includes the protective Psalm 91 and the Sabbath day song.' },
+            { c: 'Psalms 97–103',    s: 'Joy in Judgment: Describes the world rejoicing in God\'s Kingship. Features the thanksgiving offering and the call to bless God for His favors.' },
+            { c: 'Psalms 104–105',   s: 'Creation and Covenant: A masterpiece on the wonders of nature. Recounts the miracles for the Patriarchs fulfilling God\'s promise of the land.' },
+            { c: 'Psalms 106–107',   s: 'Rebellion and Mercy: A confession of national sins throughout history. Features four groups who must thank God for surviving life-threatening dangers.' },
+            { c: 'Psalms 108–112',   s: 'Steadfast Praise: David\'s heart is firm in song. Discusses the reward of charity and the "fear of God" as the beginning of all wisdom.' },
+            { c: 'Psalms 113–118',   s: 'The Hallel: A cycle of praise used on festivals. Recalls the splitting of the sea and God\'s power to lift the destitute from the dunghill.' },
+            { c: 'Psalm 119 (א–ל)',  s: 'The ABCs of Life (Pt 1): The first 96 verses of the great alphabetic acrostic, each expressing a different facet of devotion to God\'s Torah.' },
+            { c: 'Psalm 119 (מ–ת)', s: 'The ABCs of Life (Pt 2): Completes the acrostic. Highlights the Torah as a "lamp to my feet" and a source of life during persecution.' },
+            { c: 'Psalms 120–134',   s: 'Songs of Ascent: Fifteen songs sung by pilgrims ascending to the Temple. Themes of peace, divine protection, and the unity of brothers.' },
+            { c: 'Psalms 135–139',   s: 'God\'s Nearness: Contrasts the living God with dead idols. Includes "By the rivers of Babylon" and God\'s knowledge of us even in the womb.' },
+            { c: 'Psalms 140–144',   s: 'Shield from Slander: Prayers for protection from evil speech and violence. Includes a lesson on placing a "guard for the mouth".' },
+            { c: 'Psalms 145–150',   s: 'The Grand Finale: The Ashrei, promising God\'s support for all who fall. Concludes with a crescendo of Hallelujahs from every soul and instrument.' }
+        ];
+
+        function cacheGet(k) {
+            try { var o = JSON.parse(localStorage.getItem(k)); return o && Date.now() < o.expires ? o.data : null; }
+            catch(e) { return null; }
+        }
+
+        function applyResult(result) {
+            var refEl  = document.getElementById('dt-ref-text');
+            var dayEl  = document.getElementById('dt-day-badge');
+            var noteEl = document.getElementById('dt-combined-note');
+            var sigEl  = document.getElementById('dt-sig');
+            var extEl  = document.getElementById('dt-extras');
+
+            if (refEl) refEl.textContent = result.chapters || '';
+            if (dayEl) dayEl.textContent = 'Day ' + (result.day || '—');
+            if (noteEl && result.combined) noteEl.classList.remove('hidden');
+            if (sigEl)  sigEl.textContent = result.sig || '';
+
+            if (extEl) {
+                extEl.innerHTML = '';
+                (result.extras || []).forEach(function(e) {
+                    var span = document.createElement('span');
+                    span.className = 'dt-extra-badge';
+                    span.title = e.note || '';
+                    span.textContent = '+ ' + e.text;
+                    extEl.appendChild(span);
+                });
+            }
+
+            // Expose Hebrew date for personal-psalm logic
+            window._tehillimHebDate = { day: result.day, monthName: result.monthName, month: result.month, year: result.year };
+        }
+
+        function compute() {
+            var fmt     = new Intl.DateTimeFormat('en-US-u-ca-hebrew', { day: 'numeric', month: 'long', year: 'numeric' });
+            var fmtNum  = new Intl.DateTimeFormat('en-US-u-ca-hebrew', { day: 'numeric', month: 'numeric', year: 'numeric' });
+            var now     = new Date();
+            var parts   = {}, numParts = {};
+            fmt.formatToParts(now).forEach(function(p) { parts[p.type] = p.value; });
+            fmtNum.formatToParts(now).forEach(function(p) { numParts[p.type] = p.value; });
+
+            var hDay       = parseInt(parts.day,      10);
+            var hMonthName = (parts.month || '').trim();
+            var hYear      = parseInt(numParts.year,  10);
+            var hMonth     = parseInt(numParts.month, 10);
+
+            // Detect month length (probe +30 days to see if still in same month)
+            var probe = new Date(now);
+            probe.setDate(now.getDate() + (30 - hDay));
+            var probeNum = {};
+            fmtNum.formatToParts(probe).forEach(function(p) { probeNum[p.type] = p.value; });
+            var daysInMonth = (parseInt(probeNum.month, 10) === hMonth) ? 30 : 29;
+
+            var day      = Math.min(Math.max(hDay, 1), 30);
+            var combined = (day === 29 && daysInMonth === 29);
+            var portion  = combined
+                ? { c: 'Psalms 140–150', s: PORTIONS[29].s + ' ' + PORTIONS[30].s }
+                : PORTIONS[day];
+
+            var monthLower = hMonthName.toLowerCase();
+            var isElul     = monthLower === 'elul';
+            var isTishrei  = monthLower.startsWith('tishrei') || monthLower.startsWith('tishri');
+
+            // ── Seasonal extra chapters (Baal Shem Tov: Elul 1 – Yom Kippur) ──
+            var elulExtra = null;
+            var inElulSeason = isElul || (isTishrei && hDay <= 10);
+            if (inElulSeason) {
+                var offset = isElul ? (hDay - 1) : (29 + hDay - 1);
+                if (isTishrei && hDay === 10) {
+                    elulExtra = 'Psalms 115–150 (Yom Kippur)';
+                } else {
+                    var start = 3 * offset + 1;
+                    elulExtra = 'Psalms ' + start + '–' + (start + 2);
+                }
+            }
+
+            // ── Psalm 27 (L'David): Elul 1 through Hoshana Rabbah (21 Tishrei) ──
+            var psalm27 = isElul || (isTishrei && hDay <= 21);
+
+            // ── Rosh Chodesh: add Psalm 104 ──
+            var isRoshChodesh = (hDay === 1) || (hDay === 30 && daysInMonth === 30);
+            // Avoid double-adding if day 21 of Tishrei (Hoshana Rabbah) which is neither Rosh Chodesh
+            // Rosh Hashana (1 Tishrei) is also Rosh Chodesh — include it
+            var psalm104 = isRoshChodesh;
+
+            var extras = [];
+            if (psalm104)   extras.push({ text: 'Psalm 104', note: 'Rosh Chodesh — Barchi Nafshi' });
+            if (elulExtra)  extras.push({ text: elulExtra,   note: 'Baal Shem Tov custom (Elul–Yom Kippur)' });
+            if (psalm27)    extras.push({ text: 'Psalm 27',  note: 'L\'David Hashem Ori (Elul – Hoshana Rabbah)' });
+
+            return {
+                day:       day,
+                chapters:  portion ? portion.c : '',
+                sig:       portion ? portion.s : '',
+                combined:  combined,
+                extras:    extras,
+                monthName: hMonthName,
+                month:     hMonth,
+                year:      hYear
+            };
+        }
+
+        // Try cache
+        var cached = cacheGet(CACHE_KEY);
+        if (cached && cached.chapters) { applyResult(cached); }
+
+        // Always recompute fresh (cache only avoids flicker)
+        try {
+            var result = compute();
+            try { localStorage.setItem(CACHE_KEY, JSON.stringify({ data: result, expires: Date.now() + TTL })); } catch(e) {}
+            applyResult(result);
+        } catch(e) {
+            // Intl fallback: Sefaria API
+            if (!cached) {
+                fetch('https://www.sefaria.org/api/calendars').then(function(r){ return r.ok ? r.json() : null; })
+                    .then(function(data) {
+                        if (!data || !data.calendar_items) return;
+                        var item = data.calendar_items.find(function(i){
+                            var en = ((i.title && i.title.en) || '').toLowerCase();
+                            return en === 'daily psalms' || en.indexOf('psalm') !== -1;
+                        });
+                        if (item) {
+                            var refEl = document.getElementById('dt-ref-text');
+                            if (refEl) refEl.textContent = item.displayValue && item.displayValue.en || '';
+                        }
+                    }).catch(function(){});
+            }
+        }
+    })();
+    </script>
+
+    <div id="shared-footer-mount"></div>
+    <script src="/js/footer-loader.js"></script>
 </body>
 </html>

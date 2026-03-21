@@ -868,6 +868,38 @@
     }
 }
 
+/* ── Study page significance modal — keep X always visible ── */
+@media (max-width: 768px) {
+    /* Align to top so long content doesn't push header above viewport */
+    #verse-significance-modal {
+        align-items: flex-start !important;
+        padding: 0.75rem !important;
+        overflow-y: auto !important;
+    }
+    /* Inner dialog: constrain height, scroll internally */
+    #verse-significance-modal > div {
+        display: flex !important;
+        flex-direction: column !important;
+        max-height: calc(100dvh - 1.5rem) !important;
+        overflow: hidden !important; /* clip rounded corners */
+        margin-top: 0 !important;
+    }
+    /* Header with X: sticky at top — never scrolls away */
+    #verse-significance-modal > div > div:first-child {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 2 !important;
+        flex-shrink: 0 !important;
+    }
+    /* Body: scrollable */
+    #verse-significance-modal > div > div:last-child {
+        overflow-y: auto !important;
+        flex: 1 !important;
+        min-height: 0 !important;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
 /* ── Study page mobile ── */
 @media (max-width: 768px) {
     /* Verse containers */

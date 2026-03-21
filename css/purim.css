@@ -2013,6 +2013,12 @@ a.splash-btn {
     color: rgba(219, 234, 254, 0.9);
 }
 
+/* Footer removed sitewide */
+footer,
+.page-footer {
+    display: none !important;
+}
+
 /* Landing-page splash decos are positioned relative to .purim-landing-main */
 .purim-landing-main .splash-deco {
     position: absolute;

@@ -38,19 +38,29 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             line-height: 1.7;
-            background:
-                radial-gradient(circle at 10% 10%, rgba(58, 99, 190, 0.16), transparent 40%),
-                radial-gradient(circle at 90% 20%, rgba(212, 168, 67, 0.14), transparent 42%),
-                linear-gradient(180deg, #f8fbff 0%, #f2f6fc 100%);
+            background: #f5f3ee;
             color: #1f2a44;
+        }
+        /* Warm parchment-inspired page background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -10;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse at 15% 8%, rgba(200, 154, 53, 0.08), transparent 50%),
+                radial-gradient(ellipse at 85% 15%, rgba(35, 64, 143, 0.06), transparent 45%),
+                radial-gradient(ellipse at 50% 90%, rgba(200, 154, 53, 0.05), transparent 50%),
+                linear-gradient(175deg, #faf8f4 0%, #f0ece4 40%, #eae6dc 100%);
         }
         .font-heading {
             font-family: 'Cormorant Garamond', serif;
         }
         .gradient-header {
-            background: linear-gradient(138deg, #16285e 0%, #23408f 45%, #2f56ab 100%);
+            background: linear-gradient(138deg, #0c1a3a 0%, #162b60 40%, #1e3d7a 75%, #274d94 100%);
             background-size: 200% 200%;
-            animation: gradientShift 8s ease infinite;
+            animation: gradientShift 12s ease infinite;
         }
         @keyframes gradientShift {
             0%, 100% { background-position: 0% 50%; }
@@ -71,43 +81,72 @@
         }
         .tab-inactive {
             border-bottom: 3px solid transparent;
-            color: #6b7280;
+            color: #8b8d94;
         }
         .tab-inactive:hover {
-            color: #2563eb;
-            border-bottom-color: #dbeafe;
+            color: #274d94;
+            border-bottom-color: rgba(200, 154, 53, 0.3);
         }
         .input-field {
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: border-color 0.25s, box-shadow 0.25s;
+            background: rgba(255, 255, 255, 0.7);
         }
         .input-field:focus {
-            border-color: #274ea8;
-            box-shadow: 0 0 0 3px rgba(39, 78, 168, 0.15);
+            border-color: #c89a35;
+            box-shadow: 0 0 0 3px rgba(200, 154, 53, 0.12);
+            background: #fff;
         }
         .fade-in {
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.35s ease-out;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .decorative-line {
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #c89a35, transparent);
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #c89a35 30%, #c89a35 70%, transparent);
         }
+
+        /* ── Card system ─────────────────────────────────────────────── */
         .mission-card {
             position: relative;
-            border: 1px solid rgba(25, 52, 122, 0.13);
-            background:
-                radial-gradient(circle at 85% 15%, rgba(212, 168, 67, 0.2), transparent 35%),
-                linear-gradient(170deg, rgba(255, 255, 255, 0.95), rgba(245, 250, 255, 0.97));
-            box-shadow: 0 24px 60px rgba(23, 42, 95, 0.14);
+            border: 1px solid rgba(200, 154, 53, 0.18);
+            background: linear-gradient(170deg, #ffffff 0%, #fdfcf9 100%);
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.04),
+                0 4px 12px rgba(23, 42, 95, 0.06),
+                0 20px 50px rgba(23, 42, 95, 0.08);
+            border-radius: 1.5rem;
+        }
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            border-radius: 1.5rem 1.5rem 0 0;
+            background: linear-gradient(90deg, #c89a35 0%, #d4af37 50%, #c89a35 100%);
+            opacity: 0.7;
         }
         .auth-card {
-            background: rgba(255, 255, 255, 0.94);
-            backdrop-filter: blur(7px);
-            border: 1px solid rgba(19, 43, 102, 0.1);
-            box-shadow: 0 22px 58px rgba(28, 48, 103, 0.16);
+            background: linear-gradient(170deg, #ffffff 0%, #fdfcf9 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(200, 154, 53, 0.18);
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.04),
+                0 4px 12px rgba(23, 42, 95, 0.06),
+                0 20px 50px rgba(23, 42, 95, 0.08);
+            position: relative;
+        }
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            border-radius: 1.5rem 1.5rem 0 0;
+            background: linear-gradient(90deg, #1e3d7a 0%, #c89a35 50%, #1e3d7a 100%);
+            opacity: 0.6;
+            z-index: 1;
         }
         .mission-point {
             border: 1px solid rgba(37, 78, 168, 0.13);
@@ -117,8 +156,16 @@
             border-left: 3px solid #c89a35;
             background: rgba(255, 251, 242, 0.8);
         }
-        .mfeat { transition: background 0.2s ease; }
-        .mfeat:hover { background: rgba(235,244,255,0.95) !important; }
+        .mfeat {
+            transition: all 0.25s ease;
+            border: 1px solid rgba(200, 154, 53, 0.12) !important;
+            background: rgba(255, 255, 255, 0.6) !important;
+        }
+        .mfeat:hover {
+            background: rgba(253, 250, 240, 0.9) !important;
+            border-color: rgba(200, 154, 53, 0.25) !important;
+            box-shadow: 0 2px 8px rgba(200, 154, 53, 0.08);
+        }
         .mfeat-body { transition: max-height 0.32s ease; }
         .mfeat-chevron { transition: transform 0.22s ease; flex-shrink: 0; }
         .spinner {
@@ -133,9 +180,17 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
         .modal-overlay {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
+            background: rgba(12, 20, 40, 0.55);
+            backdrop-filter: blur(6px);
         }
         /* Subtle pattern overlay */
         .pattern-overlay {
@@ -144,38 +199,68 @@
         /* Google button */
         .google-btn {
             background: white;
-            border: 2px solid #e5e7eb;
-            transition: all 0.2s ease;
+            border: 1.5px solid #e0ddd6;
+            transition: all 0.25s ease;
+            border-radius: 0.75rem;
         }
         .google-btn:hover {
-            border-color: #d1d5db;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-color: #c89a35;
+            box-shadow: 0 2px 12px rgba(200,154,53,0.1);
+            background: #fffdf8;
         }
         /* Divider */
         .or-divider {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
         .or-divider::before, .or-divider::after {
             content: '';
             flex: 1;
             height: 1px;
-            background: #e5e7eb;
+            background: linear-gradient(90deg, transparent, #d5d0c4, transparent);
         }
-        @media (max-width: 1023px) {
-            .mission-card {
-                padding-top: 2rem;
-                padding-bottom: 2rem;
-                order: 2;
+
+        /* ── Bottom section cards ─────────────────────────────────────── */
+        .bottom-card {
+            background: linear-gradient(170deg, #ffffff 0%, #fdfcf9 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(200, 154, 53, 0.18);
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.04),
+                0 4px 12px rgba(23, 42, 95, 0.06),
+                0 20px 50px rgba(23, 42, 95, 0.08);
+            position: relative;
+            border-radius: 1.5rem;
+            overflow: hidden;
+        }
+        .bottom-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent 10%, #c89a35, transparent 90%);
+            opacity: 0.5;
+        }
+
+        /* Two-column login layout */
+        @media (min-width: 768px) {
+            .login-two-col {
+                grid-template-columns: 1fr 1fr !important;
             }
-            /* Show auth card first on mobile */
-            .login-right-column {
-                order: 1;
-            }
+        }
+        @media (max-width: 767px) {
+            .login-left-col { order: 1; }
+            .login-right-col { order: 2; }
+        }
+        /* Feature grid responsive */
+        @media (max-width: 899px) and (min-width: 600px) {
+            .feature-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+        @media (max-width: 599px) {
+            .feature-grid { grid-template-columns: 1fr !important; }
         }
         @media (max-width: 640px) {
-            /* Fix About button placement on mobile login header */
             .login-header-inner {
                 flex-direction: column;
                 gap: 0.5rem;
@@ -188,13 +273,79 @@
                 justify-content: center;
                 width: 100%;
             }
+            .coffee-btn-wrap {
+                margin-bottom: 2.5rem;
+            }
         }
+
+        /* ── Parallax floating Hebrew letter accents ───────────────────── */
+        .parallax-letter {
+            position: absolute;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.055);
+            pointer-events: none;
+            user-select: none;
+            will-change: transform;
+            transition: transform 0.1s linear;
+            direction: rtl;
+            line-height: 1;
+        }
+
+        /* ── Flip Words animated subtitle ──────────────────────────────── */
+        .fw-wrap {
+            display: block;
+            position: relative;
+            min-height: 1.65em;
+        }
+        .fw-word {
+            position: absolute;
+            left: 0;
+            right: 0;
+            text-align: center;
+            opacity: 0;
+            filter: blur(5px);
+            transform: translateY(10px);
+            transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                        filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+            color: rgba(255, 210, 80, 0.95);
+            font-style: italic;
+        }
+        .fw-word.fw-active {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0);
+        }
+        .fw-word.fw-exit {
+            opacity: 0;
+            filter: blur(5px);
+            transform: translateY(-10px);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .fw-word { transition: opacity 0.3s ease; filter: none !important; transform: none !important; }
+        }
+
+        /* ── Refined button styling ────────────────────────────────────── */
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3d7a 0%, #274d94 100%);
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #162b60 0%, #1e3d7a 100%);
+            box-shadow: 0 4px 16px rgba(30, 61, 122, 0.25);
+            transform: translateY(-1px);
+        }
+        .btn-primary:active { transform: translateY(0); }
+
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col">
 
     <!-- Invite Banner (hidden by default) -->
-    <div id="invite-banner" class="hidden bg-gradient-to-r from-amber-50 to-yellow-50 border-b border-amber-200 px-4 py-3 text-center">
+    <div id="invite-banner" class="hidden px-4 py-3 text-center" style="background:linear-gradient(90deg,#fdf8ed,#fef6e0,#fdf8ed);border-bottom:1px solid rgba(200,154,53,0.2);">
         <p class="text-sm font-medium text-amber-900">
             <svg class="inline-block w-5 h-5 mr-1 -mt-0.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -204,7 +355,7 @@
     </div>
 
     <!-- Header -->
-    <header class="gradient-header shadow-lg relative overflow-hidden" style="padding:3rem 1rem 3.6rem;">
+    <header class="gradient-header relative overflow-hidden" style="padding:3.2rem 1rem 3.8rem;box-shadow:0 4px 30px rgba(12,26,58,0.2);">
         <div class="pattern-overlay absolute inset-0"></div>
         <!-- Background glow accents -->
         <div style="position:absolute;width:400px;height:400px;top:-200px;right:-100px;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,0.18),transparent 70%);pointer-events:none;"></div>
@@ -214,380 +365,408 @@
             <span style="font-family:'Cormorant Garamond',serif;font-size:clamp(5rem,14vw,10rem);font-weight:700;color:rgba(255,255,255,0.045);direction:rtl;line-height:1;user-select:none;white-space:nowrap;letter-spacing:0.04em;">אוֹת בַּתּוֹרָה</span>
         </div>
         <!-- About button -->
-        <div style="position:absolute;top:1rem;right:1rem;z-index:2;">
-            <a href="/about" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.45rem 1rem;border-radius:999px;font-size:0.82rem;font-weight:600;color:#fff;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);text-decoration:none;backdrop-filter:blur(4px);transition:background 0.2s ease;" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
-                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div style="position:absolute;top:1.1rem;right:1.1rem;z-index:2;">
+            <a href="/about" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.45rem 1.1rem;border-radius:999px;font-size:0.8rem;font-weight:600;color:rgba(255,220,130,0.9);background:rgba(255,255,255,0.08);border:1px solid rgba(212,175,55,0.25);text-decoration:none;backdrop-filter:blur(6px);transition:all 0.25s ease;letter-spacing:0.03em;" onmouseover="this.style.background='rgba(212,175,55,0.15)';this.style.borderColor='rgba(212,175,55,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.borderColor='rgba(212,175,55,0.25)'">
+                <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 About
             </a>
         </div>
+        <!-- Parallax floating Hebrew letter accents -->
+        <span class="parallax-letter" data-depth="0.6" style="font-size:4.5rem;top:12%;left:6%;" aria-hidden="true">א</span>
+        <span class="parallax-letter" data-depth="1.3" style="font-size:3rem;top:15%;right:9%;" aria-hidden="true">ב</span>
+        <span class="parallax-letter" data-depth="0.9" style="font-size:3.8rem;bottom:8%;left:10%;" aria-hidden="true">ש</span>
+        <span class="parallax-letter" data-depth="1.6" style="font-size:2.5rem;bottom:18%;right:5%;" aria-hidden="true">ת</span>
+        <span class="parallax-letter" data-depth="0.5" style="font-size:3.2rem;top:55%;left:2%;" aria-hidden="true">ל</span>
+        <span class="parallax-letter" data-depth="1.1" style="font-size:2.8rem;top:28%;right:3%;" aria-hidden="true">מ</span>
         <!-- Centered content -->
         <div class="relative text-center" style="max-width:620px;margin:0 auto;">
-            <div style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.34rem 1rem;border:1px solid rgba(212,175,55,0.34);border-radius:999px;color:rgba(242,212,123,0.92);text-transform:uppercase;letter-spacing:0.16em;font-size:0.68rem;font-weight:700;background:rgba(212,175,55,0.08);margin-bottom:1.1rem;">
+            <div style="display:inline-flex;align-items:center;gap:0.45rem;padding:0.36rem 1.1rem;border:1px solid rgba(212,175,55,0.3);border-radius:999px;color:rgba(242,212,123,0.9);text-transform:uppercase;letter-spacing:0.18em;font-size:0.65rem;font-weight:700;background:rgba(212,175,55,0.07);margin-bottom:1.2rem;backdrop-filter:blur(4px);">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
                 Torah Study with Friends
             </div>
             <h1 class="font-heading" style="font-size:clamp(2.4rem,5.5vw,3.8rem);color:#ffffff;font-weight:700;line-height:1.08;letter-spacing:-0.01em;margin-bottom:0.85rem;">A Letter in the Scroll</h1>
             <div style="height:1.5px;width:72px;background:linear-gradient(90deg,transparent,#d4af37,transparent);margin:0 auto 1rem;"></div>
-            <p style="color:rgba(200,220,255,0.86);font-size:clamp(0.9rem,1.8vw,1.06rem);letter-spacing:0.015em;line-height:1.65;">Every Jewish soul is a letter in the Torah.<br>Study deeply. Learn together. Carry the scroll forward.</p>
+            <p style="color:rgba(200,220,255,0.86);font-size:clamp(0.9rem,1.8vw,1.06rem);letter-spacing:0.015em;line-height:1.65;margin-bottom:0;">Every Jewish soul is a letter in the Torah.</p>
+            <div id="fw-container" class="fw-wrap" aria-live="polite" style="font-size:clamp(0.9rem,1.8vw,1.06rem);letter-spacing:0.015em;margin-top:0.15em;">
+                <span class="fw-word fw-active">Study deeply.</span>
+                <span class="fw-word">Learn together.</span>
+                <span class="fw-word">Carry the scroll forward.</span>
+                <span class="fw-word">Find your chavruta.</span>
+                <span class="fw-word">Grow in wisdom.</span>
+            </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-1 px-4 py-8 sm:py-12 lg:py-16">
-        <div class="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-10 items-start">
+    <main class="flex-1">
 
-            <!-- Mission Panel -->
-            <section class="mission-card rounded-3xl overflow-hidden" style="padding:0;">
+        <!-- ══════ SECTION 1: Two-column — Auth (left) + Newsletter/Support (right) ══════ -->
+        <section style="padding:3rem 1rem 0;">
+            <div class="login-two-col" style="max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:1.5rem;align-items:stretch;">
 
-                <!-- ── Inspirational Carousel ── -->
-                <div id="mc-outer" style="position:relative;background:linear-gradient(145deg,#06142e 0%,#0f2556 50%,#1f3f86 100%);overflow:hidden;">
+                <!-- ── LEFT COLUMN: Auth + Join ── -->
+                <div class="login-left-col" style="display:flex;flex-direction:column;gap:1.25rem;">
 
-                    <!-- Slide track -->
-                    <div id="mc-track" style="display:flex;transition:transform 0.55s cubic-bezier(0.4,0,0.2,1);">
+                    <!-- Auth Card -->
+                    <div class="auth-card rounded-3xl overflow-hidden">
 
-                        <!-- Slide 1: Your Identity -->
-                        <div style="min-width:100%;padding:2.2rem 2.8rem 3.2rem 2.2rem;position:relative;box-sizing:border-box;">
-                            <div style="position:absolute;width:280px;height:280px;top:-140px;right:-80px;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,0.22),transparent 70%);pointer-events:none;"></div>
-                            <span style="position:absolute;font-family:'Cormorant Garamond',serif;font-size:clamp(5rem,12vw,8.5rem);font-weight:700;color:rgba(255,255,255,0.05);top:0.5rem;right:1rem;direction:rtl;pointer-events:none;user-select:none;line-height:1;">אוֹת</span>
-                            <div style="position:relative;z-index:1;">
-                                <p style="font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(212,175,55,0.9);font-weight:700;margin-bottom:0.7rem;">✦ &nbsp;The Zohar Teaches</p>
-                                <h2 class="font-heading" style="font-size:clamp(1.8rem,3.4vw,2.55rem);color:#ffffff;line-height:1.1;font-weight:700;margin-bottom:1rem;max-width:22ch;">Every Jew Is a Letter In One Living Torah</h2>
-                                <p style="color:rgba(210,228,255,0.9);font-size:0.95rem;line-height:1.8;margin-bottom:0.8rem;">The Baal Shem Tov taught that the Jewish people itself is a living <em style="color:#ffd070;">Sefer Torah</em> — and every single Jew is one of its sacred letters.</p>
-                                <p style="color:rgba(210,228,255,0.9);font-size:0.95rem;line-height:1.8;">You are not free-floating in history. You are a character in an amazing story — a story whose final chapter has not yet been written. <strong style="color:#ffe4a3;">Your letter belongs in the scroll.</strong></p>
+                        <!-- Card Header with Logo -->
+                        <div class="text-center pt-10 pb-5 px-8">
+                            <div style="display:inline-flex;align-items:center;justify-content:center;width:80px;height:80px;border-radius:1.1rem;background:linear-gradient(145deg,#fff,#faf7f0);border:1.5px solid rgba(200,154,53,0.22);box-shadow:0 4px 20px rgba(200,154,53,0.12),0 1px 3px rgba(0,0,0,0.06);margin-bottom:1.25rem;">
+                                <img src="media/images/IconOnly.png" alt="A Letter in the Scroll" style="width:56px;height:56px;border-radius:0.6rem;">
                             </div>
+                            <h2 id="login-greeting" class="font-heading" style="font-size:1.9rem;font-weight:700;color:#1a2744;letter-spacing:-0.01em;">Welcome</h2>
+                            <p id="login-subtitle" style="color:#6b7280;font-size:0.85rem;margin-top:0.4rem;line-height:1.6;max-width:280px;margin-left:auto;margin-right:auto;">Create an account or sign in to start studying Torah together.</p>
+                            <script>
+                                try {
+                                    if (localStorage.getItem('hasSignedIn')) {
+                                        document.getElementById('login-greeting').textContent = 'Welcome Back';
+                                        document.getElementById('login-subtitle').textContent = 'Sign in, then land on your dashboard home to manage rooms and enter study.';
+                                    }
+                                } catch(e) {}
+                            </script>
+                            <div class="decorative-line mt-5 mx-auto" style="width:100px;"></div>
                         </div>
 
-                        <!-- Slide 2: Your Heritage -->
-                        <div style="min-width:100%;padding:2.2rem 2.8rem 3.2rem 2.2rem;position:relative;box-sizing:border-box;">
-                            <div style="position:absolute;width:240px;height:240px;top:-100px;left:-80px;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,0.18),transparent 70%);pointer-events:none;"></div>
-                            <span style="position:absolute;font-family:'Cormorant Garamond',serif;font-size:clamp(4rem,10vw,7rem);font-weight:700;color:rgba(255,255,255,0.05);bottom:2.5rem;right:1rem;direction:rtl;pointer-events:none;user-select:none;line-height:1;">עַם</span>
-                            <div style="position:relative;z-index:1;">
-                                <p style="font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(212,175,55,0.9);font-weight:700;margin-bottom:0.7rem;">✦ &nbsp;Three Thousand Years</p>
-                                <h2 class="font-heading" style="font-size:clamp(1.8rem,3.4vw,2.55rem);color:#ffffff;line-height:1.1;font-weight:700;margin-bottom:1rem;max-width:22ch;">Heirs to an Unbreakable Inheritance</h2>
-                                <p style="color:rgba(210,228,255,0.9);font-size:0.95rem;line-height:1.8;margin-bottom:1rem;">A tiny people, scattered across the globe for two millennia, they survived without a land — through the power of a book. They transformed the moral imagination of the world, introducing the sanctity of every human life. The scroll they carried is now yours to carry forward.</p>
-                                <div style="border-left:2px solid rgba(212,175,55,0.5);padding-left:0.9rem;">
-                                    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;color:#ffe4a3;font-size:1.05rem;line-height:1.6;margin-bottom:0.3rem;">"Zis gut zu zein a Yid — It is good to be a Jew."</p>
-                                    <p style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.42);font-weight:600;">A Hassidic Song of Survival</p>
-                                </div>
-                            </div>
+                        <!-- Google Sign-In -->
+                        <div class="px-8 pt-3">
+                            <button id="google-signin-btn" onclick="handleGoogleSignIn()" class="google-btn w-full py-3.5 rounded-xl font-semibold text-sm text-gray-600 flex items-center justify-center gap-3">
+                                <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
+                                    <path d="M9.003 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009.003 18z" fill="#34A853"/>
+                                    <path d="M3.964 10.712A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.712V4.956H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.046l3.007-2.334z" fill="#FBBC05"/>
+                                    <path d="M9.003 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.464.891 11.428 0 9.002 0A8.997 8.997 0 00.957 4.958L3.964 7.29c.708-2.127 2.692-3.71 5.036-3.71z" fill="#EA4335"/>
+                                </svg>
+                                Continue with Google
+                            </button>
+
+                            <div class="or-divider my-5 text-xs font-semibold" style="color:#b5b0a4;letter-spacing:0.06em;">or</div>
                         </div>
 
-                        <!-- Slide 3: Your Invitation -->
-                        <div style="min-width:100%;padding:2.2rem 2.8rem 3.2rem 2.2rem;position:relative;box-sizing:border-box;">
-                            <div style="position:absolute;width:260px;height:260px;top:-120px;right:-60px;border-radius:50%;background:radial-gradient(circle,rgba(100,150,255,0.18),transparent 70%);pointer-events:none;"></div>
-                            <span style="position:absolute;font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,8vw,5.5rem);font-weight:700;color:rgba(255,255,255,0.05);top:1rem;right:1rem;direction:rtl;pointer-events:none;user-select:none;line-height:1;">חַבְרוּתָא</span>
-                            <div style="position:relative;z-index:1;">
-                                <p style="font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(212,175,55,0.9);font-weight:700;margin-bottom:0.7rem;">✦ &nbsp;Your Voice Belongs Here</p>
-                                <h2 class="font-heading" style="font-size:clamp(1.7rem,3.2vw,2.4rem);color:#ffffff;line-height:1.1;font-weight:700;margin-bottom:1rem;max-width:24ch;">The Conversation Is Still Going — Join It</h2>
-                                <p style="color:rgba(210,228,255,0.9);font-size:0.95rem;line-height:1.8;margin-bottom:1rem;">The Talmud is not a book of answers — it is a record of voices arguing for the sake of heaven. Through <em style="color:#ffd070;">chavruta</em>, the ancient fellowship of study, you join that eternal conversation with real friends by your side.</p>
-                                <div style="border-left:2px solid rgba(212,175,55,0.5);padding-left:0.9rem;">
-                                    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;color:#ffe4a3;font-size:1.0rem;line-height:1.6;margin-bottom:0.3rem;">"You are the heir to a book written by a hundred generations, and there is a final chapter that only you can write."</p>
-                                    <p style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.42);font-weight:600;">Rabbi Jonathan Sacks</p>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div><!-- /mc-track -->
-
-                    <!-- Bottom nav: ‹ dots › all in one row at the bottom -->
-                    <div style="position:absolute;bottom:0.75rem;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:0.7rem;z-index:10;">
-                        <button onclick="mcPrev()" style="width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,0.26)'" onmouseout="this.style.background='rgba(255,255,255,0.12)'" aria-label="Previous slide">
-                            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
-                        </button>
-                        <div style="display:flex;gap:0.45rem;align-items:center;">
-                            <button onclick="mcGoTo(0)" id="mc-dot-0" style="width:18px;height:7px;border-radius:999px;border:none;cursor:pointer;background:rgba(255,255,255,0.9);padding:0;transition:all 0.25s;" aria-label="Slide 1"></button>
-                            <button onclick="mcGoTo(1)" id="mc-dot-1" style="width:7px;height:7px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,0.35);padding:0;transition:all 0.25s;" aria-label="Slide 2"></button>
-                            <button onclick="mcGoTo(2)" id="mc-dot-2" style="width:7px;height:7px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,0.35);padding:0;transition:all 0.25s;" aria-label="Slide 3"></button>
-                        </div>
-                        <button onclick="mcNext()" style="width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.22);color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,0.26)'" onmouseout="this.style.background='rgba(255,255,255,0.12)'" aria-label="Next slide">
-                            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                        </button>
-                    </div>
-
-                </div><!-- /mc-outer -->
-
-                <!-- ── What's Inside (accordion) ── -->
-                <div style="padding:1.5rem 1.75rem 0;">
-                    <p style="font-size:0.67rem;letter-spacing:0.18em;text-transform:uppercase;color:#1d3f87;font-weight:700;margin-bottom:0.8rem;">What's inside — tap to explore</p>
-                    <div style="display:flex;flex-direction:column;gap:0.45rem;">
-
-                        <div class="mfeat" onclick="toggleMFeat(this)" style="border:1px solid rgba(37,78,168,0.14);background:rgba(255,255,255,0.72);border-radius:14px;cursor:pointer;">
-                            <div style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem 1rem;">
-                                <span style="font-size:0.9rem;font-weight:700;color:#0f2a61;flex:1;">Chavruta Learning</span>
-                                <svg class="mfeat-chevron" width="15" height="15" fill="none" stroke="#7794c0" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
-                            </div>
-                            <div class="mfeat-body" style="max-height:0;overflow:hidden;">
-                                <p style="padding:0 1rem 0.9rem;font-size:0.87rem;color:#475569;line-height:1.65;">Build a private study circle where two or more voices wrestle with Torah together, turning the weekly parsha into a living conversation.</p>
-                            </div>
-                        </div>
-
-                        <div class="mfeat" onclick="toggleMFeat(this)" style="border:1px solid rgba(37,78,168,0.14);background:rgba(255,255,255,0.72);border-radius:14px;cursor:pointer;">
-                            <div style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem 1rem;">
-                                <span style="font-size:0.9rem;font-weight:700;color:#0f2a61;flex:1;">Daily Inspiration</span>
-                                <svg class="mfeat-chevron" width="15" height="15" fill="none" stroke="#7794c0" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
-                            </div>
-                            <div class="mfeat-body" style="max-height:0;overflow:hidden;">
-                                <p style="padding:0 1rem 0.9rem;font-size:0.87rem;color:#475569;line-height:1.65;">Start each day with a curated quote and reflection from Jewish wisdom that helps carry Torah from the page into real decisions.</p>
-                            </div>
-                        </div>
-
-                        <div class="mfeat" onclick="toggleMFeat(this)" style="border:1px solid rgba(37,78,168,0.14);background:rgba(255,255,255,0.72);border-radius:14px;cursor:pointer;">
-                            <div style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem 1rem;">
-                                <span style="font-size:0.9rem;font-weight:700;color:#0f2a61;flex:1;">Reactions &amp; Bookmarks</span>
-                                <svg class="mfeat-chevron" width="15" height="15" fill="none" stroke="#7794c0" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
-                            </div>
-                            <div class="mfeat-body" style="max-height:0;overflow:hidden;">
-                                <p style="padding:0 1rem 0.9rem;font-size:0.87rem;color:#475569;line-height:1.65;">React to verses, save what moves you, and let your highlights follow you across every chavruta you belong to.</p>
-                            </div>
-                        </div>
-
-                        <div class="mfeat" onclick="toggleMFeat(this)" style="border:1px solid rgba(37,78,168,0.14);background:rgba(255,255,255,0.72);border-radius:14px;cursor:pointer;">
-                            <div style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem 1rem;">
-                                <span style="font-size:0.9rem;font-weight:700;color:#0f2a61;flex:1;">Lead Together, Live Jewish Time</span>
-                                <svg class="mfeat-chevron" width="15" height="15" fill="none" stroke="#7794c0" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
-                            </div>
-                            <div class="mfeat-body" style="max-height:0;overflow:hidden;">
-                                <p style="padding:0 1rem 0.9rem;font-size:0.87rem;color:#475569;line-height:1.65;">Appoint co-leaders, guide your group with shared responsibility, and explore holidays, prayers, songs, and Parshat HaShavua in one place.</p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- ── Quote block ── -->
-                <div style="margin:1.3rem 1.75rem 0;">
-                    <div style="border-left:3px solid #c89a35;background:linear-gradient(120deg,rgba(251,246,229,0.92),rgba(255,255,255,0.82));border-radius:0 14px 14px 0;padding:1.1rem 1.2rem 1.1rem 1.35rem;">
-                        <p class="font-heading" style="font-size:clamp(1.05rem,2vw,1.22rem);color:#132d65;font-style:italic;line-height:1.65;margin-bottom:0.5rem;">"When one letter is missing, the scroll is incomplete. When one person is missing, the people are incomplete."</p>
-                        <p style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280;font-weight:600;">— Inspired by the Zohar, as taught by the Baal Shem Tov</p>
-                    </div>
-                </div>
-
-                <!-- Closing line -->
-                <p style="text-align:center;font-size:0.82rem;color:#6b7280;font-style:italic;padding:1rem 1.75rem 1.65rem;">Join a chavruta. Study deeply. Carry the scroll forward.</p>
-            </section>
-
-            <div class="w-full max-w-xl mx-auto lg:max-w-none space-y-6 login-right-column">
-
-                <!-- Auth Card -->
-                <div class="auth-card rounded-3xl overflow-hidden">
-
-                    <!-- Card Header with Logo -->
-                    <div class="text-center pt-8 pb-4 px-6">
-                        <img src="media/images/Icon.png" alt="A Letter in the Scroll" class="w-20 h-20 mx-auto rounded-xl shadow-md mb-4">
-                        <h2 id="login-greeting" class="font-heading text-3xl font-semibold text-slate-900">Welcome</h2>
-                        <p id="login-subtitle" class="text-slate-600 text-sm mt-1">Create an account or sign in to start studying Torah together.</p>
-                        <script>
-                            try {
-                                if (localStorage.getItem('hasSignedIn')) {
-                                    document.getElementById('login-greeting').textContent = 'Welcome Back';
-                                    document.getElementById('login-subtitle').textContent = 'Sign in, then land on your dashboard home to manage rooms and enter study.';
-                                }
-                            } catch(e) {}
-                        </script>
-                        <div class="decorative-line mt-4 mx-auto w-36"></div>
-                    </div>
-
-                    <!-- Google Sign-In -->
-                    <div class="px-6 pt-4">
-                        <button id="google-signin-btn" onclick="handleGoogleSignIn()" class="google-btn w-full py-3 rounded-xl font-medium text-sm text-gray-700 flex items-center justify-center gap-3">
-                            <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
-                                <path d="M9.003 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009.003 18z" fill="#34A853"/>
-                                <path d="M3.964 10.712A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.712V4.956H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.046l3.007-2.334z" fill="#FBBC05"/>
-                                <path d="M9.003 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.464.891 11.428 0 9.002 0A8.997 8.997 0 00.957 4.958L3.964 7.29c.708-2.127 2.692-3.71 5.036-3.71z" fill="#EA4335"/>
-                            </svg>
-                            Continue with Google
-                        </button>
-
-                        <div class="or-divider my-4 text-xs text-gray-400 font-medium">or</div>
-                    </div>
-
-                    <!-- Tabs -->
-                    <div class="flex border-b border-gray-200 px-6">
-                        <button id="tab-signin" class="flex-1 py-3 text-center text-sm font-medium transition-all tab-active" onclick="switchTab('signin')">
-                            Sign In
-                        </button>
-                        <button id="tab-create" class="flex-1 py-3 text-center text-sm font-medium transition-all tab-inactive" onclick="switchTab('create')">
-                            Create Account
-                        </button>
-                    </div>
-
-                    <!-- Message Areas -->
-                    <div id="auth-error" class="hidden mx-6 mt-4 bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-lg text-sm"></div>
-                    <div id="auth-success" class="hidden mx-6 mt-4 bg-green-50 border border-green-300 text-green-700 px-4 py-3 rounded-lg text-sm"></div>
-
-                    <!-- Sign In Form -->
-                    <div id="form-signin" class="p-6 space-y-4 fade-in">
-                        <div>
-                            <label for="signin-email" class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
-                            <input
-                                type="email"
-                                id="signin-email"
-                                placeholder="you@example.com"
-                                autocomplete="email"
-                                autocapitalize="none"
-                                spellcheck="false"
-                                class="input-field w-full px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900"
-                            />
-                        </div>
-                        <div>
-                            <div class="flex items-center justify-between mb-1.5">
-                                <label for="signin-password" class="block text-sm font-semibold text-gray-700">Password</label>
-                                <button type="button" id="forgot-password-link" class="text-xs text-blue-600 hover:text-blue-800 font-medium" onclick="openResetModal()">
-                                    Forgot password?
-                                </button>
-                            </div>
-                            <input
-                                type="password"
-                                id="signin-password"
-                                placeholder="Enter your password"
-                                autocomplete="current-password"
-                                class="input-field w-full px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900"
-                            />
-                        </div>
-                        <button id="signin-btn" onclick="handleSignIn()" class="w-full py-3 bg-gradient-to-r from-blue-800 to-blue-600 text-white rounded-xl hover:from-blue-900 hover:to-blue-700 transition-all font-semibold shadow-md hover:shadow-lg text-sm">
-                            Sign In
-                        </button>
-                    </div>
-
-                    <!-- Create Account Form -->
-                    <div id="form-create" class="p-6 space-y-4 fade-in hidden">
-                        <div>
-                            <label for="create-display-name" class="block text-sm font-semibold text-gray-700 mb-1.5">Your Name</label>
-                            <input
-                                type="text"
-                                id="create-display-name"
-                                minlength="2"
-                                maxlength="50"
-                                placeholder="e.g., Jane Doe"
-                                autocomplete="name"
-                                class="input-field w-full px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900"
-                            />
-                            <p class="text-xs text-gray-400 mt-1">We will greet you by first name (for example: "Shalom, Jane").</p>
-                        </div>
-                        <div>
-                            <label for="create-email" class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
-                            <input
-                                type="email"
-                                id="create-email"
-                                placeholder="you@example.com"
-                                autocomplete="email"
-                                autocapitalize="none"
-                                spellcheck="false"
-                                class="input-field w-full px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900"
-                            />
-                        </div>
-                        <div>
-                            <label for="create-password" class="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
-                            <input
-                                type="password"
-                                id="create-password"
-                                placeholder="At least 6 characters"
-                                autocomplete="new-password"
-                                class="input-field w-full px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900"
-                            />
-                        </div>
-                        <div>
-                            <label for="create-confirm" class="block text-sm font-semibold text-gray-700 mb-1.5">Confirm Password</label>
-                            <input
-                                type="password"
-                                id="create-confirm"
-                                placeholder="Re-enter your password"
-                                autocomplete="new-password"
-                                class="input-field w-full px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900"
-                            />
-                        </div>
-                        <button id="create-account-btn" onclick="handleCreateAccount()" class="w-full py-3 btn-gold text-white rounded-xl transition-all font-semibold shadow-md hover:shadow-lg text-sm">
-                            Create Account
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Join a Chavruta Section -->
-                <div class="auth-card rounded-3xl overflow-hidden">
-                    <div class="p-6">
-                        <div class="text-center mb-4">
-                            <h3 class="font-heading text-2xl font-semibold text-gray-900">Join a Chavruta</h3>
-                            <p class="text-gray-500 text-xs mt-1">Paste an invite link or 16-character code below.</p>
-                        </div>
-                        <div class="flex gap-3">
-                            <input
-                                type="text"
-                                id="invite-code-input"
-                                placeholder="Paste invite link or code"
-                                class="input-field flex-1 px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:outline-none text-gray-900 text-sm font-mono tracking-wider"
-                                oninput="handleInviteInput(this)"
-                            />
-                            <button id="join-btn" onclick="handleJoinChavruta()" class="px-6 py-2.5 bg-gradient-to-r from-blue-800 to-blue-600 text-white rounded-xl hover:from-blue-900 hover:to-blue-700 transition-all font-semibold shadow-md hover:shadow-lg text-sm whitespace-nowrap">
-                                Join
+                        <!-- Tabs -->
+                        <div class="flex px-8" style="border-bottom:1px solid rgba(200,154,53,0.15);">
+                            <button id="tab-signin" class="flex-1 py-3.5 text-center text-sm font-semibold transition-all tab-active" onclick="switchTab('signin')">
+                                Sign In
+                            </button>
+                            <button id="tab-create" class="flex-1 py-3.5 text-center text-sm font-semibold transition-all tab-inactive" onclick="switchTab('create')">
+                                Create Account
                             </button>
                         </div>
-                        <div id="join-error" class="hidden mt-3 bg-red-50 border border-red-300 text-red-700 px-3 py-2 rounded-lg text-sm"></div>
-                        <div id="join-success" class="hidden mt-3 bg-green-50 border border-green-300 text-green-700 px-3 py-2 rounded-lg text-sm"></div>
+
+                        <!-- Message Areas -->
+                        <div id="auth-error" class="hidden mx-8 mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm"></div>
+                        <div id="auth-success" class="hidden mx-8 mt-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm"></div>
+
+                        <!-- Sign In Form -->
+                        <div id="form-signin" class="fade-in" style="padding:1.5rem 2rem 2rem;">
+                            <div style="display:flex;flex-direction:column;gap:1.1rem;">
+                                <div>
+                                    <label for="signin-email" class="block text-sm font-semibold mb-1.5" style="color:#3d4555;">Email Address</label>
+                                    <input type="email" id="signin-email" placeholder="you@example.com" autocomplete="email" autocapitalize="none" spellcheck="false" class="input-field w-full px-4 py-3 rounded-xl focus:outline-none text-gray-900" style="border:1.5px solid #ddd8ce;font-size:0.9rem;" />
+                                </div>
+                                <div>
+                                    <div class="flex items-center justify-between mb-1.5">
+                                        <label for="signin-password" class="block text-sm font-semibold" style="color:#3d4555;">Password</label>
+                                        <button type="button" id="forgot-password-link" class="text-xs font-semibold" style="color:#b88b26;transition:color 0.2s;" onmouseover="this.style.color='#9d7418'" onmouseout="this.style.color='#b88b26'" onclick="openResetModal()">Forgot password?</button>
+                                    </div>
+                                    <input type="password" id="signin-password" placeholder="Enter your password" autocomplete="current-password" class="input-field w-full px-4 py-3 rounded-xl focus:outline-none text-gray-900" style="border:1.5px solid #ddd8ce;font-size:0.9rem;" />
+                                </div>
+                                <button id="signin-btn" onclick="handleSignIn()" class="btn-primary w-full py-3.5 text-white rounded-xl font-bold text-sm" style="margin-top:0.3rem;letter-spacing:0.02em;">Sign In</button>
+                            </div>
+                        </div>
+
+                        <!-- Create Account Form -->
+                        <div id="form-create" class="fade-in hidden" style="padding:1.5rem 2rem 2rem;">
+                            <div style="display:flex;flex-direction:column;gap:1.1rem;">
+                                <div>
+                                    <label for="create-display-name" class="block text-sm font-semibold mb-1.5" style="color:#3d4555;">Your Name</label>
+                                    <input type="text" id="create-display-name" minlength="2" maxlength="50" placeholder="e.g., Jane Doe" autocomplete="name" class="input-field w-full px-4 py-3 rounded-xl focus:outline-none text-gray-900" style="border:1.5px solid #ddd8ce;font-size:0.9rem;" />
+                                    <p class="text-xs mt-1" style="color:#a09a8e;">We will greet you by first name (for example: "Shalom, Jane").</p>
+                                </div>
+                                <div>
+                                    <label for="create-email" class="block text-sm font-semibold mb-1.5" style="color:#3d4555;">Email Address</label>
+                                    <input type="email" id="create-email" placeholder="you@example.com" autocomplete="email" autocapitalize="none" spellcheck="false" class="input-field w-full px-4 py-3 rounded-xl focus:outline-none text-gray-900" style="border:1.5px solid #ddd8ce;font-size:0.9rem;" />
+                                </div>
+                                <div>
+                                    <label for="create-password" class="block text-sm font-semibold mb-1.5" style="color:#3d4555;">Password</label>
+                                    <input type="password" id="create-password" placeholder="At least 6 characters" autocomplete="new-password" class="input-field w-full px-4 py-3 rounded-xl focus:outline-none text-gray-900" style="border:1.5px solid #ddd8ce;font-size:0.9rem;" />
+                                </div>
+                                <div>
+                                    <label for="create-confirm" class="block text-sm font-semibold mb-1.5" style="color:#3d4555;">Confirm Password</label>
+                                    <input type="password" id="create-confirm" placeholder="Re-enter your password" autocomplete="new-password" class="input-field w-full px-4 py-3 rounded-xl focus:outline-none text-gray-900" style="border:1.5px solid #ddd8ce;font-size:0.9rem;" />
+                                </div>
+                                <div>
+                                    <label for="create-birthday" class="block text-sm font-semibold mb-1.5" style="color:#3d4555;">Date of Birth</label>
+                                    <input type="date" id="create-birthday" required autocomplete="bday" class="input-field w-full px-4 py-3 rounded-xl focus:outline-none text-gray-900" style="border:1.5px solid #ddd8ce;font-size:0.9rem;" />
+                                    <p class="text-xs mt-1" style="color:#a09a8e;">Used to calculate your personal daily Psalm and celebrate your Hebrew birthday.</p>
+                                </div>
+                                <button id="create-account-btn" onclick="handleCreateAccount()" class="w-full py-3.5 btn-gold text-white rounded-xl transition-all font-bold text-sm" style="margin-top:0.3rem;letter-spacing:0.02em;box-shadow:0 4px 16px rgba(200,154,53,0.25);">Create Account</button>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Join a Chavruta -->
+                    <div class="auth-card rounded-3xl overflow-hidden">
+                        <div style="padding:1.5rem 2rem;">
+                            <div style="display:flex;align-items:center;gap:0.9rem;">
+                                <div style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,rgba(30,61,122,0.08),rgba(30,61,122,0.03));border:1px solid rgba(30,61,122,0.12);">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1e3d7a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                                </div>
+                                <div style="flex:1;min-width:0;">
+                                    <h3 class="font-heading" style="font-size:1.25rem;font-weight:700;color:#1a2744;line-height:1.2;">Join a Chavruta</h3>
+                                    <p style="color:#a09a8e;font-size:0.75rem;margin-top:0.15rem;">Paste an invite link or 16-character code</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3" style="margin-top:1rem;">
+                                <input type="text" id="invite-code-input" placeholder="Paste invite link or code" class="input-field flex-1 px-4 py-3 rounded-xl focus:outline-none text-gray-900 text-sm font-mono tracking-wider" style="border:1.5px solid #ddd8ce;font-size:0.9rem;" oninput="handleInviteInput(this)" />
+                                <button id="join-btn" onclick="handleJoinChavruta()" class="btn-primary px-6 py-3 text-white rounded-xl font-bold text-sm whitespace-nowrap" style="letter-spacing:0.02em;">Join</button>
+                            </div>
+                            <div id="join-error" class="hidden mt-3 bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-xl text-sm"></div>
+                            <div id="join-success" class="hidden mt-3 bg-green-50 border border-green-200 text-green-700 px-3 py-2 rounded-xl text-sm"></div>
+                        </div>
+                    </div>
+
+                </div><!-- /left col -->
+
+                <!-- ── RIGHT COLUMN: Newsletter + Support stacked ── -->
+                <div class="login-right-col" style="display:flex;flex-direction:column;gap:1.25rem;">
+
+                    <!-- Newsletter Signup (compact) -->
+                    <div id="nl-section" class="bottom-card">
+                        <div style="padding:1.4rem 1.75rem;text-align:center;">
+                            <div style="margin-bottom:0.5rem;">
+                                <p style="font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:#b88b26;font-weight:700;margin-bottom:0.25rem;">Weekly Dvar Torah</p>
+                                <h2 class="font-heading" style="font-size:1.1rem;font-weight:700;color:#1a2744;line-height:1.25;">Torah straight to your inbox</h2>
+                            </div>
+                            <p style="font-size:0.82rem;color:#7a7670;line-height:1.55;margin-bottom:0.9rem;">Every Friday, receive a thoughtful Dvar Torah to carry into Shabbat.</p>
+
+                            <div id="nl-success" class="hidden mb-3 bg-green-50 border border-green-200 text-green-700 px-3 py-2 rounded-xl text-sm font-medium"></div>
+                            <div id="nl-error" class="hidden mb-3 bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-xl text-sm font-medium"></div>
+
+                            <form id="nl-form" onsubmit="handleNewsletterSignup(event)">
+                                <div style="position:absolute;left:-9999px" aria-hidden="true">
+                                    <input type="text" id="nl-hp" name="website" tabindex="-1" autocomplete="off">
+                                </div>
+                                <div class="flex gap-2">
+                                    <input type="email" id="nl-email" required placeholder="you@example.com" autocomplete="email" autocapitalize="none" spellcheck="false" class="input-field flex-1 px-4 py-2.5 rounded-xl focus:outline-none text-gray-900 text-sm" style="border:1.5px solid #ddd8ce;" />
+                                    <button type="submit" id="nl-btn" class="px-5 py-2.5 rounded-xl font-bold text-sm text-white transition-all whitespace-nowrap" style="background:linear-gradient(135deg,#c89a35,#b7871e);box-shadow:0 4px 14px rgba(200,154,53,0.2);">Subscribe</button>
+                                </div>
+                                <div id="nl-captcha-wrap" class="hidden flex justify-center mt-2">
+                                    <div class="g-recaptcha" data-sitekey="6LepOYgsAAAAAH5vqu3hk9iVfQJZhqe9Dymj1ATi" data-theme="light"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Support This Project -->
+                    <div class="bottom-card" style="flex:1;display:flex;flex-direction:column;position:relative;overflow:hidden;background:linear-gradient(165deg,#fffefb 0%,#fdf8ed 100%);">
+                        <div style="position:absolute;top:-50px;right:-50px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(200,154,53,0.1),transparent 70%);pointer-events:none;"></div>
+                        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#d4af37,transparent);"></div>
+                        <div style="padding:1.8rem 1.75rem;text-align:center;flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:1;">
+                            <div style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,rgba(212,175,55,0.14),rgba(212,175,55,0.06));border:1px solid rgba(212,175,55,0.25);margin:0 auto 0.8rem;animation:heartPulse 3s ease-in-out infinite;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(200,154,53,0.2)" stroke="#c89a35" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                            </div>
+                            <h2 class="font-heading" style="font-size:1.2rem;font-weight:700;color:#1a2744;margin-bottom:0.5rem;">Support This Project</h2>
+                            <p style="font-size:0.84rem;color:#7a7670;line-height:1.65;max-width:340px;margin:0 auto 1.1rem;">
+                                A non-profit labor of love. If this platform has given you a moment of connection or a verse that stayed with you, your support helps keep the lights on and this resource free for everyone.
+                            </p>
+                            <div class="coffee-btn-wrap" style="display:flex;justify-content:center;">
+                                <a href="https://buymeacoffee.com/aletterinthescroll" target="_blank" rel="noopener noreferrer"
+                                   style="display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.75rem 0;border-radius:12px;font-size:0.88rem;font-weight:700;color:#fff;background:linear-gradient(135deg,#c89a35,#b7871e);text-decoration:none;box-shadow:0 4px 16px rgba(200,154,53,0.25);transition:all 0.25s ease;letter-spacing:0.01em;width:100%;"
+                                   onmouseover="this.style.boxShadow='0 6px 24px rgba(200,154,53,0.4)';this.style.transform='translateY(-2px)'"
+                                   onmouseout="this.style.boxShadow='0 4px 16px rgba(200,154,53,0.25)';this.style.transform='translateY(0)'">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                                    Buy Me a Coffee
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Inspiring Torah Quote -->
+                    <div class="bottom-card" style="flex:1;display:flex;flex-direction:column;position:relative;overflow:hidden;background:linear-gradient(170deg,#ffffff 0%,#fdfcf9 60%,#faf6ee 100%);">
+                        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(200,154,53,0.2),transparent);"></div>
+                        <div style="padding:1.8rem 1.75rem;text-align:center;flex:1;display:flex;flex-direction:column;justify-content:center;">
+                            <p style="font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:#b88b26;font-weight:700;margin-bottom:0.6rem;">✦ &nbsp;From the Torah</p>
+                            <p class="font-heading" style="font-size:1.05rem;color:#1a2744;font-style:italic;line-height:1.5;max-width:340px;margin:0 auto 0.5rem;">
+                                "When one letter is missing, the scroll is incomplete. When one person is missing, the people are incomplete."
+                            </p>
+                            <p style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:#a09a8e;font-weight:600;margin-bottom:0.8rem;">— Inspired by the Zohar</p>
+                            <div style="width:40px;height:1px;background:linear-gradient(90deg,transparent,#c89a35,transparent);margin:0 auto 0.8rem;"></div>
+                            <p class="font-heading" style="font-size:0.82rem;font-style:italic;color:#8b8680;line-height:1.45;">
+                                Chazak, chazak, v'nitchazek —<br>Be strong, be strong, and let us strengthen one another.
+                            </p>
+                        </div>
+                    </div>
+
+                </div><!-- /right col -->
+
+            </div>
+        </section>
+
+        <!-- ══════ SECTION 2: Inspirational carousel (full-bleed dark) ══════ -->
+        <section style="margin-top:3.5rem;">
+            <div id="mc-outer" style="position:relative;background:linear-gradient(150deg,#071428 0%,#0d1f48 35%,#162d66 70%,#1d3a7a 100%);overflow:hidden;">
+
+                <!-- Slide track -->
+                <div id="mc-track" style="display:flex;transition:transform 0.55s cubic-bezier(0.4,0,0.2,1);">
+
+                    <!-- Slide 1: Your Identity -->
+                    <div style="min-width:100%;position:relative;box-sizing:border-box;">
+                        <div style="position:absolute;width:280px;height:280px;top:-140px;right:-80px;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,0.22),transparent 70%);pointer-events:none;"></div>
+                        <span style="position:absolute;font-family:'Cormorant Garamond',serif;font-size:clamp(5rem,12vw,8.5rem);font-weight:700;color:rgba(255,255,255,0.04);top:0.5rem;right:1rem;direction:rtl;pointer-events:none;user-select:none;line-height:1;">אוֹת</span>
+                        <div style="position:relative;z-index:1;max-width:720px;margin:0 auto;padding:3.5rem 2rem 4rem;">
+                            <p style="font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(212,175,55,0.9);font-weight:700;margin-bottom:0.7rem;">✦ &nbsp;The Zohar Teaches</p>
+                            <h2 class="font-heading" style="font-size:clamp(2rem,4vw,2.8rem);color:#ffffff;line-height:1.1;font-weight:700;margin-bottom:1.2rem;max-width:24ch;">Every Jew Is a Letter In One Living Torah</h2>
+                            <p style="color:rgba(210,228,255,0.88);font-size:1rem;line-height:1.85;margin-bottom:0.8rem;max-width:56ch;">The Baal Shem Tov taught that the Jewish people itself is a living <em style="color:#ffd070;">Sefer Torah</em> — and every single Jew is one of its sacred letters.</p>
+                            <p style="color:rgba(210,228,255,0.88);font-size:1rem;line-height:1.85;max-width:56ch;">You are not free-floating in history. You are a character in an amazing story — a story whose final chapter has not yet been written. <strong style="color:#ffe4a3;">Your letter belongs in the scroll.</strong></p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: Your Heritage -->
+                    <div style="min-width:100%;position:relative;box-sizing:border-box;">
+                        <div style="position:absolute;width:240px;height:240px;top:-100px;left:-80px;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,0.18),transparent 70%);pointer-events:none;"></div>
+                        <span style="position:absolute;font-family:'Cormorant Garamond',serif;font-size:clamp(4rem,10vw,7rem);font-weight:700;color:rgba(255,255,255,0.04);bottom:2.5rem;right:1rem;direction:rtl;pointer-events:none;user-select:none;line-height:1;">עַם</span>
+                        <div style="position:relative;z-index:1;max-width:720px;margin:0 auto;padding:3.5rem 2rem 4rem;">
+                            <p style="font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(212,175,55,0.9);font-weight:700;margin-bottom:0.7rem;">✦ &nbsp;Three Thousand Years</p>
+                            <h2 class="font-heading" style="font-size:clamp(2rem,4vw,2.8rem);color:#ffffff;line-height:1.1;font-weight:700;margin-bottom:1.2rem;max-width:24ch;">Heirs to an Unbreakable Inheritance</h2>
+                            <p style="color:rgba(210,228,255,0.88);font-size:1rem;line-height:1.85;margin-bottom:1rem;max-width:56ch;">A tiny people, scattered across the globe for two millennia, they survived without a land — through the power of a book. They transformed the moral imagination of the world, introducing the sanctity of every human life. The scroll they carried is now yours to carry forward.</p>
+                            <div style="border-left:2px solid rgba(212,175,55,0.5);padding-left:0.9rem;">
+                                <p style="font-family:'Cormorant Garamond',serif;font-style:italic;color:#ffe4a3;font-size:1.1rem;line-height:1.6;margin-bottom:0.3rem;">"Zis gut zu zein a Yid — It is good to be a Jew."</p>
+                                <p style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.42);font-weight:600;">A Hassidic Song of Survival</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3: Your Invitation -->
+                    <div style="min-width:100%;position:relative;box-sizing:border-box;">
+                        <div style="position:absolute;width:260px;height:260px;top:-120px;right:-60px;border-radius:50%;background:radial-gradient(circle,rgba(100,150,255,0.18),transparent 70%);pointer-events:none;"></div>
+                        <span style="position:absolute;font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,8vw,5.5rem);font-weight:700;color:rgba(255,255,255,0.04);top:1rem;right:1rem;direction:rtl;pointer-events:none;user-select:none;line-height:1;">חַבְרוּתָא</span>
+                        <div style="position:relative;z-index:1;max-width:720px;margin:0 auto;padding:3.5rem 2rem 4rem;">
+                            <p style="font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(212,175,55,0.9);font-weight:700;margin-bottom:0.7rem;">✦ &nbsp;Your Voice Belongs Here</p>
+                            <h2 class="font-heading" style="font-size:clamp(2rem,4vw,2.8rem);color:#ffffff;line-height:1.1;font-weight:700;margin-bottom:1.2rem;max-width:24ch;">The Conversation Is Still Going — Join It</h2>
+                            <p style="color:rgba(210,228,255,0.88);font-size:1rem;line-height:1.85;margin-bottom:1rem;max-width:56ch;">The Talmud is not a book of answers — it is a record of voices arguing for the sake of heaven. Through <em style="color:#ffd070;">chavruta</em>, the ancient fellowship of study, you join that eternal conversation with real friends by your side.</p>
+                            <div style="border-left:2px solid rgba(212,175,55,0.5);padding-left:0.9rem;">
+                                <p style="font-family:'Cormorant Garamond',serif;font-style:italic;color:#ffe4a3;font-size:1.05rem;line-height:1.6;margin-bottom:0.3rem;">"You are the heir to a book written by a hundred generations, and there is a final chapter that only you can write."</p>
+                                <p style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.42);font-weight:600;">Rabbi Jonathan Sacks</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /mc-track -->
+
+                <!-- Bottom nav: ‹ dots › -->
+                <div style="position:absolute;bottom:1rem;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:0.7rem;z-index:10;">
+                    <button onclick="mcPrev()" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.22)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'" aria-label="Previous slide">
+                        <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <div style="display:flex;gap:0.45rem;align-items:center;">
+                        <button onclick="mcGoTo(0)" id="mc-dot-0" style="width:18px;height:7px;border-radius:999px;border:none;cursor:pointer;background:rgba(255,255,255,0.9);padding:0;transition:all 0.25s;" aria-label="Slide 1"></button>
+                        <button onclick="mcGoTo(1)" id="mc-dot-1" style="width:7px;height:7px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,0.35);padding:0;transition:all 0.25s;" aria-label="Slide 2"></button>
+                        <button onclick="mcGoTo(2)" id="mc-dot-2" style="width:7px;height:7px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,0.35);padding:0;transition:all 0.25s;" aria-label="Slide 3"></button>
+                    </div>
+                    <button onclick="mcNext()" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.22)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'" aria-label="Next slide">
+                        <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
                 </div>
 
-                <p class="text-center text-gray-500 text-xs mb-2 italic font-heading">
-                    Each of us is a letter in the scroll of Torah.
-                </p>
-                <p class="text-center mt-3 mb-1">
-                    <a href="/about" style="color:#2857be;font-size:0.85rem;font-weight:600;text-decoration:none;">Learn more about this project &rarr;</a>
-                </p>
+            </div><!-- /mc-outer -->
+        </section>
+
+        <!-- ══════ SECTION 3: What's Inside — static feature cards ══════ -->
+        <section style="padding:3rem 1rem 2.5rem;">
+            <div style="max-width:1020px;margin:0 auto;">
+
+                <!-- Section header -->
+                <div style="text-align:center;margin-bottom:2rem;">
+                    <p style="font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:#b88b26;font-weight:700;margin-bottom:0.5rem;">What's Inside</p>
+                    <h2 class="font-heading" style="font-size:clamp(1.5rem,3vw,2rem);font-weight:700;color:#1a2744;margin-bottom:0.5rem;">Everything you need to study Torah together</h2>
+                    <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,#c89a35,transparent);margin:0 auto;"></div>
+                </div>
+
+                <!-- Feature grid (3x2) — static, always visible -->
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;" class="feature-grid">
+
+                    <div class="bottom-card" style="padding:1.5rem;">
+                        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.7rem;">
+                            <div style="flex-shrink:0;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,rgba(200,154,53,0.1),rgba(200,154,53,0.04));border:1px solid rgba(200,154,53,0.16);display:flex;align-items:center;justify-content:center;">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#b88b26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                            </div>
+                            <h3 style="font-size:0.95rem;font-weight:700;color:#1a2744;">Chavruta Learning</h3>
+                        </div>
+                        <p style="font-size:0.85rem;color:#6b6860;line-height:1.65;">Build a private study circle where two or more voices wrestle with Torah together, turning the weekly parsha into a living conversation.</p>
+                    </div>
+
+                    <div class="bottom-card" style="padding:1.5rem;">
+                        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.7rem;">
+                            <div style="flex-shrink:0;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,rgba(200,154,53,0.1),rgba(200,154,53,0.04));border:1px solid rgba(200,154,53,0.16);display:flex;align-items:center;justify-content:center;">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#b88b26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            </div>
+                            <h3 style="font-size:0.95rem;font-weight:700;color:#1a2744;">Daily Inspiration</h3>
+                        </div>
+                        <p style="font-size:0.85rem;color:#6b6860;line-height:1.65;">Start each day with a curated quote and reflection from Jewish wisdom that helps carry Torah from the page into real decisions.</p>
+                    </div>
+
+                    <div class="bottom-card" style="padding:1.5rem;">
+                        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.7rem;">
+                            <div style="flex-shrink:0;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,rgba(200,154,53,0.1),rgba(200,154,53,0.04));border:1px solid rgba(200,154,53,0.16);display:flex;align-items:center;justify-content:center;">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#b88b26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                            </div>
+                            <h3 style="font-size:0.95rem;font-weight:700;color:#1a2744;">Reactions &amp; Bookmarks</h3>
+                        </div>
+                        <p style="font-size:0.85rem;color:#6b6860;line-height:1.65;">React to verses, save what moves you, and let your highlights follow you across every chavruta you belong to.</p>
+                    </div>
+
+                    <div class="bottom-card" style="padding:1.5rem;">
+                        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.7rem;">
+                            <div style="flex-shrink:0;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,rgba(200,154,53,0.1),rgba(200,154,53,0.04));border:1px solid rgba(200,154,53,0.16);display:flex;align-items:center;justify-content:center;">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#b88b26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                            </div>
+                            <h3 style="font-size:0.95rem;font-weight:700;color:#1a2744;">Lead Together, Live Jewish Time</h3>
+                        </div>
+                        <p style="font-size:0.85rem;color:#6b6860;line-height:1.65;">Appoint co-leaders, guide your group with shared responsibility, and explore holidays, prayers, songs, and Parshat HaShavua in one place.</p>
+                    </div>
+
+                    <div class="bottom-card" style="padding:1.5rem;">
+                        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.7rem;">
+                            <div style="flex-shrink:0;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,rgba(200,154,53,0.1),rgba(200,154,53,0.04));border:1px solid rgba(200,154,53,0.16);display:flex;align-items:center;justify-content:center;">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#b88b26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            </div>
+                            <h3 style="font-size:0.95rem;font-weight:700;color:#1a2744;">Holidays &amp; Traditions</h3>
+                        </div>
+                        <p style="font-size:0.85rem;color:#6b6860;line-height:1.65;">Journey through the Jewish calendar with dedicated guides for every holiday — stories, customs, songs, and the spirit behind each one.</p>
+                    </div>
+
+                    <div class="bottom-card" style="padding:1.5rem;">
+                        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.7rem;">
+                            <div style="flex-shrink:0;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,rgba(200,154,53,0.1),rgba(200,154,53,0.04));border:1px solid rgba(200,154,53,0.16);display:flex;align-items:center;justify-content:center;">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#b88b26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                            </div>
+                            <h3 style="font-size:0.95rem;font-weight:700;color:#1a2744;">Prayers &amp; Songs</h3>
+                        </div>
+                        <p style="font-size:0.85rem;color:#6b6860;line-height:1.65;">Explore the words of tefillah and the melodies that have carried our people through generations — from Shabbat zemirot to daily psalms.</p>
+                    </div>
+
+                </div>
+
+                <!-- Closing quote + tagline -->
+                <div style="text-align:center;margin-top:2.5rem;">
+                    <p class="font-heading" style="font-size:clamp(1.1rem,2.2vw,1.35rem);color:#1a2744;font-style:italic;line-height:1.6;max-width:550px;margin:0 auto 0.5rem;">"You are the heir to a story written by a hundred generations — and there is a final chapter that only you can write."</p>
+                    <p style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.12em;color:#a09a8e;font-weight:600;margin-bottom:1rem;">— Rabbi Jonathan Sacks</p>
+                    <p class="font-heading" style="font-size:0.88rem;color:#8b8680;font-style:italic;letter-spacing:0.01em;">Your letter. Your story. Your scroll.</p>
+                </div>
+
             </div>
-        </div>
-    <!-- ═══ NEWSLETTER SIGNUP ═══ -->
-    <section id="nl-section" class="max-w-3xl mx-auto w-full px-4 mt-12 mb-8">
-        <div class="relative rounded-2xl overflow-hidden border border-blue-900/10" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%)">
-            <div class="pattern-overlay absolute inset-0 pointer-events-none"></div>
-            <div class="relative px-6 sm:px-10 py-8 sm:py-10 text-center">
-                <p class="text-amber-300 text-xs font-bold uppercase tracking-widest mb-2">Weekly Dvar Torah</p>
-                <h2 class="font-heading text-2xl sm:text-3xl font-bold text-white mb-2">Torah straight to your inbox</h2>
-                <p class="text-blue-200 text-sm sm:text-base max-w-lg mx-auto mb-6">Every Friday, receive a thoughtful Dvar Torah to carry into Shabbat. Free, meaningful, and written with heart.</p>
-
-                <!-- Success state (hidden by default) -->
-                <div id="nl-success" class="hidden mb-4 bg-green-500/20 border border-green-400/30 text-green-200 px-4 py-3 rounded-xl text-sm font-medium"></div>
-                <!-- Error state (hidden by default) -->
-                <div id="nl-error" class="hidden mb-4 bg-red-500/20 border border-red-400/30 text-red-200 px-4 py-3 rounded-xl text-sm font-medium"></div>
-
-                <form id="nl-form" onsubmit="handleNewsletterSignup(event)" class="max-w-md mx-auto space-y-3">
-                    <!-- Honeypot (hidden from real users, bots fill it) -->
-                    <div style="position:absolute;left:-9999px" aria-hidden="true">
-                        <input type="text" id="nl-hp" name="website" tabindex="-1" autocomplete="off">
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row gap-2">
-                        <input
-                            type="email"
-                            id="nl-email"
-                            required
-                            placeholder="you@example.com"
-                            autocomplete="email"
-                            autocapitalize="none"
-                            spellcheck="false"
-                            class="flex-1 px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-blue-300/60 focus:outline-none focus:border-amber-400/60 focus:bg-white/15 transition-all text-sm"
-                        />
-                        <button type="submit" id="nl-btn" class="px-6 py-3 rounded-xl font-bold text-sm text-white shadow-lg hover:shadow-xl transition-all whitespace-nowrap" style="background:linear-gradient(135deg,#c89a35,#b7871e)">
-                            Subscribe
-                        </button>
-                    </div>
-
-                    <!-- reCAPTCHA v2 checkbox (hidden until first submit attempt) -->
-                    <div id="nl-captcha-wrap" class="hidden flex justify-center mt-2">
-                        <div class="g-recaptcha" data-sitekey="6LepOYgsAAAAAH5vqu3hk9iVfQJZhqe9Dymj1ATi" data-theme="dark"></div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
+        </section>
 
     </main>
 
     <!-- Password Reset Modal -->
     <div id="reset-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
         <div class="modal-overlay absolute inset-0" onclick="closeResetModal()"></div>
-        <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden fade-in">
+        <div class="relative rounded-2xl max-w-md w-full overflow-hidden fade-in" style="background:linear-gradient(170deg,#ffffff 0%,#fdfcf9 100%);box-shadow:0 25px 60px rgba(12,26,58,0.2),0 4px 12px rgba(0,0,0,0.06);">
             <div class="gradient-header px-6 py-6 relative overflow-hidden">
                 <div class="pattern-overlay absolute inset-0"></div>
+                <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#d4af37,transparent);opacity:0.6;"></div>
                 <div class="relative flex items-center justify-between">
                     <h2 class="text-xl font-bold text-white font-heading">Reset Password</h2>
                     <button onclick="closeResetModal()" class="text-white/70 hover:text-white transition-colors">
@@ -598,9 +777,9 @@
                 </div>
                 <p class="relative text-blue-200 text-sm mt-1">Enter your email and we'll send you a reset link.</p>
             </div>
-            <div class="p-6 space-y-4">
+            <div style="padding:1.5rem 1.75rem;display:flex;flex-direction:column;gap:1rem;">
                 <div>
-                    <label for="reset-email" class="block text-sm font-semibold text-gray-700 mb-1.5">Email Address</label>
+                    <label for="reset-email" class="block text-sm font-semibold mb-1.5" style="color:#3d4555;">Email Address</label>
                     <input
                         type="email"
                         id="reset-email"
@@ -608,16 +787,17 @@
                         autocomplete="email"
                         autocapitalize="none"
                         spellcheck="false"
-                        class="input-field w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900"
+                        class="input-field w-full px-4 py-3 rounded-xl focus:outline-none text-gray-900"
+                        style="border:1.5px solid #ddd8ce;font-size:0.9rem;"
                     />
                 </div>
-                <div id="reset-error" class="hidden bg-red-50 border border-red-300 text-red-700 px-3 py-2 rounded-lg text-sm"></div>
-                <div id="reset-success" class="hidden bg-green-50 border border-green-300 text-green-700 px-3 py-2 rounded-lg text-sm"></div>
+                <div id="reset-error" class="hidden bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-xl text-sm"></div>
+                <div id="reset-success" class="hidden bg-green-50 border border-green-200 text-green-700 px-3 py-2 rounded-xl text-sm"></div>
                 <div class="flex gap-3">
-                    <button onclick="closeResetModal()" class="flex-1 py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all font-medium text-sm">
+                    <button onclick="closeResetModal()" class="flex-1 py-3 rounded-xl font-semibold text-sm transition-all" style="border:1.5px solid #ddd8ce;color:#5a5d66;background:transparent;" onmouseover="this.style.background='#f8f6f2'" onmouseout="this.style.background='transparent'">
                         Cancel
                     </button>
-                    <button id="reset-btn" onclick="handlePasswordReset()" class="flex-1 py-2.5 bg-gradient-to-r from-blue-800 to-blue-600 text-white rounded-lg hover:from-blue-900 hover:to-blue-700 transition-all font-semibold shadow-md hover:shadow-lg text-sm">
+                    <button id="reset-btn" onclick="handlePasswordReset()" class="btn-primary flex-1 py-3 text-white rounded-xl font-bold text-sm" style="letter-spacing:0.02em;">
                         Send Reset Link
                     </button>
                 </div>
@@ -662,15 +842,11 @@
                 signingOut = false;
             });
         }
-        // If bfcache restores this page while a user is still in memory, sign them out
+        // If bfcache restores this page while user is still logged in,
+        // send them to the dashboard — don't sign them out.
         window.addEventListener('pageshow', function(evt) {
             if (evt.persisted && auth.currentUser) {
-                signingOut = true;
-                auth.signOut().then(function() {
-                    signingOut = false;
-                }).catch(function() {
-                    signingOut = false;
-                });
+                window.location.replace('/dashboard');
             }
         });
 
@@ -1139,12 +1315,30 @@
             }
         }
 
+        // Converts a Gregorian date string (YYYY-MM-DD) to Hebrew calendar components
+        function gregorianToHebrew(dateStr) {
+            try {
+                const [y, m, d] = dateStr.split('-').map(Number);
+                if (!y || !m || !d) return null;
+                const date = new Date(y, m - 1, d, 12, 0, 0);
+                const fmt = new Intl.DateTimeFormat('en-US-u-ca-hebrew', { day: 'numeric', month: 'numeric', year: 'numeric' });
+                const parts = {};
+                fmt.formatToParts(date).forEach(p => { parts[p.type] = p.value; });
+                const hebDay   = parseInt(parts.day,   10);
+                const hebMonth = parseInt(parts.month, 10);
+                const hebYear  = parseInt(parts.year,  10);
+                if (!hebDay || !hebMonth || !hebYear) return null;
+                return { hebrewBirthDay: hebDay, hebrewBirthMonth: hebMonth, hebrewBirthYear: hebYear };
+            } catch { return null; }
+        }
+
         async function handleCreateAccount() {
             clearMessages();
             const rawName = document.getElementById('create-display-name').value;
             const email = document.getElementById('create-email').value.trim();
             const password = document.getElementById('create-password').value;
             const confirm = document.getElementById('create-confirm').value;
+            const birthdayStr = (document.getElementById('create-birthday')?.value || '').trim();
             const inviteCode = resolveInviteCode();
             const displayName = normalizeDisplayName(rawName);
 
@@ -1172,6 +1366,10 @@
                 showError('Passwords do not match.');
                 return;
             }
+            if (!birthdayStr) {
+                showError('Please enter your date of birth.');
+                return;
+            }
             if (inviteCode && inviteCode.length !== INVITE_CODE_LENGTH) {
                 showError('Invite codes must be exactly 16 letters/numbers.');
                 return;
@@ -1186,6 +1384,18 @@
 
                 await user.updateProfile({ displayName: displayName });
                 await syncUserProfile(user, displayName, true);
+
+                // Save birthday
+                const hebBday = gregorianToHebrew(birthdayStr);
+                if (hebBday) {
+                    try {
+                        await db.collection('users').doc(user.uid).set(
+                            { birthDateGregorian: birthdayStr, ...hebBday },
+                            { merge: true }
+                        );
+                    } catch (_) {}
+                }
+
                 showSuccess('Account created successfully. Redirecting...');
 
                 if (inviteCode.length === INVITE_CODE_LENGTH) {
@@ -1507,5 +1717,41 @@
         }
     </script>
     <script src="/js/shabbat.js"></script>
+    <script>
+    (function () {
+        /* ── Flip Words ───────────────────────────────────────────────────── */
+        var words = document.querySelectorAll('#fw-container .fw-word');
+        if (words.length) {
+            var cur = 0;
+            setInterval(function () {
+                var prev = cur;
+                cur = (cur + 1) % words.length;
+                words[prev].classList.remove('fw-active');
+                words[prev].classList.add('fw-exit');
+                words[cur].classList.add('fw-active');
+                setTimeout(function () { words[prev].classList.remove('fw-exit'); }, 500);
+            }, 3200);
+        }
+
+        /* ── Parallax Hebrew letters ──────────────────────────────────────── */
+        var header = document.querySelector('.gradient-header');
+        if (header && window.innerWidth > 640) {
+            var layers = header.querySelectorAll('[data-depth]');
+            header.addEventListener('mousemove', function (e) {
+                var rect = header.getBoundingClientRect();
+                var dx = (e.clientX - rect.left - rect.width  / 2) / rect.width;
+                var dy = (e.clientY - rect.top  - rect.height / 2) / rect.height;
+                layers.forEach(function (el) {
+                    var d = parseFloat(el.dataset.depth) || 1;
+                    el.style.transform = 'translate(' + (dx * d * 28) + 'px, ' + (dy * d * 28) + 'px)';
+                });
+            });
+            header.addEventListener('mouseleave', function () {
+                layers.forEach(function (el) { el.style.transform = ''; });
+            });
+        }
+    })();
+    </script>
+
 </body>
 </html>

@@ -13,6 +13,7 @@ import {
     sendPasswordResetEmail
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import {
+    initializeFirestore,
     getFirestore,
     collection,
     collectionGroup,
@@ -44,18 +45,41 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+// If another SDK (e.g. compat) already created the app, reuse it.
+const _isNewApp = getApps().length === 0;
+const app = _isNewApp ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
-const db = getFirestore(app);
-
-// Set persistence to LOCAL so user stays logged in even after browser closes
-setPersistence(auth, browserLocalPersistence)
-  .then(() => {
-    console.log('Persistence enabled - users will stay logged in');
-  })
-  .catch((error) => {
-    console.error('Persistence setup error:', error);
+const locationHost = (typeof window !== 'undefined' && window.location) ? window.location.hostname : '';
+const userAgent = (typeof navigator !== 'undefined' && navigator.userAgent) ? navigator.userAgent : '';
+const isLocalDevHost = locationHost === '127.0.0.1' || locationHost === 'localhost';
+const isSafariBrowser = /^((?!chrome|android).)*safari/i.test(userAgent || '');
+let db;
+try {
+  db = initializeFirestore(app, {
+    experimentalForceLongPolling: isLocalDevHost || isSafariBrowser,
+    experimentalAutoDetectLongPolling: true,
+    useFetchStreams: false
   });
+} catch (_) {
+  db = getFirestore(app);
+}
+
+// Set persistence to LOCAL so user stays logged in even after browser closes.
+// ONLY do this when we created the app AND the compat SDK is not already on the
+// page. Calling setPersistence when the compat SDK already manages auth causes
+// onAuthStateChanged to briefly fire with null, breaking all active Firestore
+// snapshot listeners (seen as "Missing or insufficient permissions" errors on
+// the dashboard when mitzvah-dash.js imports this module).
+const _compatAlreadyPresent = typeof window !== 'undefined' && Boolean(window.firebase);
+if (_isNewApp && !_compatAlreadyPresent) {
+  setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+      console.log('Persistence enabled - users will stay logged in');
+    })
+    .catch((error) => {
+      console.error('Persistence setup error:', error);
+    });
+}
 
 // ========================================
 // CHAVRUTA CONTEXT
@@ -96,7 +120,7 @@ function chavrutaDoc(subcollectionName, docId) {
   return doc(db, 'chavrutas', chavrutaId, subcollectionName, docId);
 }
 
-const USER_CHAVRUTA_CACHE_TTL_MS = 45000;
+const USER_CHAVRUTA_CACHE_TTL_MS = 300000; // 5 minutes
 const userChavrutaCache = new Map();
 
 function getTimestampMillis(timestamp) {
@@ -110,6 +134,13 @@ function getTimestampMillis(timestamp) {
     return timestamp.getTime();
   }
   return 0;
+}
+
+function isMissingIndexError(error) {
+  if (!error) return false;
+  if (error.code === 'failed-precondition') return true;
+  const message = typeof error.message === 'string' ? error.message.toLowerCase() : '';
+  return message.includes('index');
 }
 
 async function getUserChavrutaIds(userId, options = {}) {
@@ -415,6 +446,17 @@ function showLoginRequiredOverlayAndRedirect() {
     const cta = overlay.querySelector('#login-required-cta');
     if (cta) {
       cta.addEventListener('click', () => {
+        // If auth restored while the overlay was visible, just dismiss it
+        const compatCurrent = typeof window !== 'undefined'
+          && window.firebase
+          && typeof window.firebase.auth === 'function'
+          && window.firebase.auth().currentUser;
+        if (auth.currentUser || compatCurrent) {
+          window.__loginRedirectPending = false;
+          overlay.remove();
+          document.body?.classList.remove('login-required-pending');
+          return;
+        }
         window.location.assign('/');
       });
     }
@@ -424,6 +466,14 @@ function showLoginRequiredOverlayAndRedirect() {
 
 function initAuth(onAuthReady) {
   let authRedirectTimer = null;
+
+  // Check if there's evidence of a prior session — give Firebase more time
+  // to restore it. Without this, the overlay flashes on every page navigation.
+  const hasSessionHint = Boolean(
+    sessionStorage.getItem('headerUserCache') ||
+    localStorage.getItem('dashGroupsCache') ||
+    localStorage.getItem('lastActiveChavrutaId')
+  );
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -441,22 +491,68 @@ function initAuth(onAuthReady) {
       console.log('User authenticated:', user.email);
       if (onAuthReady) onAuthReady(user);
     } else {
-      currentUser = null;
-      console.log('No user authenticated');
+      // The modular SDK may fire null transiently while the compat SDK
+      // (used on the dashboard) still holds a valid session.  Only clear
+      // our module-level variable when we're confident no SDK has a user.
+      const compatUser = typeof window !== 'undefined'
+        && window.firebase
+        && typeof window.firebase.auth === 'function'
+        && window.firebase.auth().currentUser;
+      if (!compatUser) {
+        currentUser = null;
+      }
+      console.log('No user authenticated (modular SDK)');
       // Redirect unauthenticated users away from protected app pages.
       // Login and invite onboarding routes are public.
       const path = window.location.pathname.replace(/\/+$/, '') || '/';
       const publicPaths = ['', '/', '/invite', '/join', '/about'];
       const isPublic = publicPaths.includes(path);
       if (!isPublic) {
-        // Firebase fires null initially while loading persisted session.
-        // Delay the redirect so the real auth state can cancel it.
+        // If the compat SDK (dashboard) already has a user, skip the
+        // redirect/overlay logic entirely — the session is fine.
+        if (compatUser) {
+          return;
+        }
+        // Firebase fires null initially while loading persisted session from
+        // IndexedDB. Give it enough time to restore before showing the overlay.
+        // Use a generous delay if we have any evidence of a prior session.
+        // Mobile devices can be very slow to restore from IndexedDB, so be generous.
+        const delay = hasSessionHint ? 12000 : 5000;
         if (!authRedirectTimer) {
           authRedirectTimer = setTimeout(() => {
-            if (!currentUser) {
-              showLoginRequiredOverlayAndRedirect();
+            // Check all possible auth sources — the module-level variable,
+            // the modular SDK's auth object, AND the compat SDK (used by
+            // the dashboard's inline script).  Any one having a user means
+            // the session is alive; showing the overlay would be wrong.
+            const compatUser = typeof window !== 'undefined'
+              && window.firebase
+              && typeof window.firebase.auth === 'function'
+              && window.firebase.auth().currentUser;
+            const isAuthenticated = currentUser || auth.currentUser || compatUser;
+            if (!isAuthenticated) {
+              // Double-check session hints — if they still exist, the session
+              // is likely restoring slowly, so wait a bit longer.
+              const stillHasHint = Boolean(
+                sessionStorage.getItem('headerUserCache') ||
+                localStorage.getItem('dashGroupsCache') ||
+                localStorage.getItem('lastActiveChavrutaId')
+              );
+              if (stillHasHint) {
+                // Give it one final chance
+                setTimeout(() => {
+                  const laterCompatUser = typeof window !== 'undefined'
+                    && window.firebase
+                    && typeof window.firebase.auth === 'function'
+                    && window.firebase.auth().currentUser;
+                  if (!currentUser && !auth.currentUser && !laterCompatUser) {
+                    showLoginRequiredOverlayAndRedirect();
+                  }
+                }, 5000);
+              } else {
+                showLoginRequiredOverlayAndRedirect();
+              }
             }
-          }, 200);
+          }, delay);
         }
         return;
       }
@@ -949,18 +1045,19 @@ async function getUserBookmarks(userId) {
   }
 
   try {
-    const allDocs = await queryAcrossChavrutas(userId, 'bookmarks', [
-      where('userId', '==', userId)
+    // Query both legacy chavruta-scoped bookmarks AND the globalBookmarks collection
+    // (psalms/tehilim bookmarks are saved to globalBookmarks)
+    const [legacyDocs, globalSnap] = await Promise.all([
+      queryAcrossChavrutas(userId, 'bookmarks', [where('userId', '==', userId)]),
+      getDocs(query(collection(db, 'globalBookmarks'), where('userId', '==', userId)))
     ]);
+
     const bookmarksByVerseRef = new Map();
 
-    allDocs.forEach((docSnap) => {
+    function mergeDoc(docSnap) {
       const data = docSnap.data();
       const verseRef = data.verseRef;
-      if (!verseRef) {
-        return;
-      }
-
+      if (!verseRef) return;
       const next = {
         id: docSnap.id,
         verseRef,
@@ -968,20 +1065,19 @@ async function getUserBookmarks(userId) {
         timestamp: data.timestamp,
         verseText: data.verseText || null
       };
-
       const existing = bookmarksByVerseRef.get(verseRef);
       if (!existing || getTimestampMillis(next.timestamp) > getTimestampMillis(existing.timestamp)) {
         bookmarksByVerseRef.set(verseRef, next);
       } else if (existing && !existing.verseText && next.verseText) {
         bookmarksByVerseRef.set(verseRef, { ...existing, verseText: next.verseText });
       }
-    });
+    }
+
+    legacyDocs.forEach(mergeDoc);
+    globalSnap.forEach(mergeDoc);
 
     const bookmarks = Array.from(bookmarksByVerseRef.values());
-    bookmarks.sort((a, b) => {
-      return getTimestampMillis(b.timestamp) - getTimestampMillis(a.timestamp);
-    });
-
+    bookmarks.sort((a, b) => getTimestampMillis(b.timestamp) - getTimestampMillis(a.timestamp));
     return bookmarks;
   } catch (error) {
     console.error('Error getting user bookmarks:', error);
@@ -1053,6 +1149,202 @@ async function getBookmarkCountsForVerses(verseRefs) {
   } catch (error) {
     console.error('Error getting bookmark counts for verses:', error);
     return counts;
+  }
+}
+
+// ========================================
+// GLOBAL REACTIONS (universal — all authenticated users can see)
+// Used for Psalms / Tehillim page
+// ========================================
+
+async function submitGlobalReaction(verseRef, reactionType, userId) {
+  if (!userId) throw new Error('User not authenticated');
+  if (!['emphasize', 'heart'].includes(reactionType)) throw new Error('Invalid reaction type');
+  try {
+    const reactionKey = `${encodeURIComponent(verseRef)}__${userId}__${reactionType}`;
+    const reactionDocRef = doc(db, 'globalReactions', reactionKey);
+    const existing = await getDoc(reactionDocRef);
+    if (existing.exists()) {
+      await deleteDoc(reactionDocRef);
+      return { action: 'removed', reactionType };
+    }
+    await setDoc(reactionDocRef, { verseRef, userId, reactionType, timestamp: serverTimestamp() });
+    return { action: 'added', reactionType, id: reactionKey };
+  } catch (error) {
+    console.error('Error submitting global reaction:', error);
+    throw error;
+  }
+}
+
+async function getUserGlobalReactions(userId, verseRefs) {
+  const userReactions = {};
+  if (!userId || !verseRefs || verseRefs.length === 0) return userReactions;
+  try {
+    const verseRefSet = new Set(verseRefs);
+    // Query all user reactions and filter client-side to avoid the 30-item
+    // 'in' limit and composite-index requirement. Data volume per user is small.
+    const querySnapshot = await getDocs(query(
+      collection(db, 'globalReactions'),
+      where('userId', '==', userId)
+    ));
+    querySnapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      if (!verseRefSet.has(data.verseRef)) return;
+      if (!userReactions[data.verseRef]) userReactions[data.verseRef] = [];
+      if (!userReactions[data.verseRef].includes(data.reactionType)) {
+        userReactions[data.verseRef].push(data.reactionType);
+      }
+    });
+    return userReactions;
+  } catch (error) {
+    console.error('Error getting user global reactions:', error);
+    return userReactions;
+  }
+}
+
+async function getGlobalReactionCountsForBook(bookName) {
+  const counts = {};
+  try {
+    const snapshot = await getDocs(query(
+      collection(db, 'globalReactions'),
+      where('verseRef', '>=', `${bookName} `),
+      where('verseRef', '<=', `${bookName}~`)
+    ));
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      if (!counts[data.verseRef]) counts[data.verseRef] = { emphasize: 0, heart: 0 };
+      counts[data.verseRef][data.reactionType] = (counts[data.verseRef][data.reactionType] || 0) + 1;
+    });
+    return counts;
+  } catch (error) {
+    console.error('Error getting global reaction counts:', error);
+    return counts;
+  }
+}
+
+// ========================================
+// GLOBAL BOOKMARKS (universal — all authenticated users can see)
+// ========================================
+
+async function addGlobalBookmark(userId, verseRef, bookmarkMeta = {}) {
+  if (!userId) throw new Error('User not authenticated');
+  if (!verseRef) throw new Error('Verse reference is required');
+  try {
+    const bookmarkKey = `${userId}__${encodeURIComponent(verseRef)}`;
+    await setDoc(doc(db, 'globalBookmarks', bookmarkKey), {
+      verseRef, userId, verseText: bookmarkMeta.verseText || '', timestamp: serverTimestamp()
+    });
+    return { action: 'added', verseRef, id: bookmarkKey };
+  } catch (error) {
+    console.error('Error adding global bookmark:', error);
+    throw error;
+  }
+}
+
+async function removeGlobalBookmark(userId, verseRef) {
+  if (!userId) throw new Error('User not authenticated');
+  try {
+    const bookmarkKey = `${userId}__${encodeURIComponent(verseRef)}`;
+    await deleteDoc(doc(db, 'globalBookmarks', bookmarkKey));
+    return { action: 'removed', verseRef };
+  } catch (error) {
+    console.error('Error removing global bookmark:', error);
+    throw error;
+  }
+}
+
+async function isGlobalVerseBookmarked(userId, verseRef) {
+  if (!userId || !verseRef) return false;
+  try {
+    const bookmarkKey = `${userId}__${encodeURIComponent(verseRef)}`;
+    const snap = await getDoc(doc(db, 'globalBookmarks', bookmarkKey));
+    return snap.exists();
+  } catch { return false; }
+}
+
+async function getUserGlobalBookmarks(userId) {
+  if (!userId) return [];
+  try {
+    const snapshot = await getDocs(query(
+      collection(db, 'globalBookmarks'),
+      where('userId', '==', userId)
+    ));
+    return snapshot.docs.map(d => d.data());
+  } catch (error) {
+    console.error('Error getting user global bookmarks:', error);
+    return [];
+  }
+}
+
+async function getGlobalBookmarkCountsForVerses(verseRefs) {
+  const counts = {};
+  if (!Array.isArray(verseRefs) || verseRefs.length === 0) return counts;
+  try {
+    for (let i = 0; i < verseRefs.length; i += 10) {
+      const batch = verseRefs.slice(i, i + 10);
+      const snapshot = await getDocs(query(
+        collection(db, 'globalBookmarks'),
+        where('verseRef', 'in', batch)
+      ));
+      snapshot.forEach(docSnap => {
+        const { verseRef } = docSnap.data();
+        counts[verseRef] = (counts[verseRef] || 0) + 1;
+      });
+    }
+    return counts;
+  } catch (error) {
+    console.error('Error getting global bookmark counts:', error);
+    return counts;
+  }
+}
+
+async function getGlobalVerseInteractors(verseRef, interactionType) {
+  const MAX_USERS = 20;
+  try {
+    const isIndexError = (error) => {
+      if (!error) return false;
+      if (error.code === 'failed-precondition') return true;
+      const message = typeof error.message === 'string' ? error.message.toLowerCase() : '';
+      return message.includes('index');
+    };
+
+    const col = interactionType === 'bookmark'
+      ? collection(db, 'globalBookmarks')
+      : collection(db, 'globalReactions');
+
+    const baseConstraints = interactionType === 'bookmark'
+      ? [where('verseRef', '==', verseRef)]
+      : [where('verseRef', '==', verseRef), where('reactionType', '==', interactionType)];
+
+    let snapshot;
+    try {
+      snapshot = await getDocs(query(col, ...baseConstraints, orderBy('timestamp', 'desc'), limit(MAX_USERS)));
+    } catch (error) {
+      if (isIndexError(error)) {
+        snapshot = await getDocs(query(col, ...baseConstraints, limit(MAX_USERS)));
+      } else {
+        throw error;
+      }
+    }
+
+    const userPromises = [];
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      if (data.userId) {
+        userPromises.push(
+          getUserInfo(data.userId).then(userInfo => ({
+            user: userInfo,
+            timestamp: data.timestamp
+          }))
+        );
+      }
+    });
+
+    const userResults = await Promise.all(userPromises);
+    return userResults.filter(r => r.user !== null);
+  } catch (error) {
+    console.error(`Error fetching global ${interactionType} interactors for ${verseRef}:`, error);
+    return [];
   }
 }
 
@@ -1511,6 +1803,18 @@ async function getUserInfo(userId) {
   }
 }
 
+/** Returns the user's Gregorian birthday string (YYYY-MM-DD) from their profile, or null. */
+async function getUserBirthday(userId) {
+  if (!userId) return null;
+  try {
+    const snap = await getDoc(doc(db, 'users', userId));
+    if (snap.exists()) {
+      return snap.data().birthDateGregorian || null;
+    }
+    return null;
+  } catch { return null; }
+}
+
 // Reads from chavruta's presence subcollection, returns users active in last 3 weeks
 async function getUsersWithinThreeWeeks(limitCount = 10) {
   try {
@@ -1569,6 +1873,10 @@ async function getUsersWithinThreeWeeks(limitCount = 10) {
 // ========================================
 
 let mitzvahReflectionsUnsubscribe = null;
+let mitzvahReflectionsOrderBySupported = true;
+let mitzvahReflectionsIndexWarned = false;
+let mitzvahLeaderboardOrderBySupported = true;
+let mitzvahLeaderboardIndexWarned = false;
 
 function listenForMitzvahReflections(parshaName, callback) {
   if (mitzvahReflectionsUnsubscribe) {
@@ -1581,16 +1889,19 @@ function listenForMitzvahReflections(parshaName, callback) {
     return;
   }
 
-  try {
-    const reflectionsQuery = query(
-      chavrutaCollection('mitzvah-data'),
+  const subscribeReflections = (useOrderBy) => {
+    const constraints = [
       where('type', '==', 'reflection'),
-      where('parshaName', '==', parshaName),
-      orderBy('createdAt', 'asc'),
-      limit(100)
-    );
+      where('parshaName', '==', parshaName)
+    ];
+    if (useOrderBy) {
+      constraints.push(orderBy('createdAt', 'asc'));
+    }
+    constraints.push(limit(100));
 
-    mitzvahReflectionsUnsubscribe = onSnapshot(reflectionsQuery,
+    const reflectionsQuery = query(chavrutaCollection('mitzvah-data'), ...constraints);
+    return onSnapshot(
+      reflectionsQuery,
       (querySnapshot) => {
         const reflections = [];
         querySnapshot.forEach((docSnapshot) => {
@@ -1607,50 +1918,37 @@ function listenForMitzvahReflections(parshaName, callback) {
             reactions: data.reactions
           });
         });
+
+        if (!useOrderBy) {
+          reflections.sort((a, b) => getTimestampMillis(a.createdAt) - getTimestampMillis(b.createdAt));
+        }
         callback(reflections);
       },
       (error) => {
-        console.error('Error listening to mitzvah reflections:', error);
-        // Fallback: try without orderBy in case index doesn't exist yet
-        try {
-          const fallbackQuery = query(
-            chavrutaCollection('mitzvah-data'),
-            where('type', '==', 'reflection'),
-            where('parshaName', '==', parshaName),
-            limit(100)
-          );
-          mitzvahReflectionsUnsubscribe = onSnapshot(fallbackQuery,
-            (querySnapshot) => {
-              const reflections = [];
-              querySnapshot.forEach((docSnapshot) => {
-                const data = docSnapshot.data();
-                reflections.push({
-                  id: docSnapshot.id,
-                  challengeId: data.parshaName || data.challengeId,
-                  parshaName: data.parshaName,
-                  message: data.message,
-                  userId: data.userId,
-                  username: data.username,
-                  createdAt: data.createdAt,
-                  updatedAt: data.updatedAt,
-                  reactions: data.reactions
-                });
-              });
-              // Sort manually
-              reflections.sort((a, b) => {
-                if (!a.createdAt) return -1;
-                if (!b.createdAt) return 1;
-                return a.createdAt.toMillis() - b.createdAt.toMillis();
-              });
-              callback(reflections);
-            },
-            () => callback([])
-          );
-        } catch (_) {
-          callback([]);
+        if (useOrderBy && isMissingIndexError(error)) {
+          mitzvahReflectionsOrderBySupported = false;
+          if (!mitzvahReflectionsIndexWarned) {
+            mitzvahReflectionsIndexWarned = true;
+            console.warn('Mitzvah reflections index not available, using fallback query.');
+          }
+          try {
+            if (mitzvahReflectionsUnsubscribe) {
+              mitzvahReflectionsUnsubscribe();
+            }
+            mitzvahReflectionsUnsubscribe = subscribeReflections(false);
+            return;
+          } catch (fallbackError) {
+            console.error('Error attaching fallback mitzvah reflections listener:', fallbackError);
+          }
         }
+        console.error('Error listening to mitzvah reflections:', error);
+        callback([]);
       }
     );
+  };
+
+  try {
+    mitzvahReflectionsUnsubscribe = subscribeReflections(mitzvahReflectionsOrderBySupported);
   } catch (error) {
     console.error('Error setting up mitzvah reflections listener:', error);
     callback([]);
@@ -1695,6 +1993,36 @@ async function submitMitzvahReflection(parshaName, text, userId, username) {
     return reflection;
   } catch (error) {
     console.error('Error submitting mitzvah reflection:', error);
+    throw error;
+  }
+}
+
+async function editMitzvahReflection(reflectionId, newText) {
+  if (!reflectionId || !newText) {
+    throw new Error('Missing required fields to edit reflection');
+  }
+  const trimmed = newText.trim();
+  if (!trimmed) {
+    throw new Error('Reflection message cannot be empty');
+  }
+  try {
+    const reflectionRef = chavrutaDoc('mitzvah-data', reflectionId);
+    await setDoc(reflectionRef, { message: trimmed, updatedAt: serverTimestamp() }, { merge: true });
+  } catch (error) {
+    console.error('Error editing mitzvah reflection:', error);
+    throw error;
+  }
+}
+
+async function deleteMitzvahReflection(reflectionId) {
+  if (!reflectionId) {
+    throw new Error('Missing reflection ID');
+  }
+  try {
+    const reflectionRef = chavrutaDoc('mitzvah-data', reflectionId);
+    await deleteDoc(reflectionRef);
+  } catch (error) {
+    console.error('Error deleting mitzvah reflection:', error);
     throw error;
   }
 }
@@ -1794,31 +2122,55 @@ async function updateMitzvahLeaderboard(parshaName, userId, displayName) {
       ? displayName.trim()
       : 'Friend';
 
-    // Count all completions for this user in this chavruta
-    const completionsQuery = query(
-      chavrutaCollection('mitzvah-data'),
-      where('type', '==', 'completion'),
-      where('userId', '==', userId),
-      where('completed', '==', true)
-    );
-    const snapshot = await getDocs(completionsQuery);
-    const total = snapshot.size;
+    // Read the existing leaderboard entry to get the current count
+    let currentTotal = 0;
+    try {
+      const existing = await getDoc(leaderboardRef);
+      if (existing.exists()) {
+        currentTotal = existing.data().totalCompleted || 0;
+      }
+    } catch (_) {}
+
+    const total = currentTotal + 1;
 
     const payload = {
       type: 'leaderboard',
       userId,
       username: resolvedName,
       totalCompleted: total,
+      lastCompletedAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     };
-
-    if (total > 0) {
-      payload.lastCompletedAt = serverTimestamp();
-    }
 
     await setDoc(leaderboardRef, payload, { merge: true });
   } catch (error) {
     console.error('Error updating mitzvah leaderboard:', error);
+  }
+}
+
+async function decrementMitzvahLeaderboard(userId) {
+  if (!userId) {
+    return;
+  }
+
+  try {
+    const leaderboardRef = chavrutaDoc('mitzvah-data', `leaderboard__${userId}`);
+    const existing = await getDoc(leaderboardRef);
+    if (!existing.exists()) return;
+
+    const currentTotal = existing.data().totalCompleted || 0;
+    const newTotal = Math.max(0, currentTotal - 1);
+
+    if (newTotal <= 0) {
+      await deleteDoc(leaderboardRef);
+    } else {
+      await setDoc(leaderboardRef, {
+        totalCompleted: newTotal,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+    }
+  } catch (error) {
+    console.error('Error decrementing mitzvah leaderboard:', error);
   }
 }
 
@@ -1867,19 +2219,32 @@ async function recalculateMitzvahLeaderboard(parshaName, userId) {
 async function getMitzvahLeaderboard(parshaName, limitCount = 10) {
   try {
     let snapshot;
-    try {
-      const leaderboardQuery = query(
-        chavrutaCollection('mitzvah-data'),
-        where('type', '==', 'leaderboard'),
-        orderBy('totalCompleted', 'desc'),
-        limit(limitCount * 2)
-      );
-      snapshot = await getDocs(leaderboardQuery);
-    } catch (indexError) {
-      console.warn('Leaderboard index not available, using fallback query:', indexError.message);
+    if (mitzvahLeaderboardOrderBySupported) {
+      try {
+        const leaderboardQuery = query(
+          chavrutaCollection('mitzvah-data'),
+          where('type', '==', 'leaderboard'),
+          orderBy('totalCompleted', 'desc'),
+          limit(limitCount * 2)
+        );
+        snapshot = await getDocs(leaderboardQuery);
+      } catch (indexError) {
+        if (!isMissingIndexError(indexError)) {
+          throw indexError;
+        }
+        mitzvahLeaderboardOrderBySupported = false;
+        if (!mitzvahLeaderboardIndexWarned) {
+          mitzvahLeaderboardIndexWarned = true;
+          console.warn('Leaderboard index not available, using fallback query.');
+        }
+      }
+    }
+
+    if (!snapshot) {
       const fallbackQuery = query(
         chavrutaCollection('mitzvah-data'),
-        where('type', '==', 'leaderboard')
+        where('type', '==', 'leaderboard'),
+        limit(limitCount * 4)
       );
       snapshot = await getDocs(fallbackQuery);
     }
@@ -1978,6 +2343,16 @@ export {
   getUserBookmarks,
   getBookmarkCountsForBook,
   getBookmarkCountsForVerses,
+  submitGlobalReaction,
+  getUserGlobalReactions,
+  getGlobalReactionCountsForBook,
+  addGlobalBookmark,
+  removeGlobalBookmark,
+  isGlobalVerseBookmarked,
+  getUserGlobalBookmarks,
+  getGlobalBookmarkCountsForVerses,
+  getGlobalVerseInteractors,
+  getUserBirthday,
   addDailyQuoteBookmark,
   removeDailyQuoteBookmark,
   isDailyQuoteBookmarked,
@@ -1995,11 +2370,27 @@ export {
   listenForMitzvahReflections,
   stopListeningForMitzvahReflections,
   submitMitzvahReflection,
+  editMitzvahReflection,
+  deleteMitzvahReflection,
   submitMitzvahReflectionReaction,
   getMitzvahCompletionStatus,
   setMitzvahCompletionStatus,
   updateMitzvahLeaderboard,
+  decrementMitzvahLeaderboard,
   recalculateMitzvahLeaderboard,
   getMitzvahLeaderboard,
+  getChavrutaBasicInfo,
   formatTimeAgo
 };
+
+async function getChavrutaBasicInfo(chavrutaId) {
+  if (!chavrutaId) return null;
+  try {
+    const snap = await getDoc(doc(db, 'chavrutas', chavrutaId));
+    if (!snap.exists()) return null;
+    const d = snap.data();
+    return { id: chavrutaId, name: d.name || 'Study Group' };
+  } catch {
+    return null;
+  }
+}

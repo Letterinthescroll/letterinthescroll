@@ -15,7 +15,10 @@ export const state = {
     currentMitzvahChallengeId: null,
     currentMitzvahWeekStart: null,
     currentMitzvahDeadline: null,
-    mitzvahLeaderboard: []
+    mitzvahLeaderboard: [],
+    isDoubleParsha: false,
+    doubleParshaFirstIndex: -1,
+    doubleParshaDisplayName: null
 };
 
 export function setState(updates) {

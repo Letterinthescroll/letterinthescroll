@@ -189,7 +189,9 @@ service cloud.firestore {
         allow update: if isChavrutaMember(chavrutaId) &&
           resource.data.userId == request.auth.uid;
 
-        allow delete: if false;
+        // Only the author of a reflection can delete it
+        allow delete: if isChavrutaMember(chavrutaId) &&
+          resource.data.userId == request.auth.uid;
       }
     }
 
@@ -213,6 +215,38 @@ service cloud.firestore {
       // Users can only delete their own subscription entry
       allow delete: if isAuth() &&
         resource.data.email == request.auth.token.email;
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // GLOBAL REACTIONS (Psalms / Tehillim — universal)
+    // Any authenticated user can read; users manage their own.
+    // ═══════════════════════════════════════════════════════
+    match /globalReactions/{reactionId} {
+      allow read: if isAuth();
+
+      allow create: if isAuth()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.reactionType in ['heart', 'emphasize'];
+
+      allow delete: if isAuth()
+        && resource.data.userId == request.auth.uid;
+
+      allow update: if false;
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // GLOBAL BOOKMARKS (Psalms / Tehillim — universal)
+    // ═══════════════════════════════════════════════════════
+    match /globalBookmarks/{bookmarkId} {
+      allow read: if isAuth();
+
+      allow create: if isAuth()
+        && request.resource.data.userId == request.auth.uid;
+
+      allow delete: if isAuth()
+        && resource.data.userId == request.auth.uid;
+
+      allow update: if false;
     }
 
     // ═══════════════════════════════════════════════════════

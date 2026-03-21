@@ -1,5 +1,5 @@
 // Main Application Entry Point - QUERY FIX FOR COMMENT BADGES + GENERAL PARSHA CHAT
-import { TORAH_PARSHAS } from './config.js';
+import { TORAH_PARSHAS, DOUBLE_PARSHA_PAIRS } from './config.js';
 import { fetchCurrentParsha, fetchParshaText, loadCommentaryData, loadMitzvahChallenges, getCachedCurrentParsha, cacheCurrentParsha } from './api.js';
 import { state, setState } from './state.js';
 import { isImportantVerse, getImportantVerseData } from './important-verses.js';
@@ -517,6 +517,8 @@ function openStudyRoomPickerModal(chavrutas = []) {
             return;
         }
         sessionStorage.setItem('activeChavrutaId', selectedId);
+        localStorage.setItem('lastActiveChavrutaId', selectedId);
+        try { sessionStorage.removeItem('presenceCache'); } catch (_) {}
         document.documentElement.removeAttribute('data-readonly');
         _studyRoomResolved = true;
         closeStudyRoomPickerModal();
@@ -565,6 +567,14 @@ async function enforceStudyRoomSelection(user) {
         }));
 
         _userChavrutas = chavrutas;
+        // Persist slim chavruta list so header-loader.js can offer the nav picker on any page.
+        try {
+            const slim = chavrutas.map(c => ({ id: c.id, name: c.name || 'Study Group' }));
+            localStorage.setItem('userChavrutaList', JSON.stringify(slim));
+        } catch (_) {}
+        // Refresh the context bar now that _userChavrutas is populated (fixes race
+        // where a concurrent auth call ran updateChavrutaContextBar with an empty list).
+        updateChavrutaContextBar();
 
         if (!chavrutas.length) {
             sessionStorage.removeItem('activeChavrutaId');
@@ -577,17 +587,27 @@ async function enforceStudyRoomSelection(user) {
         const requestedChavrutaId = params.get('chavruta');
         const chavrutaIds = new Set(chavrutas.map((room) => room.id));
 
-        if (requestedChavrutaId && chavrutaIds.has(requestedChavrutaId)) {
+        // Always respect an explicit URL param — it was set by the user's own
+        // choice (dashboard modal or study picker). Trust it unconditionally so that
+        // even a momentarily stale Firestore cache doesn't revert to a previous group.
+        if (requestedChavrutaId) {
             sessionStorage.setItem('activeChavrutaId', requestedChavrutaId);
-            document.documentElement.removeAttribute('data-readonly');
+            // Always persist to localStorage so next visit (no URL param) keeps this choice.
+            try { localStorage.setItem('lastActiveChavrutaId', requestedChavrutaId); } catch (_) {}
+            if (chavrutaIds.has(requestedChavrutaId)) {
+                document.documentElement.removeAttribute('data-readonly');
+            }
             closeStudyRoomPickerModal();
             _studyRoomResolved = true;
+            // Refresh bar now that sessionStorage is guaranteed correct for this param.
+            updateChavrutaContextBar();
             return false;
         }
 
         if (chavrutas.length === 1) {
             const onlyRoomId = chavrutas[0].id;
             sessionStorage.setItem('activeChavrutaId', onlyRoomId);
+            localStorage.setItem('lastActiveChavrutaId', onlyRoomId);
             document.documentElement.removeAttribute('data-readonly');
             closeStudyRoomPickerModal();
             _studyRoomResolved = true;
@@ -595,16 +615,19 @@ async function enforceStudyRoomSelection(user) {
             return false;
         }
 
-        // Multiple rooms — check if user already picked one this session
-        const storedChavrutaId = sessionStorage.getItem('activeChavrutaId');
+        // Multiple rooms — check sessionStorage first, then localStorage fallback
+        const storedChavrutaId = sessionStorage.getItem('activeChavrutaId')
+            || localStorage.getItem('lastActiveChavrutaId');
         if (storedChavrutaId && chavrutaIds.has(storedChavrutaId)) {
+            sessionStorage.setItem('activeChavrutaId', storedChavrutaId);
+            localStorage.setItem('lastActiveChavrutaId', storedChavrutaId);
             document.documentElement.removeAttribute('data-readonly');
             closeStudyRoomPickerModal();
             _studyRoomResolved = true;
             return false;
         }
 
-        // No valid stored selection: require user choice.
+        // No stored selection at all: require user choice.
         sessionStorage.removeItem('activeChavrutaId');
         document.documentElement.setAttribute('data-readonly', 'true');
         openStudyRoomPickerModal(chavrutas);
@@ -710,12 +733,10 @@ async function init() {
             console.log('⚡ No cached parsha — fetching from API...');
             const currentParshaName = await parshaNamePromise;
             if (currentParshaName) {
-                const matchingParsha = TORAH_PARSHAS.find(p =>
-                    p.name.toLowerCase() === currentParshaName.toLowerCase() ||
-                    currentParshaName.toLowerCase().includes(p.name.toLowerCase())
-                );
-                if (matchingParsha) {
-                    const matchingIndex = TORAH_PARSHAS.indexOf(matchingParsha);
+                const match = findMatchingParshaByName(currentParshaName);
+                const matchingParsha = match?.parsha || null;
+                const matchingIndex = match?.index ?? -1;
+                if (matchingParsha && matchingIndex >= 0) {
                     const initialWeekStart = getWeekStartForDate();
                     cacheCurrentParsha(currentParshaName, matchingParsha.reference);
                     setState({
@@ -730,7 +751,7 @@ async function init() {
                     });
                     updateNavigationButtons();
                     await loadParsha(matchingParsha.reference);
-                    console.log('✅ Loaded weekly parsha from API:', matchingParsha.name);
+                    console.log('✅ Loaded weekly parsha from API:', match.displayName || matchingParsha.name);
                 } else {
                     setState({ currentParshaRef: TORAH_PARSHAS[0].reference, currentParshaIndex: 0 });
                     await loadParsha(TORAH_PARSHAS[0].reference);
@@ -774,13 +795,11 @@ async function init() {
             console.log('✅ Current parsha fetched:', currentParshaName);
 
             if (currentParshaName) {
-                const matchingParsha = TORAH_PARSHAS.find(p =>
-                    p.name.toLowerCase() === currentParshaName.toLowerCase() ||
-                    currentParshaName.toLowerCase().includes(p.name.toLowerCase())
-                );
+                const match = findMatchingParshaByName(currentParshaName);
+                const matchingParsha = match?.parsha || null;
+                const matchingIndex = match?.index ?? -1;
 
-                if (matchingParsha) {
-                    const matchingIndex = TORAH_PARSHAS.indexOf(matchingParsha);
+                if (matchingParsha && matchingIndex >= 0) {
                     const initialWeekStart = getWeekStartForDate();
 
                     cacheCurrentParsha(currentParshaName, matchingParsha.reference);
@@ -801,7 +820,7 @@ async function init() {
                         updateNavigationButtons();
                         await loadParsha(matchingParsha.reference);
                     } else {
-                        updateMitzvahChallengeForParsha(matchingParsha.name);
+                        updateMitzvahChallengeForParsha(match.displayName || matchingParsha.name);
                     }
                 }
             }
@@ -816,6 +835,13 @@ async function init() {
         } else if (hash === '#bookmarks-quotes') {
             window.history.replaceState(null, '', window.location.pathname);
             openBookmarksPanel('quotes');
+        }
+
+        // Handle ?verse=VERSE_REF from bookmark navigation (e.g. "Leviticus 5:3")
+        const verseParam = new URLSearchParams(window.location.search).get('verse');
+        if (verseParam) {
+            window.history.replaceState(null, '', window.location.pathname);
+            await loadVerseFromBookmark(verseParam);
         }
 
         console.log('✅ Application initialized successfully');
@@ -850,13 +876,28 @@ function setupEventListeners() {
     
     document.getElementById('prev-parsha').addEventListener('click', async () => {
         if (state.currentParshaIndex > 0) {
-            const newIndex = state.currentParshaIndex - 1;
+            let newIndex = state.currentParshaIndex - 1;
+            // If the parsha we'd land on is the second in a double pair for this year,
+            // skip back to the first (loadParsha will show both in combined view)
+            const targetParsha = state.allParshas[newIndex];
+            if (targetParsha) {
+                const pairInfo = getDoubleParshaPairInfo(targetParsha.name);
+                if (pairInfo && pairInfo.position === 'first' && !isHebrewLeapYear(getCurrentHebrewYear())) {
+                    // We're about to land on the first parsha of a double pair,
+                    // but we're coming FROM the double view — skip before it
+                    const currentParsha = state.allParshas[state.currentParshaIndex];
+                    const currentPairInfo = getDoubleParshaPairInfo(currentParsha?.name);
+                    if (currentPairInfo && currentPairInfo.position === 'second'
+                        && normalizeParshaName(currentPairInfo.pair[0]) === normalizeParshaName(pairInfo.pair[0])) {
+                        newIndex = Math.max(0, newIndex - 1);
+                    }
+                }
+            }
             const prevParsha = state.allParshas[newIndex];
             setState({
                 currentParshaIndex: newIndex,
                 currentParshaRef: prevParsha.reference
             });
-            // Update ALL select elements to keep them in sync
             document.querySelectorAll('select#parsha-selector').forEach((s) => {
                 s.value = prevParsha.reference;
             });
@@ -867,13 +908,15 @@ function setupEventListeners() {
 
     document.getElementById('next-parsha').addEventListener('click', async () => {
         if (state.currentParshaIndex < state.allParshas.length - 1) {
-            const newIndex = state.currentParshaIndex + 1;
+            let newIndex = state.currentParshaIndex + 1;
+            // loadParsha handles combining — just go to the next index.
+            // If we're currently on the second parsha of a double,
+            // next naturally goes past both. No special handling needed.
             const nextParsha = state.allParshas[newIndex];
             setState({
                 currentParshaIndex: newIndex,
                 currentParshaRef: nextParsha.reference
             });
-            // Update ALL select elements to keep them in sync
             document.querySelectorAll('select#parsha-selector').forEach((s) => {
                 s.value = nextParsha.reference;
             });
@@ -1054,10 +1097,138 @@ function normalizeParshaName(rawName) {
         .trim();
 }
 
+/**
+ * Get the approximate current Hebrew year based on the Gregorian date.
+ * Before Rosh Hashanah (~September), the Hebrew year is Gregorian + 3760.
+ * After Rosh Hashanah, it is Gregorian + 3761.
+ */
+function getCurrentHebrewYear() {
+    const now = new Date();
+    const month = now.getMonth(); // 0-based (0 = Jan)
+    return now.getFullYear() + (month < 8 ? 3760 : 3761);
+}
+
+/**
+ * Check if a Hebrew year is a leap year using the Metonic 19-year cycle.
+ * Leap years fall on positions 3, 6, 8, 11, 14, 17, 19 (remainder 0) of the cycle.
+ */
+function isHebrewLeapYear(hebrewYear) {
+    const remainder = hebrewYear % 19;
+    return [3, 6, 8, 11, 14, 17, 0].includes(remainder);
+}
+
+/**
+ * Check if a parsha (by name) is part of a known double-parsha pair.
+ * Returns { pairIndex, position: 'first'|'second', pair: [name1, name2] } or null.
+ */
+function getDoubleParshaPairInfo(parshaName) {
+    if (!parshaName) return null;
+    const normalizedTarget = normalizeParshaName(parshaName);
+    for (let i = 0; i < DOUBLE_PARSHA_PAIRS.length; i++) {
+        const pair = DOUBLE_PARSHA_PAIRS[i];
+        if (normalizeParshaName(pair[0]) === normalizedTarget) {
+            return { pairIndex: i, position: 'first', pair };
+        }
+        if (normalizeParshaName(pair[1]) === normalizedTarget) {
+            return { pairIndex: i, position: 'second', pair };
+        }
+    }
+    return null;
+}
+
+/**
+ * Determine if the given parsha should be displayed as part of a double-parsha pair
+ * this year. Returns { firstParsha, secondParsha, firstIndex, secondIndex, displayName }
+ * or null if the parsha is read alone this year.
+ */
+function resolveDoubleParshaForCurrentYear(parshaRef) {
+    const hebrewYear = getCurrentHebrewYear();
+    if (isHebrewLeapYear(hebrewYear)) {
+        // Leap year — all parshiyot are read separately
+        return null;
+    }
+
+    // Find which parsha this ref belongs to
+    const parshaObj = state.allParshas.find(p => p.reference === parshaRef);
+    if (!parshaObj) return null;
+
+    const pairInfo = getDoubleParshaPairInfo(parshaObj.name);
+    if (!pairInfo) return null;
+
+    // Find both parshiyot in the allParshas list
+    const firstIdx = state.allParshas.findIndex(p => normalizeParshaName(p.name) === normalizeParshaName(pairInfo.pair[0]));
+    const secondIdx = state.allParshas.findIndex(p => normalizeParshaName(p.name) === normalizeParshaName(pairInfo.pair[1]));
+
+    if (firstIdx < 0 || secondIdx < 0) return null;
+
+    return {
+        firstParsha: state.allParshas[firstIdx],
+        secondParsha: state.allParshas[secondIdx],
+        firstIndex: firstIdx,
+        secondIndex: secondIdx,
+        displayName: `${state.allParshas[firstIdx].name}-${state.allParshas[secondIdx].name}`
+    };
+}
+
+/**
+ * Check if a raw parsha name from the API represents a double parsha
+ * (e.g. "Parashat Vayakhel-Pekudei"). Returns the two individual names if so.
+ */
+function parseDoubleParsha(rawName) {
+    if (!rawName || typeof rawName !== 'string') return null;
+    const cleaned = rawName.replace(/parashat|parshat|parasha|parshah|parsha/gi, '').trim();
+    // Double parshiyot are hyphenated (e.g. "Vayakhel-Pekudei", "Tazria-Metzora")
+    const parts = cleaned.split(/\s*[-–—]\s*/);
+    if (parts.length === 2 && parts[0].length > 1 && parts[1].length > 1) {
+        return { first: parts[0].trim(), second: parts[1].trim() };
+    }
+    return null;
+}
+
 function findMatchingParshaByName(rawName) {
     if (!rawName || !Array.isArray(state.allParshas) || state.allParshas.length === 0) {
         return null;
     }
+
+    // Handle double parshiyot (e.g. "Vayakhel-Pekudei") — match the SECOND
+    // parsha so the weekly index advances past both, and include both parsha
+    // references so the UI can load and display them together.
+    const doubleParts = parseDoubleParsha(rawName);
+    if (doubleParts) {
+        let firstMatch = null;
+        let secondMatch = null;
+        for (let i = 0; i < state.allParshas.length; i++) {
+            const parsha = state.allParshas[i];
+            if (!parsha?.name) continue;
+            const normalizedCandidate = normalizeParshaName(parsha.name);
+            if (!normalizedCandidate) continue;
+            const normalizedFirst = normalizeParshaName(doubleParts.first);
+            const normalizedSecond = normalizeParshaName(doubleParts.second);
+            if (normalizedCandidate === normalizedFirst) {
+                firstMatch = { parsha, index: i };
+            }
+            if (normalizedCandidate === normalizedSecond) {
+                secondMatch = { parsha, index: i };
+            }
+        }
+        if (secondMatch) {
+            const displayName = firstMatch
+                ? `${firstMatch.parsha.name}-${secondMatch.parsha.name}`
+                : secondMatch.parsha.name;
+            return {
+                parsha: secondMatch.parsha,
+                index: secondMatch.index,
+                displayName,
+                isDouble: true,
+                firstParsha: firstMatch ? firstMatch.parsha : null,
+                firstIndex: firstMatch ? firstMatch.index : -1
+            };
+        }
+        if (firstMatch) {
+            return { parsha: firstMatch.parsha, index: firstMatch.index };
+        }
+    }
+
     const normalizedTarget = normalizeParshaName(rawName);
     if (!normalizedTarget) {
         return null;
@@ -1198,6 +1369,9 @@ async function checkAndApplyWeeklyParsha({ forceAdvance = false } = {}) {
     setState({
         weeklyParshaRef: match.parsha.reference,
         weeklyParshaIndex: match.index,
+        isDoubleParsha: Boolean(match.isDouble),
+        doubleParshaFirstIndex: match.isDouble ? (match.firstIndex ?? -1) : -1,
+        doubleParshaDisplayName: match.isDouble ? (match.displayName || null) : null,
         ...(newWeekStart ? { weeklyParshaWeekStart: newWeekStart.toISOString() } : {})
     });
 
@@ -1264,6 +1438,85 @@ function updateMitzvahChallengeForParsha(parshaName) {
         return;
     }
     renderMitzvahChallengeSection(parshaName);
+}
+
+function updateMitzvahChallengeForDoubleParsha(parshaName1, parshaName2) {
+    const challenge1 = getMitzvahChallengeByParsha(parshaName1);
+    const challenge2 = getMitzvahChallengeByParsha(parshaName2);
+
+    if (!challenge1 && !challenge2) {
+        teardownMitzvahChallenge();
+        return;
+    }
+
+    // Use the second parsha (the weekly index) for timing/mode
+    const primaryName = parshaName2;
+    const primaryChallenge = challenge2 || challenge1;
+
+    // Render the main section using the second parsha (determines timing)
+    renderMitzvahChallengeSection(primaryName, primaryChallenge);
+
+    // Now augment the displayed content to show both challenges
+    const titleEl = document.getElementById('mitzvah-challenge-heading');
+    if (titleEl) {
+        titleEl.textContent = `Weekly Mitzvah Challenge — ${parshaName1}-${parshaName2}`;
+    }
+
+    const mitzvahEl = document.getElementById('mitzvah-challenge-mitzvah');
+    const explanationEl = document.getElementById('mitzvah-challenge-explanation');
+    const connectionEl = document.getElementById('mitzvah-challenge-connection');
+    const actionEl = document.getElementById('mitzvah-challenge-action');
+
+    if (challenge1 && challenge2) {
+        if (mitzvahEl) {
+            mitzvahEl.innerHTML = `
+                <div class="double-mitzvah-label">
+                    <div class="double-mitzvah-label__parsha">${escapeHtml(parshaName1)}:</div>
+                    ${buildMitzvahLabel(challenge1)}
+                </div>
+                <div class="double-mitzvah-label" style="margin-top: 0.75rem;">
+                    <div class="double-mitzvah-label__parsha">${escapeHtml(parshaName2)}:</div>
+                    ${buildMitzvahLabel(challenge2)}
+                </div>
+            `;
+        }
+        if (explanationEl) {
+            explanationEl.innerHTML = `
+                <div class="double-mitzvah-block">
+                    <div class="double-mitzvah-block__name">${escapeHtml(parshaName1)}</div>
+                    ${formatText(challenge1.explanation || '')}
+                </div>
+                <div class="double-mitzvah-block" style="margin-top: 1rem;">
+                    <div class="double-mitzvah-block__name">${escapeHtml(parshaName2)}</div>
+                    ${formatText(challenge2.explanation || '')}
+                </div>
+            `;
+        }
+        if (connectionEl) {
+            connectionEl.innerHTML = `
+                <div class="double-mitzvah-block">
+                    <div class="double-mitzvah-block__name">${escapeHtml(parshaName1)}</div>
+                    ${formatText(challenge1.connection || '')}
+                </div>
+                <div class="double-mitzvah-block" style="margin-top: 1rem;">
+                    <div class="double-mitzvah-block__name">${escapeHtml(parshaName2)}</div>
+                    ${formatText(challenge2.connection || '')}
+                </div>
+            `;
+        }
+        if (actionEl) {
+            actionEl.innerHTML = `
+                <div class="double-mitzvah-block">
+                    <div class="double-mitzvah-block__name">${escapeHtml(parshaName1)}</div>
+                    ${formatText(challenge1.challenge || '')}
+                </div>
+                <div class="double-mitzvah-block" style="margin-top: 1rem;">
+                    <div class="double-mitzvah-block__name">${escapeHtml(parshaName2)}</div>
+                    ${formatText(challenge2.challenge || '')}
+                </div>
+            `;
+        }
+    }
 }
 
 function startMitzvahReflectionsListener(challengeId) {
@@ -1648,7 +1901,7 @@ async function refreshMitzvahCompletionStatus(challengeId) {
 
     let hadError = false;
     try {
-        const status = await getMitzvahCompletionStatus(userId, challengeId);
+        const status = await getMitzvahCompletionStatus(challengeId, userId);
         currentMitzvahCompletion = Boolean(status.completed);
         console.log('[Mitzvah Completion] Status loaded:', {
             userId,
@@ -2470,10 +2723,10 @@ async function handleMitzvahChatSubmit() {
                     username,
                     submissionEmail
                 });
-                await setMitzvahCompletionStatus(userId, challengeId, true);
+                await setMitzvahCompletionStatus(challengeId, userId, true);
                 currentMitzvahCompletion = true;
                 updateMitzvahChecklistUI('Challenge marked as completed!');
-                await updateMitzvahLeaderboard(userId, username, 1, submissionEmail);
+                await updateMitzvahLeaderboard(challengeId, userId, username);
                 applyLocalMitzvahLeaderboardIncrement(userId, username, 1);
                 console.log('[Mitzvah Reflection] Leaderboard incremented successfully');
             } catch (error) {
@@ -2992,11 +3245,13 @@ function updateHeaderUserDropdown(user, userProfile) {
 
     // Detect skeleton placeholder (has no real menu button)
     const isSkeleton = dropdownContainer && !dropdownContainer.querySelector('#header-user-menu-btn');
+    // Detect pill pre-rendered by header-loader.js (has the button but no dropdown panel yet)
+    const isPreRendered = dropdownContainer && !document.getElementById('header-user-dropdown');
 
     if (user) {
-        if (!dropdownContainer || isSkeleton) {
-            // Remove skeleton or old logout button
-            if (isSkeleton && dropdownContainer) {
+        if (!dropdownContainer || isSkeleton || isPreRendered) {
+            // Remove skeleton or pre-rendered pill so the real dropdown replaces it
+            if ((isSkeleton || isPreRendered) && dropdownContainer) {
                 dropdownContainer.remove();
             }
             if (oldLogoutBtn && oldLogoutBtn.parentElement === headerActions) {
@@ -3149,15 +3404,21 @@ function updateChavrutaContextBar() {
     const switchBtn = document.getElementById('chavruta-switch-btn');
     if (!bar || !nameEl) return;
 
+    // URL param is always authoritative — sync sessionStorage to match it
+    const urlParam = new URLSearchParams(window.location.search).get('chavruta');
+    if (urlParam && sessionStorage.getItem('activeChavrutaId') !== urlParam) {
+        sessionStorage.setItem('activeChavrutaId', urlParam);
+        try { localStorage.setItem('lastActiveChavrutaId', urlParam); } catch (_) {}
+    }
+
     const activeId = sessionStorage.getItem('activeChavrutaId');
     if (!activeId || !_userChavrutas.length) {
-        bar.classList.add('hidden');
+        bar.style.display = 'none';
         return;
     }
 
     const active = _userChavrutas.find(c => c.id === activeId);
     nameEl.textContent = active ? (active.name || 'Study Group') : 'Study Group';
-    bar.classList.remove('hidden');
     bar.style.display = 'flex';
 
     // Only show switch button if user has multiple groups
@@ -3186,24 +3447,16 @@ async function handleAuthStateChange(user) {
         // Set the user's email so display name can be extracted from it
         setCurrentUserEmail(user.email);
         updateUsernameDisplay();
-        await refreshBookmarkedVerses();
-        await refreshBookmarkedQuotes();
 
+        // Run independent Firestore operations in parallel for faster loading
         let userProfile = null;
-
-        // Record user login activity
-        try {
-            await recordUserLogin(user.uid, user.email);
-        } catch (error) {
-            console.error('Error recording login:', error);
-        }
-
-        // Fetch the latest user profile (captures Firestore timestamps)
-        try {
-            userProfile = await getUserInfo(user.uid);
-        } catch (error) {
-            console.error('Error loading user profile:', error);
-        }
+        const [, , , profileResult] = await Promise.all([
+            refreshBookmarkedVerses().catch(e => console.error('Error refreshing bookmarks:', e)),
+            refreshBookmarkedQuotes().catch(e => console.error('Error refreshing quote bookmarks:', e)),
+            recordUserLogin(user.uid, user.email).catch(e => console.error('Error recording login:', e)),
+            getUserInfo(user.uid).catch(e => { console.error('Error loading user profile:', e); return null; })
+        ]);
+        userProfile = profileResult || null;
 
         currentUserProfile = userProfile;
 
@@ -3218,7 +3471,7 @@ async function handleAuthStateChange(user) {
             } else if (user.displayName) {
                 cachedFirstName = user.displayName.split(' ')[0];
             }
-            sessionStorage.setItem('headerUserCache', JSON.stringify({ firstName: cachedFirstName, email: user.email || '' }));
+            sessionStorage.setItem('headerUserCache', JSON.stringify({ firstName: cachedFirstName, email: user.email || '', uid: user.uid }));
         } catch (_) {}
 
         // Reflect latest login status in UI
@@ -3789,27 +4042,75 @@ async function loadParsha(parshaRef) {
     hideError();
 
     try {
-        console.log('Fetching parsha text for:', parshaRef);
-        const data = await fetchParshaText(parshaRef);
-        console.log('Parsha text received');
+        // Check if this parsha is part of a double-parsha pair for the current year.
+        // In regular (non-leap) years, certain pairs are always read together.
+        const doublePairInfo = resolveDoubleParshaForCurrentYear(parshaRef);
+        let isDoubleView = false;
+        let firstParshaRef = null;
+        let secondParshaRef = null;
+        let firstParshaObj = null;
+        let secondParshaObj = null;
 
-        console.log('Rendering parsha...');
-        renderParsha(data, parshaRef);
-        console.log('Parsha rendered');
+        if (doublePairInfo) {
+            isDoubleView = true;
+            firstParshaObj = doublePairInfo.firstParsha;
+            secondParshaObj = doublePairInfo.secondParsha;
+            firstParshaRef = firstParshaObj.reference;
+            secondParshaRef = secondParshaObj.reference;
+        }
 
-        highlightCurrentParsha(parshaRef);
+        if (isDoubleView) {
+            // Ensure currentParshaIndex points to the second parsha for consistent nav
+            const secondIndex = doublePairInfo.secondIndex;
+            if (state.currentParshaIndex !== secondIndex) {
+                setState({ currentParshaIndex: secondIndex, currentParshaRef: secondParshaRef });
+            }
 
-        console.log('Loading counts (comments, reactions, bookmarks)...');
-        // Load social data — failures should not block verse display
-        try {
-            await Promise.all([
-                loadCommentCounts(parshaRef),
-                loadReactionCounts(parshaRef),
-                loadBookmarkCounts(parshaRef)
+            console.log('Fetching double parsha texts for:', firstParshaRef, 'and', secondParshaRef);
+            const [data1, data2] = await Promise.all([
+                fetchParshaText(firstParshaRef),
+                fetchParshaText(secondParshaRef)
             ]);
-            console.log('✅ Counts loaded');
-        } catch (countError) {
-            console.warn('Social counts unavailable (read-only mode):', countError.message);
+            console.log('Double parsha texts received');
+
+            renderDoubleParsha(data1, firstParshaRef, firstParshaObj, data2, secondParshaRef, secondParshaObj);
+            highlightCurrentParsha(secondParshaRef);
+
+            try {
+                await Promise.all([
+                    loadCommentCounts(firstParshaRef),
+                    loadReactionCounts(firstParshaRef),
+                    loadBookmarkCounts(firstParshaRef),
+                    loadCommentCounts(secondParshaRef),
+                    loadReactionCounts(secondParshaRef),
+                    loadBookmarkCounts(secondParshaRef)
+                ]);
+                console.log('✅ Counts loaded for both parshiyot');
+            } catch (countError) {
+                console.warn('Social counts unavailable (read-only mode):', countError.message);
+            }
+        } else {
+            console.log('Fetching parsha text for:', parshaRef);
+            const data = await fetchParshaText(parshaRef);
+            console.log('Parsha text received');
+
+            console.log('Rendering parsha...');
+            renderParsha(data, parshaRef);
+            console.log('Parsha rendered');
+
+            highlightCurrentParsha(parshaRef);
+
+            console.log('Loading counts (comments, reactions, bookmarks)...');
+            try {
+                await Promise.all([
+                    loadCommentCounts(parshaRef),
+                    loadReactionCounts(parshaRef),
+                    loadBookmarkCounts(parshaRef)
+                ]);
+                console.log('✅ Counts loaded');
+            } catch (countError) {
+                console.warn('Social counts unavailable (read-only mode):', countError.message);
+            }
         }
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -3883,7 +4184,10 @@ function openParshaSignificanceModal() {
 
 function renderParsha(data, parshaRef) {
     const textContainer = document.getElementById('parsha-text');
-    
+
+    // Always keep the dropdown in sync with whatever parsha is being rendered
+    document.querySelectorAll('select#parsha-selector').forEach(s => { s.value = parshaRef; });
+
     updateParshaHeader(data.book || 'Torah Portion', parshaRef);
     textContainer.innerHTML = '';
 
@@ -3929,29 +4233,35 @@ function renderParsha(data, parshaRef) {
     }
 
     updateMitzvahChallengeForParsha(activeParsha?.name || null);
-    
+
+    appendParshaVersesToContainer(data, parshaRef, textContainer);
+
+    applyBookmarkStateToVisibleVerses();
+}
+
+function appendParshaVersesToContainer(data, parshaRef, textContainer, skipFirstChapterHeader) {
     const englishText = Array.isArray(data.text) ? data.text : [data.text];
     const hebrewText = Array.isArray(data.he) ? data.he : [data.he];
-    
+
     const { bookName, startChapter, startVerse, endChapter, endVerse } = parseParshaReference(parshaRef);
-    
+
     if (Array.isArray(englishText[0])) {
         let currentChapterNumber = startChapter;
-        let isFirstChapter = true;
-        
+        let isFirstChapter = skipFirstChapterHeader || (textContainer.children.length === 0);
+
         englishText.forEach((chapterVerses, chapterIndex) => {
             if (!Array.isArray(chapterVerses)) {
                 chapterVerses = [chapterVerses];
             }
-            
-            const hebrewChapterVerses = Array.isArray(hebrewText[chapterIndex]) ? 
+
+            const hebrewChapterVerses = Array.isArray(hebrewText[chapterIndex]) ?
                 hebrewText[chapterIndex] : [hebrewText[chapterIndex] || ''];
-            
+
             const isStartChapter = currentChapterNumber === startChapter;
             const isEndChapter = endChapter ? currentChapterNumber === endChapter : false;
             const chapterStartVerse = isStartChapter ? startVerse : 1;
             const chapterEndVerse = isEndChapter ? endVerse : null;
-            
+
             if (!isFirstChapter) {
                 const chapterHeader = document.createElement('div');
                 chapterHeader.className = 'chapter-header';
@@ -3959,41 +4269,129 @@ function renderParsha(data, parshaRef) {
                 textContainer.appendChild(chapterHeader);
             }
             isFirstChapter = false;
-            
+
             for (let localIndex = 0; localIndex < chapterVerses.length; localIndex++) {
                 const verseText = chapterVerses[localIndex];
                 if (!verseText || verseText.trim() === '') continue;
-                
+
                 const verseNumber = chapterStartVerse + localIndex;
-                
+
                 if (chapterEndVerse && verseNumber > chapterEndVerse) {
                     break;
                 }
-                
+
                 const hebrewVerseText = hebrewChapterVerses[localIndex] || '';
                 const verseRef = `${bookName} ${currentChapterNumber}:${verseNumber}`;
-                
+
                 const verseElement = createVerseElement(verseText, hebrewVerseText, verseRef, verseNumber);
                 textContainer.appendChild(verseElement);
             }
-            
+
             currentChapterNumber++;
         });
     } else {
         const flatEnglish = flattenTextArray(englishText);
         const flatHebrew = flattenTextArray(hebrewText);
-        
+
         flatEnglish.forEach((verseText, index) => {
             if (!verseText || verseText.trim() === '') return;
-            
+
             const hebrewVerseText = flatHebrew[index] || '';
             const verseNumber = startVerse + index;
             const verseRef = `${bookName} ${startChapter}:${verseNumber}`;
-            
+
             const verseElement = createVerseElement(verseText, hebrewVerseText, verseRef, verseNumber);
             textContainer.appendChild(verseElement);
         });
     }
+}
+
+function renderDoubleParsha(data1, parshaRef1, parshaObj1, data2, parshaRef2, parshaObj2) {
+    const textContainer = document.getElementById('parsha-text');
+    const displayName = state.doubleParshaDisplayName || `${parshaObj1.name}-${parshaObj2.name}`;
+
+    // Show the combined parsha name as the title, and both references below
+    const parshaTitle = document.getElementById('parsha-title');
+    const parshaReference = document.getElementById('parsha-reference');
+    if (parshaTitle) parshaTitle.textContent = displayName;
+    if (parshaReference) parshaReference.textContent = `${parshaRef1}  |  ${parshaRef2}`;
+    textContainer.innerHTML = '';
+
+    // ── Top banner ──
+    const topBanner = document.createElement('div');
+    topBanner.className = 'double-parsha-banner';
+    topBanner.innerHTML = `
+        <span class="double-parsha-banner__text">
+            <strong>Double Parsha Week</strong> — ${escapeHtml(parshaObj1.name)} and ${escapeHtml(parshaObj2.name)} are read together this Shabbat
+        </span>
+    `;
+    textContainer.appendChild(topBanner);
+
+    // ── Significance (combine both) ──
+    let significanceText = null;
+    let significanceParshaName = null;
+    try {
+        if (state.commentaryData && Array.isArray(state.commentaryData.parshas)) {
+            const entry1 = state.commentaryData.parshas.find(p => p.name === parshaObj1.name);
+            const entry2 = state.commentaryData.parshas.find(p => p.name === parshaObj2.name);
+            const parts = [];
+            if (entry1?.significance) parts.push(`${parshaObj1.name}:\n${entry1.significance}`);
+            if (entry2?.significance) parts.push(`${parshaObj2.name}:\n${entry2.significance}`);
+            if (parts.length) {
+                significanceText = parts.join('\n\n');
+                significanceParshaName = displayName;
+            }
+        }
+    } catch (e) {
+        console.warn('Unable to render significance for double parsha:', e);
+    }
+
+    setState({
+        currentParshaSignificance: significanceText,
+        currentParshaSignificanceName: significanceParshaName
+    });
+
+    [document.getElementById('show-significance'), document.getElementById('show-significance-mobile')].forEach(btn => {
+        if (!btn) return;
+        const enabled = Boolean(significanceText);
+        btn.disabled = !enabled;
+        btn.classList.toggle('opacity-40', !enabled);
+        btn.classList.toggle('cursor-not-allowed', !enabled);
+        btn.classList.toggle('pointer-events-none', !enabled);
+    });
+
+    // ── Mitzvah challenges for both parshiyot ──
+    updateMitzvahChallengeForDoubleParsha(parshaObj1.name, parshaObj2.name);
+
+    // ── First parsha section header ──
+    const firstHeader = document.createElement('div');
+    firstHeader.className = 'double-parsha-section-header';
+    firstHeader.textContent = parshaObj1.name;
+    textContainer.appendChild(firstHeader);
+
+    // ── First parsha verses ──
+    appendParshaVersesToContainer(data1, parshaRef1, textContainer, true);
+
+    // ── Divider between parshiyot ──
+    const divider = document.createElement('div');
+    divider.className = 'double-parsha-divider';
+    divider.innerHTML = `<span class="double-parsha-divider__line"></span>
+        <span class="double-parsha-divider__label">${escapeHtml(parshaObj2.name)}</span>
+        <span class="double-parsha-divider__line"></span>`;
+    textContainer.appendChild(divider);
+
+    // ── Second parsha verses ──
+    appendParshaVersesToContainer(data2, parshaRef2, textContainer, true);
+
+    // ── Bottom banner ──
+    const bottomBanner = document.createElement('div');
+    bottomBanner.className = 'double-parsha-banner double-parsha-banner--bottom';
+    bottomBanner.innerHTML = `
+        <span class="double-parsha-banner__text">
+            End of double parsha <strong>${escapeHtml(displayName)}</strong>
+        </span>
+    `;
+    textContainer.appendChild(bottomBanner);
 
     applyBookmarkStateToVisibleVerses();
 }

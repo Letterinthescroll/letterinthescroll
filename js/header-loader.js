@@ -167,6 +167,14 @@
         var mount = document.getElementById('shared-header-mount');
         if (!mount) return;
 
+        // Ensure Cormorant Garamond is available for the header title
+        if (!document.querySelector('link[href*="Cormorant+Garamond"]')) {
+            var fontLink = document.createElement('link');
+            fontLink.rel = 'stylesheet';
+            fontLink.href = 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap';
+            document.head.appendChild(fontLink);
+        }
+
         var navHtml = buildNavHtml();
         var headerHtml = loadTemplate().replace(NAV_TOKEN, navHtml);
         mount.outerHTML = headerHtml;
@@ -235,8 +243,105 @@
     document.addEventListener('click', function (e) {
         var a = e.target.closest && e.target.closest('a[href]');
         if (!a) return;
+        // Only block navigation if we're exactly on this page (not a sub-page)
         if (a.getAttribute('aria-current') === 'page') {
-            e.preventDefault();
+            var linkHref = a.getAttribute('href').replace(/\/$/, '');
+            if (path === linkHref) {
+                e.preventDefault();
+                return;
+            }
         }
+
+        // ── Chavruta picker: intercept Study nav on non-study pages ──────
+        var href = a.getAttribute('href');
+        if (href !== '/study') return;
+
+        // Already on study page — handled by main.js; don't interfere.
+        var currentPath = window.location.pathname.replace(/\/index\.html$/, '').replace(/\/$/, '');
+        if (currentPath === '/study') return;
+
+        // Dashboard has its own study-room picker — don't open a duplicate.
+        if (e.defaultPrevented) return;
+
+        // Read persisted chavruta list (saved by dashboard / study page).
+        var chavrutas = null;
+        try { chavrutas = JSON.parse(localStorage.getItem('userChavrutaList')); } catch (_) {}
+        if (!Array.isArray(chavrutas) || chavrutas.length <= 1) return; // 0 or 1 — navigate normally
+
+        e.preventDefault();
+        showNavChavrutaPicker(chavrutas);
     });
+
+    /* ── Chavruta picker overlay (shown when Study nav is clicked) ──── */
+    function showNavChavrutaPicker(chavrutas) {
+        var existing = document.getElementById('nav-chavruta-picker');
+        if (existing) existing.parentNode.removeChild(existing);
+
+        var overlay = document.createElement('div');
+        overlay.id = 'nav-chavruta-picker';
+        overlay.style.cssText = [
+            'position:fixed', 'inset:0',
+            'background:rgba(6,16,32,0.58)',
+            'display:flex', 'align-items:center', 'justify-content:center',
+            'z-index:9000', 'padding:1rem',
+            'backdrop-filter:blur(5px)'
+        ].join(';');
+
+        var card = document.createElement('div');
+        card.style.cssText = [
+            'background:#fff', 'border-radius:1.25rem',
+            'padding:1.5rem', 'width:min(100%,380px)',
+            'box-shadow:0 20px 50px rgba(15,35,62,0.3)'
+        ].join(';');
+
+        var html = '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.5rem;margin-bottom:1rem;">' +
+            '<div>' +
+            '<h3 style="font-size:1.05rem;font-weight:800;color:#0f1d3e;margin:0 0 0.2rem;">Choose a Study Room</h3>' +
+            '<p style="font-size:0.8rem;color:#64748b;margin:0;">Select the group you want to study with.</p>' +
+            '</div>' +
+            '<button id="nav-chavruta-x" style="background:none;border:none;font-size:1.3rem;line-height:1;color:#94a3b8;cursor:pointer;padding:0.1rem 0.3rem;">&times;</button>' +
+            '</div>' +
+            '<div id="nav-chavruta-list"></div>' +
+            '<button id="nav-chavruta-cancel" style="margin-top:0.6rem;width:100%;padding:0.55rem;border:1.5px solid #e2e8f0;background:#fff;border-radius:0.75rem;font-size:0.82rem;font-weight:600;color:#64748b;cursor:pointer;">Cancel</button>';
+        card.innerHTML = html;
+
+        var list = card.querySelector('#nav-chavruta-list');
+        chavrutas.forEach(function (c) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.style.cssText = [
+                'display:block', 'width:100%', 'text-align:left',
+                'padding:0.75rem 1rem', 'margin-bottom:0.45rem',
+                'border:1.5px solid #e2e8f0', 'border-radius:0.875rem',
+                'background:#f8fafc', 'font-size:0.88rem', 'font-weight:700',
+                'color:#0f1d3e', 'cursor:pointer'
+            ].join(';');
+            btn.textContent = c.name || 'Study Group';
+            btn.onmouseover = function () { this.style.background = '#eff6ff'; this.style.borderColor = '#bfdbfe'; };
+            btn.onmouseout  = function () { this.style.background = '#f8fafc'; this.style.borderColor = '#e2e8f0'; };
+            btn.onclick = function () {
+                overlay.parentNode.removeChild(overlay);
+                // Set storage BEFORE navigating so the study page picks it up immediately
+                try {
+                    sessionStorage.setItem('activeChavrutaId', c.id);
+                    localStorage.setItem('lastActiveChavrutaId', c.id);
+                    sessionStorage.removeItem('presenceCache');
+                } catch(_){}
+                window.location.href = '/study?chavruta=' + encodeURIComponent(c.id);
+            };
+            list.appendChild(btn);
+        });
+
+        function closeOverlay() { if (overlay.parentNode) overlay.parentNode.removeChild(overlay); }
+        card.querySelector('#nav-chavruta-cancel').onclick = closeOverlay;
+        card.querySelector('#nav-chavruta-x').onclick = closeOverlay;
+        overlay.onclick = function (ev) { if (ev.target === overlay) closeOverlay(); };
+        document.addEventListener('keydown', function esc(ev) {
+            if (ev.key === 'Escape') { closeOverlay(); document.removeEventListener('keydown', esc); }
+        });
+
+        overlay.appendChild(card);
+        document.body.appendChild(overlay);
+    }
+
 })();

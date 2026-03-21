@@ -222,6 +222,82 @@ export async function loadCommentaryData() {
     }
 }
 
+// ─── Daily Psalms — Chabad 30-day monthly cycle ───────────────────────────────
+const PSALMS_TTL = 24 * 60 * 60 * 1000;
+
+const _PORTIONS = [
+    null,
+    { ref: 'Psalms 1-9',        display: 'Psalms 1–9'         },
+    { ref: 'Psalms 10-17',      display: 'Psalms 10–17'       },
+    { ref: 'Psalms 18-22',      display: 'Psalms 18–22'       },
+    { ref: 'Psalms 23-28',      display: 'Psalms 23–28'       },
+    { ref: 'Psalms 29-34',      display: 'Psalms 29–34'       },
+    { ref: 'Psalms 35-38',      display: 'Psalms 35–38'       },
+    { ref: 'Psalms 39-43',      display: 'Psalms 39–43'       },
+    { ref: 'Psalms 44-48',      display: 'Psalms 44–48'       },
+    { ref: 'Psalms 49-54',      display: 'Psalms 49–54'       },
+    { ref: 'Psalms 55-59',      display: 'Psalms 55–59'       },
+    { ref: 'Psalms 60-65',      display: 'Psalms 60–65'       },
+    { ref: 'Psalms 66-68',      display: 'Psalms 66–68'       },
+    { ref: 'Psalms 69-71',      display: 'Psalms 69–71'       },
+    { ref: 'Psalms 72-76',      display: 'Psalms 72–76'       },
+    { ref: 'Psalms 77-78',      display: 'Psalms 77–78'       },
+    { ref: 'Psalms 79-82',      display: 'Psalms 79–82'       },
+    { ref: 'Psalms 83-87',      display: 'Psalms 83–87'       },
+    { ref: 'Psalms 88-89',      display: 'Psalms 88–89'       },
+    { ref: 'Psalms 90-96',      display: 'Psalms 90–96'       },
+    { ref: 'Psalms 97-103',     display: 'Psalms 97–103'      },
+    { ref: 'Psalms 104-105',    display: 'Psalms 104–105'     },
+    { ref: 'Psalms 106-107',    display: 'Psalms 106–107'     },
+    { ref: 'Psalms 108-112',    display: 'Psalms 108–112'     },
+    { ref: 'Psalms 113-118',    display: 'Psalms 113–118'     },
+    { ref: 'Psalms 119:1-96',   display: 'Psalm 119 (א–ל)',  ps119: 'a' },
+    { ref: 'Psalms 119:97-176', display: 'Psalm 119 (מ–ת)', ps119: 'b' },
+    { ref: 'Psalms 120-134',    display: 'Psalms 120–134'     },
+    { ref: 'Psalms 135-139',    display: 'Psalms 135–139'     },
+    { ref: 'Psalms 140-144',    display: 'Psalms 140–144'     },
+    { ref: 'Psalms 145-150',    display: 'Psalms 145–150'     },
+];
+
+function _getHebrewInfo() {
+    const fmt = new Intl.DateTimeFormat('en-US-u-ca-hebrew', { day: 'numeric', month: 'numeric', year: 'numeric' });
+    const now = new Date();
+    const tp = Object.fromEntries(fmt.formatToParts(now).map(p => [p.type, p.value]));
+    const hebrewDay = parseInt(tp.day, 10);
+    const hebrewMonth = parseInt(tp.month, 10);
+    const probe = new Date(now);
+    probe.setDate(now.getDate() + (30 - hebrewDay));
+    const pp = Object.fromEntries(fmt.formatToParts(probe).map(p => [p.type, p.value]));
+    const daysInMonth = (parseInt(pp.month, 10) === hebrewMonth) ? 30 : 29;
+    return { hebrewDay, daysInMonth };
+}
+
+export function getCachedDailyPsalms() {
+    return _cacheGet(`sefaria_psalms_${CACHE_V}`);
+}
+
+export async function fetchDailyPsalms() {
+    const cached = getCachedDailyPsalms();
+    if (cached) return cached;
+    try {
+        const { hebrewDay, daysInMonth } = _getHebrewInfo();
+        const day = Math.min(Math.max(hebrewDay, 1), 30);
+        const combined = (day === 29 && daysInMonth === 29);
+        let result;
+        if (combined) {
+            result = { ref: 'Psalms 140-150', display: 'Psalms 140–150', displayNote: '(29th & 30th combined)', hebrewDay: day, daysInMonth, combined: true };
+        } else {
+            const p = _PORTIONS[day];
+            result = { ref: p.ref, display: p.display, ps119: p.ps119 || null, hebrewDay: day, daysInMonth, combined: false };
+        }
+        _cacheSet(`sefaria_psalms_${CACHE_V}`, result, PSALMS_TTL);
+        return result;
+    } catch {
+        return null;
+    }
+}
+// ──────────────────────────────────────────────────────────────────────────────
+
 /**
  * Load mitzvah challenge data
  */

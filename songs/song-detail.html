@@ -25,7 +25,10 @@
     <link rel="stylesheet" href="/css/shabbat.css">
     <link rel="stylesheet" href="/css/mobile-overrides.css">
     <link rel="stylesheet" href="/css/song-detail-style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Serif+Hebrew:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@400;600&family=Cormorant+Garamond:wght@500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@400;600&family=Cormorant+Garamond:wght@500;600&display=swap"></noscript>
 </head>
 <body class="song-detail-body" data-header-fallback="true">
 
@@ -97,14 +100,12 @@
         </article>
     </main>
 
-    <footer class="song-footer">
-        <p>May these songs and poems deepen your faith</p>
-        <p class="song-footer-sub">A Letter in the Scroll</p>
-    </footer>
 
     <script src="/js/shabbat.js"></script>
     <script src="/js/song-detail.js"></script>
     <script src="/js/header-fallback.js"></script>
     <script src="/js/sidebar-nav.js"></script>
+    <div id="shared-footer-mount"></div>
+    <script src="/js/footer-loader.js"></script>
 </body>
 </html>
