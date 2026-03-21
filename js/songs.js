@@ -86,7 +86,7 @@ function buildSongCard(entry) {
 
   return `
     <article class="song-card ${isPoem ? "song-card-poem" : ""}" data-song-index="${sourceIndex}" data-entry-type="${entryType}">
-      <a href="song-detail.html?song=${sourceIndex}" class="song-card-link">
+      <a href="/songs/${sourceIndex}.html" class="song-card-link">
         <header class="song-header">
           <div class="song-meta-row">
             <span class="song-meta-chip ${typeClass}">${typeLabel}</span>

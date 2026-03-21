@@ -20,6 +20,10 @@ function getEntryType(entry = {}) {
 }
 
 function getSongIndexFromURL() {
+  // Generated per-song pages inject window.SONG_INDEX at build time
+  if (typeof window.SONG_INDEX === "number" && Number.isInteger(window.SONG_INDEX) && window.SONG_INDEX >= 0) {
+    return window.SONG_INDEX;
+  }
   const params = new URLSearchParams(window.location.search);
   const raw = params.get("song");
   if (raw === null) return null;
