@@ -86,7 +86,7 @@ function buildSongCard(entry) {
 
   return `
     <article class="song-card ${isPoem ? "song-card-poem" : ""}" data-song-index="${sourceIndex}" data-entry-type="${entryType}">
-      <a href="song-detail.html?song=${sourceIndex}" class="song-card-link">
+      <a href="/songs/${sourceIndex}.html" class="song-card-link">
         <header class="song-header">
           <div class="song-meta-row">
             <span class="song-meta-chip ${typeClass}">${typeLabel}</span>
@@ -116,12 +116,12 @@ function renderEntries(entries) {
     return;
   }
 
-  // Use a single innerHTML write to minimize reflows
-  const html = [];
+  // Build all cards as a single HTML string for one fast DOM write
+  let html = "";
   for (let i = 0; i < entries.length; i++) {
-    html.push(buildSongCard(entries[i]));
+    html += buildSongCard(entries[i]);
   }
-  container.innerHTML = html.join("");
+  container.innerHTML = html;
 }
 
 function getTypeCounts(entries) {
