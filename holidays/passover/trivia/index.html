@@ -3,295 +3,596 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Passover Trivia — Test Your Knowledge | A Letter in the Scroll</title>
-    <meta name="description" content="Test your Passover knowledge with 10 fascinating biblical trivia questions about the Exodus, the Seder, and the holiday traditions.">
+    <title>Passover Quiz — Test Your Knowledge | A Letter in the Scroll</title>
+    <meta name="description" content="Test your Passover knowledge with 10 fun questions about the Exodus, the Seder, and the holiday traditions. Perfect for the Seder table.">
     <link rel="icon" type="image/png" href="/media/images/Icon.png">
     <link rel="apple-touch-icon" href="/media/images/Icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/passover.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pes-navy:   #0e1d40;
+            --pes-blue:   #1e3a8a;
+            --pes-blue2:  #1e40af;
+            --pes-blue3:  #2563eb;
+            --pes-gold:   #c49a2a;
+            --pes-amber:  #f4c046;
+            --pes-green:  #16a34a;
+            --pes-cream:  #fffbef;
+            --pes-ink:    #1a2f4b;
+            --pes-muted:  #4b6278;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: linear-gradient(170deg, #0e1d40 0%, #162554 30%, #1e3a8a 60%, #1e40af 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Background particles */
+        .quiz-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .quiz-bg .star {
+            position: absolute;
+            width: 3px; height: 3px;
+            background: rgba(244,192,70,0.4);
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite alternate;
+        }
+        @keyframes twinkle { 0% { opacity: 0.2; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
+
+        /* Top bar */
+        .quiz-topbar {
+            position: relative; z-index: 10;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.9rem 1.5rem;
+            background: rgba(14,29,64,0.6);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(196,154,42,0.2);
+        }
+        .quiz-topbar a {
+            color: rgba(255,255,255,0.8); text-decoration: none;
+            font-size: 0.82rem; font-weight: 600;
+            transition: color 0.2s;
+        }
+        .quiz-topbar a:hover { color: var(--pes-amber); }
+        .quiz-brand { font-family: 'Cinzel', serif; font-size: 0.9rem; letter-spacing: 0.04em; }
+
+        /* Container */
+        .quiz-container {
+            position: relative; z-index: 1;
+            max-width: 640px; margin: 0 auto;
+            padding: 1.5rem 1.2rem 3rem;
+        }
+
+        /* Hero */
+        .quiz-hero { text-align: center; padding: 2rem 0 1.5rem; }
+        .quiz-hero__hebrew {
+            display: block; font-size: 1.8rem;
+            color: var(--pes-amber); margin-bottom: 0.4rem;
+            text-shadow: 0 0 30px rgba(244,192,70,0.3);
+        }
+        .quiz-hero h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, var(--pes-amber) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; margin-bottom: 0.5rem;
+        }
+        .quiz-hero__sub {
+            color: rgba(191,219,254,0.8);
+            font-size: 0.95rem; max-width: 460px;
+            margin: 0 auto; line-height: 1.6;
+        }
+
+        /* Progress bar */
+        .quiz-progress {
+            display: flex; align-items: center; gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 0.7rem 1.2rem;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+        }
+        .quiz-progress__label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.82rem; font-weight: 700;
+            color: var(--pes-amber); white-space: nowrap;
+        }
+        .quiz-progress__bar-wrap {
+            flex: 1; height: 6px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 99px; overflow: hidden;
+        }
+        .quiz-progress__bar {
+            height: 100%; width: 0;
+            background: linear-gradient(90deg, var(--pes-gold), var(--pes-amber));
+            border-radius: 99px;
+            transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        /* Question card */
+        .quiz-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
+            padding: 2rem 1.8rem;
+            backdrop-filter: blur(10px);
+            animation: cardIn 0.4s cubic-bezier(0.16,1,0.3,1);
+            position: relative; overflow: hidden;
+        }
+        .quiz-card::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--pes-gold), var(--pes-amber), var(--pes-gold));
+        }
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(16px) scale(0.98); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .quiz-card__badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 38px; height: 38px;
+            background: linear-gradient(135deg, var(--pes-gold), var(--pes-amber));
+            color: #fff; font-family: 'Cinzel', serif;
+            font-weight: 800; font-size: 0.95rem;
+            border-radius: 50%; margin-bottom: 1.2rem;
+            box-shadow: 0 4px 15px rgba(196,154,42,0.3);
+        }
+
+        .quiz-card__question {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.1rem, 3.5vw, 1.35rem);
+            font-weight: 700; line-height: 1.5;
+            color: #fff; margin-bottom: 0.5rem;
+        }
+
+        .quiz-card__hint {
+            color: rgba(191,219,254,0.5);
+            font-size: 0.78rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Reveal button */
+        .quiz-reveal-btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, var(--pes-gold), var(--pes-amber));
+            color: #fff; font-weight: 700; font-size: 0.92rem;
+            border: none; border-radius: 99px; cursor: pointer;
+            font-family: 'Manrope', sans-serif;
+            box-shadow: 0 6px 20px rgba(196,154,42,0.35);
+            transition: all 0.25s ease;
+        }
+        .quiz-reveal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(196,154,42,0.45);
+        }
+
+        /* Answer section */
+        .quiz-answer {
+            margin-top: 1.5rem;
+            padding: 1.3rem 1.4rem;
+            background: rgba(22,163,74,0.1);
+            border: 1px solid rgba(22,163,74,0.25);
+            border-radius: 14px;
+            animation: answerIn 0.4s ease;
+        }
+        @keyframes answerIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .quiz-answer__label {
+            display: block;
+            font-family: 'Cinzel', serif;
+            font-weight: 800; font-size: 0.78rem;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: #4ade80; margin-bottom: 0.6rem;
+        }
+        .quiz-answer p {
+            color: rgba(255,255,255,0.92);
+            font-size: 0.92rem; line-height: 1.7;
+        }
+        .quiz-answer strong { color: var(--pes-amber); }
+        .quiz-answer em { color: rgba(191,219,254,0.9); font-style: italic; }
+
+        /* Next button */
+        .quiz-next-btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            margin-top: 1.3rem;
+            padding: 0.75rem 1.8rem;
+            background: rgba(255,255,255,0.1);
+            border: 1.5px solid rgba(255,255,255,0.2);
+            color: #fff; font-weight: 700; font-size: 0.9rem;
+            border-radius: 99px; cursor: pointer;
+            font-family: 'Manrope', sans-serif;
+            transition: all 0.25s ease;
+        }
+        .quiz-next-btn:hover {
+            background: rgba(255,255,255,0.18);
+            border-color: var(--pes-amber);
+            transform: translateY(-1px);
+        }
+
+        /* Start screen */
+        .quiz-start { text-align: center; }
+        .quiz-start__desc {
+            color: rgba(191,219,254,0.8);
+            font-size: 0.92rem; line-height: 1.65;
+            max-width: 420px; margin: 0 auto 1.5rem;
+        }
+        .quiz-start__features {
+            display: flex; flex-wrap: wrap; gap: 0.6rem;
+            justify-content: center; margin-bottom: 1.8rem;
+        }
+        .quiz-start__feat {
+            padding: 0.45rem 1rem;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 99px;
+            font-size: 0.78rem; font-weight: 600;
+            color: rgba(255,255,255,0.65);
+        }
+
+        /* Finish screen */
+        .quiz-finish { text-align: center; animation: cardIn 0.5s ease; }
+        .quiz-finish__title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.4rem, 4vw, 1.9rem);
+            font-weight: 800; margin-bottom: 0.6rem;
+            background: linear-gradient(135deg, #fff, var(--pes-amber));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .quiz-finish__sub {
+            color: rgba(191,219,254,0.8);
+            font-size: 0.92rem; line-height: 1.6;
+            max-width: 400px; margin: 0 auto 1.5rem;
+        }
+        .quiz-finish__ring {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 110px; height: 110px;
+            border-radius: 50%;
+            margin: 0.5rem auto 1.2rem;
+            position: relative;
+        }
+        .quiz-finish__ring svg {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            transform: rotate(-90deg);
+        }
+        .quiz-finish__ring circle { fill: none; stroke-width: 5; stroke-linecap: round; }
+        .quiz-finish__ring .ring-bg { stroke: rgba(255,255,255,0.08); }
+        .quiz-finish__ring .ring-fill {
+            stroke: var(--pes-amber);
+            stroke-dasharray: 314;
+            stroke-dashoffset: 314;
+            transition: stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1) 0.3s;
+        }
+        .quiz-finish__num {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem; font-weight: 800;
+            color: var(--pes-amber); position: relative; z-index: 1;
+        }
+        .quiz-finish__num small {
+            font-size: 0.7rem; font-weight: 600;
+            color: rgba(255,255,255,0.5); display: block;
+        }
+        .quiz-btn-row {
+            display: flex; gap: 0.8rem;
+            justify-content: center; flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+        .quiz-btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.7rem 1.5rem; border-radius: 99px;
+            font-weight: 700; font-size: 0.85rem;
+            font-family: 'Manrope', sans-serif;
+            cursor: pointer; text-decoration: none;
+            transition: all 0.25s ease; border: none;
+        }
+        .quiz-btn--gold {
+            background: linear-gradient(135deg, var(--pes-gold), var(--pes-amber));
+            color: #fff; box-shadow: 0 6px 20px rgba(196,154,42,0.3);
+        }
+        .quiz-btn--gold:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(196,154,42,0.4); }
+        .quiz-btn--outline {
+            background: rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.8);
+            border: 1.5px solid rgba(255,255,255,0.15);
+        }
+        .quiz-btn--outline:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+        /* Footer */
+        .quiz-footer {
+            text-align: center; padding: 2rem 1rem;
+            font-size: 0.82rem; position: relative; z-index: 1;
+        }
+        .quiz-footer a {
+            color: rgba(191,219,254,0.5); text-decoration: none;
+            font-weight: 600; margin: 0 0.6rem;
+            transition: color 0.2s;
+        }
+        .quiz-footer a:hover { color: var(--pes-amber); }
+
+        /* Confetti */
+        #confetti-canvas { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
+
+        @media (max-width: 500px) {
+            .quiz-container { padding: 1rem 0.9rem 2rem; }
+            .quiz-card { padding: 1.5rem 1.2rem; border-radius: 16px; }
+        }
+    </style>
 </head>
-<body class="pes-story-body">
+<body>
 
-    <!-- Floating background decorations -->
-    <div class="pes-story-bg" aria-hidden="true">
-        <img class="pes-story-deco pes-story-deco--plate1" src="/media/images/passoverplate.png" alt="">
-        <img class="pes-story-deco pes-story-deco--matza1" src="/media/images/Matza.png" alt="">
-        <img class="pes-story-deco pes-story-deco--plate2" src="/media/images/passoverplate.png" alt="">
-        <img class="pes-story-deco pes-story-deco--matza2" src="/media/images/Matza.png" alt="">
-    </div>
+    <div class="quiz-bg" id="quiz-bg" aria-hidden="true"></div>
+    <canvas id="confetti-canvas" aria-hidden="true"></canvas>
 
-    <div class="pes-story-page">
+    <header class="quiz-topbar">
+        <a class="quiz-brand" href="/dashboard">A Letter in the Scroll</a>
+        <a href="/holidays/passover/">&#8592; Back to Passover</a>
+    </header>
 
-        <!-- Top nav -->
-        <header class="pes-topbar pes-topbar--light">
-            <div class="pes-topbar__inner">
-                <a class="pes-brand" href="/dashboard">A Letter in the Scroll</a>
-                <a class="pes-back" href="/holidays/passover">← Back to Passover</a>
-            </div>
-        </header>
+    <div class="quiz-container">
 
-        <!-- Hero -->
-        <section class="pes-story-hero" aria-label="Passover Trivia">
-            <img src="/media/images/passoverplate.png" class="pes-story-hero__plate" alt="" aria-hidden="true">
-            <p class="pes-story-hero__eyebrow">ב״ה &nbsp;·&nbsp; Pesach 5786 &nbsp;·&nbsp; April 2026</p>
-            <span class="pes-story-hero__hebrew">מַה נִּשְׁתַּנָּה?</span>
-            <h1>Passover Trivia</h1>
-            <p class="pes-story-hero__sub">
-                10 fascinating questions and biblical facts — tap each card to reveal the answer
+        <div class="quiz-hero">
+            <span class="quiz-hero__hebrew">&#1502;&#1463;&#1492; &#1504;&#1468;&#1460;&#1513;&#1473;&#1456;&#1514;&#1468;&#1463;&#1504;&#1468;&#1464;&#1492;?</span>
+            <h1>Passover Quiz</h1>
+            <p class="quiz-hero__sub">
+                Read each question aloud at the table, let everyone guess, then reveal the answer. Who knows the most?
             </p>
-        </section>
+        </div>
 
-        <!-- Main content -->
-        <main class="pes-story-main">
-
-            <div class="pes-intro-highlight">
-                Passover is rooted in asking questions — from the Four Questions at the Seder to the tradition of teaching the next generation.<br>
-                Test your knowledge and discover surprising biblical facts!
+        <div class="quiz-progress" id="quiz-progress" style="display:none">
+            <span class="quiz-progress__label" id="quiz-progress-label">1 / 10</span>
+            <div class="quiz-progress__bar-wrap">
+                <div class="quiz-progress__bar" id="quiz-bar"></div>
             </div>
+        </div>
 
-            <article class="pes-section pes-section--gold" id="trivia">
-                <p class="pes-kicker">Test Your Knowledge</p>
-                <h2>Tap a Card to Reveal the Answer</h2>
-
-                <div class="pes-trivia-progress">
-                    <span class="pes-trivia-progress__text">Revealed: <strong id="trivia-count">0</strong> / 10</span>
-                    <div class="pes-trivia-progress__bar">
-                        <div class="pes-trivia-progress__fill" id="trivia-fill"></div>
-                    </div>
+        <div id="quiz-area">
+            <div class="quiz-card quiz-start">
+                <h2 style="font-family:'Cinzel',serif; font-size:1.3rem; font-weight:700; margin-bottom:0.6rem;">Ready for a Seder table challenge?</h2>
+                <p class="quiz-start__desc">
+                    10 questions about the Exodus, the plagues, and Passover traditions.
+                    Read them aloud and see who can guess the answer before you reveal it.
+                </p>
+                <div class="quiz-start__features">
+                    <span class="quiz-start__feat">10 questions</span>
+                    <span class="quiz-start__feat">Read aloud</span>
+                    <span class="quiz-start__feat">No time limit</span>
+                    <span class="quiz-start__feat">Learn together</span>
                 </div>
-
-                <div class="pes-trivia-grid">
-
-                    <div class="pes-trivia-card" data-num="1">
-                        <div class="pes-trivia-card__inner">
-                            <div class="pes-trivia-card__front">
-                                <span class="pes-trivia-card__num">1</span>
-                                <span class="pes-trivia-card__icon">🍷</span>
-                                <h3 class="pes-trivia-card__q">The Four Verbs of Freedom</h3>
-                                <p>Why do we drink exactly four cups of wine?</p>
-                                <span class="pes-trivia-card__tap">Tap to reveal</span>
-                            </div>
-                            <div class="pes-trivia-card__back">
-                                <span class="pes-trivia-card__num">1</span>
-                                <p>They correspond to the four verbs God uses in <strong>Exodus 6:6–7</strong> to promise redemption: <em>"I will bring you out… I will deliver you… I will redeem you… and I will take you to me as a people."</em> Each cup represents a different stage of the transition from slavery to nationhood.</p>
-                                <span class="pes-trivia-card__tap">Tap to flip back</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pes-trivia-card" data-num="2">
-                        <div class="pes-trivia-card__inner">
-                            <div class="pes-trivia-card__front">
-                                <span class="pes-trivia-card__num">2</span>
-                                <span class="pes-trivia-card__icon">📅</span>
-                                <h3 class="pes-trivia-card__q">The First National Mitzvah</h3>
-                                <p>What was the very first commandment given to the Israelites as a nation?</p>
-                                <span class="pes-trivia-card__tap">Tap to reveal</span>
-                            </div>
-                            <div class="pes-trivia-card__back">
-                                <span class="pes-trivia-card__num">2</span>
-                                <p>It wasn't the Ten Commandments! In <strong>Exodus 12:2</strong>, while still in Egypt, God commanded them to establish their own calendar (Rosh Chodesh). A slave doesn't own their own time — to be free, the first thing they had to do was take control of the clock.</p>
-                                <span class="pes-trivia-card__tap">Tap to flip back</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pes-trivia-card" data-num="3">
-                        <div class="pes-trivia-card__inner">
-                            <div class="pes-trivia-card__front">
-                                <span class="pes-trivia-card__num">3</span>
-                                <span class="pes-trivia-card__icon">🩸</span>
-                                <h3 class="pes-trivia-card__q">The "War" Against the Nile</h3>
-                                <p>Why was "Blood" the very first plague?</p>
-                                <span class="pes-trivia-card__tap">Tap to reveal</span>
-                            </div>
-                            <div class="pes-trivia-card__back">
-                                <span class="pes-trivia-card__num">3</span>
-                                <p>The Nile was not just a river — it was a primary Egyptian deity (the god Hapi). By turning it into blood, God was <em>"executing judgments against the gods of Egypt"</em> (<strong>Exodus 12:12</strong>), proving that the Egyptians' source of life was under His control.</p>
-                                <span class="pes-trivia-card__tap">Tap to flip back</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pes-trivia-card" data-num="4">
-                        <div class="pes-trivia-card__inner">
-                            <div class="pes-trivia-card__front">
-                                <span class="pes-trivia-card__num">4</span>
-                                <span class="pes-trivia-card__icon">🐑</span>
-                                <h3 class="pes-trivia-card__q">The "Rebel" Lamb</h3>
-                                <p>Why did God specifically choose a lamb for the Passover sacrifice?</p>
-                                <span class="pes-trivia-card__tap">Tap to reveal</span>
-                            </div>
-                            <div class="pes-trivia-card__back">
-                                <span class="pes-trivia-card__num">4</span>
-                                <p>The lamb was a sacred animal in Egypt (associated with the god Khnum). Tying it to their bedposts for four days and then sacrificing it was an act of incredible bravery and public rebellion against Egyptian idolatry (<strong>Exodus 8:22</strong>).</p>
-                                <span class="pes-trivia-card__tap">Tap to flip back</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pes-trivia-card" data-num="5">
-                        <div class="pes-trivia-card__inner">
-                            <div class="pes-trivia-card__front">
-                                <span class="pes-trivia-card__num">5</span>
-                                <span class="pes-trivia-card__icon">⚰️</span>
-                                <h3 class="pes-trivia-card__q">The 400-Year-Old "Luggage"</h3>
-                                <p>While everyone packed gold and silver, what was Moses looking for?</p>
-                                <span class="pes-trivia-card__tap">Tap to reveal</span>
-                            </div>
-                            <div class="pes-trivia-card__back">
-                                <span class="pes-trivia-card__num">5</span>
-                                <p>Moses spent the final moments locating the coffin of Joseph. Joseph had made his brothers swear 400 years earlier not to leave Egypt without him (<strong>Genesis 50:25</strong>). They carried his bones through the entire 40-year desert journey (<strong>Exodus 13:19</strong>).</p>
-                                <span class="pes-trivia-card__tap">Tap to flip back</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pes-trivia-card" data-num="6">
-                        <div class="pes-trivia-card__inner">
-                            <div class="pes-trivia-card__front">
-                                <span class="pes-trivia-card__num">6</span>
-                                <span class="pes-trivia-card__icon">👥</span>
-                                <h3 class="pes-trivia-card__q">The "Mixed Multitude"</h3>
-                                <p>Was it only the descendants of Jacob who left Egypt?</p>
-                                <span class="pes-trivia-card__tap">Tap to reveal</span>
-                            </div>
-                            <div class="pes-trivia-card__back">
-                                <span class="pes-trivia-card__num">6</span>
-                                <p>No! <strong>Exodus 12:38</strong> mentions that a "mixed multitude" (Erev Rav) went up with them — Egyptians and other foreigners so moved by the miracles that they joined the Jewish people on their journey to freedom.</p>
-                                <span class="pes-trivia-card__tap">Tap to flip back</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pes-trivia-card" data-num="7">
-                        <div class="pes-trivia-card__inner">
-                            <div class="pes-trivia-card__front">
-                                <span class="pes-trivia-card__num">7</span>
-                                <span class="pes-trivia-card__icon">☀️</span>
-                                <h3 class="pes-trivia-card__q">The Midday Exit</h3>
-                                <p>Did the Israelites "sneak out" of Egypt under the cover of night?</p>
-                                <span class="pes-trivia-card__tap">Tap to reveal</span>
-                            </div>
-                            <div class="pes-trivia-card__back">
-                                <span class="pes-trivia-card__num">7</span>
-                                <p>While the 10th plague struck at midnight, the Torah emphasizes they left <em>"in the middle of the day"</em> (<strong>Exodus 12:42</strong>). God wanted them to leave with "a high hand" — proudly and openly — as free men, not escaping like thieves.</p>
-                                <span class="pes-trivia-card__tap">Tap to flip back</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pes-trivia-card" data-num="8">
-                        <div class="pes-trivia-card__inner">
-                            <div class="pes-trivia-card__front">
-                                <span class="pes-trivia-card__num">8</span>
-                                <span class="pes-trivia-card__icon">🦴</span>
-                                <h3 class="pes-trivia-card__q">The "No Broken Bones" Rule</h3>
-                                <p>What was the strangest rule about eating the original Passover lamb?</p>
-                                <span class="pes-trivia-card__tap">Tap to reveal</span>
-                            </div>
-                            <div class="pes-trivia-card__back">
-                                <span class="pes-trivia-card__num">8</span>
-                                <p>In <strong>Exodus 12:46</strong>, the Torah forbids breaking any of the lamb's bones. Breaking bones is how a slave eats desperately. A free person eats with dignity, leaving the bones whole to show they are not desperate for every last scrap.</p>
-                                <span class="pes-trivia-card__tap">Tap to flip back</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pes-trivia-card" data-num="9">
-                        <div class="pes-trivia-card__inner">
-                            <div class="pes-trivia-card__front">
-                                <span class="pes-trivia-card__num">9</span>
-                                <span class="pes-trivia-card__icon">🏆</span>
-                                <h3 class="pes-trivia-card__q">The Fifth "Hidden" Expression</h3>
-                                <p>Why do we have a "Cup of Elijah" that no one drinks?</p>
-                                <span class="pes-trivia-card__tap">Tap to reveal</span>
-                            </div>
-                            <div class="pes-trivia-card__back">
-                                <span class="pes-trivia-card__num">9</span>
-                                <p>There is actually a 5th verb of redemption in <strong>Exodus 6:8</strong>: <em>"I will bring you to the land."</em> Since the Israelites didn't enter the land immediately, we pour a 5th cup but don't drink it — symbolizing a redemption still "in progress."</p>
-                                <span class="pes-trivia-card__tap">Tap to flip back</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pes-trivia-card" data-num="10">
-                        <div class="pes-trivia-card__inner">
-                            <div class="pes-trivia-card__front">
-                                <span class="pes-trivia-card__num">10</span>
-                                <span class="pes-trivia-card__icon">🛡️</span>
-                                <h3 class="pes-trivia-card__q">The Literal Meaning of "Pesach"</h3>
-                                <p>We translate Pesach as "Passover," but what does the word actually imply?</p>
-                                <span class="pes-trivia-card__tap">Tap to reveal</span>
-                            </div>
-                            <div class="pes-trivia-card__back">
-                                <span class="pes-trivia-card__num">10</span>
-                                <p>While it can mean "to skip," in <strong>Isaiah 31:5</strong> the root means "to shield" or "to protect." God wasn't just skipping the houses — He was actively standing over the doors to shield the families inside from the plague.</p>
-                                <span class="pes-trivia-card__tap">Tap to flip back</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <button class="pes-trivia-reset" id="trivia-reset" style="display:none;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                    Reset All Cards
+                <button class="quiz-btn quiz-btn--gold" onclick="startQuiz()" style="font-size:0.95rem; padding:0.85rem 2.5rem;">
+                    Start the Quiz &#8594;
                 </button>
-            </article>
-
-            <!-- CTA links -->
-            <div class="pes-cta-wrap" style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
-                <a href="/holidays/passover/story" class="pes-cta-btn" style="background: linear-gradient(135deg, var(--pes-gold) 0%, var(--pes-amber) 100%); box-shadow: 0 8px 28px rgba(196,154,42,0.32);">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-                    About Passover
-                </a>
-                <a href="/holidays/passover/haggadah" class="pes-cta-btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                    Open the Full Seder Haggadah
-                </a>
             </div>
-
-        </main>
+        </div>
 
     </div>
+
+    <footer class="quiz-footer">
+        <a href="/holidays/passover/">&#8592; Passover</a>
+        <a href="/holidays/passover/story/">About Passover</a>
+        <a href="/holidays/passover/haggadah/">Haggadah</a>
+        <a href="/dashboard">Home</a>
+    </footer>
 
     <script>
-        // Trivia flip cards
-        (function() {
-            const cards = document.querySelectorAll('.pes-trivia-card');
-            const countEl = document.getElementById('trivia-count');
-            const fillEl = document.getElementById('trivia-fill');
-            const resetBtn = document.getElementById('trivia-reset');
-            const total = cards.length;
-            const revealed = new Set();
+    (function() {
 
-            function updateProgress() {
-                const n = revealed.size;
-                countEl.textContent = n;
-                fillEl.style.width = (n / total * 100) + '%';
-                resetBtn.style.display = n > 0 ? '' : 'none';
+        var QUESTIONS = [
+            {
+                question: 'We drink exactly four cups of wine at the Seder. Why four?',
+                answer: 'They correspond to the four verbs God uses in <strong>Exodus 6:6\u20137</strong> to promise redemption: <em>\u201CI will bring you out\u2026 I will deliver you\u2026 I will redeem you\u2026 and I will take you to me as a people.\u201D</em> Each cup represents a different stage of the journey from slavery to nationhood.'
+            },
+            {
+                question: 'What was the very first commandment God gave the Israelites as a nation \u2014 before even the Ten Commandments?',
+                answer: 'To establish their own calendar. In <strong>Exodus 12:2</strong>, while still in Egypt, God commanded them to mark the new moon (Rosh Chodesh). A slave doesn\u2019t own their own time \u2014 to be free, the first step was to take control of the clock.'
+            },
+            {
+                question: 'Of all the plagues, why was turning the Nile to blood the very first one?',
+                answer: 'The Nile was not just a river \u2014 it was a primary Egyptian deity (the god Hapi). By turning it into blood, God was <em>\u201Cexecuting judgments against the gods of Egypt\u201D</em> (<strong>Exodus 12:12</strong>), proving that the Egyptians\u2019 source of life was under His control.'
+            },
+            {
+                question: 'Why did God specifically choose a lamb for the Passover sacrifice? Why not a different animal?',
+                answer: 'The lamb was a sacred animal in Egypt, associated with the god Khnum. Tying it to their bedposts for four days and then sacrificing it was an act of incredible bravery \u2014 a public rebellion against Egyptian idolatry (<strong>Exodus 8:22</strong>).'
+            },
+            {
+                question: 'When the Israelites were packing to leave Egypt, everyone grabbed gold and silver. But Moses was busy searching for something else. What was it?',
+                answer: 'The coffin of Joseph. Four hundred years earlier, Joseph had made his brothers swear not to leave Egypt without his remains (<strong>Genesis 50:25</strong>). Moses honored that promise and carried Joseph\u2019s bones through the entire 40-year desert journey (<strong>Exodus 13:19</strong>).'
+            },
+            {
+                question: 'Was it only the descendants of Jacob who walked out of Egypt in the Exodus?',
+                answer: 'No. <strong>Exodus 12:38</strong> tells us that a <em>\u201Cmixed multitude\u201D</em> (Erev Rav) went up with them \u2014 Egyptians and other foreigners so moved by the miracles that they joined the Jewish people on their journey to freedom.'
+            },
+            {
+                question: 'Did the Israelites sneak out of Egypt under the cover of night?',
+                answer: 'No \u2014 they left in broad daylight. While the 10th plague struck at midnight, the Torah emphasizes they departed <em>\u201Cin the middle of the day\u201D</em> (<strong>Exodus 12:42</strong>). God wanted them to walk out proudly, with <em>\u201Ca high hand\u201D</em> \u2014 as free people, not as fugitives.'
+            },
+            {
+                question: 'There was one very unusual rule about eating the Passover lamb. What was it?',
+                answer: 'None of its bones could be broken (<strong>Exodus 12:46</strong>). Breaking bones to suck out marrow is how a starving slave eats \u2014 desperately. A free person eats with dignity, leaving the bones whole to show they are not desperate for every last scrap.'
+            },
+            {
+                question: 'At the Seder table there is a cup of wine poured for Elijah that nobody drinks. Why?',
+                answer: 'There is actually a fifth expression of redemption in <strong>Exodus 6:8</strong>: <em>\u201CI will bring you to the land.\u201D</em> Since the generation of the Exodus didn\u2019t enter the land themselves, we pour a fifth cup but leave it undrunk \u2014 a symbol of a redemption still in progress, waiting to be completed.'
+            },
+            {
+                question: 'We translate \u201CPesach\u201D as \u201CPassover\u201D \u2014 as if God simply skipped over the Israelite houses. But is that really what the Hebrew word means?',
+                answer: 'The root can mean \u201Cto skip,\u201D but in <strong>Isaiah 31:5</strong> it means <em>\u201Cto shield\u201D</em> or <em>\u201Cto protect.\u201D</em> God wasn\u2019t just passing over the houses \u2014 He was actively standing guard over each doorway, shielding the families inside from the plague.'
             }
+        ];
 
-            cards.forEach(card => {
-                card.addEventListener('click', () => {
-                    card.classList.toggle('flipped');
-                    if (card.classList.contains('flipped')) {
-                        revealed.add(card.dataset.num);
-                    }
-                    updateProgress();
+        var currentQ = 0;
+        var isRevealed = false;
+
+        // Stars
+        (function() {
+            var bg = document.getElementById('quiz-bg');
+            for (var i = 0; i < 40; i++) {
+                var s = document.createElement('div');
+                s.className = 'star';
+                s.style.left = Math.random() * 100 + '%';
+                s.style.top  = Math.random() * 100 + '%';
+                s.style.animationDelay = (Math.random() * 3) + 's';
+                s.style.animationDuration = (2 + Math.random() * 3) + 's';
+                s.style.width = s.style.height = (2 + Math.random() * 2) + 'px';
+                bg.appendChild(s);
+            }
+        })();
+
+        window.startQuiz = function() {
+            currentQ = 0;
+            document.getElementById('quiz-progress').style.display = '';
+            renderQuestion();
+        };
+
+        function renderQuestion() {
+            isRevealed = false;
+            var q = QUESTIONS[currentQ];
+            updateProgress();
+
+            var html = '<div class="quiz-card">' +
+                '<div class="quiz-card__badge">' + (currentQ + 1) + '</div>' +
+                '<p class="quiz-card__question">' + q.question + '</p>' +
+                '<p class="quiz-card__hint">Let everyone guess before you reveal!</p>' +
+                '<button class="quiz-reveal-btn" id="reveal-btn" onclick="revealAnswer()">Reveal the Answer</button>' +
+                '<div id="answer-area"></div>' +
+                '</div>';
+
+            document.getElementById('quiz-area').innerHTML = html;
+        }
+
+        window.revealAnswer = function() {
+            if (isRevealed) return;
+            isRevealed = true;
+
+            var q = QUESTIONS[currentQ];
+            document.getElementById('reveal-btn').style.display = 'none';
+
+            var isLast = currentQ >= QUESTIONS.length - 1;
+            var nextLabel = isLast ? 'See Final Screen &#8594;' : 'Next Question &#8594;';
+
+            document.getElementById('answer-area').innerHTML =
+                '<div class="quiz-answer">' +
+                    '<span class="quiz-answer__label">The Answer</span>' +
+                    '<p>' + q.answer + '</p>' +
+                '</div>' +
+                '<button class="quiz-next-btn" onclick="goNext()">' + nextLabel + '</button>';
+        };
+
+        window.goNext = function() {
+            currentQ++;
+            if (currentQ >= QUESTIONS.length) {
+                showFinish();
+            } else {
+                renderQuestion();
+            }
+        };
+
+        function updateProgress() {
+            document.getElementById('quiz-progress-label').textContent = (currentQ + 1) + ' / ' + QUESTIONS.length;
+            document.getElementById('quiz-bar').style.width = (currentQ / QUESTIONS.length * 100) + '%';
+        }
+
+        function showFinish() {
+            document.getElementById('quiz-progress').style.display = 'none';
+
+            var circ = 2 * Math.PI * 50;
+
+            var html = '<div class="quiz-card quiz-finish">' +
+                '<h2 class="quiz-finish__title">Chag Sameach!</h2>' +
+                '<div class="quiz-finish__ring">' +
+                    '<svg viewBox="0 0 110 110">' +
+                        '<circle class="ring-bg" cx="55" cy="55" r="50"/>' +
+                        '<circle class="ring-fill" id="ring-fill" cx="55" cy="55" r="50" style="stroke-dasharray:' + circ + ';stroke-dashoffset:' + circ + '"/>' +
+                    '</svg>' +
+                    '<span class="quiz-finish__num">10/10<small>complete</small></span>' +
+                '</div>' +
+                '<p class="quiz-finish__sub">' +
+                    'You made it through all 10 questions! Hopefully everyone at the table learned something new tonight.' +
+                '</p>' +
+                '<div class="quiz-btn-row">' +
+                    '<button class="quiz-btn quiz-btn--gold" onclick="startQuiz()">Play Again</button>' +
+                    '<a href="/holidays/passover/story/" class="quiz-btn quiz-btn--outline">About Passover</a>' +
+                    '<a href="/holidays/passover/haggadah/" class="quiz-btn quiz-btn--outline">Open Haggadah</a>' +
+                '</div>' +
+            '</div>';
+
+            document.getElementById('quiz-area').innerHTML = html;
+
+            requestAnimationFrame(function() {
+                requestAnimationFrame(function() {
+                    document.getElementById('ring-fill').style.strokeDashoffset = 0;
                 });
             });
 
-            resetBtn.addEventListener('click', () => {
-                cards.forEach(c => c.classList.remove('flipped'));
-                revealed.clear();
-                updateProgress();
-            });
-        })();
+            fireConfetti();
+        }
+
+        function fireConfetti() {
+            var canvas = document.getElementById('confetti-canvas');
+            var ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            var particles = [];
+            var colors = ['#c49a2a','#f4c046','#1e3a8a','#2563eb','#fff','#16a34a'];
+
+            for (var i = 0; i < 100; i++) {
+                particles.push({
+                    x: canvas.width / 2 + (Math.random() - 0.5) * 200,
+                    y: canvas.height * 0.4,
+                    vx: (Math.random() - 0.5) * 12,
+                    vy: -Math.random() * 14 - 4,
+                    w: 6 + Math.random() * 6,
+                    h: 4 + Math.random() * 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    rot: Math.random() * 360,
+                    rv: (Math.random() - 0.5) * 12,
+                    life: 1
+                });
+            }
+
+            var frame = 0;
+            function tick() {
+                frame++;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                var alive = false;
+                for (var i = 0; i < particles.length; i++) {
+                    var p = particles[i];
+                    if (p.life <= 0) continue;
+                    alive = true;
+                    p.x += p.vx;
+                    p.vy += 0.25;
+                    p.y += p.vy;
+                    p.rot += p.rv;
+                    p.life -= 0.008;
+                    ctx.save();
+                    ctx.globalAlpha = Math.max(0, p.life);
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rot * Math.PI / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                    ctx.restore();
+                }
+                if (alive && frame < 300) requestAnimationFrame(tick);
+                else ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            requestAnimationFrame(tick);
+        }
+
+    })();
     </script>
-    <script src="/js/auth-gate.js"></script>
+
 </body>
 </html>

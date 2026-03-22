@@ -3562,6 +3562,10 @@
         // Hide newsletter section if this user already subscribed (covers cross-device / cleared storage)
         hideNewsletterIfSubscribed(user.email);
 
+        // Pre-fill newsletter email for logged-in users
+        var nlEmailInput = document.getElementById('dash-nl-email');
+        if (nlEmailInput && user.email) nlEmailInput.value = user.email;
+
         // URL params
         const p = new URLSearchParams(window.location.search);
         const jId = p.get('join');
