@@ -308,24 +308,39 @@
         // while restoring auth from IndexedDB after a dynamic SDK load.
         var hasCachedSession = false;
         try { hasCachedSession = !!sessionStorage.getItem('headerUserCache'); } catch (_) {}
+        if (!hasCachedSession) {
+            try { hasCachedSession = !!localStorage.getItem('dashGroupsCache'); } catch (_) {}
+        }
+        if (!hasCachedSession) {
+            try { hasCachedSession = !!localStorage.getItem('lastActiveChavrutaId'); } catch (_) {}
+        }
 
+        var userSeen = false;
         var resolved = false;
-        var unsubscribe = auth.onAuthStateChanged(function (user) {
-            if (resolved) return;
+        auth.onAuthStateChanged(function (user) {
             if (user) {
-                // User is signed in — nothing to do
-                resolved = true;
-                unsubscribe();
+                userSeen = true;
                 // Remove the overlay if it was somehow shown
+                window.__loginRedirectPending = false;
                 var overlay = document.getElementById('login-required-overlay');
                 if (overlay) overlay.remove();
                 document.body.classList.remove('login-required-pending');
+                document.documentElement.style.removeProperty('--login-required-overlay-top');
                 return;
             }
+            // If user was already authenticated, this is a transient null
+            // from a token refresh — ignore it.
+            if (userSeen) {
+                // Force token refresh to recover session
+                if (auth.currentUser) {
+                    auth.currentUser.getIdToken(true).catch(function () {});
+                }
+                return;
+            }
+            if (resolved) return;
             if (!hasCachedSession) {
                 // No cached session and Firebase says no user — show overlay
                 resolved = true;
-                unsubscribe();
                 showLoginRequiredOverlayAndRedirect();
             }
             // If we have a cached session but Firebase says null, wait —
@@ -333,15 +348,24 @@
         });
 
         // Safety timeout: if Firebase hasn't resolved with a real user
-        // after 4 seconds despite a cached session, show the overlay.
+        // after a generous delay despite a cached session, show the overlay.
         if (hasCachedSession) {
             setTimeout(function () {
-                if (!resolved) {
+                if (!resolved && !userSeen) {
                     resolved = true;
-                    unsubscribe();
                     showLoginRequiredOverlayAndRedirect();
                 }
-            }, 4000);
+            }, 8000);
         }
+
+        // When tab regains focus, force token refresh to prevent stale session
+        document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'visible' && userSeen) {
+                var u = auth.currentUser;
+                if (u) {
+                    u.getIdToken(true).catch(function () {});
+                }
+            }
+        });
     }
 })();

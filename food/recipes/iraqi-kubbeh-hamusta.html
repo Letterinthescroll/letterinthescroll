@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iraqi Kubbeh Hamusta (Sour Soup) — A Letter in the Scroll</title>
+    <link rel="icon" type="image/png" href="/media/images/Icon.png">
+    <link rel="apple-touch-icon" href="/media/images/Icon.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="A Letter in the Scroll">
+    <meta property="og:title" content="Iraqi Kubbeh Hamusta (Sour Soup) — A Letter in the Scroll">
+    <meta property="og:description" content="Semolina dumplings stuffed with spiced ground beef, simmered in a tart, lemony celery broth. The crown jewel of Iraqi Jewish cooking and a labor of love that rewards every minute of effort.">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/mobile-overrides.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink-950: #102039;
+            --ink-800: #1e3558;
+            --ink-700: #2c4a75;
+            --ink-600: #456188;
+            --ink-500: #667c9c;
+            --surface: #ffffff;
+            --surface-soft: #f7fbff;
+            --surface-glass: rgba(255, 255, 255, 0.82);
+            --line: rgba(25, 61, 108, 0.16);
+            --line-strong: rgba(25, 61, 108, 0.24);
+            --accent-navy: #1f3f76;
+            --accent-teal: #0f7b8f;
+            --accent-gold: #cf9a32;
+            --accent-mint: #2f9f84;
+            --radius-xl: 1.45rem;
+            --radius-lg: 1.05rem;
+            --shadow-xl: 0 24px 56px rgba(17, 44, 84, 0.17);
+            --shadow-lg: 0 12px 30px rgba(17, 44, 84, 0.11);
+            --shadow-sm: 0 4px 12px rgba(17, 44, 84, 0.07);
+        }
+        html { scroll-behavior: smooth; background: #edf5ff; }
+        body {
+            font-family: 'Manrope', sans-serif;
+            color: var(--ink-950);
+            min-height: 100vh;
+            background:
+                radial-gradient(1200px 580px at -8% -10%, rgba(207, 154, 50, 0.18), transparent 60%),
+                radial-gradient(900px 560px at 108% -12%, rgba(36, 118, 175, 0.16), transparent 58%),
+                linear-gradient(180deg, #faf6ee 0%, #f4f8ff 47%, #faf6ee 100%);
+        }
+        .recipe-page { max-width: 52rem; margin: 0 auto; padding: 2rem 2.5rem 4rem; }
+        .recipe-back {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-size: 0.85rem; font-weight: 600; color: var(--accent-teal);
+            text-decoration: none; margin-bottom: 1.5rem;
+            transition: color 0.2s;
+        }
+        .recipe-back:hover { color: var(--accent-navy); }
+        .recipe-back svg { width: 16px; height: 16px; }
+        .recipe-header { margin-bottom: 2rem; }
+        .recipe-header h1 {
+            font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 700; color: var(--ink-950); margin: 0 0 0.5rem; line-height: 1.2;
+        }
+        .recipe-origin {
+            font-size: 0.85rem; font-weight: 600; color: var(--accent-teal);
+            text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem;
+        }
+        .recipe-desc {
+            font-size: 1rem; color: var(--ink-600); line-height: 1.7; max-width: 44rem;
+        }
+        .recipe-meta {
+            display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0;
+            margin: 1rem 0 1.25rem; padding: 0;
+            background: none; border: none; border-radius: 0; box-shadow: none;
+        }
+        .meta-item {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+        }
+        .meta-item::after {
+            content: '\00b7'; color: var(--ink-500); font-weight: 700;
+            font-size: 1rem; margin: 0 0.4rem;
+        }
+        .meta-item:last-child::after { display: none; }
+        .meta-label {
+            font-size: 0.75rem; font-weight: 600;
+            color: var(--ink-500);
+        }
+        .meta-value { font-size: 0.75rem; font-weight: 700; color: var(--ink-950); }
+        .recipe-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+        .recipe-tag {
+            font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.05em; padding: 0.2rem 0.6rem;
+            background: rgba(15, 123, 143, 0.08); color: var(--accent-teal);
+            border-radius: 2rem;
+        }
+        .recipe-section {
+            background: linear-gradient(170deg, rgba(255,255,255,0.94), rgba(252,254,255,0.87));
+            border: 1px solid var(--line); border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg); backdrop-filter: blur(8px);
+            padding: 2rem; margin-bottom: 1.5rem;
+        }
+        .recipe-section h2 {
+            font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 700;
+            color: var(--ink-950); margin: 0 0 1rem;
+            padding-bottom: 0.6rem; border-bottom: 2px solid rgba(207,154,50,0.25);
+        }
+        .ingredients-list {
+            list-style: none; padding: 0; margin: 0;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.15rem 1.8rem;
+        }
+        .ingredients-list li {
+            position: relative;
+            padding: 0.28rem 0 0.28rem 1.1rem;
+            font-size: 0.88rem; line-height: 1.45; color: var(--ink-700);
+        }
+        .ingredients-list li::before {
+            content: ''; position: absolute; left: 0; top: 0.55rem;
+            width: 5px; height: 5px; border-radius: 50%;
+            background: var(--accent-gold);
+        }
+        .ingredients-list li.section-divider {
+            grid-column: 1 / -1; padding: 0.5rem 0 0.15rem 0;
+            font-weight: 700; font-size: 0.78rem;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            color: var(--accent-teal); border-bottom: 1px solid rgba(15,123,143,0.15);
+        }
+        .ingredients-list li.section-divider::before { display: none; }
+        @media (max-width: 640px) {
+            .ingredients-list { grid-template-columns: 1fr; }
+        }
+        .directions-list { list-style: none; padding: 0; margin: 0; counter-reset: step; }
+        .directions-list li {
+            position: relative; padding: 1rem 0 1rem 3rem;
+            border-bottom: 1px solid var(--line);
+            font-size: 0.95rem; line-height: 1.75; color: var(--ink-700);
+            counter-increment: step;
+        }
+        .directions-list li:last-child { border-bottom: none; }
+        .directions-list li::before {
+            content: counter(step);
+            position: absolute; left: 0; top: 1rem;
+            width: 2rem; height: 2rem; border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-gold), #b8882a);
+            color: #fff; font-size: 0.8rem; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .recipe-tip {
+            background: rgba(207, 154, 50, 0.08);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            padding: 1.25rem 1.5rem; margin-top: 0.5rem;
+        }
+        .recipe-tip strong { color: var(--accent-gold); font-weight: 700; }
+        .recipe-tip p { margin: 0.3rem 0 0; font-size: 0.92rem; line-height: 1.65; color: var(--ink-700); }
+
+        /* ── Serving Scaler ────────────────────────────────── */
+        .serving-scaler {
+            display: flex; align-items: center; gap: 0.5rem;
+            margin-bottom: 1.25rem; flex-wrap: wrap;
+        }
+        .serving-scaler-label {
+            font-size: 0.82rem; font-weight: 600; color: var(--ink-600);
+        }
+        .serving-scaler-controls {
+            display: flex; align-items: center; gap: 0;
+            border: 1.5px solid var(--line-strong); border-radius: 0.6rem; overflow: hidden;
+        }
+        .serving-btn {
+            width: 36px; height: 36px; border: none;
+            background: var(--surface-soft); color: var(--ink-700);
+            font-size: 1.1rem; font-weight: 700; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s;
+        }
+        .serving-btn:hover { background: rgba(207, 154, 50, 0.15); color: var(--accent-gold); }
+        .serving-btn:active { transform: scale(0.95); }
+        .serving-count {
+            width: 50px; height: 36px; border: none; border-left: 1px solid var(--line);
+            border-right: 1px solid var(--line);
+            text-align: center; font-family: 'Manrope', sans-serif;
+            font-size: 0.95rem; font-weight: 700; color: var(--ink-950);
+            background: #fff;
+        }
+        .serving-count:focus { outline: none; background: rgba(207, 154, 50, 0.06); }
+        .serving-multiplier {
+            font-size: 0.75rem; font-weight: 600; color: var(--accent-teal);
+            padding: 0.2rem 0.55rem; background: rgba(15, 123, 143, 0.08);
+            border-radius: 1rem; margin-left: 0.4rem;
+        }
+        .serving-reset {
+            font-size: 0.72rem; font-weight: 600; color: var(--ink-500);
+            background: none; border: 1px solid var(--line); border-radius: 1rem;
+            padding: 0.2rem 0.6rem; cursor: pointer; transition: all 0.15s;
+            margin-left: 0.25rem;
+        }
+        .serving-reset:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+        .ingredient-scaled { color: var(--accent-teal); font-weight: 600; }
+
+        @media (max-width: 640px) {
+            .recipe-page { padding: 1.5rem 1.25rem 3rem; }
+            .recipe-section { padding: 1.5rem; }
+            .recipe-meta { gap: 0.3rem 0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="shared-header-mount"></div>
+    <main class="recipe-page">
+        <a href="/food" class="recipe-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            Back to All Recipes
+        </a>
+        <div class="recipe-header">
+            <div class="recipe-origin">Iraqi / Mizrahi</div>
+            <h1>Iraqi Kubbeh Hamusta (Sour Soup)</h1>
+            <p class="recipe-desc">Semolina dumplings stuffed with spiced ground beef, simmered in a tart, lemony celery broth. The crown jewel of Iraqi Jewish cooking and a labor of love that rewards every minute of effort.</p>
+        </div>
+        <div class="recipe-meta">
+            <div class="meta-item"><span class="meta-label">Prep Time</span><span class="meta-value">1 hr</span></div>
+            <div class="meta-item"><span class="meta-label">Cook Time</span><span class="meta-value">1 hr</span></div>
+            <div class="meta-item"><span class="meta-label">Total Time</span><span class="meta-value">2 hrs</span></div>
+            <div class="meta-item"><span class="meta-label">Servings</span><span class="meta-value" id="servings-display">8</span></div>
+            <div class="meta-item"><span class="meta-label">Difficulty</span><span class="meta-value">Advanced</span></div>
+        </div>
+        <div class="recipe-tags">
+            <span class="recipe-tag">Shabbat</span>
+            <span class="recipe-tag">Year-Round</span>
+        </div>
+        <div class="recipe-section">
+            <h2>Ingredients</h2>
+            <div class="serving-scaler">
+                <span class="serving-scaler-label">Adjust servings:</span>
+                <div class="serving-scaler-controls">
+                    <button class="serving-btn" onclick="changeServings(-1)" aria-label="Decrease servings">-</button>
+                    <input type="number" class="serving-count" id="serving-input" value="8" min="1" max="200" onchange="updateServings()">
+                    <button class="serving-btn" onclick="changeServings(1)" aria-label="Increase servings">+</button>
+                </div>
+                <span class="serving-multiplier" id="multiplier-badge" style="display:none;"></span>
+                <button class="serving-reset" id="reset-btn" onclick="resetServings()" style="display:none;">Reset</button>
+            </div>
+            <ul class="ingredients-list" id="ingredients-list">
+                <li class="section-divider">For the soup broth:</li>
+                <li class="ingredient-item">1 large onion, diced</li>
+                <li class="ingredient-item">2 carrots, peeled and diced</li>
+                <li class="ingredient-item">2 medium potatoes, peeled and cubed</li>
+                <li class="ingredient-item">2 celery stalks, diced</li>
+                <li class="ingredient-item">1 cup fresh cilantro, chopped</li>
+                <li class="ingredient-item">Juice of 1-2 lemons (about 1/3 cup)</li>
+                <li class="ingredient-item">2 tbsp neutral oil</li>
+                <li class="ingredient-item">8 cups water</li>
+                <li class="ingredient-item">1 tsp salt</li>
+                <li class="ingredient-item">1/2 tsp turmeric</li>
+                <li class="section-divider">For the semolina dough:</li>
+                <li class="ingredient-item">3 cups fine semolina flour</li>
+                <li class="ingredient-item">1/4 cup neutral oil</li>
+                <li class="ingredient-item">1 cup warm water</li>
+                <li class="ingredient-item">1/2 tsp salt</li>
+                <li class="section-divider">For the meat filling:</li>
+                <li class="ingredient-item">1 lb ground beef (85% lean)</li>
+                <li class="ingredient-item">1 medium onion, very finely diced</li>
+                <li class="ingredient-item">1 tsp ras el hanout (or a mix of allspice, cinnamon, and cumin)</li>
+                <li class="ingredient-item">1/2 tsp salt</li>
+                <li class="ingredient-item">1/4 tsp black pepper</li>
+            </ul>
+        </div>
+        <div class="recipe-section">
+            <h2>Directions</h2>
+            <ol class="directions-list">
+                <li>Begin by making the soup broth. Heat 2 tablespoons of oil in a large soup pot over medium heat. Add the diced onion and cook for 5 minutes until softened. Add the diced carrots, cubed potatoes, and celery. Pour in 8 cups of water and add the turmeric and salt. Bring to a boil, then reduce to a simmer. Add the juice of half a lemon. Let the broth simmer while you prepare the dumplings — it should cook for at least 20 minutes before you add them.</li>
+                <li>To make the meat filling, heat a small skillet over medium-high heat. Add the ground beef and finely diced onion, breaking the meat up with a wooden spoon. Cook until the beef is browned and no pink remains, about 6 to 7 minutes. Drain off any excess fat. Add the ras el hanout (or spice mixture), salt, and pepper. Stir well and cook for 1 more minute. Transfer to a plate and let cool completely. If you are finding the assembly challenging, you can freeze the filling for 15 minutes — cold filling is much easier to work with.</li>
+                <li>To make the semolina dough, place the fine semolina in a large bowl. Add the oil and rub it into the semolina with your fingertips. Gradually add the warm water, mixing with your hands, until a smooth dough forms that holds together without crumbling but is not sticky. The dough should feel like wet sand that clumps together when squeezed. If it is too dry, add water a teaspoon at a time; if too wet, add semolina a tablespoon at a time.</li>
+                <li>This is the most important technique: keep a bowl of water beside you and wet your hands constantly throughout the entire assembly process. Semolina dough cracks when it dries out, so wet hands are non-negotiable. Take a piece of dough about the size of a walnut and roll it into a ball between your wet palms.</li>
+                <li>Using your thumb, press a deep hole into the center of the ball, rotating it while pressing to create a cup with thin, even walls (about 1/4 inch thick). If the walls crack, wet your fingers and smooth the cracks closed. Place 1 tablespoon of the cooled meat filling into the cup.</li>
+                <li>Pinch the opening closed, smoothing the seam with wet fingers. Gently flatten the sealed dumpling into a thick patty about 2 inches in diameter. Place on a plate or tray. Repeat with the remaining dough and filling — you should get 15 to 18 dumplings.</li>
+                <li>Bring the soup broth back to a steady boil. Carefully drop the kubbeh into the boiling soup 5 at a time, waiting a moment between each addition so the broth temperature does not drop too quickly. Once all the dumplings are in the pot, reduce the heat to a gentle simmer.</li>
+                <li>Cover the pot and simmer for 30 minutes. The dumplings will swell slightly and become tender throughout. In the last 5 minutes, add the remaining lemon juice and the chopped cilantro. Taste the broth — it should be distinctly sour and bright. Adjust with more lemon juice if needed. The word &#x27;hamusta&#x27; means sour, so do not be shy with the lemon.</li>
+                <li>Serve the soup in deep bowls with 2 to 3 kubbeh per serving, plenty of broth, and the vegetables.</li>
+            </ol>
+        </div>
+        <div class="recipe-tip">
+            <strong>Chef's Tip</strong>
+            <p>The golden rule of kubbeh: always keep your hands wet. Dry hands cause the semolina dough to crack and the dumplings to fall apart in the soup. A Jerusalem grandmother&#x27;s trick is to freeze the small meat balls for 15 minutes before wrapping — the cold, firm filling is much easier for beginners to handle.</p>
+        </div>
+    </main>
+    <div id="shared-footer-mount"></div>
+    <script src="/js/header-loader.js"></script>
+    <script src="/js/footer-loader.js"></script>
+    <script>
+    (function() {
+        var BASE_SERVINGS = 8;
+        var ingredients = [
+            { divider: true, text: "For the soup broth:" },
+            { divider: false, text: "1 large onion, diced" },
+            { divider: false, text: "2 carrots, peeled and diced" },
+            { divider: false, text: "2 medium potatoes, peeled and cubed" },
+            { divider: false, text: "2 celery stalks, diced" },
+            { divider: false, text: "1 cup fresh cilantro, chopped" },
+            { divider: false, text: "Juice of 1-2 lemons (about 1/3 cup)" },
+            { divider: false, text: "2 tbsp neutral oil" },
+            { divider: false, text: "8 cups water" },
+            { divider: false, text: "1 tsp salt" },
+            { divider: false, text: "1/2 tsp turmeric" },
+            { divider: true, text: "For the semolina dough:" },
+            { divider: false, text: "3 cups fine semolina flour" },
+            { divider: false, text: "1/4 cup neutral oil" },
+            { divider: false, text: "1 cup warm water" },
+            { divider: false, text: "1/2 tsp salt" },
+            { divider: true, text: "For the meat filling:" },
+            { divider: false, text: "1 lb ground beef (85% lean)" },
+            { divider: false, text: "1 medium onion, very finely diced" },
+            { divider: false, text: "1 tsp ras el hanout (or a mix of allspice, cinnamon, and cumin)" },
+            { divider: false, text: "1/2 tsp salt" },
+            { divider: false, text: "1/4 tsp black pepper" }
+        ];
+
+        // Fraction map for display
+        var FRACTIONS = {
+            0.125: '1/8', 0.25: '1/4', 0.333: '1/3', 0.375: '3/8',
+            0.5: '1/2', 0.625: '5/8', 0.667: '2/3', 0.75: '3/4', 0.875: '7/8'
+        };
+
+        function parseFraction(s) {
+            s = s.trim();
+            // Handle mixed numbers like "1 1/2"
+            var parts = s.split(/\s+/);
+            var total = 0;
+            for (var i = 0; i < parts.length; i++) {
+                if (parts[i].indexOf('/') !== -1) {
+                    var frac = parts[i].split('/');
+                    total += parseFloat(frac[0]) / parseFloat(frac[1]);
+                } else {
+                    var n = parseFloat(parts[i]);
+                    if (!isNaN(n)) total += n;
+                }
+            }
+            return total;
+        }
+
+        function formatNumber(n) {
+            if (n === 0) return '0';
+            var whole = Math.floor(n);
+            var frac = n - whole;
+            // Round to nearest common fraction
+            if (frac < 0.0625) frac = 0;
+            else if (frac < 0.1875) frac = 0.125;
+            else if (frac < 0.292) frac = 0.25;
+            else if (frac < 0.354) frac = 0.333;
+            else if (frac < 0.4375) frac = 0.375;
+            else if (frac < 0.5625) frac = 0.5;
+            else if (frac < 0.646) frac = 0.625;
+            else if (frac < 0.709) frac = 0.667;
+            else if (frac < 0.8125) frac = 0.75;
+            else if (frac < 0.9375) frac = 0.875;
+            else { whole++; frac = 0; }
+
+            var fracStr = FRACTIONS[frac] || '';
+            if (whole === 0 && fracStr) return fracStr;
+            if (whole > 0 && fracStr) return whole + ' ' + fracStr;
+            return '' + (whole || Math.round(n * 100) / 100);
+        }
+
+        function scaleIngredient(text, multiplier) {
+            if (multiplier === 1) return text;
+            // Match leading quantity patterns: "1/2 cup", "1 1/2 tsp", "4 cloves", "6 oz (1 can)"
+            return text.replace(/^((?:\d+\s+)?\d+\/\d+|\d+\.\d+|\d+)/, function(match) {
+                var val = parseFraction(match);
+                var scaled = val * multiplier;
+                return '<span class="ingredient-scaled">' + formatNumber(scaled) + '</span>';
+            });
+        }
+
+        function updateServings() {
+            var input = document.getElementById('serving-input');
+            var count = parseInt(input.value) || BASE_SERVINGS;
+            if (count < 1) count = 1;
+            if (count > 200) count = 200;
+            input.value = count;
+
+            var multiplier = count / BASE_SERVINGS;
+            var badge = document.getElementById('multiplier-badge');
+            var resetBtn = document.getElementById('reset-btn');
+
+            if (count !== BASE_SERVINGS) {
+                badge.textContent = multiplier < 1 ? (multiplier.toFixed(2) + 'x') : (multiplier.toFixed(1) + 'x');
+                badge.style.display = '';
+                resetBtn.style.display = '';
+            } else {
+                badge.style.display = 'none';
+                resetBtn.style.display = 'none';
+            }
+
+            // Update ingredients list
+            var list = document.getElementById('ingredients-list');
+            var html = '';
+            ingredients.forEach(function(ing) {
+                if (ing.divider) {
+                    html += '<li class="section-divider">' + ing.text + '</li>';
+                } else {
+                    html += '<li class="ingredient-item">' + scaleIngredient(ing.text, multiplier) + '</li>';
+                }
+            });
+            list.innerHTML = html;
+
+            // Update servings display
+            document.getElementById('servings-display').textContent = count + (count !== parseInt('8') ? '' : '');
+        }
+
+        window.changeServings = function(delta) {
+            var input = document.getElementById('serving-input');
+            var current = parseInt(input.value) || BASE_SERVINGS;
+            var next = Math.max(1, Math.min(200, current + delta));
+            input.value = next;
+            updateServings();
+        };
+
+        window.updateServings = updateServings;
+
+        window.resetServings = function() {
+            document.getElementById('serving-input').value = BASE_SERVINGS;
+            updateServings();
+        };
+    })();
+    </script>
+    <script type="module">
+        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { auth } from '/js/firebase.js';
+        var _authSeen = false;
+        onAuthStateChanged(auth, function(user) {
+            if (user) { _authSeen = true; return; }
+            if (_authSeen) return; // ignore transient null during token refresh
+            // Give Firebase time to restore session from IndexedDB
+            setTimeout(function() {
+                if (!auth.currentUser) {
+                    window.location.href = '/?redirect=' + encodeURIComponent(window.location.pathname);
+                }
+            }, 4000);
+        });
+    </script>
+</body>
+</html>

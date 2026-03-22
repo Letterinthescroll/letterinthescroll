@@ -2858,7 +2858,7 @@
             </div>
         </section>
 
-        <section class="section-card dash-section-shell fade-up fd4">
+        <section id="explore-section" class="section-card dash-section-shell fade-up fd4">
             <div class="dash-section-header">
                 <div class="dash-section-title-row">
                     <div class="dash-section-bar"></div>
@@ -3143,6 +3143,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="/js/tutorial.js"></script>
+<script src="/js/mobile-tutorial.js"></script>
 <script>
     const loadingStateEl = document.getElementById('loading-state');
     const mainContentEl = document.getElementById('main-content');
@@ -3626,12 +3628,32 @@
                 const grid = document.getElementById('chavrutas-grid');
                 if (grid) grid.innerHTML = userChavrutas.map(cardHTML).join('');
             }
-            // Notify user if birthday hasn't been filled in yet
+            // Notify user if birthday hasn't been filled in yet.
+            // If the cached snapshot has no birthday, re-fetch from server
+            // to avoid showing the toast after the user just saved it.
             if (!uData.birthDateGregorian) {
-                showMissingInfoToast();
+                try {
+                    const freshSnap = await db.collection('users').doc(user.uid).get({ source: 'server' });
+                    const freshData = (freshSnap.exists ? freshSnap.data() : {}) || {};
+                    if (!freshData.birthDateGregorian) {
+                        showMissingInfoToast();
+                    }
+                } catch (_) {
+                    // Server unreachable — fall back to cached check
+                    showMissingInfoToast();
+                }
             }
         } catch(_) {}
         refreshDailyQuoteBookmarkState();
+
+        // Trigger first-time user tutorial (no-op if already completed)
+        if (typeof window.startTutorialIfNew === 'function') {
+            window.startTutorialIfNew(user.uid);
+        }
+        // Mobile tutorial (separate from desktop — only runs on small screens)
+        if (typeof window.startMobileTutorialIfNew === 'function') {
+            window.startMobileTutorialIfNew(user.uid);
+        }
     });
 
     function signOutUser() { sessionStorage.removeItem('headerUserCache'); sessionStorage.setItem('justSignedOut', '1'); auth.signOut().then(() => window.location.href = '/'); }

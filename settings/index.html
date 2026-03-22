@@ -14,39 +14,64 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f5f7fc; }
         .font-heading { font-family: 'Cormorant Garamond', serif; }
-        .site-header { background: linear-gradient(138deg, #16285e 0%, #23408f 55%, #2f56ab 100%); }
-        .nav-link {
-            color: rgba(255,255,255,0.75); font-size: 0.8125rem; font-weight: 500;
-            padding: 0.375rem 0.75rem; border-radius: 0.5rem;
-            transition: background 0.15s, color 0.15s; white-space: nowrap; text-decoration: none; display: inline-block;
-        }
-        .nav-link:hover { color: #fff; background: rgba(255,255,255,0.12); }
         .card { background: #fff; border-radius: 1.25rem; border: 1px solid rgba(20,40,100,0.08); box-shadow: 0 4px 20px rgba(22,40,94,0.07); }
         .input-field { transition: border-color 0.2s, box-shadow 0.2s; }
         .input-field:focus { border-color: #274ea8; box-shadow: 0 0 0 3px rgba(39,78,168,0.15); }
         .gold-line { height: 2px; background: linear-gradient(90deg, transparent, #c89a35, transparent); }
+        .red-line { height: 2px; background: linear-gradient(90deg, transparent, #ef4444, transparent); }
         .fade-up { animation: fadeUp 0.45s ease-out both; }
         @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-        .fd1{animation-delay:.05s} .fd2{animation-delay:.1s} .fd3{animation-delay:.15s}
+        .fd1{animation-delay:.05s} .fd2{animation-delay:.1s} .fd3{animation-delay:.15s} .fd4{animation-delay:.2s} .fd5{animation-delay:.25s}
         .spinner { width:20px; height:20px; border:3px solid rgba(255,255,255,0.35); border-top:3px solid #fff; border-radius:50%; animation:spin 0.7s linear infinite; display:inline-block; }
         @keyframes spin { to { transform:rotate(360deg); } }
-        .mobile-menu { display:none; } .mobile-menu.open { display:block; }
+        html { scroll-behavior: smooth; }
 
-        /* Side nav tab */
-        .side-tab {
-            display: flex; align-items: center; gap: 0.625rem;
-            padding: 0.625rem 0.875rem; border-radius: 0.75rem;
-            font-size: 0.875rem; font-weight: 500; color: #64748b;
-            cursor: pointer; transition: all 0.15s; text-decoration: none;
-            border: 1.5px solid transparent;
+        /* Jump-nav sidebar */
+        .jump-nav { position: sticky; top: 5.5rem; }
+        .jump-group-label {
+            font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.12em; color: #94a3b8; padding: 0.5rem 0.75rem 0.25rem;
         }
-        .side-tab:hover { background: #f0f4ff; color: #16285e; }
-        .side-tab.active { background: #eff4ff; color: #16285e; font-weight: 600; border-color: rgba(22,40,94,0.12); }
-        .side-tab .icon { width: 1.75rem; height: 1.75rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; }
+        .jump-link {
+            display: block; padding: 0.4rem 0.75rem; border-radius: 0.5rem;
+            font-size: 0.82rem; font-weight: 500; color: #64748b;
+            text-decoration: none; transition: all 0.15s;
+        }
+        .jump-link:hover { background: #f0f4ff; color: #16285e; }
 
-        /* Section panel */
-        .settings-section { display: none; }
-        .settings-section.active { display: block; }
+        /* Section group header */
+        .group-header {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin-bottom: 0.75rem; padding-top: 0.5rem;
+        }
+        .group-header-icon {
+            width: 2rem; height: 2rem; border-radius: 0.5rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .group-header-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem; font-weight: 600; color: #0f172a;
+        }
+
+        /* Toggle switch */
+        .toggle-track {
+            position: relative; width: 44px; height: 24px;
+            background: #cbd5e1; border-radius: 999px;
+            cursor: pointer; transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        .toggle-track.active { background: #2563eb; }
+        .toggle-thumb {
+            position: absolute; top: 2px; left: 2px;
+            width: 20px; height: 20px; background: #fff;
+            border-radius: 50%; transition: transform 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        }
+        .toggle-track.active .toggle-thumb { transform: translateX(20px); }
+
+        @media (max-width: 768px) {
+            .settings-sidebar { display: none; }
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -54,7 +79,6 @@
 <!-- ═══ HEADER ═══ -->
 <div id="shared-header-mount" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%);min-height:64px"></div>
     <script src="/js/header-loader.js"></script>
-
 
 <!-- ═══ MAIN ═══ -->
 <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
@@ -67,308 +91,328 @@
 
     <!-- Content -->
     <div id="main-content" class="hidden">
-        <!-- Page title -->
-        <div class="mb-7 fade-up fd1">
-            <p class="text-xs font-bold uppercase tracking-widest text-blue-600/60 mb-1">Account</p>
-            <h1 class="font-heading text-4xl font-semibold text-slate-900" style="font-family:'Cormorant Garamond',serif">Settings</h1>
-            <div class="gold-line mt-3 w-28"></div>
+        <!-- Page title + user info -->
+        <div class="mb-7 fade-up fd1 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-blue-600/60 mb-1">Account</p>
+                <h1 class="font-heading text-4xl font-semibold text-slate-900" style="font-family:'Cormorant Garamond',serif">Settings</h1>
+                <div class="gold-line mt-3 w-28"></div>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" id="avatar-circle" style="background:linear-gradient(135deg,#16285e,#2f56ab)">?</div>
+                <div>
+                    <p id="sidebar-name" class="text-sm font-semibold text-slate-700 truncate max-w-[200px]"></p>
+                    <p id="sidebar-email" class="text-xs text-slate-400 truncate max-w-[200px]"></p>
+                </div>
+            </div>
         </div>
 
-        <div class="flex flex-col md:flex-row gap-6">
+        <div class="flex gap-8">
 
-            <!-- ── Side nav ── -->
-            <aside class="md:w-52 shrink-0 fade-up fd2">
-                <div class="card p-3 space-y-1">
-                    <button class="side-tab active w-full text-left" id="nav-profile" onclick="showSection('profile')">
-                        <span class="icon bg-blue-50">
-                            <svg class="w-4 h-4 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9.953 9.953 0 0112 15c2.601 0 4.97.993 6.758 2.619M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                        </span>
-                        Profile
-                    </button>
-                    <button class="side-tab w-full text-left" id="nav-email" onclick="showSection('email')">
-                        <span class="icon bg-indigo-50">
-                            <svg class="w-4 h-4 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                        </span>
-                        Email
-                    </button>
-                    <button class="side-tab w-full text-left" id="nav-password" onclick="showSection('password')">
-                        <span class="icon bg-amber-50">
-                            <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c-1.105 0-2 .895-2 2v2a2 2 0 104 0v-2c0-1.105-.895-2-2-2zm-6 2V9a6 6 0 1112 0v4"></path>
-                            </svg>
-                        </span>
-                        Password
-                    </button>
-                    <button class="side-tab w-full text-left" id="nav-newsletter" onclick="showSection('newsletter')">
-                        <span class="icon bg-green-50">
-                            <svg class="w-4 h-4 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
-                            </svg>
-                        </span>
-                        Newsletter
-                    </button>
-                    <button class="side-tab w-full text-left" id="nav-birthday" onclick="showSection('birthday')">
-                        <span class="icon bg-rose-50">
-                            <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                        </span>
-                        Birthday
-                    </button>
-                    <div class="gold-line my-2"></div>
-                    <button class="side-tab w-full text-left text-red-500 hover:bg-red-50 hover:text-red-600" onclick="signOutUser()">
-                        <span class="icon bg-red-50">
-                            <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                            </svg>
-                        </span>
+            <!-- ── Jump-nav sidebar ── -->
+            <aside class="settings-sidebar w-44 shrink-0 fade-up fd2">
+                <nav class="jump-nav space-y-0.5">
+                    <p class="jump-group-label">Account</p>
+                    <a href="#sec-profile" class="jump-link">Profile</a>
+                    <a href="#sec-email" class="jump-link">Email</a>
+                    <a href="#sec-password" class="jump-link">Password</a>
+                    <a href="#sec-birthday" class="jump-link">Birthday</a>
+
+                    <p class="jump-group-label mt-3">Preferences</p>
+                    <a href="#sec-shabbat" class="jump-link">Shabbat Mode</a>
+                    <a href="#sec-newsletter" class="jump-link">Newsletter</a>
+                    <a href="#sec-tutorial" class="jump-link">Tutorial</a>
+
+                    <p class="jump-group-label mt-3">Danger Zone</p>
+                    <a href="#sec-delete" class="jump-link text-red-400 hover:text-red-600 hover:bg-red-50">Delete Account</a>
+
+                    <div class="gold-line my-3"></div>
+                    <button onclick="signOutUser()" class="jump-link w-full text-left text-red-500 hover:bg-red-50 hover:text-red-600 flex items-center gap-2">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                         Sign Out
                     </button>
-                </div>
-                <!-- Account info card -->
-                <div class="card p-4 mt-4 text-center">
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-2" id="avatar-circle" style="background:linear-gradient(135deg,#16285e,#2f56ab)">?</div>
-                    <p id="sidebar-name" class="text-sm font-semibold text-slate-700 truncate"></p>
-                    <p id="sidebar-email" class="text-xs text-slate-400 truncate"></p>
-                    <a href="/dashboard" class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    <a href="/dashboard" class="jump-link text-blue-500 hover:text-blue-700 flex items-center gap-2 mt-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                         Back to Home
                     </a>
-                </div>
+                </nav>
             </aside>
 
-            <!-- ── Right panel ── -->
-            <div class="flex-1 space-y-0 fade-up fd3">
+            <!-- ── Main content column ── -->
+            <div class="flex-1 space-y-5 min-w-0 fade-up fd3">
 
-                <!-- ── PROFILE SECTION ── -->
-                <div id="sec-profile" class="settings-section active">
-                    <div class="card p-6 sm:p-7">
-                        <h2 class="font-semibold text-slate-800 text-lg mb-1">Profile</h2>
-                        <p class="text-sm text-slate-400 mb-5">Your display name is shown to study partners in your groups.</p>
-                        <div class="gold-line mb-6"></div>
-
-                        <div id="profile-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
-
-                        <div id="profile-locked" class="hidden mb-4 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-                            <p class="text-sm font-semibold text-amber-800">Display name has been set</p>
-                            <p class="text-xs text-amber-600 mt-1">Your display name can only be changed once and has already been updated. Contact the group leader if you need to change it again.</p>
-                        </div>
-
-                        <form id="profile-form" onsubmit="saveProfile(event)" class="space-y-5">
-                            <div>
-                                <label for="profile-name" class="block text-sm font-semibold text-slate-700 mb-1.5">Display Name</label>
-                                <input type="text" id="profile-name" minlength="2" maxlength="50" required
-                                    placeholder="Your full name"
-                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
-                                <p class="text-xs text-slate-400 mt-1">This is how you appear to others. Between 2–50 characters.</p>
-                                <p class="text-xs text-amber-600 mt-1 font-medium">You can only change your display name once. Choose carefully!</p>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <button type="submit" id="profile-btn"
-                                    class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
-                                    style="background:linear-gradient(135deg,#16285e,#2f56ab)">
-                                    Save Changes
-                                </button>
-                                <button type="button" onclick="cancelEdit('profile')" class="px-5 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-700 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all">
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
+                <!-- ═══════════════ ACCOUNT GROUP ═══════════════ -->
+                <div class="group-header" id="group-account">
+                    <div class="group-header-icon bg-blue-50">
+                        <svg class="w-4 h-4 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9.953 9.953 0 0112 15c2.601 0 4.97.993 6.758 2.619M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                     </div>
+                    <h2 class="group-header-title">Account</h2>
                 </div>
 
-                <!-- ── EMAIL SECTION ── -->
-                <div id="sec-email" class="settings-section">
-                    <div class="card p-6 sm:p-7">
-                        <h2 class="font-semibold text-slate-800 text-lg mb-1">Email Address</h2>
-                        <p class="text-sm text-slate-400 mb-5">Update the email you use to sign in. You'll need to confirm your current password.</p>
-                        <div class="gold-line mb-6"></div>
-
-                        <!-- Google-sign-in notice (shown/hidden by JS) -->
-                        <div id="google-notice" class="hidden mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800">
-                            <strong>Signed in with Google.</strong> Your email is managed by your Google account and cannot be changed here.
+                <!-- Profile -->
+                <div id="sec-profile" class="card p-6 sm:p-7 scroll-mt-24">
+                    <h3 class="font-semibold text-slate-800 text-base mb-1">Profile</h3>
+                    <p class="text-sm text-slate-400 mb-4">Your display name is shown to study partners in your groups.</p>
+                    <div class="gold-line mb-5"></div>
+                    <div id="profile-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
+                    <div id="profile-locked" class="hidden mb-4 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+                        <p class="text-sm font-semibold text-amber-800">Display name has been set</p>
+                        <p class="text-xs text-amber-600 mt-1">Your display name can only be changed once and has already been updated. Contact the group leader if you need to change it again.</p>
+                    </div>
+                    <form id="profile-form" onsubmit="saveProfile(event)" class="space-y-4">
+                        <div>
+                            <label for="profile-name" class="block text-sm font-semibold text-slate-700 mb-1.5">Display Name</label>
+                            <input type="text" id="profile-name" minlength="2" maxlength="50" required placeholder="Your full name"
+                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                            <p class="text-xs text-slate-400 mt-1">Between 2–50 characters.</p>
+                            <p class="text-xs text-amber-600 mt-1 font-medium">You can only change your display name once. Choose carefully!</p>
                         </div>
-
-                        <div id="email-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
-
-                        <form id="email-form" onsubmit="saveEmail(event)" class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-1.5">New Email Address</label>
-                                <input type="email" id="new-email" required placeholder="new@example.com" autocomplete="email"
-                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-1.5">Current Password <span class="text-slate-400 font-normal">(to confirm it's you)</span></label>
-                                <input type="password" id="email-current-pw" required placeholder="Your current password" autocomplete="current-password"
-                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
-                            </div>
-                            <button type="submit" id="email-btn"
+                        <div class="flex items-center gap-3">
+                            <button type="submit" id="profile-btn"
                                 class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
-                                style="background:linear-gradient(135deg,#16285e,#2f56ab)">
-                                Update Email
-                            </button>
-                        </form>
+                                style="background:linear-gradient(135deg,#16285e,#2f56ab)">Save Changes</button>
+                            <button type="button" onclick="cancelEdit('profile')" class="px-5 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-700 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Email -->
+                <div id="sec-email" class="card p-6 sm:p-7 scroll-mt-24">
+                    <h3 class="font-semibold text-slate-800 text-base mb-1">Email Address</h3>
+                    <p class="text-sm text-slate-400 mb-4">Update the email you use to sign in.</p>
+                    <div class="gold-line mb-5"></div>
+                    <div id="google-notice" class="hidden mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800">
+                        <strong>Signed in with Google.</strong> Your email is managed by your Google account and cannot be changed here.
+                    </div>
+                    <div id="email-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
+                    <form id="email-form" onsubmit="saveEmail(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">New Email Address</label>
+                            <input type="email" id="new-email" required placeholder="new@example.com" autocomplete="email"
+                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Current Password <span class="text-slate-400 font-normal">(to confirm it's you)</span></label>
+                            <input type="password" id="email-current-pw" required placeholder="Your current password" autocomplete="current-password"
+                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                        </div>
+                        <button type="submit" id="email-btn"
+                            class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
+                            style="background:linear-gradient(135deg,#16285e,#2f56ab)">Update Email</button>
+                    </form>
+                </div>
+
+                <!-- Password -->
+                <div id="sec-password" class="card p-6 sm:p-7 scroll-mt-24">
+                    <h3 class="font-semibold text-slate-800 text-base mb-1">Password</h3>
+                    <p class="text-sm text-slate-400 mb-4">Choose a strong password with at least 6 characters.</p>
+                    <div class="gold-line mb-5"></div>
+                    <div id="google-pw-notice" class="hidden mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800">
+                        <strong>Signed in with Google.</strong> Your password is managed by Google. Use <a href="https://myaccount.google.com/security" target="_blank" class="underline">Google Account Security</a> to change it.
+                    </div>
+                    <div id="pw-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
+                    <form id="pw-form" onsubmit="savePassword(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Current Password</label>
+                            <input type="password" id="pw-current" required placeholder="Your current password" autocomplete="current-password"
+                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">New Password</label>
+                            <input type="password" id="pw-new" required minlength="6" placeholder="At least 6 characters" autocomplete="new-password"
+                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Confirm New Password</label>
+                            <input type="password" id="pw-confirm" required placeholder="Re-enter new password" autocomplete="new-password"
+                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                        </div>
+                        <button type="submit" id="pw-btn"
+                            class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
+                            style="background:linear-gradient(135deg,#16285e,#2f56ab)">Update Password</button>
+                    </form>
+                    <div class="mt-5 pt-5 border-t border-slate-100">
+                        <p class="text-sm text-slate-500 mb-3">Forgot your current password?</p>
+                        <button onclick="sendPasswordReset()" class="text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors">
+                            Send a password reset email &rarr;
+                        </button>
+                        <div id="reset-msg" class="hidden mt-3 text-sm px-4 py-3 rounded-xl"></div>
                     </div>
                 </div>
 
-                <!-- ── NEWSLETTER SECTION ── -->
-                <div id="sec-newsletter" class="settings-section">
-                    <div class="card p-6 sm:p-7">
-                        <h2 class="font-semibold text-slate-800 text-lg mb-1">Weekly Dvar Torah Newsletter</h2>
-                        <p class="text-sm text-slate-400 mb-5">Receive a thoughtful Dvar Torah every Friday to carry into Shabbat.</p>
-                        <div class="gold-line mb-6"></div>
+                <!-- Birthday -->
+                <div id="sec-birthday" class="card p-6 sm:p-7 scroll-mt-24">
+                    <h3 class="font-semibold text-slate-800 text-base mb-1">Date of Birth</h3>
+                    <p class="text-sm text-slate-400 mb-4">Used to calculate your personal daily Psalm from the Hebrew calendar.</p>
+                    <div class="gold-line mb-5"></div>
+                    <div id="birthday-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
+                    <form id="birthday-form" onsubmit="saveBirthday(event)" class="space-y-4">
+                        <div>
+                            <label for="birthday-input" class="block text-sm font-semibold text-slate-700 mb-1.5">Date of Birth</label>
+                            <input type="date" id="birthday-input" autocomplete="bday"
+                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                            <p class="text-xs text-slate-400 mt-1">Enter your Gregorian (English) birthday — we'll calculate the Hebrew date automatically.</p>
+                        </div>
+                        <div>
+                            <label for="birthday-timezone" class="block text-sm font-semibold text-slate-700 mb-1.5">Place of Birth (for timezone)</label>
+                            <select id="birthday-timezone"
+                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800 bg-white">
+                                <option value="">— Select your birth region —</option>
+                                <optgroup label="Americas">
+                                    <option value="America/New_York">Eastern US/Canada (New York, Toronto)</option>
+                                    <option value="America/Chicago">Central US/Canada (Chicago, Dallas)</option>
+                                    <option value="America/Denver">Mountain US/Canada (Denver, Calgary)</option>
+                                    <option value="America/Los_Angeles">Pacific US/Canada (Los Angeles, Vancouver)</option>
+                                    <option value="America/Sao_Paulo">Brazil (São Paulo, Rio)</option>
+                                    <option value="America/Argentina/Buenos_Aires">Argentina (Buenos Aires)</option>
+                                </optgroup>
+                                <optgroup label="Europe">
+                                    <option value="Europe/London">UK / Ireland (London, Dublin)</option>
+                                    <option value="Europe/Paris">Western Europe (Paris, Berlin, Rome)</option>
+                                    <option value="Europe/Athens">Eastern Europe (Athens, Kyiv, Bucharest)</option>
+                                    <option value="Europe/Moscow">Russia (Moscow)</option>
+                                </optgroup>
+                                <optgroup label="Middle East &amp; Africa">
+                                    <option value="Asia/Jerusalem">Israel (Jerusalem, Tel Aviv)</option>
+                                    <option value="Europe/Istanbul">Turkey (Istanbul)</option>
+                                    <option value="Asia/Dubai">Gulf States (Dubai, Riyadh)</option>
+                                    <option value="Africa/Johannesburg">South Africa (Johannesburg)</option>
+                                </optgroup>
+                                <optgroup label="Asia &amp; Oceania">
+                                    <option value="Asia/Kolkata">India (Mumbai, Delhi)</option>
+                                    <option value="Asia/Shanghai">China (Shanghai, Beijing)</option>
+                                    <option value="Asia/Tokyo">Japan / Korea (Tokyo, Seoul)</option>
+                                    <option value="Australia/Sydney">Australia (Sydney, Melbourne)</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div id="birthday-hebrew-preview" class="hidden p-4 bg-blue-50 border border-blue-100 rounded-xl">
+                            <p class="text-xs font-bold uppercase tracking-widest text-blue-600/70 mb-1">Hebrew Calendar Date</p>
+                            <p id="birthday-hebrew-text" class="text-sm font-semibold text-slate-700"></p>
+                        </div>
+                        <button type="submit" id="birthday-btn"
+                            class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
+                            style="background:linear-gradient(135deg,#16285e,#2f56ab)">Save Birthday</button>
+                    </form>
+                </div>
 
-                        <div id="nl-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
+                <!-- ═══════════════ PREFERENCES GROUP ═══════════════ -->
+                <div class="group-header mt-4" id="group-preferences">
+                    <div class="group-header-icon bg-indigo-50">
+                        <svg class="w-4 h-4 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                    </div>
+                    <h2 class="group-header-title">Preferences</h2>
+                </div>
 
-                        <!-- Subscribed state -->
-                        <div id="nl-subscribed" class="hidden">
-                            <div class="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl mb-5">
-                                <svg class="w-5 h-5 text-green-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                <div>
-                                    <p class="text-sm font-semibold text-green-800">You're subscribed!</p>
-                                    <p class="text-xs text-green-600 mt-0.5">The weekly Dvar Torah is sent to <strong id="nl-sub-email"></strong> every Friday.</p>
-                                </div>
+                <!-- Shabbat Mode -->
+                <div id="sec-shabbat" class="card p-6 sm:p-7 scroll-mt-24">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="min-w-0">
+                            <h3 class="font-semibold text-slate-800 text-base mb-1">Shabbat Mode</h3>
+                            <p class="text-sm text-slate-400">Every Friday through Saturday evening, the site transforms with a special Shabbat design, banner, and music. Turn this off if you prefer the standard look.</p>
+                        </div>
+                        <div id="shabbat-toggle" class="toggle-track active" onclick="toggleShabbatMode()" role="switch" aria-checked="true" tabindex="0">
+                            <div class="toggle-thumb"></div>
+                        </div>
+                    </div>
+                    <div id="shabbat-toggle-msg" class="hidden mt-3 text-sm px-4 py-2.5 rounded-xl bg-blue-50 border border-blue-100 text-blue-700"></div>
+                </div>
+
+                <!-- Newsletter -->
+                <div id="sec-newsletter" class="card p-6 sm:p-7 scroll-mt-24">
+                    <h3 class="font-semibold text-slate-800 text-base mb-1">Weekly Dvar Torah Newsletter</h3>
+                    <p class="text-sm text-slate-400 mb-4">Receive a thoughtful Dvar Torah every Friday to carry into Shabbat.</p>
+                    <div class="gold-line mb-5"></div>
+                    <div id="nl-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
+                    <div id="nl-subscribed" class="hidden">
+                        <div class="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl mb-4">
+                            <svg class="w-5 h-5 text-green-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <div>
+                                <p class="text-sm font-semibold text-green-800">You're subscribed!</p>
+                                <p class="text-xs text-green-600 mt-0.5">Sent to <strong id="nl-sub-email"></strong> every Friday.</p>
                             </div>
-                            <button onclick="unsubscribeNewsletter()" id="nl-unsub-btn"
-                                class="px-5 py-2.5 text-sm font-medium text-red-600 hover:text-white hover:bg-red-500 rounded-xl border border-red-200 hover:border-red-500 transition-all">
-                                Unsubscribe
-                            </button>
                         </div>
+                        <button onclick="unsubscribeNewsletter()" id="nl-unsub-btn"
+                            class="px-5 py-2 text-sm font-medium text-red-600 hover:text-white hover:bg-red-500 rounded-xl border border-red-200 hover:border-red-500 transition-all">Unsubscribe</button>
+                    </div>
+                    <div id="nl-not-subscribed" class="hidden">
+                        <p class="text-sm text-slate-600 mb-3">You're not currently subscribed.</p>
+                        <button onclick="subscribeNewsletter()" id="nl-sub-btn"
+                            class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
+                            style="background:linear-gradient(135deg,#16285e,#2f56ab)">Subscribe with <span id="nl-user-email"></span></button>
+                    </div>
+                    <div id="nl-loading" class="flex items-center gap-2">
+                        <div class="spinner" style="border-color:rgba(0,0,0,0.1);border-top-color:#16285e"></div>
+                        <span class="text-sm text-slate-400">Checking subscription…</span>
+                    </div>
+                </div>
 
-                        <!-- Not subscribed state -->
-                        <div id="nl-not-subscribed" class="hidden">
-                            <p class="text-sm text-slate-600 mb-4">You're not currently subscribed. Sign up to receive a Dvar Torah in your inbox every Friday.</p>
-                            <button onclick="subscribeNewsletter()" id="nl-sub-btn"
-                                class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
-                                style="background:linear-gradient(135deg,#16285e,#2f56ab)">
-                                Subscribe with <span id="nl-user-email"></span>
-                            </button>
+                <!-- Tutorial -->
+                <div id="sec-tutorial" class="card p-6 sm:p-7 scroll-mt-24">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="min-w-0">
+                            <h3 class="font-semibold text-slate-800 text-base mb-1">Site Tutorial</h3>
+                            <p class="text-sm text-slate-400">Replay the guided walkthrough to learn about every feature of the site.</p>
                         </div>
+                        <button onclick="replayTutorialFromSettings()" id="tutorial-replay-btn"
+                            class="px-5 py-2 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all shrink-0"
+                            style="background:linear-gradient(135deg,#0d9488,#14b8a6)">Replay Tour</button>
+                    </div>
+                </div>
 
-                        <!-- Loading state -->
-                        <div id="nl-loading" class="flex items-center gap-2">
-                            <div class="spinner" style="border-color:rgba(0,0,0,0.1);border-top-color:#16285e"></div>
-                            <span class="text-sm text-slate-400">Checking subscription…</span>
+                <!-- ═══════════════ DANGER ZONE ═══════════════ -->
+                <div class="group-header mt-4" id="group-danger">
+                    <div class="group-header-icon bg-red-50">
+                        <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <h2 class="group-header-title text-red-700">Danger Zone</h2>
+                </div>
+
+                <!-- Sign Out -->
+                <div class="card p-6 sm:p-7 scroll-mt-24">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="min-w-0">
+                            <h3 class="font-semibold text-slate-800 text-base mb-1">Sign Out</h3>
+                            <p class="text-sm text-slate-400">Sign out of your account on this device. You can sign back in anytime.</p>
+                        </div>
+                        <button onclick="signOutUser()"
+                            class="px-5 py-2 text-sm font-bold text-red-600 rounded-xl border border-red-200 hover:bg-red-50 transition-all shrink-0">Sign Out</button>
+                    </div>
+                </div>
+
+                <!-- Delete Account -->
+                <div id="sec-delete" class="card p-6 sm:p-7 scroll-mt-24 border-red-200">
+                    <h3 class="font-semibold text-red-700 text-base mb-1">Delete Account</h3>
+                    <p class="text-sm text-slate-400 mb-4">Permanently delete your account and all associated data.</p>
+                    <div class="red-line mb-5"></div>
+                    <div class="p-4 rounded-xl border border-red-200 bg-red-50 mb-4">
+                        <p class="text-sm font-semibold text-red-800 mb-2">This action is permanent and cannot be undone</p>
+                        <ul class="text-xs text-red-700 space-y-0.5 list-disc list-inside">
+                            <li>Your profile, display name, and all personal data will be erased</li>
+                            <li>All your comments, reactions, and bookmarks will be deleted</li>
+                            <li>Your study group memberships will be removed</li>
+                            <li>Your newsletter subscription will be cancelled</li>
+                            <li>Your Firebase authentication account will be deleted</li>
+                        </ul>
+                    </div>
+                    <div id="delete-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
+                    <div id="delete-step-1">
+                        <p class="text-sm text-slate-600 mb-3">Enter your password to confirm:</p>
+                        <div class="flex flex-col sm:flex-row gap-3 items-start">
+                            <input type="password" id="delete-password" required placeholder="Enter your password"
+                                class="input-field flex-1 px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                            <button type="button" onclick="confirmDeleteAccount()" id="delete-btn"
+                                class="px-5 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all shrink-0"
+                                style="background:linear-gradient(135deg,#dc2626,#ef4444)">Delete My Account</button>
+                        </div>
+                        <div id="delete-google-notice" class="hidden mt-3 p-3 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800">
+                            <strong>Google account detected.</strong> No password needed — click the button to proceed.
                         </div>
                     </div>
                 </div>
 
-                <!-- ── BIRTHDAY SECTION ── -->
-                <div id="sec-birthday" class="settings-section">
-                    <div class="card p-6 sm:p-7">
-                        <h2 class="font-semibold text-slate-800 text-lg mb-1">Date of Birth</h2>
-                        <p class="text-sm text-slate-400 mb-5">Used to calculate your personal daily Psalm from the Hebrew calendar.</p>
-                        <div class="gold-line mb-6"></div>
-
-                        <div id="birthday-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
-
-                        <form id="birthday-form" onsubmit="saveBirthday(event)" class="space-y-5">
-                            <div>
-                                <label for="birthday-input" class="block text-sm font-semibold text-slate-700 mb-1.5">Date of Birth</label>
-                                <input type="date" id="birthday-input" autocomplete="bday"
-                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
-                                <p class="text-xs text-slate-400 mt-1">Enter your Gregorian (English) birthday — we'll calculate the Hebrew date automatically.</p>
-                            </div>
-                            <div>
-                                <label for="birthday-timezone" class="block text-sm font-semibold text-slate-700 mb-1.5">Place of Birth (for timezone)</label>
-                                <select id="birthday-timezone"
-                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800 bg-white">
-                                    <option value="">— Select your birth region —</option>
-                                    <optgroup label="Americas">
-                                        <option value="America/New_York">Eastern US/Canada (New York, Toronto)</option>
-                                        <option value="America/Chicago">Central US/Canada (Chicago, Dallas)</option>
-                                        <option value="America/Denver">Mountain US/Canada (Denver, Calgary)</option>
-                                        <option value="America/Los_Angeles">Pacific US/Canada (Los Angeles, Vancouver)</option>
-                                        <option value="America/Sao_Paulo">Brazil (São Paulo, Rio)</option>
-                                        <option value="America/Argentina/Buenos_Aires">Argentina (Buenos Aires)</option>
-                                    </optgroup>
-                                    <optgroup label="Europe">
-                                        <option value="Europe/London">UK / Ireland (London, Dublin)</option>
-                                        <option value="Europe/Paris">Western Europe (Paris, Berlin, Rome)</option>
-                                        <option value="Europe/Athens">Eastern Europe (Athens, Kyiv, Bucharest)</option>
-                                        <option value="Europe/Moscow">Russia (Moscow)</option>
-                                    </optgroup>
-                                    <optgroup label="Middle East &amp; Africa">
-                                        <option value="Asia/Jerusalem">Israel (Jerusalem, Tel Aviv)</option>
-                                        <option value="Europe/Istanbul">Turkey (Istanbul)</option>
-                                        <option value="Asia/Dubai">Gulf States (Dubai, Riyadh)</option>
-                                        <option value="Africa/Johannesburg">South Africa (Johannesburg)</option>
-                                    </optgroup>
-                                    <optgroup label="Asia &amp; Oceania">
-                                        <option value="Asia/Kolkata">India (Mumbai, Delhi)</option>
-                                        <option value="Asia/Shanghai">China (Shanghai, Beijing)</option>
-                                        <option value="Asia/Tokyo">Japan / Korea (Tokyo, Seoul)</option>
-                                        <option value="Australia/Sydney">Australia (Sydney, Melbourne)</option>
-                                    </optgroup>
-                                </select>
-                                <p class="text-xs text-slate-400 mt-1">Ensures your birthday celebration triggers at the right time regardless of where you are now.</p>
-                            </div>
-                            <div id="birthday-hebrew-preview" class="hidden p-4 bg-blue-50 border border-blue-100 rounded-xl">
-                                <p class="text-xs font-bold uppercase tracking-widest text-blue-600/70 mb-1">Hebrew Calendar Date</p>
-                                <p id="birthday-hebrew-text" class="text-sm font-semibold text-slate-700"></p>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <button type="submit" id="birthday-btn"
-                                    class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
-                                    style="background:linear-gradient(135deg,#16285e,#2f56ab)">
-                                    Save Birthday
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- ── PASSWORD SECTION ── -->
-                <div id="sec-password" class="settings-section">
-                    <div class="card p-6 sm:p-7">
-                        <h2 class="font-semibold text-slate-800 text-lg mb-1">Change Password</h2>
-                        <p class="text-sm text-slate-400 mb-5">Choose a strong password with at least 8 characters.</p>
-                        <div class="gold-line mb-6"></div>
-
-                        <div id="google-pw-notice" class="hidden mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800">
-                            <strong>Signed in with Google.</strong> Your password is managed by Google. Use <a href="https://myaccount.google.com/security" target="_blank" class="underline">Google Account Security</a> to change it.
-                        </div>
-
-                        <div id="pw-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
-
-                        <form id="pw-form" onsubmit="savePassword(event)" class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-1.5">Current Password</label>
-                                <input type="password" id="pw-current" required placeholder="Your current password" autocomplete="current-password"
-                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-1.5">New Password</label>
-                                <input type="password" id="pw-new" required minlength="6" placeholder="At least 6 characters" autocomplete="new-password"
-                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 mb-1.5">Confirm New Password</label>
-                                <input type="password" id="pw-confirm" required placeholder="Re-enter new password" autocomplete="new-password"
-                                    class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
-                            </div>
-                            <button type="submit" id="pw-btn"
-                                class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
-                                style="background:linear-gradient(135deg,#16285e,#2f56ab)">
-                                Update Password
-                            </button>
-                        </form>
-
-                        <!-- Forgot password -->
-                        <div class="mt-5 pt-5 border-t border-slate-100">
-                            <p class="text-sm text-slate-500 mb-3">Forgot your current password?</p>
-                            <button onclick="sendPasswordReset()" class="text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors">
-                                Send a password reset email →
-                            </button>
-                            <div id="reset-msg" class="hidden mt-3 text-sm px-4 py-3 rounded-xl"></div>
-                        </div>
-                    </div>
-                </div>
-
+                <!-- Bottom spacer -->
+                <div class="h-8"></div>
             </div>
         </div>
     </div>
@@ -400,9 +444,6 @@
     /* ════ AUTH ════ */
     auth.onAuthStateChanged(async user => {
         if (!user) {
-            // Firebase fires null initially while loading session from IndexedDB.
-            // Start a redirect timer — if the real user arrives before it fires,
-            // the timer is cancelled below. This avoids a fixed-delay race.
             if (!authRedirectTimer) {
                 authRedirectTimer = setTimeout(() => {
                     if (!currentUser) window.location.href = '/';
@@ -413,19 +454,16 @@
         if (authRedirectTimer) { clearTimeout(authRedirectTimer); authRedirectTimer = null; }
         currentUser = user;
 
-        // Detect Google sign-in
         isGoogleUser = (user.providerData || []).some(p => p.providerId === 'google.com');
 
-        // Populate sidebar
+        // Populate user info
         const firstName = (user.displayName || user.email || '').split(' ')[0].split('@')[0];
         document.getElementById('sidebar-name').textContent  = user.displayName || '';
         document.getElementById('sidebar-email').textContent = user.email || '';
         document.getElementById('avatar-circle').textContent = firstName.charAt(0).toUpperCase();
-
-        // Pre-fill profile form
         document.getElementById('profile-name').value = user.displayName || '';
 
-        // Check if display name was already changed (one-time limit) + load birthday
+        // Load user data from Firestore
         try {
             const userDoc = await db.collection('users').doc(user.uid).get();
             const uData = userDoc.exists ? (userDoc.data() || {}) : {};
@@ -433,7 +471,6 @@
                 document.getElementById('profile-form').classList.add('hidden');
                 document.getElementById('profile-locked').classList.remove('hidden');
             }
-            // Pre-fill birthday input with Gregorian date if saved
             if (uData.birthDateGregorian) {
                 const bdayInput = document.getElementById('birthday-input');
                 if (bdayInput) {
@@ -441,61 +478,77 @@
                     updateHebrewPreview(uData.birthDateGregorian);
                 }
             }
-            // Pre-fill timezone if saved
             if (uData.birthTimezone) {
                 const tzInput = document.getElementById('birthday-timezone');
                 if (tzInput) tzInput.value = uData.birthTimezone;
             }
         } catch(e) { console.error('Error loading user data:', e); }
 
-        // Show Google notice if applicable
+        // Google notices
         if (isGoogleUser) {
             document.getElementById('google-notice').classList.remove('hidden');
             document.getElementById('email-form').classList.add('hidden');
             document.getElementById('google-pw-notice').classList.remove('hidden');
             document.getElementById('pw-form').classList.add('hidden');
+            // Delete section — hide password, show notice
+            const delNotice = document.getElementById('delete-google-notice');
+            const delPw = document.getElementById('delete-password');
+            if (delNotice) delNotice.classList.remove('hidden');
+            if (delPw) delPw.parentElement.style.display = 'none';
         }
 
         document.getElementById('loading-state').classList.add('hidden');
         document.getElementById('main-content').classList.remove('hidden');
 
-        // Check newsletter subscription status
         checkNewsletterStatus();
+        initShabbatToggle();
     });
 
     function signOutUser() { sessionStorage.removeItem('headerUserCache'); sessionStorage.setItem('justSignedOut', '1'); auth.signOut().then(() => window.location.href = '/'); }
-
-    /* ════ SECTION SWITCHING ════ */
-    function showSection(sec) {
-        ['profile','email','password','newsletter','birthday'].forEach(s => {
-            document.getElementById('sec-'+s).classList.toggle('active', s===sec);
-            document.getElementById('nav-'+s).classList.toggle('active', s===sec);
-        });
-    }
 
     function cancelEdit(sec) {
         if (sec === 'profile') document.getElementById('profile-name').value = currentUser?.displayName || '';
     }
 
+    /* ════ SHABBAT MODE TOGGLE ════ */
+    function initShabbatToggle() {
+        const toggle = document.getElementById('shabbat-toggle');
+        if (!toggle) return;
+        const isDisabled = localStorage.getItem('alits_shabbat_disabled') === 'true';
+        toggle.classList.toggle('active', !isDisabled);
+        toggle.setAttribute('aria-checked', String(!isDisabled));
+    }
+
+    function toggleShabbatMode() {
+        const toggle = document.getElementById('shabbat-toggle');
+        const msgEl = document.getElementById('shabbat-toggle-msg');
+        const isCurrentlyActive = toggle.classList.contains('active');
+
+        if (isCurrentlyActive) {
+            // Turning OFF
+            localStorage.setItem('alits_shabbat_disabled', 'true');
+            toggle.classList.remove('active');
+            toggle.setAttribute('aria-checked', 'false');
+            msgEl.textContent = 'Shabbat mode is now off. The site will use its standard design during Shabbat.';
+            msgEl.classList.remove('hidden');
+        } else {
+            // Turning ON
+            localStorage.removeItem('alits_shabbat_disabled');
+            toggle.classList.add('active');
+            toggle.setAttribute('aria-checked', 'true');
+            msgEl.textContent = 'Shabbat mode is now on. The site will transform with a special design every Friday through Saturday evening.';
+            msgEl.classList.remove('hidden');
+        }
+    }
+
     /* ════ BIRTHDAY ════ */
-    // Map Intl Hebrew calendar month names (en-US) to canonical display names.
-    // Using month:'long' + numberingSystem:'latn' avoids the Safari bug where
-    // year:'numeric' returns Hebrew letters (e.g. "תשפ״ד") instead of digits.
     const HEBREW_INTL_MONTH_MAP = {
         'Tishri': 'Tishrei',   'Tishrei': 'Tishrei',
         'Heshvan': 'Cheshvan', 'Cheshvan': 'Cheshvan', 'Marheshvan': 'Cheshvan',
-        'Kislev': 'Kislev',
-        'Tevet': 'Tevet',
-        'Shevat': 'Shevat',
-        'Adar': 'Adar',        // non-leap year
-        'Adar I': 'Adar I',    // leap year
-        'Adar II': 'Adar II',  // leap year
-        'Nisan': 'Nisan',
-        'Iyar': 'Iyar',
-        'Sivan': 'Sivan',
-        'Tamuz': 'Tammuz',     'Tammuz': 'Tammuz',
-        'Av': 'Av',
-        'Elul': 'Elul',
+        'Kislev': 'Kislev', 'Tevet': 'Tevet', 'Shevat': 'Shevat',
+        'Adar': 'Adar', 'Adar I': 'Adar I', 'Adar II': 'Adar II',
+        'Nisan': 'Nisan', 'Iyar': 'Iyar', 'Sivan': 'Sivan',
+        'Tamuz': 'Tammuz', 'Tammuz': 'Tammuz', 'Av': 'Av', 'Elul': 'Elul',
     };
 
     function gregorianToHebrew(dateStr) {
@@ -503,36 +556,21 @@
             const [y, m, d] = dateStr.split('-').map(Number);
             if (!y || !m || !d) return null;
             const date = new Date(y, m - 1, d, 12, 0, 0);
-
-            // Use numberingSystem:'latn' to force Arabic digits on all platforms
-            // (Safari with ca-hebrew returns Hebrew letters for year:'numeric').
-            // Use month:'long' to get a reliable text name, immune to leap-year
-            // ordinal shifts that break a simple numeric index lookup.
             const fmtFull = new Intl.DateTimeFormat('en-US', {
-                calendar: 'hebrew',
-                numberingSystem: 'latn',
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
+                calendar: 'hebrew', numberingSystem: 'latn',
+                day: 'numeric', month: 'long', year: 'numeric'
             });
             const parts = {};
             fmtFull.formatToParts(date).forEach(p => { parts[p.type] = p.value; });
-
             const hebDay  = parseInt(parts.day,  10);
             const hebYear = parseInt(parts.year, 10);
             const intlMonthName = (parts.month || '').trim();
-
             if (!hebDay || !hebYear || !intlMonthName) return null;
-
-            // Get the true ordinal month number (1=Tishrei … 13=Elul in leap year)
             const fmtNum = new Intl.DateTimeFormat('en-US', {
-                calendar: 'hebrew',
-                numberingSystem: 'latn',
-                month: 'numeric'
+                calendar: 'hebrew', numberingSystem: 'latn', month: 'numeric'
             });
             const hebMonth = parseInt(fmtNum.format(date), 10);
             if (!hebMonth) return null;
-
             const hebrewBirthMonthName = HEBREW_INTL_MONTH_MAP[intlMonthName] || intlMonthName;
             return { hebrewBirthDay: hebDay, hebrewBirthMonth: hebMonth, hebrewBirthYear: hebYear, hebrewBirthMonthName };
         } catch { return null; }
@@ -544,20 +582,23 @@
         if (!preview || !text || !dateStr) { if (preview) preview.classList.add('hidden'); return; }
         const heb = gregorianToHebrew(dateStr);
         if (!heb) { preview.classList.add('hidden'); return; }
-        const monthDisplay = heb.hebrewBirthMonthName || `Month ${heb.hebrewBirthMonth}`;
-        text.textContent = `${heb.hebrewBirthDay} ${monthDisplay} ${heb.hebrewBirthYear}`;
+        text.textContent = `${heb.hebrewBirthDay} ${heb.hebrewBirthMonthName || 'Month ' + heb.hebrewBirthMonth} ${heb.hebrewBirthYear}`;
         preview.classList.remove('hidden');
     }
 
-    // Wire up live preview on birthday input; also honour ?section= deep-link
     document.addEventListener('DOMContentLoaded', () => {
         const bdayInput = document.getElementById('birthday-input');
         if (bdayInput) bdayInput.addEventListener('input', e => updateHebrewPreview(e.target.value));
 
-        // Auto-navigate to a specific section when linked from the missing-info toast
+        // Deep-link scroll
+        if (window.location.hash) {
+            const target = document.querySelector(window.location.hash);
+            if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 300);
+        }
         const sectionParam = new URLSearchParams(window.location.search).get('section');
-        if (sectionParam && ['profile','email','password','newsletter','birthday'].includes(sectionParam)) {
-            showSection(sectionParam);
+        if (sectionParam) {
+            const target = document.getElementById('sec-' + sectionParam);
+            if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 300);
         }
     });
 
@@ -566,17 +607,12 @@
         const dateStr = document.getElementById('birthday-input').value.trim();
         const btn     = document.getElementById('birthday-btn');
         const msg     = document.getElementById('birthday-msg');
-
         if (!dateStr) { showMsg(msg, 'Please select a date of birth.', 'error'); return; }
-
         const heb = gregorianToHebrew(dateStr);
         if (!heb) { showMsg(msg, 'Could not calculate Hebrew date. Please try a different date.', 'error'); return; }
-
         const timezone = (document.getElementById('birthday-timezone')?.value || '').trim();
-
         setLoading(btn, true, 'Saving…');
         hideMsg(msg);
-
         try {
             const payload = { birthDateGregorian: dateStr, ...heb };
             if (timezone) payload.birthTimezone = timezone;
@@ -585,9 +621,7 @@
             showMsg(msg, '✓ Birthday saved successfully.', 'success');
         } catch (err) {
             showMsg(msg, 'Failed to save birthday. Please try again.', 'error');
-        } finally {
-            setLoading(btn, false, 'Save Birthday');
-        }
+        } finally { setLoading(btn, false, 'Save Birthday'); }
     }
 
     /* ════ SAVE PROFILE ════ */
@@ -596,32 +630,21 @@
         const name = document.getElementById('profile-name').value.trim();
         const btn  = document.getElementById('profile-btn');
         const msg  = document.getElementById('profile-msg');
-
         if (!name || name.length < 2) { showMsg(msg, 'Name must be at least 2 characters.', 'error'); return; }
-
         setLoading(btn, true, 'Saving…');
         hideMsg(msg);
-
         try {
             await currentUser.updateProfile({ displayName: name });
-            // Also update Firestore with displayNameChanged flag
-            await db.collection('users').doc(currentUser.uid).set({
-                displayName: name,
-                displayNameChanged: true
-            }, { merge: true });
+            await db.collection('users').doc(currentUser.uid).set({ displayName: name, displayNameChanged: true }, { merge: true });
             document.getElementById('sidebar-name').textContent = name;
             document.getElementById('avatar-circle').textContent = name.charAt(0).toUpperCase();
             showMsg(msg, '✓ Display name updated successfully. This change is permanent.', 'success');
-            // Lock the form since they've used their one change
             setTimeout(() => {
                 document.getElementById('profile-form').classList.add('hidden');
                 document.getElementById('profile-locked').classList.remove('hidden');
             }, 2000);
-        } catch (err) {
-            showMsg(msg, 'Failed to update name. Please try again.', 'error');
-        } finally {
-            setLoading(btn, false, 'Save Changes');
-        }
+        } catch (err) { showMsg(msg, 'Failed to update name. Please try again.', 'error'); }
+        finally { setLoading(btn, false, 'Save Changes'); }
     }
 
     /* ════ SAVE EMAIL ════ */
@@ -632,15 +655,11 @@
         const password = document.getElementById('email-current-pw').value;
         const btn      = document.getElementById('email-btn');
         const msg      = document.getElementById('email-msg');
-
         if (!newEmail) { showMsg(msg, 'Please enter a new email address.', 'error'); return; }
         if (!password) { showMsg(msg, 'Please enter your current password.', 'error'); return; }
-
         setLoading(btn, true, 'Updating…');
         hideMsg(msg);
-
         try {
-            // Re-authenticate first
             const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, password);
             await currentUser.reauthenticateWithCredential(cred);
             await currentUser.updateEmail(newEmail);
@@ -650,37 +669,27 @@
             document.getElementById('email-current-pw').value = '';
             showMsg(msg, '✓ Email updated successfully.', 'success');
         } catch (err) {
-            if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-                showMsg(msg, 'Incorrect password. Please try again.', 'error');
-            } else if (err.code === 'auth/email-already-in-use') {
-                showMsg(msg, 'That email is already in use by another account.', 'error');
-            } else if (err.code === 'auth/invalid-email') {
-                showMsg(msg, 'Please enter a valid email address.', 'error');
-            } else {
-                showMsg(msg, 'Failed to update email. Please try again.', 'error');
-            }
-        } finally {
-            setLoading(btn, false, 'Update Email');
-        }
+            if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') showMsg(msg, 'Incorrect password. Please try again.', 'error');
+            else if (err.code === 'auth/email-already-in-use') showMsg(msg, 'That email is already in use by another account.', 'error');
+            else if (err.code === 'auth/invalid-email') showMsg(msg, 'Please enter a valid email address.', 'error');
+            else showMsg(msg, 'Failed to update email. Please try again.', 'error');
+        } finally { setLoading(btn, false, 'Update Email'); }
     }
 
     /* ════ SAVE PASSWORD ════ */
     async function savePassword(e) {
         e.preventDefault();
         if (isGoogleUser) return;
-        const current  = document.getElementById('pw-current').value;
-        const newPw    = document.getElementById('pw-new').value;
-        const confirm  = document.getElementById('pw-confirm').value;
-        const btn      = document.getElementById('pw-btn');
-        const msg      = document.getElementById('pw-msg');
-
+        const current = document.getElementById('pw-current').value;
+        const newPw   = document.getElementById('pw-new').value;
+        const confirm = document.getElementById('pw-confirm').value;
+        const btn     = document.getElementById('pw-btn');
+        const msg     = document.getElementById('pw-msg');
         if (!current) { showMsg(msg, 'Please enter your current password.', 'error'); return; }
         if (newPw.length < 6) { showMsg(msg, 'New password must be at least 6 characters.', 'error'); return; }
         if (newPw !== confirm) { showMsg(msg, 'Passwords do not match.', 'error'); return; }
-
         setLoading(btn, true, 'Updating…');
         hideMsg(msg);
-
         try {
             const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, current);
             await currentUser.reauthenticateWithCredential(cred);
@@ -690,19 +699,12 @@
             document.getElementById('pw-confirm').value = '';
             showMsg(msg, '✓ Password updated successfully.', 'success');
         } catch (err) {
-            if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-                showMsg(msg, 'Current password is incorrect.', 'error');
-            } else if (err.code === 'auth/weak-password') {
-                showMsg(msg, 'Password is too weak. Use at least 6 characters.', 'error');
-            } else {
-                showMsg(msg, 'Failed to update password. Please try again.', 'error');
-            }
-        } finally {
-            setLoading(btn, false, 'Update Password');
-        }
+            if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') showMsg(msg, 'Current password is incorrect.', 'error');
+            else if (err.code === 'auth/weak-password') showMsg(msg, 'Password is too weak. Use at least 6 characters.', 'error');
+            else showMsg(msg, 'Failed to update password. Please try again.', 'error');
+        } finally { setLoading(btn, false, 'Update Password'); }
     }
 
-    /* ════ PASSWORD RESET EMAIL ════ */
     function sendPasswordReset() {
         const msg = document.getElementById('reset-msg');
         if (!currentUser?.email) { showMsg(msg, 'No email address on your account.', 'error'); return; }
@@ -713,9 +715,7 @@
     }
 
     /* ════ NEWSLETTER ════ */
-    function getNewsletterDocId(email) {
-        return email.toLowerCase().replace(/[.#$/\[\]]/g, '_');
-    }
+    function getNewsletterDocId(email) { return email.toLowerCase().replace(/[.#$/\[\]]/g, '_'); }
 
     async function checkNewsletterStatus() {
         if (!currentUser?.email) return;
@@ -723,7 +723,6 @@
         var nlLoading = document.getElementById('nl-loading');
         var nlSubscribed = document.getElementById('nl-subscribed');
         var nlNotSubscribed = document.getElementById('nl-not-subscribed');
-
         try {
             var doc = await db.collection('newsletterSubscribers').doc(docId).get();
             nlLoading.classList.add('hidden');
@@ -735,7 +734,6 @@
                 nlNotSubscribed.classList.remove('hidden');
             }
         } catch (e) {
-            console.error('Newsletter status check failed:', e);
             nlLoading.classList.add('hidden');
             document.getElementById('nl-user-email').textContent = currentUser.email;
             nlNotSubscribed.classList.remove('hidden');
@@ -745,35 +743,24 @@
     async function subscribeNewsletter() {
         var btn = document.getElementById('nl-sub-btn');
         var msg = document.getElementById('nl-msg');
-        hideMsg(msg);
-        setLoading(btn, true, 'Subscribing…');
-
+        hideMsg(msg); setLoading(btn, true, 'Subscribing…');
         try {
             var email = currentUser.email.toLowerCase();
             var docId = getNewsletterDocId(email);
-            await db.collection('newsletterSubscribers').doc(docId).set({
-                email: email,
-                subscribedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                source: 'settings'
-            });
+            await db.collection('newsletterSubscribers').doc(docId).set({ email: email, subscribedAt: firebase.firestore.FieldValue.serverTimestamp(), source: 'settings' });
             localStorage.setItem('nlSubscribed', '1');
             document.getElementById('nl-not-subscribed').classList.add('hidden');
             document.getElementById('nl-sub-email').textContent = email;
             document.getElementById('nl-subscribed').classList.remove('hidden');
             showMsg(msg, '✓ Subscribed! Look out for your first Dvar Torah this Friday.', 'success');
-        } catch (err) {
-            showMsg(msg, 'Failed to subscribe. Please try again.', 'error');
-        } finally {
-            setLoading(btn, false, 'Subscribe with ' + currentUser.email);
-        }
+        } catch (err) { showMsg(msg, 'Failed to subscribe. Please try again.', 'error'); }
+        finally { setLoading(btn, false, 'Subscribe with ' + currentUser.email); }
     }
 
     async function unsubscribeNewsletter() {
         var btn = document.getElementById('nl-unsub-btn');
         var msg = document.getElementById('nl-msg');
-        hideMsg(msg);
-        setLoading(btn, true, 'Unsubscribing…');
-
+        hideMsg(msg); setLoading(btn, true, 'Unsubscribing…');
         try {
             var email = currentUser.email.toLowerCase();
             var docId = getNewsletterDocId(email);
@@ -783,34 +770,103 @@
             document.getElementById('nl-user-email').textContent = email;
             document.getElementById('nl-not-subscribed').classList.remove('hidden');
             showMsg(msg, '✓ You have been unsubscribed.', 'success');
+        } catch (err) { showMsg(msg, 'Failed to unsubscribe. Please try again.', 'error'); }
+        finally { setLoading(btn, false, 'Unsubscribe'); }
+    }
+
+    /* ════ REPLAY TUTORIAL ════ */
+    function replayTutorialFromSettings() {
+        if (currentUser) {
+            try { localStorage.removeItem('alits_tutorial_completed:' + currentUser.uid); } catch(_){}
+            try { localStorage.removeItem('alits_mobile_tutorial_completed:' + currentUser.uid); } catch(_){}
+        }
+        window.location.href = '/dashboard';
+    }
+
+    /* ════ DELETE ACCOUNT ════ */
+    async function confirmDeleteAccount() {
+        const btn = document.getElementById('delete-btn');
+        const msg = document.getElementById('delete-msg');
+        const passwordInput = document.getElementById('delete-password');
+        hideMsg(msg);
+
+        if (!isGoogleUser) {
+            const password = passwordInput.value;
+            if (!password) { showMsg(msg, 'Please enter your password to confirm deletion.', 'error'); return; }
+            try {
+                const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, password);
+                await currentUser.reauthenticateWithCredential(cred);
+            } catch (err) {
+                if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') showMsg(msg, 'Incorrect password. Please try again.', 'error');
+                else showMsg(msg, 'Authentication failed: ' + (err.message || 'Please try again.'), 'error');
+                return;
+            }
+        }
+
+        if (!confirm('Are you absolutely sure you want to delete your account? This cannot be undone. All your data will be permanently erased.')) return;
+
+        setLoading(btn, true, 'Deleting…');
+        const userId = currentUser.uid;
+        const userEmail = (currentUser.email || '').toLowerCase();
+
+        try {
+            try { await db.collection('users').doc(userId).delete(); } catch(e) { console.warn('Could not delete user doc:', e); }
+
+            try {
+                const globalBookmarks = await db.collection('globalBookmarks').where('userId', '==', userId).get();
+                await Promise.all(globalBookmarks.docs.map(d => d.ref.delete()));
+            } catch(e) { console.warn('Could not delete global bookmarks:', e); }
+
+            try {
+                const globalReactions = await db.collection('globalReactions').where('userId', '==', userId).get();
+                await Promise.all(globalReactions.docs.map(d => d.ref.delete()));
+            } catch(e) { console.warn('Could not delete global reactions:', e); }
+
+            try {
+                const chavrutasSnap = await db.collection('chavrutas').where('members', 'array-contains', userId).get();
+                for (const chavDoc of chavrutasSnap.docs) {
+                    const chavId = chavDoc.id;
+                    const subcols = ['comments', 'reactions', 'bookmarks', 'dailyQuoteBookmarks'];
+                    for (const sub of subcols) {
+                        try {
+                            const docs = await db.collection('chavrutas').doc(chavId).collection(sub).where('userId', '==', userId).get();
+                            await Promise.all(docs.docs.map(d => d.ref.delete()));
+                        } catch(e) {}
+                    }
+                    try { await db.collection('chavrutas').doc(chavId).update({ members: firebase.firestore.FieldValue.arrayRemove(userId) }); } catch(e) {}
+                }
+            } catch(e) { console.warn('Could not clean up chavrutas:', e); }
+
+            if (userEmail) {
+                try { await db.collection('newsletterSubscribers').doc(userEmail.replace(/[.#$/\[\]]/g, '_')).delete(); } catch(e) {}
+            }
+
+            try { const mc = await db.collectionGroup('mitzvahCompletions').where('userId', '==', userId).get(); await Promise.all(mc.docs.map(d => d.ref.delete())); } catch(e) {}
+            try { const mr = await db.collectionGroup('mitzvahReflections').where('userId', '==', userId).get(); await Promise.all(mr.docs.map(d => d.ref.delete())); } catch(e) {}
+            try { const lb = await db.collection('mitzvahLeaderboard').where('userId', '==', userId).get(); await Promise.all(lb.docs.map(d => d.ref.delete())); } catch(e) {}
+
+            try { localStorage.clear(); sessionStorage.clear(); } catch(e) {}
+
+            await currentUser.delete();
+            window.location.href = '/';
         } catch (err) {
-            showMsg(msg, 'Failed to unsubscribe. Please try again.', 'error');
-        } finally {
-            setLoading(btn, false, 'Unsubscribe');
+            console.error('Account deletion error:', err);
+            if (err.code === 'auth/requires-recent-login') showMsg(msg, 'Your session has expired. Please sign out, sign back in, and try again.', 'error');
+            else showMsg(msg, 'Failed to delete account: ' + (err.message || 'Please try again.'), 'error');
+            setLoading(btn, false, 'Delete My Account');
         }
     }
 
     /* ════ HELPERS ════ */
     function setLoading(btn, loading, text) {
-        if (loading) {
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span>';
-            btn.classList.add('opacity-80','cursor-not-allowed');
-        } else {
-            btn.disabled = false;
-            btn.textContent = text;
-            btn.classList.remove('opacity-80','cursor-not-allowed');
-        }
+        if (loading) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>'; btn.classList.add('opacity-80','cursor-not-allowed'); }
+        else { btn.disabled = false; btn.textContent = text; btn.classList.remove('opacity-80','cursor-not-allowed'); }
     }
-
     function showMsg(el, msg, type) {
         el.textContent = msg;
-        el.className = 'mb-4 text-sm px-4 py-3 rounded-xl ' + (type === 'success'
-            ? 'bg-green-50 border border-green-200 text-green-800'
-            : 'bg-red-50 border border-red-200 text-red-700');
+        el.className = 'mb-4 text-sm px-4 py-3 rounded-xl ' + (type === 'success' ? 'bg-green-50 border border-green-200 text-green-800' : 'bg-red-50 border border-red-200 text-red-700');
         el.classList.remove('hidden');
     }
-
     function hideMsg(el) { el.classList.add('hidden'); }
 </script>
     <script src="/js/sidebar-nav.js"></script>

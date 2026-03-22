@@ -500,6 +500,39 @@
                                     <input type="date" id="create-birthday" required autocomplete="bday" class="input-field w-full px-4 py-3 rounded-xl focus:outline-none text-gray-900" style="border:1.5px solid #ddd8ce;font-size:0.9rem;" />
                                     <p class="text-xs mt-1" style="color:#a09a8e;">Used to calculate your personal daily Psalm and celebrate your Hebrew birthday.</p>
                                 </div>
+                                <div>
+                                    <label for="create-timezone" class="block text-sm font-semibold mb-1.5" style="color:#3d4555;">Place of Birth</label>
+                                    <select id="create-timezone" required class="input-field w-full px-4 py-3 rounded-xl focus:outline-none text-gray-900" style="border:1.5px solid #ddd8ce;font-size:0.9rem;background:#fff;">
+                                        <option value="">— Select your birth region —</option>
+                                        <optgroup label="Americas">
+                                            <option value="America/New_York">Eastern US/Canada (New York, Toronto)</option>
+                                            <option value="America/Chicago">Central US/Canada (Chicago, Dallas)</option>
+                                            <option value="America/Denver">Mountain US/Canada (Denver, Calgary)</option>
+                                            <option value="America/Los_Angeles">Pacific US/Canada (Los Angeles, Vancouver)</option>
+                                            <option value="America/Sao_Paulo">Brazil (São Paulo, Rio)</option>
+                                            <option value="America/Argentina/Buenos_Aires">Argentina (Buenos Aires)</option>
+                                        </optgroup>
+                                        <optgroup label="Europe">
+                                            <option value="Europe/London">UK / Ireland (London, Dublin)</option>
+                                            <option value="Europe/Paris">Western Europe (Paris, Berlin, Rome)</option>
+                                            <option value="Europe/Athens">Eastern Europe (Athens, Kyiv, Bucharest)</option>
+                                            <option value="Europe/Moscow">Russia (Moscow)</option>
+                                        </optgroup>
+                                        <optgroup label="Middle East &amp; Africa">
+                                            <option value="Asia/Jerusalem">Israel (Jerusalem, Tel Aviv)</option>
+                                            <option value="Europe/Istanbul">Turkey (Istanbul)</option>
+                                            <option value="Asia/Dubai">Gulf States (Dubai, Riyadh)</option>
+                                            <option value="Africa/Johannesburg">South Africa (Johannesburg)</option>
+                                        </optgroup>
+                                        <optgroup label="Asia &amp; Oceania">
+                                            <option value="Asia/Kolkata">India (Mumbai, Delhi)</option>
+                                            <option value="Asia/Shanghai">China (Shanghai, Beijing)</option>
+                                            <option value="Asia/Tokyo">Japan / Korea (Tokyo, Seoul)</option>
+                                            <option value="Australia/Sydney">Australia (Sydney, Melbourne)</option>
+                                        </optgroup>
+                                    </select>
+                                    <p class="text-xs mt-1" style="color:#a09a8e;">Used for accurate Hebrew date calculation based on your timezone.</p>
+                                </div>
                                 <button id="create-account-btn" onclick="handleCreateAccount()" class="w-full py-3.5 btn-gold text-white rounded-xl transition-all font-bold text-sm" style="margin-top:0.3rem;letter-spacing:0.02em;box-shadow:0 4px 16px rgba(200,154,53,0.25);">Create Account</button>
                             </div>
                         </div>
@@ -1316,19 +1349,37 @@
         }
 
         // Converts a Gregorian date string (YYYY-MM-DD) to Hebrew calendar components
+        const HEBREW_INTL_MONTH_MAP = {
+            'Tishri': 'Tishrei',   'Tishrei': 'Tishrei',
+            'Heshvan': 'Cheshvan', 'Cheshvan': 'Cheshvan', 'Marheshvan': 'Cheshvan',
+            'Kislev': 'Kislev', 'Tevet': 'Tevet', 'Shevat': 'Shevat',
+            'Adar': 'Adar', 'Adar I': 'Adar I', 'Adar II': 'Adar II',
+            'Nisan': 'Nisan', 'Iyar': 'Iyar', 'Sivan': 'Sivan',
+            'Tamuz': 'Tammuz', 'Tammuz': 'Tammuz', 'Av': 'Av', 'Elul': 'Elul',
+        };
+
         function gregorianToHebrew(dateStr) {
             try {
                 const [y, m, d] = dateStr.split('-').map(Number);
                 if (!y || !m || !d) return null;
                 const date = new Date(y, m - 1, d, 12, 0, 0);
-                const fmt = new Intl.DateTimeFormat('en-US-u-ca-hebrew', { day: 'numeric', month: 'numeric', year: 'numeric' });
+                const fmtFull = new Intl.DateTimeFormat('en-US', {
+                    calendar: 'hebrew', numberingSystem: 'latn',
+                    day: 'numeric', month: 'long', year: 'numeric'
+                });
                 const parts = {};
-                fmt.formatToParts(date).forEach(p => { parts[p.type] = p.value; });
-                const hebDay   = parseInt(parts.day,   10);
-                const hebMonth = parseInt(parts.month, 10);
-                const hebYear  = parseInt(parts.year,  10);
-                if (!hebDay || !hebMonth || !hebYear) return null;
-                return { hebrewBirthDay: hebDay, hebrewBirthMonth: hebMonth, hebrewBirthYear: hebYear };
+                fmtFull.formatToParts(date).forEach(p => { parts[p.type] = p.value; });
+                const hebDay  = parseInt(parts.day,  10);
+                const hebYear = parseInt(parts.year, 10);
+                const intlMonthName = (parts.month || '').trim();
+                if (!hebDay || !hebYear || !intlMonthName) return null;
+                const fmtNum = new Intl.DateTimeFormat('en-US', {
+                    calendar: 'hebrew', numberingSystem: 'latn', month: 'numeric'
+                });
+                const hebMonth = parseInt(fmtNum.format(date), 10);
+                if (!hebMonth) return null;
+                const hebrewBirthMonthName = HEBREW_INTL_MONTH_MAP[intlMonthName] || intlMonthName;
+                return { hebrewBirthDay: hebDay, hebrewBirthMonth: hebMonth, hebrewBirthYear: hebYear, hebrewBirthMonthName };
             } catch { return null; }
         }
 
@@ -1339,6 +1390,7 @@
             const password = document.getElementById('create-password').value;
             const confirm = document.getElementById('create-confirm').value;
             const birthdayStr = (document.getElementById('create-birthday')?.value || '').trim();
+            const timezoneStr = (document.getElementById('create-timezone')?.value || '').trim();
             const inviteCode = resolveInviteCode();
             const displayName = normalizeDisplayName(rawName);
 
@@ -1370,6 +1422,10 @@
                 showError('Please enter your date of birth.');
                 return;
             }
+            if (!timezoneStr) {
+                showError('Please select your place of birth.');
+                return;
+            }
             if (inviteCode && inviteCode.length !== INVITE_CODE_LENGTH) {
                 showError('Invite codes must be exactly 16 letters/numbers.');
                 return;
@@ -1385,18 +1441,23 @@
                 await user.updateProfile({ displayName: displayName });
                 await syncUserProfile(user, displayName, true);
 
-                // Save birthday
+                // Save birthday and timezone
                 const hebBday = gregorianToHebrew(birthdayStr);
                 if (hebBday) {
                     try {
+                        const bdayPayload = { birthDateGregorian: birthdayStr, ...hebBday };
+                        if (timezoneStr) bdayPayload.birthTimezone = timezoneStr;
                         await db.collection('users').doc(user.uid).set(
-                            { birthDateGregorian: birthdayStr, ...hebBday },
+                            bdayPayload,
                             { merge: true }
                         );
                     } catch (_) {}
                 }
 
                 showSuccess('Account created successfully. Redirecting...');
+
+                // Signal the tutorial to start on the dashboard — only on fresh account creation
+                try { sessionStorage.setItem('alits_just_created', '1'); } catch (_) {}
 
                 if (inviteCode.length === INVITE_CODE_LENGTH) {
                     const found = await processInviteCode(inviteCode, user);

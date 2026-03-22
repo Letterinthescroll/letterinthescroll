@@ -79,7 +79,18 @@
         return false;
     }
 
+    function isShabbatOptedOut() {
+        try {
+            return localStorage.getItem('alits_shabbat_disabled') === 'true';
+        } catch (e) {
+            return false;
+        }
+    }
+
     function shouldEnableShabbatMode() {
+        if (isShabbatOptedOut()) {
+            return false;
+        }
         return isShabbatPreviewForced() || isShabbatTime();
     }
 

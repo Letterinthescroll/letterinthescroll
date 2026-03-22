@@ -464,8 +464,19 @@ function showLoginRequiredOverlayAndRedirect() {
   updateLoginRequiredOverlayOffset();
 }
 
+function _checkAnyAuth() {
+  const compatUser = typeof window !== 'undefined'
+    && window.firebase
+    && typeof window.firebase.auth === 'function'
+    && window.firebase.auth().currentUser;
+  return currentUser || auth.currentUser || compatUser;
+}
+
 function initAuth(onAuthReady) {
   let authRedirectTimer = null;
+  // Track whether the user was ever authenticated in this page session.
+  // Once true, transient null events from token refreshes are ignored.
+  let userWasAuthenticated = false;
 
   // Check if there's evidence of a prior session — give Firebase more time
   // to restore it. Without this, the overlay flashes on every page navigation.
@@ -488,6 +499,7 @@ function initAuth(onAuthReady) {
       document.documentElement.style.removeProperty('--login-required-overlay-top');
 
       currentUser = user;
+      userWasAuthenticated = true;
       console.log('User authenticated:', user.email);
       if (onAuthReady) onAuthReady(user);
     } else {
@@ -502,6 +514,18 @@ function initAuth(onAuthReady) {
         currentUser = null;
       }
       console.log('No user authenticated (modular SDK)');
+
+      // If the user was already authenticated during this page session,
+      // this null event is a transient token refresh — ignore it.
+      if (userWasAuthenticated) {
+        console.log('Ignoring transient null — user was already authenticated this session');
+        // Try to force-refresh the token to recover the session
+        if (auth.currentUser) {
+          auth.currentUser.getIdToken(true).catch(() => {});
+        }
+        return;
+      }
+
       // Redirect unauthenticated users away from protected app pages.
       // Login and invite onboarding routes are public.
       const path = window.location.pathname.replace(/\/+$/, '') || '/';
@@ -520,37 +544,25 @@ function initAuth(onAuthReady) {
         const delay = hasSessionHint ? 12000 : 5000;
         if (!authRedirectTimer) {
           authRedirectTimer = setTimeout(() => {
-            // Check all possible auth sources — the module-level variable,
-            // the modular SDK's auth object, AND the compat SDK (used by
-            // the dashboard's inline script).  Any one having a user means
-            // the session is alive; showing the overlay would be wrong.
-            const compatUser = typeof window !== 'undefined'
-              && window.firebase
-              && typeof window.firebase.auth === 'function'
-              && window.firebase.auth().currentUser;
-            const isAuthenticated = currentUser || auth.currentUser || compatUser;
-            if (!isAuthenticated) {
-              // Double-check session hints — if they still exist, the session
-              // is likely restoring slowly, so wait a bit longer.
-              const stillHasHint = Boolean(
-                sessionStorage.getItem('headerUserCache') ||
-                localStorage.getItem('dashGroupsCache') ||
-                localStorage.getItem('lastActiveChavrutaId')
-              );
-              if (stillHasHint) {
-                // Give it one final chance
-                setTimeout(() => {
-                  const laterCompatUser = typeof window !== 'undefined'
-                    && window.firebase
-                    && typeof window.firebase.auth === 'function'
-                    && window.firebase.auth().currentUser;
-                  if (!currentUser && !auth.currentUser && !laterCompatUser) {
-                    showLoginRequiredOverlayAndRedirect();
-                  }
-                }, 5000);
-              } else {
-                showLoginRequiredOverlayAndRedirect();
-              }
+            authRedirectTimer = null;
+            // Check all possible auth sources
+            if (_checkAnyAuth()) return;
+            // Double-check session hints — if they still exist, the session
+            // is likely restoring slowly, so wait a bit longer.
+            const stillHasHint = Boolean(
+              sessionStorage.getItem('headerUserCache') ||
+              localStorage.getItem('dashGroupsCache') ||
+              localStorage.getItem('lastActiveChavrutaId')
+            );
+            if (stillHasHint) {
+              // Give it one final chance
+              setTimeout(() => {
+                if (!_checkAnyAuth()) {
+                  showLoginRequiredOverlayAndRedirect();
+                }
+              }, 5000);
+            } else {
+              showLoginRequiredOverlayAndRedirect();
             }
           }, delay);
         }
@@ -559,6 +571,19 @@ function initAuth(onAuthReady) {
       if (onAuthReady) onAuthReady(null);
     }
   });
+
+  // When the tab regains focus after being backgrounded, Firebase may need
+  // to refresh its token. Force a token refresh to prevent stale-session nulls.
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && userWasAuthenticated) {
+        const u = auth.currentUser;
+        if (u) {
+          u.getIdToken(true).catch(() => {});
+        }
+      }
+    });
+  }
 }
 
 async function signInWithEmail(email, password) {

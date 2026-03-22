@@ -16,7 +16,7 @@
     'use strict';
 
     var HEADER_TEMPLATE_URL = '/includes/header.html';
-    var CACHE_KEY = 'cachedHeaderTemplate';
+    var CACHE_KEY = 'cachedHeaderTemplate_v3';
     var NAV_TOKEN = '__NAV_ITEMS__';
 
     /* ── Nav items ──────────────────────────────────────────────────────── */
@@ -50,6 +50,12 @@
             label: 'Songs',
             title: 'Songs and poems',
             icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13"/><circle cx="6" cy="18" r="3" stroke-width="2"/><circle cx="18" cy="16" r="3" stroke-width="2"/>'
+        },
+        {
+            href: '/food',
+            label: 'Food',
+            title: 'Jewish recipes & meal planner',
+            icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 2v7c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2V2M7 2v20M21 15V2a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3m0 0v7"/>'
         },
         {
             href: '/about',
@@ -113,7 +119,7 @@
             '    </div>' +
             '    <div class="header-actions-wrapper">' +
             '      <div id="header-actions" class="header-actions">' +
-                         NAV_TOKEN +
+            NAV_TOKEN +
             '        <!-- User dropdown injected by main.js / page-auth.js -->' +
             '      </div>' +
             '    </div>' +
@@ -205,11 +211,11 @@
         container.style.cssText = 'position:relative;display:flex;align-items:center;';
         container.innerHTML =
             '<button id="header-user-menu-btn" class="header-user-pill" title="Account Menu" aria-haspopup="true" aria-expanded="false">' +
-                '<div class="header-user-avatar" aria-hidden="true">' + initial + '</div>' +
-                '<span class="header-btn-text">' + cached.firstName + '</span>' +
-                '<svg class="header-user-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">' +
-                    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>' +
-                '</svg>' +
+            '<div class="header-user-avatar" aria-hidden="true">' + initial + '</div>' +
+            '<span class="header-btn-text">' + cached.firstName + '</span>' +
+            '<svg class="header-user-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">' +
+            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>' +
+            '</svg>' +
             '</button>';
         ha.appendChild(container);
     })();
@@ -265,7 +271,7 @@
 
         // Read persisted chavruta list (saved by dashboard / study page).
         var chavrutas = null;
-        try { chavrutas = JSON.parse(localStorage.getItem('userChavrutaList')); } catch (_) {}
+        try { chavrutas = JSON.parse(localStorage.getItem('userChavrutaList')); } catch (_) { }
         if (!Array.isArray(chavrutas) || chavrutas.length <= 1) return; // 0 or 1 — navigate normally
 
         e.preventDefault();
@@ -318,7 +324,7 @@
             ].join(';');
             btn.textContent = c.name || 'Study Group';
             btn.onmouseover = function () { this.style.background = '#eff6ff'; this.style.borderColor = '#bfdbfe'; };
-            btn.onmouseout  = function () { this.style.background = '#f8fafc'; this.style.borderColor = '#e2e8f0'; };
+            btn.onmouseout = function () { this.style.background = '#f8fafc'; this.style.borderColor = '#e2e8f0'; };
             btn.onclick = function () {
                 overlay.parentNode.removeChild(overlay);
                 // Set storage BEFORE navigating so the study page picks it up immediately
@@ -326,7 +332,7 @@
                     sessionStorage.setItem('activeChavrutaId', c.id);
                     localStorage.setItem('lastActiveChavrutaId', c.id);
                     sessionStorage.removeItem('presenceCache');
-                } catch(_){}
+                } catch (_) { }
                 window.location.href = '/study?chavruta=' + encodeURIComponent(c.id);
             };
             list.appendChild(btn);

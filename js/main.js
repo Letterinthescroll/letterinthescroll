@@ -3495,6 +3495,15 @@ async function handleAuthStateChange(user) {
         refreshMitzvahLeaderboardDisplay();
         maybeShowMitzvahModal();
 
+        // Trigger first-time user tutorial (no-op if already completed)
+        if (typeof window.startTutorialIfNew === 'function') {
+            window.startTutorialIfNew(user.uid);
+        }
+        // Mobile tutorial (separate from desktop — only runs on small screens)
+        if (typeof window.startMobileTutorialIfNew === 'function') {
+            window.startMobileTutorialIfNew(user.uid);
+        }
+
     } else {
         setCurrentUserEmail(null);
         updateUsernameDisplay();

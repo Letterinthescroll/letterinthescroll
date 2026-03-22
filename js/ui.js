@@ -878,6 +878,10 @@ function buildPresenceTooltip(user) {
  * Shows their names with subtle last login time indicators
  */
 export function displayOnlineUsers(onlineUsers = []) {
+    // Don't overwrite fake data during tutorial walkthrough
+    const statusBar = document.getElementById('community-status-bar');
+    if (statusBar && statusBar.dataset.tutorialLock === '1') return;
+
     const onlineSection = document.getElementById('header-online-section');
     const usersList = document.getElementById('header-online-users-list');
     const concurrencyIndicator = document.getElementById('header-online-concurrency');
@@ -1029,6 +1033,10 @@ export function displayOnlineUsers(onlineUsers = []) {
  * Hide online users display
  */
 export function hideOnlineUsers() {
+    // Don't hide during tutorial walkthrough
+    const statusBar = document.getElementById('community-status-bar');
+    if (statusBar && statusBar.dataset.tutorialLock === '1') return;
+
     const onlineSection = document.getElementById('header-online-section');
     const usersList = document.getElementById('header-online-users-list');
     const concurrencyIndicator = document.getElementById('header-online-concurrency');

@@ -1,0 +1,3077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Jewish Table — A Letter in the Scroll</title>
+    <link rel="icon" type="image/png" href="/media/images/Icon.png">
+    <link rel="apple-touch-icon" href="/media/images/Icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="A Letter in the Scroll">
+    <meta property="og:title" content="The Jewish Table — A Letter in the Scroll">
+    <meta property="og:description" content="Explore 120 authentic Jewish & Israeli recipes with a smart event planner. Cook for holidays, Shabbat, or just for fun.">
+    <meta property="og:url" content="https://www.aletterinthescroll.com/food">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/mobile-overrides.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink-950: #102039;
+            --ink-800: #1e3558;
+            --ink-700: #2c4a75;
+            --ink-600: #456188;
+            --ink-500: #667c9c;
+            --surface: #ffffff;
+            --surface-soft: #f7fbff;
+            --surface-glass: rgba(255, 255, 255, 0.82);
+            --line: rgba(25, 61, 108, 0.16);
+            --line-strong: rgba(25, 61, 108, 0.24);
+            --accent-navy: #1f3f76;
+            --accent-teal: #0f7b8f;
+            --accent-gold: #cf9a32;
+            --accent-mint: #2f9f84;
+            --danger: #b93e45;
+            --success: #25754f;
+            --radius-xl: 1.45rem;
+            --radius-lg: 1.05rem;
+            --shadow-xl: 0 24px 56px rgba(17, 44, 84, 0.17);
+            --shadow-lg: 0 12px 30px rgba(17, 44, 84, 0.11);
+            --shadow-sm: 0 4px 12px rgba(17, 44, 84, 0.07);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        html:has(.food-body) { background: #edf5ff !important; }
+        html:has(.food-body),
+        html:has(.food-body) body,
+        .food-body main { overflow-x: visible !important; }
+
+        .food-body {
+            font-family: 'Manrope', sans-serif !important;
+            color: var(--ink-950);
+            min-height: 100vh;
+            background:
+                radial-gradient(1200px 580px at -8% -10%, rgba(207, 154, 50, 0.18), transparent 60%),
+                radial-gradient(900px 560px at 108% -12%, rgba(36, 118, 175, 0.16), transparent 58%),
+                linear-gradient(180deg, #faf6ee 0%, #f4f8ff 47%, #faf6ee 100%) !important;
+            position: relative;
+        }
+
+        .food-body::before,
+        .food-body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(76px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .food-body::before { width: 360px; height: 360px; background: rgba(207, 154, 50, 0.14); top: 10vh; right: 0; }
+        .food-body::after { width: 420px; height: 420px; background: rgba(25, 127, 175, 0.12); bottom: 0; left: 0; }
+
+        /* ── Layout ─────────────────────────────────────────── */
+        .food-container { max-width: 78rem; margin: 0 auto; padding: 0 2.5rem; position: relative; z-index: 1; }
+        .food-hero { text-align: center; padding: 3rem 0 2rem; }
+        .food-hero h1 { font-family: 'Fraunces', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; color: var(--ink-950); margin: 0 0 0.5rem; }
+        .food-hero p { font-size: clamp(0.9rem, 1.5vw, 1.05rem); color: var(--ink-600); max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+        /* ── Section Cards ──────────────────────────────────── */
+        .section-card {
+            background: linear-gradient(170deg, rgba(255, 255, 255, 0.94), rgba(252, 254, 255, 0.87));
+            border: 1px solid var(--line);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(8px);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-card h2 {
+            font-family: 'Fraunces', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ink-950);
+            margin: 0 0 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .section-subtitle { font-size: 0.85rem; color: var(--ink-600); margin: 0 0 1.25rem; }
+
+        /* ── Planner / Filter Bar ──────────────────────────── */
+        .planner-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: flex-end;
+            margin-bottom: 1.5rem;
+        }
+        .planner-group { display: flex; flex-direction: column; gap: 0.3rem; }
+        .planner-group label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--ink-600);
+        }
+        .planner-group select,
+        .planner-group input[type="number"] {
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 0.55rem 0.9rem;
+            border: 1.5px solid var(--line-strong);
+            border-radius: 0.75rem;
+            background: #fff;
+            color: var(--ink-950);
+            min-width: 160px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .planner-group select:focus,
+        .planner-group input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(207, 154, 50, 0.18);
+        }
+        .planner-group input[type="number"] { width: 100px; min-width: 100px; }
+
+        .planner-btn {
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.58rem 1.3rem;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .planner-btn-primary {
+            background: linear-gradient(135deg, var(--accent-gold), #b8882a);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(207, 154, 50, 0.3);
+        }
+        .planner-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(207, 154, 50, 0.4); }
+        .planner-btn-primary:active { transform: scale(0.98); }
+        .planner-btn-secondary {
+            background: rgba(25, 61, 108, 0.08);
+            color: var(--ink-700);
+        }
+        .planner-btn-secondary:hover { background: rgba(25, 61, 108, 0.14); }
+
+        .planner-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ── Planner Result Panel ──────────────────────────── */
+        .planner-result {
+            background: linear-gradient(135deg, #fffdf5, #fef9e7);
+            border: 1.5px solid rgba(207, 154, 50, 0.25);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .planner-result.visible { display: block; animation: fadeSlideUp 0.35s ease; overflow: visible; }
+        .planner-result h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--ink-950);
+            margin: 0 0 0.6rem;
+        }
+        .planner-result p { font-size: 0.85rem; color: var(--ink-700); margin: 0 0 1rem; line-height: 1.55; }
+
+        .menu-suggestion {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 0.85rem;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.6rem;
+            overflow: visible;
+        }
+        .menu-suggestion h4 {
+            font-size: 0.9rem; font-weight: 800; color: var(--accent-navy); margin: 0 0 0.6rem;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .menu-suggestion h4 .add-course-btn {
+            font-size: 0.7rem; font-weight: 700; color: var(--accent-teal);
+            background: rgba(15, 123, 143, 0.08); border: 1px solid rgba(15, 123, 143, 0.2);
+            border-radius: 1rem; padding: 0.2rem 0.65rem; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .menu-suggestion h4 .add-course-btn:hover { background: rgba(15, 123, 143, 0.15); }
+
+        .menu-dish {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.6rem 0.75rem; margin-bottom: 0.45rem;
+            background: var(--surface-soft); border: 1px solid var(--line);
+            border-radius: 0.65rem; transition: all 0.2s;
+            position: relative; overflow: visible;
+        }
+        .menu-dish:hover { border-color: var(--accent-gold); }
+        .menu-dish-info { flex: 1; min-width: 0; }
+        .menu-dish-title {
+            font-size: 0.85rem; font-weight: 700; color: var(--ink-950);
+            margin: 0 0 0.1rem; line-height: 1.3;
+        }
+        .menu-dish-title a { color: inherit; text-decoration: none; }
+        .menu-dish-title a:hover { color: var(--accent-teal); }
+        .menu-dish-meta {
+            font-size: 0.72rem; color: var(--ink-500); line-height: 1.3;
+        }
+        .menu-dish-actions {
+            display: flex; gap: 0.35rem; flex-shrink: 0;
+        }
+        .dish-action-btn {
+            width: 28px; height: 28px; border-radius: 50%;
+            border: 1px solid var(--line); background: #fff;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; position: relative;
+        }
+        .dish-action-btn svg { width: 14px; height: 14px; stroke: var(--ink-500); fill: none; }
+        .dish-action-btn:hover { border-color: var(--accent-gold); }
+        .dish-action-btn:hover svg { stroke: var(--accent-gold); }
+        .dish-action-btn.remove:hover { border-color: var(--danger); }
+        .dish-action-btn.remove:hover svg { stroke: var(--danger); }
+
+        .swap-dropdown {
+            position: absolute; top: 100%; right: 0; margin-top: 0.3rem;
+            background: #fff; border: 1px solid var(--line-strong);
+            border-radius: 0.65rem; box-shadow: var(--shadow-lg);
+            min-width: 260px; max-height: 240px; overflow-y: auto;
+            z-index: 50; display: none;
+        }
+        .swap-dropdown.open { display: block; animation: fadeSlideUp 0.2s ease; }
+        .swap-option {
+            padding: 0.55rem 0.85rem; cursor: pointer;
+            border-bottom: 1px solid var(--line); font-size: 0.8rem;
+            color: var(--ink-700); transition: background 0.15s;
+        }
+        .swap-option:last-child { border-bottom: none; }
+        .swap-option:hover { background: rgba(207, 154, 50, 0.08); }
+        .swap-option strong { color: var(--ink-950); display: block; font-size: 0.82rem; }
+        .swap-option span { font-size: 0.7rem; color: var(--ink-500); }
+
+        .menu-summary {
+            background: rgba(15, 123, 143, 0.06);
+            border: 1px solid rgba(15, 123, 143, 0.15);
+            border-radius: 0.75rem; padding: 1rem 1.25rem;
+            margin-top: 1rem;
+        }
+        .menu-summary h4 { font-size: 0.88rem; font-weight: 700; color: var(--accent-teal); margin: 0 0 0.5rem; }
+        .summary-stat {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            font-size: 0.8rem; color: var(--ink-700); margin-right: 1.25rem; margin-bottom: 0.3rem;
+        }
+        .summary-stat strong { color: var(--ink-950); }
+
+        .prep-timeline {
+            background: #fff; border: 1px solid var(--line);
+            border-radius: 0.75rem; padding: 1rem 1.25rem; margin-top: 0.75rem;
+        }
+        .prep-timeline h4 { font-size: 0.88rem; font-weight: 700; color: var(--accent-navy); margin: 0 0 0.5rem; }
+        .timeline-item {
+            display: flex; gap: 0.75rem; padding: 0.4rem 0;
+            font-size: 0.8rem; color: var(--ink-700); border-bottom: 1px solid var(--line);
+        }
+        .timeline-item:last-child { border-bottom: none; }
+        .timeline-when {
+            font-weight: 700; color: var(--accent-gold); min-width: 100px; flex-shrink: 0;
+        }
+
+        .scaling-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+            margin-top: 1rem;
+        }
+        .scaling-table th {
+            background: rgba(207, 154, 50, 0.12);
+            font-weight: 700;
+            text-align: left;
+            padding: 0.5rem 0.75rem;
+            color: var(--ink-950);
+            border-bottom: 2px solid rgba(207, 154, 50, 0.25);
+        }
+        .scaling-table td {
+            padding: 0.45rem 0.75rem;
+            border-bottom: 1px solid var(--line);
+            color: var(--ink-700);
+        }
+        .scaling-table tr:last-child td { border-bottom: none; }
+
+        /* ── Category Tabs ─────────────────────────────────── */
+        .category-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .cat-tab {
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 0.5rem 1.1rem;
+            border: 1.5px solid var(--line);
+            border-radius: 2rem;
+            background: #fff;
+            color: var(--ink-700);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .cat-tab:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+        .cat-tab.active {
+            background: linear-gradient(135deg, var(--accent-gold), #b8882a);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 3px 10px rgba(207, 154, 50, 0.25);
+        }
+
+        /* ── Recipe Cards ──────────────────────────────────── */
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.15rem;
+        }
+
+        .recipe-card {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .recipe-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--accent-gold);
+        }
+
+        .recipe-header {
+            padding: 1.25rem 1.25rem 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        .recipe-card { text-decoration: none; display: block; color: inherit; }
+        .recipe-header-text { flex: 1; min-width: 0; }
+        .recipe-title { font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 700; color: var(--ink-950); margin: 0 0 0.15rem; }
+        .recipe-origin { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent-teal); margin: 0; }
+
+        .recipe-tags {
+            padding: 0 1.25rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin-bottom: 0.6rem;
+        }
+        .recipe-tag {
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.2rem 0.55rem;
+            border-radius: 1rem;
+            background: rgba(25, 61, 108, 0.06);
+            color: var(--ink-600);
+        }
+        .recipe-tag.holiday { background: rgba(207, 154, 50, 0.12); color: #8a6a1a; }
+        .recipe-tag.kosher { background: rgba(47, 159, 132, 0.12); color: #1a6e55; }
+
+        .recipe-desc {
+            padding: 0 1.25rem;
+            font-size: 0.82rem;
+            color: var(--ink-600);
+            line-height: 1.5;
+            margin: 0 0 0.75rem;
+        }
+
+        .recipe-meta {
+            padding: 0.65rem 1.25rem;
+            background: var(--surface-soft);
+            border-top: 1px solid var(--line);
+            display: flex;
+            gap: 1.25rem;
+            font-size: 0.75rem;
+            color: var(--ink-600);
+            font-weight: 600;
+        }
+        .recipe-meta span { display: flex; align-items: center; gap: 0.3rem; }
+
+
+        /* ── Search Bar ────────────────────────────────────── */
+        .search-bar {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        .search-bar input {
+            font-family: 'Manrope', sans-serif;
+            width: 100%;
+            padding: 0.7rem 1rem 0.7rem 2.5rem;
+            font-size: 0.88rem;
+            border: 1.5px solid var(--line-strong);
+            border-radius: 0.85rem;
+            background: #fff;
+            color: var(--ink-950);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(207, 154, 50, 0.18);
+        }
+        .search-bar svg {
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: var(--ink-500);
+        }
+
+        /* ── Animations ────────────────────────────────────── */
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .recipe-card { animation: fadeSlideUp 0.35s ease both; }
+        .recipe-grid .recipe-card:nth-child(2) { animation-delay: 0.05s; }
+        .recipe-grid .recipe-card:nth-child(3) { animation-delay: 0.1s; }
+        .recipe-grid .recipe-card:nth-child(4) { animation-delay: 0.15s; }
+        .recipe-grid .recipe-card:nth-child(5) { animation-delay: 0.2s; }
+        .recipe-grid .recipe-card:nth-child(6) { animation-delay: 0.25s; }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--ink-500);
+            font-size: 0.95rem;
+        }
+
+        /* ── Responsive ────────────────────────────────────── */
+        @media (max-width: 768px) {
+            .food-container { padding: 0 1rem; }
+            .food-hero { padding: 2rem 0 1.25rem; }
+            .section-card { padding: 1.25rem; }
+            .planner-bar { flex-direction: column; }
+            .planner-group select,
+            .planner-group input[type="number"] { width: 100%; min-width: unset; }
+            .recipe-grid { grid-template-columns: 1fr; }
+            .category-tabs { gap: 0.35rem; }
+            .cat-tab { font-size: 0.75rem; padding: 0.4rem 0.85rem; }
+        }
+
+        /* ── Pagination ───────────────────────────────────── */
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            padding: 1rem 0;
+        }
+        .pagination-info {
+            font-size: 0.82rem;
+            color: var(--ink-600);
+            font-weight: 500;
+        }
+        .pagination-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .page-btn {
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            min-width: 36px;
+            height: 36px;
+            padding: 0 0.5rem;
+            border: 1.5px solid var(--line);
+            border-radius: 0.6rem;
+            background: #fff;
+            color: var(--ink-700);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .page-btn:hover:not(:disabled):not(.active) {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+        .page-btn.active {
+            background: linear-gradient(135deg, var(--accent-gold), #b8882a);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 2px 8px rgba(207, 154, 50, 0.25);
+        }
+        .page-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+        .page-btn svg { width: 16px; height: 16px; }
+        .page-ellipsis {
+            font-size: 0.82rem;
+            color: var(--ink-500);
+            padding: 0 0.2rem;
+            user-select: none;
+        }
+        .page-size-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.82rem;
+            color: var(--ink-600);
+        }
+        .page-size-group select {
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 0.35rem 0.6rem;
+            border: 1.5px solid var(--line);
+            border-radius: 0.5rem;
+            background: #fff;
+            color: var(--ink-950);
+            cursor: pointer;
+        }
+        .page-size-group select:focus { outline: none; border-color: var(--accent-gold); }
+
+        @media (max-width: 768px) {
+            .pagination-controls { flex-direction: column; align-items: stretch; text-align: center; }
+            .pagination-nav { justify-content: center; }
+            .page-size-group { justify-content: center; }
+        }
+
+        /* ── Footer spacing ────────────────────────────────── */
+        .food-footer-spacer { height: 3rem; }
+    </style>
+</head>
+<body class="food-body">
+    <!-- ── Shared Header ────────────────────────────────────── -->
+    <div id="shared-header-mount" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%);min-height:64px"></div>
+    <script src="/js/header-loader.js"></script>
+
+    <main>
+        <div class="food-container">
+
+            <!-- ── Hero ──────────────────────────────────────── -->
+            <div class="food-hero">
+                <h1>The Jewish Table</h1>
+                <p>Authentic recipes from Morocco, Iraq, Persia, Yemen, and the Ashkenazi heartland — with a smart planner to help you cook for any holiday, Shabbat, or gathering.</p>
+            </div>
+
+            <!-- ══════════════════════════════════════════════════
+                 SMART EVENT PLANNER
+                 ══════════════════════════════════════════════════ -->
+            <div class="section-card" id="planner-section">
+                <h2>Smart Event Planner</h2>
+                <p class="section-subtitle">Build the perfect menu for any occasion. Choose your event, set your preferences, and customize every dish.</p>
+
+                <div class="planner-bar">
+                    <div class="planner-group">
+                        <label for="planner-event">Event Type</label>
+                        <select id="planner-event">
+                            <option value="">Choose an event...</option>
+                            <option value="rosh-hashanah">Rosh Hashanah</option>
+                            <option value="yom-kippur">Yom Kippur (Break Fast)</option>
+                            <option value="sukkot">Sukkot</option>
+                            <option value="hanukkah">Hanukkah</option>
+                            <option value="purim">Purim</option>
+                            <option value="passover">Passover</option>
+                            <option value="shavuot">Shavuot</option>
+                            <option value="mimouna">Mimouna</option>
+                            <option value="shabbat">Shabbat Dinner</option>
+                            <option value="shabbat-lunch">Shabbat Lunch</option>
+                            <option value="friends">Friends & Fun</option>
+                            <option value="vip">Important Guests</option>
+                            <option value="custom">Custom Menu (pick your own)</option>
+                        </select>
+                    </div>
+                    <div class="planner-group">
+                        <label for="planner-guests">Guests</label>
+                        <input type="number" id="planner-guests" min="1" max="200" value="10" placeholder="10">
+                    </div>
+                    <div class="planner-group">
+                        <label for="planner-vibe">Vibe</label>
+                        <select id="planner-vibe">
+                            <option value="comfort">Comfort & Family</option>
+                            <option value="elegant">Elegant & Impressive</option>
+                            <option value="casual">Casual & Fun</option>
+                        </select>
+                    </div>
+                    <div class="planner-group">
+                        <label for="planner-dietary">Dietary</label>
+                        <select id="planner-dietary">
+                            <option value="any">No Restrictions</option>
+                            <option value="meat">Meat Only (no dairy)</option>
+                            <option value="dairy">Dairy Only (no meat)</option>
+                            <option value="pareve">Pareve Only</option>
+                            <option value="vegetarian">Vegetarian</option>
+                            <option value="gluten-free">Gluten-Free</option>
+                        </select>
+                    </div>
+                    <div class="planner-group">
+                        <label for="planner-complexity">Effort Level</label>
+                        <select id="planner-complexity">
+                            <option value="any">Any Difficulty</option>
+                            <option value="easy">Quick & Easy</option>
+                            <option value="medium">Moderate</option>
+                            <option value="advanced">Go All Out</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="planner-actions">
+                    <button class="planner-btn planner-btn-primary" onclick="generatePlan()">Build My Menu</button>
+                    <button class="planner-btn planner-btn-secondary" onclick="clearPlan()">Start Over</button>
+                </div>
+
+                <div class="planner-result" id="planner-result"></div>
+            </div>
+
+            <!-- ══════════════════════════════════════════════════
+                 RECIPE BROWSER
+                 ══════════════════════════════════════════════════ -->
+            <div class="section-card">
+                <h2>Recipe Collection</h2>
+                <p class="section-subtitle">120 authentic recipes spanning every Jewish culinary tradition. Click any recipe to view the full instructions.</p>
+
+                <!-- Search -->
+                <div class="search-bar">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <input type="text" id="recipe-search" placeholder="Search recipes (e.g. &quot;lamb&quot;, &quot;Passover&quot;, &quot;Moroccan&quot;)..." oninput="filterRecipes()">
+                </div>
+
+                <!-- Category Tabs -->
+                <div class="category-tabs" id="category-tabs">
+                    <button class="cat-tab active" data-cat="all" onclick="setCategory('all')">All Recipes</button>
+                    <button class="cat-tab" data-cat="starters" onclick="setCategory('starters')">Starters</button>
+                    <button class="cat-tab" data-cat="soups" onclick="setCategory('soups')">Soups & Stews</button>
+                    <button class="cat-tab" data-cat="mains" onclick="setCategory('mains')">Festive Mains</button>
+                    <button class="cat-tab" data-cat="breads" onclick="setCategory('breads')">Breads & Sides</button>
+                    <button class="cat-tab" data-cat="sweets" onclick="setCategory('sweets')">Sweets & Pastries</button>
+                </div>
+
+                <!-- Recipe Grid -->
+                <div class="recipe-grid" id="recipe-grid"></div>
+                <div class="no-results" id="no-results" style="display:none;">No recipes match your search. Try a different term.</div>
+                <div class="pagination-controls" id="pagination-controls"></div>
+            </div>
+
+            <div class="food-footer-spacer"></div>
+        </div>
+    </main>
+
+    <!-- ── Shared Footer ────────────────────────────────────── -->
+    <div id="shared-footer-mount"></div>
+    <script src="/js/footer-loader.js"></script>
+
+    <script>
+    /* ══════════════════════════════════════════════════════════════
+       RECIPE DATA — 120 authentic Jewish & Israeli recipes
+       ══════════════════════════════════════════════════════════════ */
+    var RECIPES = [
+        {
+            id: 1, cat: 'starters', slug: 'spicy-moroccan-fish-chraime',
+            title: 'Spicy Moroccan Fish (Chraime)',
+            origin: 'Moroccan',
+            tags: ['Shabbat', 'Purim', 'Rosh Hashanah'],
+            holidays: ['shabbat', 'purim', 'rosh-hashanah'],
+            desc: 'White fish fillets simmered in a thick, pungent tomato sauce loaded with paprika, cumin, and cayenne pepper. A staple of Moroccan Friday night dinners and holiday tables.',
+            time: '35 min', servings: '4', difficulty: 'Easy'
+        },
+        {
+            id: 2, cat: 'starters', slug: 'iraqi-chickpea-sambousak',
+            title: 'Iraqi Chickpea Sambousak',
+            origin: 'Iraqi / Mizrahi',
+            tags: ['Hanukkah', 'Purim', 'Fried'],
+            holidays: ['hanukkah', 'purim'],
+            desc: 'Golden fried turnovers with a filling of mashed chickpeas, deeply caramelized onions, and turmeric. A highlight of the Iraqi Hanukkah and Purim tables.',
+            time: '1 hr 30 min', servings: '24 pieces', difficulty: 'Medium'
+        },
+        {
+            id: 3, cat: 'starters', slug: 'spinach-cheese-bourekas',
+            title: 'Sheet Pan Spinach & Cheese Bourekas',
+            origin: 'Sephardic',
+            tags: ['Shavuot', 'Dairy', 'Vegetarian'],
+            holidays: ['shavuot', 'shabbat'],
+            desc: 'Layers of golden puff pastry encasing a rich filling of feta, ricotta, mozzarella, and fresh spinach. Cut into elegant diamonds and topped with everything bagel seasoning.',
+            time: '1 hr 15 min', servings: '16 pieces', difficulty: 'Easy'
+        },
+        {
+            id: 4, cat: 'starters', slug: 'persian-gondi',
+            title: 'Persian Gondi (Chickpea Dumplings)',
+            origin: 'Persian',
+            tags: ['Shabbat', 'Gluten-Free Option'],
+            holidays: ['shabbat'],
+            desc: 'Cardamom-scented chicken and chickpea flour dumplings simmered gently in golden broth. The quintessential Persian Shabbat starter, served in nearly every Iranian Jewish home on Friday nights.',
+            time: '4 hrs 30 min', servings: '8', difficulty: 'Medium'
+        },
+        {
+            id: 5, cat: 'starters', slug: 'classic-gefilte-fish',
+            title: 'Classic Gefilte Fish with Chrain',
+            origin: 'Ashkenazi',
+            tags: ['Passover', 'Rosh Hashanah', 'Shabbat'],
+            holidays: ['passover', 'rosh-hashanah', 'shabbat'],
+            desc: 'Handmade poached fish patties from a blend of carp, whitefish, and pike, served cold with the traditional spicy beet horseradish known as chrain. A cornerstone of Ashkenazi holiday tables.',
+            time: '2 hrs + chilling', servings: '12 patties', difficulty: 'Advanced'
+        },
+        {
+            id: 6, cat: 'starters', slug: 'sephardic-agristada-fish',
+            title: 'Sephardic Agristada Fish (Lemon-Egg Sauce)',
+            origin: 'Sephardic / Syrian',
+            tags: ['Shabbat', 'Passover'],
+            holidays: ['shabbat', 'passover'],
+            desc: 'Fried white fish bathed in a velvety, custard-like lemon-egg sauce. An elegant Sephardic classic passed down through generations of Syrian and Turkish Jewish families.',
+            time: '40 min', servings: '6', difficulty: 'Medium'
+        },
+        {
+            id: 7, cat: 'starters', slug: 'authentic-israeli-hummus',
+            title: 'Authentic Israeli Hummus',
+            origin: 'Israeli',
+            tags: ['Year-Round', 'Vegan', 'Gluten-Free'],
+            holidays: ['shabbat', 'friends'],
+            desc: 'Silky-smooth, cloud-like hummus with a spicy tatbilah dressing. The secret is over-cooking the chickpeas until they practically melt and processing with high-quality tahini for a full 8 minutes.',
+            time: '13 hrs 20 min', servings: '8', difficulty: 'Medium'
+        },
+        {
+            id: 8, cat: 'starters', slug: 'iraqi-kubbeh-batata',
+            title: 'Iraqi Kubbeh Batata (Potato Meat Dumplings)',
+            origin: 'Iraqi / Mizrahi',
+            tags: ['Hanukkah', 'Passover', 'Gluten-Free'],
+            holidays: ['hanukkah', 'passover'],
+            desc: 'Crispy fried dumplings with a creamy mashed potato shell encasing a fragrant filling of ground beef seasoned with cinnamon and nutmeg. Perfect for Passover since they use matzo meal instead of flour.',
+            time: '1 hr 15 min', servings: '12 pieces', difficulty: 'Medium'
+        },
+        {
+            id: 9, cat: 'starters', slug: 'homemade-falafel',
+            title: 'Homemade Falafel (Green Herb Style)',
+            origin: 'Israeli',
+            tags: ['Year-Round', 'Vegan'],
+            holidays: ['friends', 'shabbat'],
+            desc: 'Vibrant green on the inside from generous handfuls of fresh cilantro and parsley. Made from soaked (never cooked) chickpeas for the perfect crispy-outside, fluffy-inside texture.',
+            time: '12 hrs 45 min', servings: '20 pieces', difficulty: 'Medium'
+        },
+        {
+            id: 10, cat: 'starters', slug: 'moroccan-carrot-salad',
+            title: 'Moroccan Carrot Salad',
+            origin: 'Moroccan',
+            tags: ['Year-Round', 'Vegan', 'Gluten-Free'],
+            holidays: ['shabbat', 'rosh-hashanah', 'friends'],
+            desc: 'Tender carrot coins tossed with toasted cumin seeds, garlic, turmeric, paprika, and tamarind. A vibrant, tangy salad that tastes even better the next day.',
+            time: '25 min + overnight chill', servings: '6', difficulty: 'Easy'
+        },
+        {
+            id: 11, cat: 'soups', slug: 'matzah-ball-soup',
+            title: 'Fluffy Matzah Ball Soup',
+            origin: 'Ashkenazi',
+            tags: ['Passover', 'Shabbat', 'Year-Round'],
+            holidays: ['passover', 'shabbat', 'rosh-hashanah'],
+            desc: 'Crystal-clear golden chicken broth with cloud-like matzah balls that practically dissolve on the tongue. The undisputed centerpiece of the Passover Seder table, but beloved all year round.',
+            time: '4 hrs 15 min', servings: '8', difficulty: 'Medium'
+        },
+        {
+            id: 12, cat: 'soups', slug: 'moroccan-harira-soup',
+            title: 'Moroccan Harira Soup',
+            origin: 'Moroccan',
+            tags: ['Yom Kippur', 'Year-Round'],
+            holidays: ['yom-kippur'],
+            desc: 'A thick, hearty tomato-based soup brimming with chickpeas, lentils, fresh herbs, and fine noodles. The traditional dish for breaking the Yom Kippur fast across Moroccan Jewish communities.',
+            time: '2 hrs 5 min', servings: '10', difficulty: 'Easy'
+        },
+        {
+            id: 13, cat: 'soups', slug: 'iraqi-kubbeh-hamusta',
+            title: 'Iraqi Kubbeh Hamusta (Sour Soup)',
+            origin: 'Iraqi / Mizrahi',
+            tags: ['Shabbat', 'Year-Round'],
+            holidays: ['shabbat', 'sukkot'],
+            desc: 'Semolina dumplings stuffed with spiced ground beef, simmered in a tart, lemony celery broth. The crown jewel of Iraqi Jewish cooking and a labor of love that rewards every minute of effort.',
+            time: '2 hrs', servings: '8', difficulty: 'Advanced'
+        },
+        {
+            id: 14, cat: 'soups', slug: 'yemenite-chicken-soup',
+            title: 'Yemenite Chicken Soup with Hawaij',
+            origin: 'Yemenite',
+            tags: ['Shabbat', 'Year-Round'],
+            holidays: ['shabbat'],
+            desc: 'A deeply golden, aromatic soup spiced with hawaij — a Yemenite blend of cumin, turmeric, black pepper, and cloves. Served with fiery zhug and spongy bread.',
+            time: '1 hr 30 min', servings: '8', difficulty: 'Easy'
+        },
+        {
+            id: 15, cat: 'soups', slug: 'moroccan-schina-hamin',
+            title: 'Moroccan S\'china (Overnight Hamin)',
+            origin: 'Moroccan',
+            tags: ['Shabbat', 'Slow-Cooked'],
+            holidays: ['shabbat'],
+            desc: 'The Moroccan Shabbat slow-cooked stew with brisket, marrow bones, chickpeas, white beans, potatoes, and eggs that cook for 8 or more hours overnight at low heat.',
+            time: '10+ hrs', servings: '8', difficulty: 'Medium'
+        },
+        {
+            id: 16, cat: 'mains', slug: 'fig-pomegranate-brisket',
+            title: 'Fig & Pomegranate Braised Brisket',
+            origin: 'Modern Israeli',
+            tags: ['Rosh Hashanah', 'Shabbat', 'Sukkot'],
+            holidays: ['rosh-hashanah', 'shabbat', 'sukkot', 'vip'],
+            desc: 'A show-stopping brisket braised low and slow with pomegranate molasses, dried figs, white wine, and honey. The ultimate centerpiece for the Rosh Hashanah table.',
+            time: '5 hrs', servings: '10-12', difficulty: 'Medium'
+        },
+        {
+            id: 17, cat: 'mains', slug: 'moroccan-lamb-tagine',
+            title: 'Moroccan Lamb Tagine with Prunes & Apricots (Mrouzia)',
+            origin: 'Moroccan',
+            tags: ['Sukkot', 'Rosh Hashanah', 'Special Guests'],
+            holidays: ['sukkot', 'rosh-hashanah', 'vip'],
+            desc: 'Fork-tender lamb shoulder braised with saffron, cinnamon, dried apricots, and prunes. A dish reserved for the most important occasions and distinguished guests.',
+            time: '2 hrs 45 min', servings: '8', difficulty: 'Medium'
+        },
+        {
+            id: 18, cat: 'mains', slug: 'iraqi-tbeet',
+            title: 'Iraqi Overnight Chicken & Rice (Tbeet)',
+            origin: 'Iraqi / Mizrahi',
+            tags: ['Shabbat', 'Slow-Cooked'],
+            holidays: ['shabbat'],
+            desc: 'A whole chicken stuffed with cardamom and rose petal spiced rice, buried in more rice, and slow-cooked overnight. The rice at the bottom becomes a crispy, golden crust.',
+            time: '9+ hrs', servings: '6', difficulty: 'Advanced'
+        },
+        {
+            id: 19, cat: 'mains', slug: 'iraqi-stuffed-vegetables-mahshi',
+            title: 'Iraqi Stuffed Vegetables (Mahshi)',
+            origin: 'Iraqi / Mizrahi',
+            tags: ['Sukkot', 'Year-Round'],
+            holidays: ['sukkot'],
+            desc: 'Hollowed zucchini, bell peppers, and eggplants filled with a mixture of rice and spiced beef, then simmered upright in a garlicky tomato broth until the rice is fluffy and the vegetables are tender.',
+            time: '2 hrs', servings: '8', difficulty: 'Advanced'
+        },
+        {
+            id: 20, cat: 'mains', slug: 'israeli-chicken-schnitzel',
+            title: 'Israeli Chicken Schnitzel',
+            origin: 'Israeli',
+            tags: ['Year-Round', 'Kid-Friendly'],
+            holidays: ['friends', 'shabbat'],
+            desc: 'Paper-thin chicken breast coated in sesame-studded paprika breadcrumbs and fried to a deep golden crunch. Israel\'s unofficial national dish and the ultimate comfort food.',
+            time: '30 min', servings: '4', difficulty: 'Easy'
+        },
+        {
+            id: 21, cat: 'mains', slug: 'mejadra-lentils-rice',
+            title: 'Mejadra (Lentils & Rice)',
+            origin: 'Israeli / Levantine',
+            tags: ['Year-Round', 'Vegan'],
+            holidays: ['shabbat', 'friends'],
+            desc: 'Spiced lentils and fluffy rice crowned with a mountain of deeply caramelized, crispy fried onion rings. Simple, magnificent, and deeply satisfying.',
+            time: '1 hr', servings: '6', difficulty: 'Easy'
+        },
+        {
+            id: 22, cat: 'mains', slug: 'pomegranate-glazed-salmon',
+            title: 'Pomegranate Glazed Salmon',
+            origin: 'Modern Israeli',
+            tags: ['Rosh Hashanah', 'Healthy'],
+            holidays: ['rosh-hashanah'],
+            desc: 'Salmon fillets with a tart, glossy pomegranate molasses glaze, scattered with jewel-like pomegranate seeds and fresh herbs. An elegant lighter option for the New Year.',
+            time: '25 min', servings: '4', difficulty: 'Easy'
+        },
+        {
+            id: 23, cat: 'breads', slug: 'holiday-challah',
+            title: '"Indestructible" Holiday Challah',
+            origin: 'Ashkenazi',
+            tags: ['Shabbat', 'Rosh Hashanah', 'Every Holiday'],
+            holidays: ['shabbat', 'rosh-hashanah', 'sukkot'],
+            desc: 'A foolproof challah recipe with a triple rise and a glossy double egg wash. For Rosh Hashanah, shape into a round spiral and add honey to the dough. This recipe has never failed anyone.',
+            time: '4 hrs (including rising)', servings: '2 loaves', difficulty: 'Medium'
+        },
+        {
+            id: 24, cat: 'breads', slug: 'chocolate-babka',
+            title: 'Uri Scheft\'s Chocolate Babka',
+            origin: 'Israeli / Ashkenazi',
+            tags: ['Shabbat', 'Shavuot'],
+            holidays: ['shavuot', 'shabbat'],
+            desc: 'A towering, laminated babka with swirls of Nutella and dark chocolate chips running through a rich, buttery brioche-like dough, finished with a sticky sugar syrup glaze.',
+            time: '6+ hrs (including chilling and rising)', servings: '2 loaves', difficulty: 'Advanced'
+        },
+        {
+            id: 25, cat: 'breads', slug: 'yerushalmi-kugel',
+            title: 'Yerushalmi Kugel',
+            origin: 'Israeli / Jerusalem',
+            tags: ['Shabbat', 'Year-Round'],
+            holidays: ['shabbat'],
+            desc: 'A Jerusalem institution — thin egg noodles tossed in dark, bitter caramel with a bold, unexpected kick of black pepper. Sweet, peppery, and addictive.',
+            time: '2 hrs 30 min', servings: '10', difficulty: 'Medium'
+        },
+        {
+            id: 26, cat: 'breads', slug: 'dairy-noodle-kugel',
+            title: 'Sweet Dairy Noodle Kugel',
+            origin: 'Ashkenazi',
+            tags: ['Shavuot', 'Yom Kippur Break Fast', 'Dairy'],
+            holidays: ['shavuot', 'yom-kippur'],
+            desc: 'Wide egg noodles baked in a creamy custard of cottage cheese, sour cream, and milk, studded with orange-soaked raisins. A rich, comforting dish that bridges the gap between side dish and dessert.',
+            time: '1 hr 35 min', servings: '12', difficulty: 'Easy'
+        },
+        {
+            id: 27, cat: 'sweets', slug: 'moroccan-moufleta',
+            title: 'Moroccan Moufleta (Mimouna Crepes)',
+            origin: 'Moroccan',
+            tags: ['Mimouna', 'Passover'],
+            holidays: ['mimouna', 'passover'],
+            desc: 'Paper-thin, chewy, stretchy crepes stacked into a tower and doused in melted butter and honey. The signature dish of the Mimouna celebration marking the end of Passover.',
+            time: '1 hr 30 min', servings: '8 (stack of 24 crepes)', difficulty: 'Medium'
+        },
+        {
+            id: 28, cat: 'sweets', slug: 'moroccan-sfenj',
+            title: 'Moroccan Sfenj (Spongy Donuts)',
+            origin: 'Moroccan',
+            tags: ['Hanukkah', 'Fried'],
+            holidays: ['hanukkah'],
+            desc: 'Light, spongy ring donuts made from a very soft, sticky yeast dough and fried to a golden puff. Traditionally dipped in granulated sugar or drizzled with honey while still piping hot.',
+            time: '1 hr 30 min', servings: '20 pieces', difficulty: 'Medium'
+        },
+        {
+            id: 29, cat: 'sweets', slug: 'israeli-jelly-sufganiyot',
+            title: 'Israeli Jelly Sufganiyot',
+            origin: 'Israeli',
+            tags: ['Hanukkah', 'Fried'],
+            holidays: ['hanukkah'],
+            desc: 'Classic Hanukkah jelly donuts: pillowy fried dough rounds filled with sweet strawberry jam and dusted with a cloud of powdered sugar. The taste of Israeli Hanukkah.',
+            time: '2 hrs 45 min', servings: '16 pieces', difficulty: 'Medium'
+        },
+        {
+            id: 30, cat: 'sweets', slug: 'jewish-honey-cake',
+            title: 'Classic Jewish Honey Cake (Lekach)',
+            origin: 'Ashkenazi',
+            tags: ['Rosh Hashanah'],
+            holidays: ['rosh-hashanah'],
+            desc: 'The quintessential Rosh Hashanah dessert: a deeply moist, oil-based cake rich with honey, warm spices, and the subtle complexity of strong coffee. Symbolizes the wish for a sweet New Year.',
+            time: '1 hr 10 min', servings: '12', difficulty: 'Easy'
+        },
+        {
+            id: 31, cat: 'sweets', slug: 'maamoul-date-cookies',
+            title: 'Ma\'amoul (Date-Filled Cookies)',
+            origin: 'Sephardic / Levantine',
+            tags: ['Purim', 'Year-Round'],
+            holidays: ['purim', 'shabbat'],
+            desc: 'Buttery, melt-in-your-mouth semolina cookies stuffed with a spiced Medjool date paste and dusted with a snowfall of powdered sugar. Shared across Sephardic, Mizrahi, and Arab communities.',
+            time: '1 hr + overnight', servings: '24 cookies', difficulty: 'Medium'
+        },
+        {
+            id: 32, cat: 'sweets', slug: 'coconut-cream-malabi',
+            title: 'Coconut Cream Malabi',
+            origin: 'Israeli / Turkish',
+            tags: ['Year-Round', 'Dairy-Free', 'Gluten-Free'],
+            holidays: ['rosh-hashanah', 'friends', 'vip'],
+            desc: 'A silky, trembling coconut milk pudding scented with rose water, pooled with ruby pomegranate molasses and scattered with crushed pistachios. Elegant, refreshing, and effortless.',
+            time: '15 min + 1 hr chill', servings: '4', difficulty: 'Easy'
+        },
+        {
+            id: 33, cat: 'starters', slug: 'chopped-liver',
+            title: 'Classic Ashkenazi Chopped Liver',
+            origin: 'Ashkenazi',
+            tags: ['Shabbat', 'Rosh Hashanah', 'Year-Round'],
+            holidays: ['shabbat', 'rosh-hashanah'],
+            desc: 'Rich, savory, and deeply traditional, made from broiled chicken livers mixed with deeply caramelized onions, hard-boiled eggs, and schmaltz. A cornerstone of the Ashkenazi appetizer table.',
+            time: '50 min + overnight chill', servings: '8', difficulty: 'Medium'
+        },
+        {
+            id: 34, cat: 'starters', slug: 'homemade-labneh',
+            title: 'Homemade Labneh with Za\'atar',
+            origin: 'Israeli / Levantine',
+            tags: ['Year-Round', 'Dairy', 'Gluten-Free'],
+            holidays: ['shabbat', 'friends'],
+            desc: 'Thick, tangy strained yogurt drowned in green olive oil and showered with fragrant za\'atar. The simplest and most satisfying appetizer or breakfast spread on the Israeli table.',
+            time: '24-48 hrs', servings: '6', difficulty: 'Easy'
+        },
+        {
+            id: 35, cat: 'starters', slug: 'israeli-chopped-salad',
+            title: 'Authentic Israeli Chopped Salad',
+            origin: 'Israeli',
+            tags: ['Year-Round', 'Vegan', 'Gluten-Free'],
+            holidays: ['shabbat', 'friends'],
+            desc: 'The freshest, crunchiest salad in the world — finely diced cucumber and tomato dressed with nothing but lemon juice, olive oil, and fresh herbs. The cornerstone of every Israeli meal.',
+            time: '15 min', servings: '4', difficulty: 'Easy'
+        },
+        {
+            id: 36, cat: 'starters', slug: 'zaalouk',
+            title: 'Zaalouk (Moroccan Eggplant & Tomato Dip)',
+            origin: 'Moroccan',
+            tags: ['Year-Round', 'Vegan', 'Gluten-Free'],
+            holidays: ['shabbat', 'friends'],
+            desc: 'A smoky, spiced dip of roasted eggplant mashed with tomatoes, cumin, paprika, and fresh cilantro. Served at room temperature with crusty bread, it is an essential part of the Moroccan mezze spread.',
+            time: '1 hr 10 min', servings: '6', difficulty: 'Easy'
+        },
+        {
+            id: 37, cat: 'starters', slug: 'keftes-de-prasa',
+            title: 'Keftes de Prasa (Sephardic Leek Patties)',
+            origin: 'Sephardic / Turkish',
+            tags: ['Rosh Hashanah', 'Passover', 'Vegetarian Option'],
+            holidays: ['rosh-hashanah', 'passover'],
+            desc: 'Tender fried patties made from slow-cooked leeks and mashed potatoes, bound with eggs and matzo meal. A Rosh Hashanah tradition symbolizing the desire to cut off enemies.',
+            time: '1 hr 10 min + 30 min chill', servings: '16 patties', difficulty: 'Medium'
+        },
+        {
+            id: 38, cat: 'starters', slug: 'syrian-lachmagine',
+            title: 'Syrian Lachmagine (Tamarind Meat Pies)',
+            origin: 'Syrian / Sephardic',
+            tags: ['Year-Round', 'Party Food'],
+            holidays: ['friends', 'purim'],
+            desc: 'Thin, crispy rounds of dough topped with a tangy, tamarind-laced meat mixture, garnished with pine nuts and pomegranate seeds. A Syrian-Jewish party essential.',
+            time: '2 hrs 48 min', servings: '24 pieces', difficulty: 'Medium'
+        },
+        {
+            id: 39, cat: 'starters', slug: 'israeli-arayes',
+            title: 'Israeli Arayes (Grilled Meat-Stuffed Pita)',
+            origin: 'Israeli / Levantine',
+            tags: ['Year-Round', 'Grilling'],
+            holidays: ['friends'],
+            desc: 'Pita pockets stuffed with spiced ground lamb and grilled until the bread is shatteringly crisp and the meat is juicy. The ultimate Israeli street food turned appetizer.',
+            time: '35 min', servings: '8 halves', difficulty: 'Easy'
+        },
+        {
+            id: 40, cat: 'starters', slug: 'matbucha',
+            title: 'Matbucha (Sephardic Tomato & Pepper Salad)',
+            origin: 'Moroccan / Israeli',
+            tags: ['Year-Round', 'Vegan', 'Gluten-Free'],
+            holidays: ['shabbat', 'friends'],
+            desc: 'A thick, jammy, slow-cooked salad of roasted peppers and tomatoes reduced to a concentrated, spicy, sweet spread. A staple of the Israeli mezze table.',
+            time: '1 hr 45 min', servings: '6', difficulty: 'Easy'
+        },
+        {
+            id: 41, cat: 'starters', slug: 'homemade-amba',
+            title: 'Homemade Amba (Iraqi Mango Sauce)',
+            origin: 'Iraqi / Mizrahi',
+            tags: ['Year-Round', 'Vegan', 'Condiment'],
+            holidays: ['friends'],
+            desc: 'The iconic tangy, mustardy mango condiment that defines Iraqi and Israeli street food. Essential on sabich, falafel, and shawarma.',
+            time: '40 min + overnight', servings: '2 cups', difficulty: 'Medium'
+        },
+        {
+            id: 42, cat: 'mains', slug: 'moroccan-chicken-pastilla',
+            title: 'Moroccan Chicken Pastilla (B\'stilla)',
+            origin: 'Moroccan',
+            tags: ['Special Guests', 'Rosh Hashanah'],
+            holidays: ['rosh-hashanah', 'vip'],
+            desc: 'An extraordinary savory pie of shredded chicken, silky egg custard, and sweetened almonds wrapped in crispy phyllo and dusted with powdered sugar and cinnamon. The ultimate Moroccan showpiece.',
+            time: '2 hrs 35 min', servings: '8', difficulty: 'Advanced'
+        },
+        {
+            id: 43, cat: 'mains', slug: 'stuffed-cabbage-holishkes',
+            title: 'Holishkes (Ashkenazi Stuffed Cabbage)',
+            origin: 'Ashkenazi',
+            tags: ['Sukkot', 'Year-Round'],
+            holidays: ['sukkot'],
+            desc: 'Tender cabbage leaves wrapped around a savory filling of ground beef and rice, simmered for hours in a sweet-and-sour tomato sauce. A beloved Sukkot tradition.',
+            time: '3 hrs 45 min', servings: '12 rolls', difficulty: 'Medium'
+        },
+        {
+            id: 44, cat: 'mains', slug: 'persian-fesenjan',
+            title: 'Persian Fesenjan (Pomegranate Walnut Stew)',
+            origin: 'Persian',
+            tags: ['Special Guests', 'Rosh Hashanah'],
+            holidays: ['rosh-hashanah', 'vip'],
+            desc: 'A deeply complex, velvety stew of chicken thighs braised in a sauce of finely ground toasted walnuts and pomegranate molasses. One of the most sophisticated dishes in the Persian Jewish repertoire.',
+            time: '2 hrs 20 min', servings: '6', difficulty: 'Medium'
+        },
+        {
+            id: 45, cat: 'mains', slug: 'ghormeh-sabzi',
+            title: 'Ghormeh Sabzi (Persian Herb Stew)',
+            origin: 'Persian',
+            tags: ['Shabbat', 'Year-Round'],
+            holidays: ['shabbat'],
+            desc: 'Iran\'s national dish — a deeply herbaceous stew of slow-braised beef with mountains of fried fresh herbs, kidney beans, and the tangy punch of dried Persian limes.',
+            time: '3 hrs 15 min', servings: '6', difficulty: 'Medium'
+        },
+        {
+            id: 46, cat: 'soups', slug: 'iraqi-kubbeh-bamia',
+            title: 'Iraqi Kubbeh Bamia (Okra Soup)',
+            origin: 'Iraqi / Mizrahi',
+            tags: ['Shabbat', 'Year-Round'],
+            holidays: ['shabbat'],
+            desc: 'Semolina dumplings stuffed with spiced meat, simmered in a sweet-and-sour okra and tomato broth. A beloved variation in the Iraqi kubbeh soup family.',
+            time: '1 hr 45 min', servings: '8', difficulty: 'Advanced'
+        },
+        {
+            id: 47, cat: 'breads', slug: 'yemenite-jachnun',
+            title: 'Yemenite Jachnun (Overnight Bread)',
+            origin: 'Yemenite',
+            tags: ['Shabbat', 'Slow-Cooked'],
+            holidays: ['shabbat'],
+            desc: 'A rich, buttery, slow-baked bread that cooks overnight at extremely low heat, emerging deeply caramelized and sweet. Served for Shabbat morning breakfast with grated tomato and fiery zhug.',
+            time: '16+ hrs', servings: '12 rolls', difficulty: 'Advanced'
+        },
+        {
+            id: 48, cat: 'breads', slug: 'yemenite-kubaneh',
+            title: 'Yemenite Kubaneh (Overnight Rolls)',
+            origin: 'Yemenite',
+            tags: ['Shabbat', 'Slow-Cooked'],
+            holidays: ['shabbat'],
+            desc: 'Pull-apart butter rolls baked overnight at the lowest possible oven temperature. They emerge soft, golden, and impossibly tender for Shabbat morning.',
+            time: '10-12 hrs', servings: '8 rolls', difficulty: 'Medium'
+        },
+        {
+            id: 49, cat: 'breads', slug: 'yemenite-malawach',
+            title: 'Yemenite Malawach (Fried Flaky Bread)',
+            origin: 'Yemenite',
+            tags: ['Shabbat', 'Year-Round'],
+            holidays: ['shabbat', 'friends'],
+            desc: 'A rich, laminated flatbread with dozens of buttery layers that puff and crisp when pan-fried. Like a savory croissant in flatbread form.',
+            time: '50 min + overnight', servings: '8 pieces', difficulty: 'Medium'
+        },
+        {
+            id: 50, cat: 'mains', slug: 'iraqi-ingeryieh',
+            title: 'Iraqi Ingeryieh (Sweet & Sour Eggplant Stew)',
+            origin: 'Iraqi / Mizrahi',
+            tags: ['Sukkot', 'Year-Round'],
+            holidays: ['sukkot'],
+            desc: 'A layered casserole of tender braised meat, fried eggplant slices, caramelized onions, and tomatoes, all bound by a tangy tamarind-sweetened sauce.',
+            time: '4 hrs 40 min', servings: '8', difficulty: 'Medium'
+        },
+        {
+            id: 51, cat: 'mains', slug: 'ashkenazi-kishke',
+            title: 'Authentic Ashkenazi Kishke (Stuffed Derma)',
+            origin: 'Ashkenazi',
+            tags: ['Shabbat', 'Year-Round'],
+            holidays: ['shabbat'],
+            desc: 'A traditional Shabbat side of seasoned flour and schmaltz stuffed into a casing and roasted until crispy on the outside and dense inside. The ultimate comfort food for the cholent pot.',
+            time: '2 hrs 50 min', servings: '8 slices', difficulty: 'Medium'
+        },
+        {
+            id: 52, cat: 'starters', slug: 'potato-knishes',
+            title: 'Potato Knishes from Scratch',
+            origin: 'Ashkenazi',
+            tags: ['Year-Round', 'Comfort Food'],
+            holidays: ['shabbat', 'friends'],
+            desc: 'Crispy, golden-baked pastries with a thin, flaky dough wrapped around a rich filling of mashed potatoes and caramelized onions. A New York Jewish deli classic made at home.',
+            time: '2 hrs 5 min', servings: '12 knishes', difficulty: 'Medium'
+        },
+        {
+            id: 53, cat: 'sweets', slug: 'etrog-jam',
+            title: 'Jewish Etrog Jam (Post-Sukkot Tradition)',
+            origin: 'Sephardic / Israeli',
+            tags: ['Sukkot', 'Tu B\'Shvat', 'Preserves'],
+            holidays: ['sukkot'],
+            desc: 'A precious, fragrant jam made from the etrog (citron) used during Sukkot. The week-long soaking and 7 boiling cycles remove the bitterness, leaving a floral, honey-like preserve.',
+            time: '7 days + 3.5 hrs', servings: '4 jars', difficulty: 'Advanced'
+        },
+        {
+            id: 54, cat: 'sweets', slug: 'persian-faloodeh',
+            title: 'Persian Faloodeh (Rosewater Noodle Sorbet)',
+            origin: 'Persian',
+            tags: ['Year-Round', 'Dairy-Free', 'Vegan'],
+            holidays: ['friends', 'vip'],
+            desc: 'A refreshing frozen dessert of thin rice vermicelli suspended in a rose-scented sugar syrup, frozen to a delicate, icy slush. Topped with sour cherry syrup and lime juice.',
+            time: '25 min + 4 hrs freezing', servings: '6', difficulty: 'Easy'
+        },
+        {
+            id: 55, cat: 'sweets', slug: 'sephardic-bimuelos',
+            title: 'Sephardic Bimuelos (Hanukkah Fritters)',
+            origin: 'Sephardic / Ladino',
+            tags: ['Hanukkah', 'Fried'],
+            holidays: ['hanukkah'],
+            desc: 'Simple, pillowy fried dough puffs soaked in warm honey syrup. The Sephardic answer to sufganiyot, these Ladino-Jewish fritters are faster and easier to make.',
+            time: '1 hr 30 min', servings: '20 pieces', difficulty: 'Easy'
+        },
+        {
+            id: 56, cat: 'sweets', slug: 'tahini-cookies',
+            title: 'Modern Israeli Tahini Cookies',
+            origin: 'Israeli',
+            tags: ['Year-Round', 'Dairy Option'],
+            holidays: ['friends', 'shabbat'],
+            desc: 'Crumbly, nutty cookies made with raw tahini and date syrup, coated in sesame seeds. A modern Israeli bakery staple that tastes like halvah in cookie form.',
+            time: '34 min', servings: '24 cookies', difficulty: 'Easy'
+        },
+        {
+            id: 57, cat: 'sweets', slug: 'traditional-teiglach',
+            title: 'Traditional Teiglach (Honey Clusters)',
+            origin: 'Ashkenazi',
+            tags: ['Rosh Hashanah', 'Year-Round'],
+            holidays: ['rosh-hashanah'],
+            desc: 'Small knots of dough boiled in a sticky honey syrup until golden and caramelized, then tumbled with nuts. An old-world Rosh Hashanah confection that predates honey cake.',
+            time: '1 hr', servings: '30 pieces', difficulty: 'Medium'
+        },
+        {
+            id: 58, cat: 'sweets', slug: 'sephardic-date-charoset',
+            title: 'Sephardic Date & Nut Charoset',
+            origin: 'Sephardic / Mizrahi',
+            tags: ['Passover'],
+            holidays: ['passover'],
+            desc: 'A rich, dark paste of dates, figs, walnuts, and red wine, rolled into balls and coated in chopped nuts. The Sephardic alternative to the Ashkenazi apple-walnut version for the Passover Seder.',
+            time: '20 min + 30 min chill', servings: '24 balls', difficulty: 'Easy'
+        },
+        {
+            id: 59, cat: 'sweets', slug: 'olive-oil-mandel-bread',
+            title: 'Olive Oil Mandel Bread (Jewish Biscotti)',
+            origin: 'Ashkenazi',
+            tags: ['Year-Round', 'Pareve'],
+            holidays: ['shabbat', 'yom-kippur'],
+            desc: 'Twice-baked Jewish cookies studded with chocolate chips and toasted almonds. Similar to Italian biscotti but made with olive oil for a richer, chewier texture. Perfect for dunking.',
+            time: '55 min', servings: '24 slices', difficulty: 'Easy'
+        },
+        {
+            id: 60, cat: 'breads', slug: 'spinach-feta-kugel',
+            title: 'Spinach & Feta Noodle Kugel',
+            origin: 'Israeli / Ashkenazi Fusion',
+            tags: ['Shavuot', 'Dairy', 'Vegetarian'],
+            holidays: ['shavuot', 'shabbat'],
+            desc: 'A savory twist on the traditional noodle kugel, loaded with crumbled feta, cottage cheese, and fresh spinach, baked until the top is crispy and golden.',
+            time: '1 hr 15 min', servings: '10', difficulty: 'Easy'
+        },
+        {
+            id: 61, cat: 'mains', slug: 'bukharan-bakhsh-green-herb-pilaf',
+            title: 'Bukharan Bakhsh (Green Herb Pilaf)',
+            origin: 'Bukharan / Central Asian',
+            tags: ['Shabbat', 'Special Guests'],
+            holidays: ['shabbat', 'vip'],
+            desc: 'A fragrant Central Asian pilaf where sushi rice is buried under a blizzard of hand-chopped cilantro and dill, then sealed under paper towels and a tight lid to steam into perfectly distinct, herb-scented grains.',
+            time: '1 hr 15 min', servings: '6', difficulty: 'Medium'
+        },
+        {
+            id: 62, cat: 'starters', slug: 'syrian-bazargan-bulgur-tamarind-salad',
+            title: 'Syrian Bazargan (Bulgur & Tamarind Salad)',
+            origin: 'Syrian',
+            tags: ['Shabbat', 'Purim', 'Friends', 'Vegan'],
+            holidays: ['shabbat', 'friends', 'purim'],
+            desc: 'A striking Syrian salad of medium bulgur soaked in tamarind paste and lemon juice, tossed with toasted walnuts and roasted red peppers — tangy, earthy, and sweet in perfect tension.',
+            time: '2 hrs (mostly resting)', servings: '8', difficulty: 'Easy'
+        },
+        {
+            id: 63, cat: 'soups', slug: 'ashkenazi-kreplach-meat-dumplings',
+            title: 'Ashkenazi Kreplach (Meat Dumplings)',
+            origin: 'Ashkenazi',
+            tags: ['Shabbat', 'Rosh Hashanah', 'Yom Kippur', 'Purim'],
+            holidays: ['shabbat', 'rosh-hashanah', 'yom-kippur', 'purim'],
+            desc: 'Tender three-cornered pasta dumplings filled with richly seasoned ground brisket and caramelized onions, simmered until plump and silky and served in golden chicken soup.',
+            time: '1 hr 30 min', servings: '30 pieces', difficulty: 'Medium'
+        },
+        {
+            id: 64, cat: 'starters', slug: 'yemenite-hilbe-fenugreek-dip',
+            title: 'Yemenite Hilbe (Fenugreek Dip)',
+            origin: 'Yemenite',
+            tags: ['Shabbat', 'Friends', 'Vegan', 'Gluten-Free'],
+            holidays: ['shabbat', 'friends'],
+            desc: 'A pale, frothy, gelatinous paste made from long-soaked fenugreek seeds whipped with zhug and lemon — a prebiotic powerhouse and the essential condiment of the Yemenite table.',
+            time: '10 min + 3 hrs soaking', servings: '4', difficulty: 'Easy'
+        },
+        {
+            id: 65, cat: 'starters', slug: 'sephardic-aggristada-fish-classic',
+            title: 'Sephardic Aggristada Fish (Lemon-Egg Sauce) — Classic',
+            origin: 'Sephardic / Syrian',
+            tags: ['Shabbat', 'Passover', 'Rosh Hashanah'],
+            holidays: ['shabbat', 'passover', 'rosh-hashanah'],
+            desc: 'A detailed classic preparation of pan-fried white fish draped in a luminous, slowly cooked lemon-egg sauce that thickens to the consistency of heavy cream — the signature Sephardic Shabbat dish.',
+            time: '40 min', servings: '6', difficulty: 'Medium'
+        },
+        {
+            id: 66, cat: 'starters', slug: 'syrian-muhammara-walnut-pepper-dip',
+            title: 'Syrian Muhammara (Walnut-Pepper Dip)',
+            origin: 'Syrian',
+            tags: ['Shabbat', 'Friends', 'Rosh Hashanah', 'Vegan'],
+            holidays: ['shabbat', 'friends', 'rosh-hashanah'],
+            desc: 'A bold, textured Syrian dip of roasted red peppers and coarsely ground walnuts bound with pomegranate molasses — smoky, sweet, and faintly spiced with a perfect silky-crunchy contrast.',
+            time: '25 min', servings: '8', difficulty: 'Easy'
+        },
+        {
+            id: 67, cat: 'starters', slug: 'moroccan-fish-patties-ktzitzot-dagim',
+            title: 'Moroccan Fish Patties (Ktzitzot Dagim)',
+            origin: 'Moroccan',
+            tags: ['Shabbat', 'Rosh Hashanah', 'Passover'],
+            holidays: ['shabbat', 'rosh-hashanah', 'passover'],
+            desc: 'Spiced fish patties simmered directly in a fiery harissa tomato sauce — a Moroccan Shabbat essential where the fish absorbs every drop of the fragrant, garlicky broth.',
+            time: '45 min', servings: '6', difficulty: 'Easy'
+        },
+        {
+            id: 68, cat: 'soups', slug: 'iraqi-kubbeh-hamusta-sour-chard-soup',
+            title: 'Iraqi Kubbeh Hamusta (Sour Chard Soup)',
+            origin: 'Iraqi / Mizrahi',
+            tags: ['Shabbat', 'Sukkot', 'Rosh Hashanah'],
+            holidays: ['shabbat', 'sukkot', 'rosh-hashanah'],
+            desc: 'Semolina dumplings stuffed with spiced ground beef, simmered in a bracingly sour soup of Swiss chard, zucchini, and lemon — a beloved Iraqi variation that balances richness and brightness.',
+            time: '1 hr 30 min', servings: '8', difficulty: 'Advanced'
+        },
+        {
+            id: 69, cat: 'mains', slug: 'bukharan-osh-sovo-overnight-slow-cooked-rice',
+            title: 'Bukharan Osh Sovo (Overnight Slow-Cooked Rice)',
+            origin: 'Bukharan / Central Asian',
+            tags: ['Shabbat', 'Special Guests', 'Slow-Cooked'],
+            holidays: ['shabbat', 'vip'],
+            desc: 'A magnificent Bukharan layered pilaf of seared beef chuck, carrots, prunes, and jasmine rice, baked sealed overnight at the lowest possible temperature until the bottom forms a golden crust.',
+            time: '12+ hrs', servings: '8', difficulty: 'Medium'
+        },
+        {
+            id: 70, cat: 'mains', slug: 'syrian-cherry-meatballs-kibbeh-geraz',
+            title: 'Syrian Cherry Meatballs (Kibbeh Geraz)',
+            origin: 'Syrian',
+            tags: ['Shabbat', 'Sukkot', 'Rosh Hashanah', 'Purim'],
+            holidays: ['shabbat', 'sukkot', 'rosh-hashanah', 'purim'],
+            desc: 'Tiny lamb meatballs simmered in a stunning sweet-and-sour sauce of sour cherries and pomegranate molasses — the ultimate expression of Syrian agrodolce cooking.',
+            time: '45 min', servings: '6', difficulty: 'Easy'
+        },
+        {
+            id: 71, cat: 'soups', slug: 'moroccan-schina-wheat-berry',
+            title: "Moroccan S'china with Wheat Berries",
+            origin: 'Moroccan',
+            tags: ['Shabbat', 'Slow-Cooked'],
+            holidays: ['shabbat'],
+            desc: "The Moroccan overnight Shabbat hamin built around whole wheat berries in cheesecloth, simmering alongside brisket, chickpeas, and caramel-glazed eggs for over eight hours.",
+            time: '10+ hrs', servings: '10', difficulty: 'Medium'
+        },
+        {
+            id: 72, cat: 'mains', slug: 'iraqi-spayty-chicken-coconut-curry',
+            title: 'Iraqi Spayty (Chicken Coconut Curry)',
+            origin: 'Iraqi / Mizrahi',
+            tags: ['Shabbat', 'Friends', 'Rosh Hashanah'],
+            holidays: ['shabbat', 'friends', 'rosh-hashanah'],
+            desc: 'A lesser-known Iraqi-Jewish gem: whole chicken pieces simmered in fragrant coconut cream with bamboo shoots, turmeric, and ginger — a golden, warming curry reflecting Babylonian diaspora spice routes.',
+            time: '1 hr 15 min', servings: '6', difficulty: 'Easy'
+        },
+        {
+            id: 73, cat: 'mains', slug: 'syrian-stuffed-zucchini-dried-fruit',
+            title: 'Syrian Stuffed Zucchini with Dried Fruit',
+            origin: 'Syrian',
+            tags: ['Sukkot', 'Shabbat', 'Rosh Hashanah'],
+            holidays: ['sukkot', 'shabbat', 'rosh-hashanah'],
+            desc: 'Hollowed zucchini stuffed with spiced beef and rice, simmered in a sweet-tart sauce of tomatoes, apricots, and prunes — a Sukkot and Shabbat classic celebrating harvest abundance.',
+            time: '1 hr 15 min', servings: '6', difficulty: 'Medium'
+        },
+        {
+            id: 74, cat: 'mains', slug: 'ashkenazi-sweet-and-sour-tongue',
+            title: 'Ashkenazi Sweet and Sour Tongue',
+            origin: 'Ashkenazi',
+            tags: ['Shabbat', 'Rosh Hashanah', 'Special Guests'],
+            holidays: ['shabbat', 'rosh-hashanah', 'vip'],
+            desc: 'Slow-boiled beef tongue, peeled while hot, sliced, and braised in a glossy sweet-and-sour sauce of ketchup, ginger ale, raisins, and brown sugar — a beloved Ashkenazi delicacy.',
+            time: '4 hrs', servings: '8', difficulty: 'Medium'
+        },
+        {
+            id: 75, cat: 'breads', slug: 'israeli-pletzl-ashkenazi-onion-flatbread',
+            title: 'Israeli Pletzl (Ashkenazi Onion Flatbread)',
+            origin: 'Ashkenazi / Israeli',
+            tags: ['Shabbat', 'Friends', 'Rosh Hashanah', 'Vegan'],
+            holidays: ['shabbat', 'friends', 'rosh-hashanah'],
+            desc: 'A chewy, dense Ashkenazi flatbread blanketed in slow-caramelized onions and poppy seeds — halfway between a bialy and a focaccia, baked at high heat until the edges char.',
+            time: '2 hrs', servings: '12', difficulty: 'Easy'
+        },
+        {
+            id: 76, cat: 'breads', slug: 'yemenite-lachuch-spongy-pancake-bread',
+            title: 'Yemenite Lachuch (Spongy Pancake Bread)',
+            origin: 'Yemenite',
+            tags: ['Shabbat', 'Friends', 'Vegan'],
+            holidays: ['shabbat', 'friends'],
+            desc: 'A thick, fermented batter cooked on one side only until the top is riddled with hundreds of tiny holes — spongy, slightly tangy, and built to soak up Yemenite soups and honey.',
+            time: '1 hr 30 min', servings: '8 pieces', difficulty: 'Easy'
+        },
+        {
+            id: 77, cat: 'breads', slug: 'ethiopian-dabo-ritual-honey-bread',
+            title: 'Ethiopian Dabo (Ritual Honey Bread)',
+            origin: 'Ethiopian Jewish',
+            tags: ['Shabbat', 'Rosh Hashanah', 'Shavuot', 'Vegan'],
+            holidays: ['shabbat', 'rosh-hashanah', 'shavuot'],
+            desc: 'A sacred Ethiopian Jewish bread sweetened with honey and baked in a Dutch oven, emerging with a thick, protective crust and a dense, cake-like golden interior.',
+            time: '2 hrs (or overnight)', servings: '10', difficulty: 'Easy'
+        },
+        {
+            id: 78, cat: 'starters', slug: 'ashkenazi-arbes-ritual-peppery-chickpeas',
+            title: 'Ashkenazi Arbes (Ritual Peppery Chickpeas)',
+            origin: 'Ashkenazi',
+            tags: ['Shabbat', 'Purim', 'Rosh Hashanah', 'Vegan'],
+            holidays: ['shabbat', 'purim', 'rosh-hashanah'],
+            desc: 'Cooked-until-creamy chickpeas showered with coarse black pepper and kosher salt while still steaming hot — a deceptively simple Ashkenazi tradition served at Purim and on Shabbat.',
+            time: '1 hr 15 min', servings: '6', difficulty: 'Easy'
+        },
+        {
+            id: 79, cat: 'breads', slug: 'moroccan-tfaya-caramelized-onion-topping',
+            title: "Moroccan T'faya (Caramelized Onion Topping)",
+            origin: 'Moroccan',
+            tags: ['Shabbat', 'Rosh Hashanah', 'Sukkot'],
+            holidays: ['shabbat', 'rosh-hashanah', 'sukkot'],
+            desc: 'Slow-cooked onions rendered into a mahogany jam with honey-soaked raisins, cinnamon, and ginger — a Moroccan sweet topping poured over couscous or used as a spectacular bread spread.',
+            time: '1 hr', servings: '6', difficulty: 'Easy'
+        },
+        {
+            id: 80, cat: 'soups', slug: 'ashkenazi-mushroom-barley-soup',
+            title: 'Ashkenazi Mushroom Barley Soup',
+            origin: 'Ashkenazi',
+            tags: ['Shabbat', 'Sukkot', 'Yom Kippur', 'Vegan Option'],
+            holidays: ['shabbat', 'sukkot', 'yom-kippur'],
+            desc: 'A thick, deeply savory soup of sautéed cremini and shiitake mushrooms, pearled barley, and root vegetables in a rich broth — old-world Ashkenazi comfort that improves enormously the next day.',
+            time: '1 hr 20 min', servings: '8', difficulty: 'Easy'
+        },
+        {
+            id: 81, cat: 'sweets', slug: 'sephardic-pan-de-espana-sponge-cake',
+            title: 'Sephardic Pan de España (Spanish Sponge Cake)',
+            origin: 'Sephardic',
+            tags: ['Passover', 'Shabbat', 'Rosh Hashanah', 'Shavuot', 'Dairy-Free'],
+            holidays: ['passover', 'shabbat', 'rosh-hashanah', 'shavuot'],
+            desc: 'A magnificent oil-free sponge cake leavened entirely by whipped eggs and scented with lemon zest — the jewel of the Sephardic Passover dessert table and a year-round celebration cake.',
+            time: '1 hr 15 min', servings: '10', difficulty: 'Medium'
+        },
+        {
+            id: 82, cat: 'sweets', slug: 'sephardic-orange-chiffon-cake',
+            title: 'Sephardic Orange Chiffon Cake',
+            origin: 'Sephardic / Israeli',
+            tags: ['Shabbat', 'Rosh Hashanah', 'Shavuot', 'Special Guests', 'Dairy-Free'],
+            holidays: ['shabbat', 'rosh-hashanah', 'shavuot', 'vip'],
+            desc: 'A towering, cloud-light chiffon cake with intense fresh orange flavor, made pareve with oil — the iconic Israeli celebration cake that graces every holiday table from Rosh Hashanah to Shavuot.',
+            time: '1 hr 30 min', servings: '12', difficulty: 'Medium'
+        },
+        {
+            id: 83, cat: 'sweets', slug: 'moroccan-spiced-kumquat-jam',
+            title: 'Moroccan Spiced Kumquat Jam',
+            origin: 'Moroccan',
+            tags: ['Shabbat', 'Mimouna', 'Sukkot', 'Friends', 'Vegan'],
+            holidays: ['shabbat', 'mimouna', 'sukkot', 'friends'],
+            desc: 'Whole kumquat halves cooked into a luminous, amber-colored jam spiced with cardamom and cinnamon — a jewel-like Moroccan preserve that belongs on every Mimouna table.',
+            time: '50 min', servings: '2 jars', difficulty: 'Easy'
+        },
+        {
+            id: 84, cat: 'starters', slug: 'israeli-sabich-salad-deconstructed',
+            title: 'Israeli Sabich Salad (Deconstructed)',
+            origin: 'Israeli',
+            tags: ['Friends', 'Shabbat', 'Vegan Option'],
+            holidays: ['friends', 'shabbat'],
+            desc: 'Everything beloved about the iconic sabich sandwich — golden fried eggplant, hard-boiled eggs, chickpeas, and Israeli salad — deconstructed into a dramatic layered bowl with tahini and amba.',
+            time: '40 min', servings: '4', difficulty: 'Easy'
+        },
+        {
+            id: 85, cat: 'starters', slug: 'sephardic-pastelicos-meat-rice-pies',
+            title: 'Sephardic Pastelicos (Meat and Rice Pies)',
+            origin: 'Sephardic',
+            tags: ['Purim', 'Shabbat', 'Rosh Hashanah'],
+            holidays: ['purim', 'shabbat', 'rosh-hashanah'],
+            desc: 'Three-cornered meat and rice-filled pastries echoing Haman\'s hat — made from a tender oil dough brushed with egg wash and scattered with sesame seeds. A beloved Purim and Shabbat tradition.',
+            time: '1 hr 15 min', servings: '24 pieces', difficulty: 'Medium'
+        },
+        {
+            id: 86, cat: 'starters', slug: 'yemenite-zhug-cilantro-chili-paste',
+            title: 'Yemenite Zhug (Cilantro Chili Paste)',
+            origin: 'Yemenite',
+            tags: ['Shabbat', 'Friends', 'Vegan', 'Condiment'],
+            holidays: ['shabbat', 'friends'],
+            desc: 'The fiery, herbaceous green chili paste that defines the Yemenite table — a vibrant blend of cilantro, serrano peppers, and garlic that elevates every soup, flatbread, and roasted meat.',
+            time: '15 min', servings: '1 cup', difficulty: 'Easy'
+        },
+        {
+            id: 87, cat: 'mains', slug: 'israeli-malawach-pizza-modern-fusion',
+            title: 'Israeli Malawach Pizza (Modern Fusion)',
+            origin: 'Israeli',
+            tags: ['Friends', 'Hanukkah', 'Shavuot', 'Dairy'],
+            holidays: ['friends', 'hanukkah', 'shavuot'],
+            desc: 'A genius Israeli hack: frozen malawach rounds pan-fried crispy, then topped with tomato sauce and melted mozzarella — a laminated flatbread pizza requiring no oven and no dough-making.',
+            time: '20 min', servings: '4', difficulty: 'Easy'
+        },
+        {
+            id: 88, cat: 'breads', slug: 'ashkenazi-apple-noodle-kugel',
+            title: 'Ashkenazi Apple Noodle Kugel',
+            origin: 'Ashkenazi',
+            tags: ['Sukkot', 'Shabbat', 'Rosh Hashanah', 'Yom Kippur'],
+            holidays: ['sukkot', 'shabbat', 'rosh-hashanah', 'yom-kippur'],
+            desc: 'Wide egg noodles baked with freshly grated Granny Smith apples, raisins, and cinnamon under a shattering cinnamon-sugar crust — a sweet, autumnal Ashkenazi kugel bridging side dish and dessert.',
+            time: '1 hr 20 min', servings: '10', difficulty: 'Easy'
+        },
+        {
+            id: 89, cat: 'mains', slug: 'syrian-tamarind-meatballs',
+            title: 'Syrian Tamarind Meatballs',
+            origin: 'Syrian',
+            tags: ['Shabbat', 'Sukkot', 'Purim', 'Friends'],
+            holidays: ['shabbat', 'sukkot', 'purim', 'friends'],
+            desc: 'Feather-light ground beef meatballs made tender by grated onion, simmered in a glossy tamarind and tomato sauce that sings with acidity and warmth — a Syrian family staple.',
+            time: '45 min', servings: '6', difficulty: 'Easy'
+        },
+        {
+            id: 90, cat: 'sweets', slug: 'yemenite-hawaij-coffee-ritual-spice',
+            title: 'Yemenite Hawaij Coffee (Ritual Spice Blend)',
+            origin: 'Yemenite',
+            tags: ['Shabbat', 'Friends', 'Mimouna', 'Vegan'],
+            holidays: ['shabbat', 'friends', 'mimouna'],
+            desc: 'The Yemenite spice blend for coffee — cardamom-forward, warming, and faintly sweet — stirred into ground coffee before brewing and served with dates for a ritual morning cup unlike any other.',
+            time: '5 min', servings: '1 cup spice blend', difficulty: 'Easy'
+        },
+        {
+            id: 91, cat: 'soups', slug: 'kubbeh-selek-iraqi-beet-dumpling-soup',
+            title: 'Kubbeh Selek (Iraqi Beet Dumpling Soup)',
+            origin: 'Iraqi / Mizrahi',
+            tags: ['Shabbat', 'Rosh Hashanah', 'Sukkot'],
+            holidays: ['shabbat', 'rosh-hashanah', 'sukkot'],
+            desc: 'Semolina dumplings filled with spiced beef, bobbing in a stunning ruby-red beet soup brightened with lemon — one of the most visually dramatic dishes in Iraqi Jewish cooking.',
+            time: '2 hrs', servings: '8', difficulty: 'Advanced'
+        },
+        {
+            id: 92, cat: 'starters', slug: 'msabaha-warm-chunky-hummus',
+            title: 'Msabaha (Warm Chunky Hummus)',
+            origin: 'Israeli / Levantine',
+            tags: ['Shabbat', 'Friends', 'Mimouna', 'Vegan'],
+            holidays: ['shabbat', 'friends', 'mimouna'],
+            desc: 'The hummusiya insider secret — warm whole chickpeas folded into a punchy, lemony tahini sauce, served in wide bowls with olive oil, pine nuts, and parsley while still steaming.',
+            time: '13 hrs (mostly soaking)', servings: '6', difficulty: 'Medium'
+        },
+        {
+            id: 93, cat: 'starters', slug: 'kubbeh-patata-iraqi-potato-meat-dumplings',
+            title: 'Kubbeh Patata (Iraqi Potato-Meat Dumplings)',
+            origin: 'Iraqi / Mizrahi',
+            tags: ['Hanukkah', 'Passover', 'Shabbat', 'Gluten-Free'],
+            holidays: ['hanukkah', 'passover', 'shabbat'],
+            desc: 'Crispy fried patties with a mashed Yukon Gold potato shell encasing fragrant ground beef spiced with cinnamon and allspice — the Iraqi Passover and Hanukkah essential.',
+            time: '2 hrs', servings: '12 pieces', difficulty: 'Medium'
+        },
+        {
+            id: 94, cat: 'mains', slug: 'mina-de-carne-sephardic-meat-matzo-pie',
+            title: 'Mina de Carne (Sephardic Meat & Matzo Pie)',
+            origin: 'Sephardic',
+            tags: ['Passover', 'Shabbat', 'Special Guests'],
+            holidays: ['passover', 'shabbat', 'vip'],
+            desc: 'Layers of broth-soaked matzo encasing allspice-scented ground beef and parsley, sealed with egg wash and baked golden — the Sephardic Passover centerpiece that is both rustic and deeply satisfying.',
+            time: '1 hr 10 min', servings: '8', difficulty: 'Medium'
+        },
+        {
+            id: 95, cat: 'starters', slug: 'maakouda-moroccan-potato-fritters',
+            title: 'Maakouda (Moroccan Potato Fritters)',
+            origin: 'Moroccan',
+            tags: ['Hanukkah', 'Friends', 'Passover', 'Vegan'],
+            holidays: ['hanukkah', 'friends', 'passover'],
+            desc: 'Golden, puffed Moroccan potato cakes dipped in a baking powder batter before frying — crispy, airy shells giving way to a cumin and turmeric-spiced mashed potato interior.',
+            time: '1 hr', servings: '12 pieces', difficulty: 'Easy'
+        },
+        {
+            id: 96, cat: 'sweets', slug: 'sefa-moroccan-sweet-ceremonial-couscous',
+            title: 'Sefa (Moroccan Sweet Ceremonial Couscous)',
+            origin: 'Moroccan',
+            tags: ['Shabbat', 'Mimouna', 'Rosh Hashanah', 'Special Guests'],
+            holidays: ['shabbat', 'mimouna', 'rosh-hashanah', 'vip'],
+            desc: 'A tower of buttered, cinnamon-dusted couscous studded with honey-soaked raisins and toasted almonds, crowned with pomegranate arils — the Moroccan sweet couscous served at celebrations.',
+            time: '25 min', servings: '8', difficulty: 'Easy'
+        },
+        {
+            id: 97, cat: 'starters', slug: 'huevos-haminados-sephardic-slow-cooked-eggs',
+            title: 'Huevos Haminados (Sephardic Slow-Cooked Eggs)',
+            origin: 'Sephardic',
+            tags: ['Passover', 'Shabbat', 'Rosh Hashanah'],
+            holidays: ['passover', 'shabbat', 'rosh-hashanah'],
+            desc: 'Eggs simmered overnight in onion skins and coffee grounds until the whites turn caramel-beige and the yolks become velvety — a Sephardic Shabbat and Passover tradition going back centuries.',
+            time: '12–15 hrs', servings: '12', difficulty: 'Easy'
+        },
+        {
+            id: 98, cat: 'soups', slug: 'abgoosht-with-gondi-persian-lamb-chickpea-stew',
+            title: 'Abgoosht with Gondi (Persian Lamb & Chickpea Stew)',
+            origin: 'Persian',
+            tags: ['Shabbat', 'Rosh Hashanah', 'Special Guests'],
+            holidays: ['shabbat', 'rosh-hashanah', 'vip'],
+            desc: 'Braised lamb and chickpeas with dried limes in a golden turmeric broth, enriched with cardamom-scented gondi dumplings — the Persian Jewish equivalent of cholent.',
+            time: '3 hrs 30 min', servings: '8', difficulty: 'Medium'
+        },
+        {
+            id: 99, cat: 'soups', slug: 'hamod-lebanese-lemon-potato-soup',
+            title: 'Hamod (Lebanese Lemon and Potato Soup)',
+            origin: 'Lebanese / Levantine',
+            tags: ['Shabbat', 'Yom Kippur', 'Friends'],
+            holidays: ['shabbat', 'yom-kippur', 'friends'],
+            desc: 'A bright, lemony Lebanese soup of whole braised garlic cloves, diced potatoes, and celery in chicken stock — warming, restorative, and wonderfully aromatic.',
+            time: '35 min', servings: '6', difficulty: 'Easy'
+        },
+        {
+            id: 100, cat: 'sweets', slug: 'biscochos-de-huevo-sephardic-bracelet-cookies',
+            title: 'Biscochos de Huevo (Sephardic Bracelet Cookies)',
+            origin: 'Sephardic',
+            tags: ['Purim', 'Shabbat', 'Rosh Hashanah'],
+            holidays: ['purim', 'shabbat', 'rosh-hashanah'],
+            desc: 'Light, sesame-encrusted ring cookies with a firm, dry bite — the Sephardic biscotti, made for dunking in coffee or tea, served at every holiday from Purim to Rosh Hashanah.',
+            time: '1 hr', servings: '24 cookies', difficulty: 'Easy'
+        },
+        {
+            id: 101, cat: 'breads', slug: 'saluf-yemenite-soft-pita',
+            title: 'Saluf (Yemenite Soft Pita)',
+            origin: 'Yemenite',
+            tags: ['Shabbat', 'Friends', 'Vegan'],
+            holidays: ['shabbat', 'friends'],
+            desc: 'A soft, pillowy Yemenite flatbread cooked directly in a cast-iron skillet — stretched by hand in the pan until it blisters and chars, perfumed with a hint of fenugreek.',
+            time: '1 hr 40 min', servings: '8 pitas', difficulty: 'Easy'
+        },
+        {
+            id: 102, cat: 'breads', slug: 'tunisian-fricassee-fried-sandwich-buns',
+            title: 'Tunisian Fricassee (Fried Sandwich Buns)',
+            origin: 'Tunisian / Sephardic',
+            tags: ['Friends', 'Mimouna', 'Hanukkah', 'Fried'],
+            holidays: ['friends', 'mimouna', 'hanukkah'],
+            desc: "Pillowy fried buns stuffed with tuna, harissa, boiled potato, hard-boiled egg, and preserved lemon — Tunisia's iconic street food sandwich, best eaten while the bun is still warm and crispy.",
+            time: '1 hr 45 min', servings: '12 buns', difficulty: 'Medium'
+        },
+        {
+            id: 103, cat: 'sweets', slug: 'israeli-baked-cheesecake-shavuot',
+            title: 'Israeli Baked Cheesecake (Shavuot Style)',
+            origin: 'Israeli',
+            tags: ['Shavuot', 'Friends', 'Special Guests', 'Dairy'],
+            holidays: ['shavuot', 'friends', 'vip'],
+            desc: "Israel's beloved light, cloud-like cheesecake made with white soft cheese and folded egg whites — baked at low temperature and cooled in the oven to emerge crack-free and impossibly tender.",
+            time: '2 hrs', servings: '10', difficulty: 'Medium'
+        },
+        {
+            id: 104, cat: 'starters', slug: 'moroccan-cumin-beet-salad-barba',
+            title: 'Moroccan Cumin Beet Salad (Barba)',
+            origin: 'Moroccan',
+            tags: ['Shabbat', 'Rosh Hashanah', 'Friends', 'Passover', 'Vegan'],
+            holidays: ['shabbat', 'rosh-hashanah', 'friends', 'passover'],
+            desc: 'Whole boiled beets slipped from their skins and dressed while warm in a lemony, toasted-cumin vinaigrette — a vibrant Moroccan salad that only improves after hours of marinating.',
+            time: '45 min + 2 hrs marinating', servings: '6', difficulty: 'Easy'
+        },
+        {
+            id: 105, cat: 'mains', slug: 'meorav-yerushalmi-jerusalem-mixed-grill',
+            title: 'Meorav Yerushalmi (Jerusalem Mixed Grill)',
+            origin: 'Israeli',
+            tags: ['Friends', 'Shabbat', 'Special Guests'],
+            holidays: ['friends', 'shabbat', 'vip'],
+            desc: "Jerusalem's famous market mixed grill — chicken breast, thighs, hearts, and livers tossed with onions and an aromatic spice blend, served stuffed into pita.",
+            time: '30 min', servings: '4', difficulty: 'Medium'
+        },
+        {
+            id: 106, cat: 'starters', slug: 'red-schug-fiery-yemenite-chili-paste',
+            title: 'Red Schug (Fiery Yemenite Chili Paste)',
+            origin: 'Yemenite',
+            tags: ['Shabbat', 'Friends', 'Mimouna', 'Vegan', 'Condiment'],
+            holidays: ['shabbat', 'friends', 'mimouna'],
+            desc: 'A deep-crimson, smoky chili paste made from dried red chilies, garlic, and cumin — the Yemenite condiment that turns any soup, bread, or egg dish into something electric.',
+            time: '40 min', servings: '1 cup', difficulty: 'Easy'
+        },
+        {
+            id: 107, cat: 'starters', slug: 'green-schug-yemenite-herb-paste',
+            title: 'Green Schug (Yemenite Herbal Chili Paste)',
+            origin: 'Yemenite',
+            tags: ['Shabbat', 'Friends', 'Vegan', 'Condiment'],
+            holidays: ['shabbat', 'friends'],
+            desc: 'A verdant, aromatic paste of fresh jalapeños, cilantro, parsley, and cardamom — the cooling yet fiery Yemenite condiment essential at any Yemenite Shabbat table.',
+            time: '15 min', servings: '1 cup', difficulty: 'Easy'
+        },
+        {
+            id: 108, cat: 'mains', slug: 'lisan-el-qathi-iraqi-stuffed-eggplant-rolls',
+            title: 'Lisan el Qathi (Iraqi Stuffed Eggplant Rolls)',
+            origin: 'Iraqi / Mizrahi',
+            tags: ['Shabbat', 'Sukkot', 'Rosh Hashanah'],
+            holidays: ['shabbat', 'sukkot', 'rosh-hashanah'],
+            desc: 'Long eggplant strips broiled until pliable, rolled around finger-shaped beef sausages, and baked in a sweet-and-sour pomegranate molasses glaze — an Iraqi Shabbat main of quiet elegance.',
+            time: '1 hr 15 min', servings: '6', difficulty: 'Medium'
+        },
+        {
+            id: 109, cat: 'breads', slug: 'classic-potato-kugel-fluffy-method',
+            title: 'Classic Potato Kugel (The Fluffy Method)',
+            origin: 'Ashkenazi',
+            tags: ['Shabbat', 'Sukkot', 'Rosh Hashanah', 'Passover', 'Gluten-Free'],
+            holidays: ['shabbat', 'sukkot', 'rosh-hashanah', 'passover'],
+            desc: 'A golden, deeply crispy potato kugel with a fluffy, custardy interior — made by preheating the oiled pan so the batter sizzles the moment it lands, creating the legendary crust.',
+            time: '1 hr 45 min', servings: '12', difficulty: 'Easy'
+        },
+        {
+            id: 110, cat: 'mains', slug: 'shirin-polo-persian-wedding-rice',
+            title: 'Shirin Polo (Persian Wedding Rice)',
+            origin: 'Persian',
+            tags: ['Rosh Hashanah', 'Special Guests', 'Shabbat', 'Shavuot'],
+            holidays: ['rosh-hashanah', 'vip', 'shabbat', 'shavuot'],
+            desc: "Iran's most celebratory rice — basmati layered with candied orange peel, carrots, jewel-like barberries, and saffron water, forming a golden tahdig crust that is the most prized bite.",
+            time: '1 hr 30 min', servings: '8', difficulty: 'Medium'
+        },
+        {
+            id: 111, cat: 'soups', slug: 'iraqi-chicken-shorba-hearty-rice-soup',
+            title: 'Iraqi Chicken Shorba (Hearty Rice Soup)',
+            origin: 'Iraqi / Mizrahi',
+            tags: ['Shabbat', 'Sukkot', 'Yom Kippur', 'Rosh Hashanah'],
+            holidays: ['shabbat', 'sukkot', 'yom-kippur', 'rosh-hashanah'],
+            desc: 'A thick, golden Iraqi chicken soup where short-grain rice cooks so long it breaks down into the broth, creating a naturally creamy, porridge-like consistency — rich and deeply comforting.',
+            time: '2 hrs', servings: '8', difficulty: 'Easy'
+        },
+        {
+            id: 112, cat: 'sweets', slug: 'couscous-au-lait-moroccan-mimouna-special',
+            title: 'Couscous-au-Lait (Moroccan Mimouna Special)',
+            origin: 'Moroccan',
+            tags: ['Mimouna', 'Shavuot', 'Friends', 'Dairy'],
+            holidays: ['mimouna', 'shavuot', 'friends'],
+            desc: 'Israeli pearl couscous simmered slowly in whole milk with butter, sugar, and cinnamon until thick and creamy like rice pudding — the beloved Moroccan Mimouna sweet.',
+            time: '25 min', servings: '6', difficulty: 'Easy'
+        },
+        {
+            id: 113, cat: 'sweets', slug: 'libyan-asida-semolina-pudding',
+            title: 'Libyan Asida (Semolina Pudding)',
+            origin: 'Libyan / North African',
+            tags: ['Mimouna', 'Shavuot', 'Rosh Hashanah', 'Friends', 'Dairy'],
+            holidays: ['mimouna', 'shavuot', 'rosh-hashanah', 'friends'],
+            desc: 'A thick, silky Libyan semolina pudding stirred until smooth and poured into a bowl where a well in the center is filled with melted butter and golden honey — simple, nurturing, and ancient.',
+            time: '20 min', servings: '4', difficulty: 'Easy'
+        },
+        {
+            id: 114, cat: 'sweets', slug: 'sephardic-travados-walnut-filled-pastries',
+            title: 'Sephardic Travados (Walnut-Filled Pastries)',
+            origin: 'Sephardic',
+            tags: ['Purim', 'Rosh Hashanah', 'Shavuot', 'Shabbat'],
+            holidays: ['purim', 'rosh-hashanah', 'shavuot', 'shabbat'],
+            desc: 'Crisp, delicate half-moon pastries from an orange-juice dough encasing a fragrant walnut and cinnamon filling, rolled in powdered sugar while still warm — a treasured Sephardic cookie.',
+            time: '1 hr', servings: '24 pieces', difficulty: 'Easy'
+        },
+        {
+            id: 115, cat: 'mains', slug: 'iraqi-amba-fish-mango-braised-fish',
+            title: 'Iraqi Amba Fish (Mango Braised Fish)',
+            origin: 'Iraqi / Mizrahi',
+            tags: ['Shabbat', 'Purim', 'Friends', 'Passover'],
+            holidays: ['shabbat', 'purim', 'friends', 'passover'],
+            desc: 'Firm white fish fillets braised over sautéed onions and garlic in a tangy, mustardy amba mango sauce — one of the most distinctive flavor profiles in Iraqi Jewish cooking.',
+            time: '30 min', servings: '4', difficulty: 'Easy'
+        },
+        {
+            id: 116, cat: 'soups', slug: 'yemenite-saltah-fenugreek-stew',
+            title: 'Yemenite Saltah (Fenugreek Stew)',
+            origin: 'Yemenite',
+            tags: ['Shabbat', 'Friends'],
+            holidays: ['shabbat', 'friends'],
+            desc: "Yemen's national dish — a bubbling stew of slow-braised lamb or beef with potatoes and tomatoes, crowned table-side with hilbe fenugreek froth and served with fiery zhug.",
+            time: '2 hrs', servings: '4', difficulty: 'Medium'
+        },
+        {
+            id: 117, cat: 'mains', slug: 'libyan-couscous-seven-vegetables',
+            title: 'Libyan Couscous with Seven Vegetables',
+            origin: 'Libyan / North African',
+            tags: ['Shabbat', 'Sukkot', 'Rosh Hashanah', 'Special Guests'],
+            holidays: ['shabbat', 'sukkot', 'rosh-hashanah', 'vip'],
+            desc: 'The Libyan Jewish Shabbat centerpiece — braised lamb shoulder surrounded by seven symbolic harvest vegetables, served over couscous steamed above the stew to absorb its aromas.',
+            time: '2 hrs 15 min', servings: '8', difficulty: 'Advanced'
+        },
+        {
+            id: 118, cat: 'sweets', slug: 'honey-ginger-teiglach-with-nuts',
+            title: 'Honey-Ginger Teiglach with Nuts',
+            origin: 'Ashkenazi',
+            tags: ['Rosh Hashanah', 'Sukkot', 'Purim'],
+            holidays: ['rosh-hashanah', 'sukkot', 'purim'],
+            desc: 'A ginger-spiked variation on traditional Ashkenazi honey clusters — baked dough pieces and mixed nuts tumbled in a boiling honey-ginger syrup until they turn a deep, brittle amber.',
+            time: '1 hr', servings: '30 pieces', difficulty: 'Medium'
+        },
+        {
+            id: 119, cat: 'starters', slug: 'sephardic-borekas-de-spinaka-spinach-cheese-triangles',
+            title: 'Sephardic Borekas de Spinaka (Spinach Cheese Triangles)',
+            origin: 'Sephardic',
+            tags: ['Shavuot', 'Shabbat', 'Friends', 'Purim', 'Dairy'],
+            holidays: ['shavuot', 'shabbat', 'friends', 'purim'],
+            desc: 'Individual flaky triangles of phyllo or puff pastry filled with a creamy blend of feta, ricotta, and wilted spinach — the quintessential Sephardic dairy appetizer for Shavuot and Shabbat.',
+            time: '45 min', servings: '20 pieces', difficulty: 'Medium'
+        },
+        {
+            id: 120, cat: 'sweets', slug: 'israeli-krembo-chocolate-marshmallow-cookies',
+            title: 'Israeli Krembo (Chocolate Marshmallow Cookies)',
+            origin: 'Israeli',
+            tags: ['Hanukkah', 'Purim', 'Friends', 'Shabbat'],
+            holidays: ['hanukkah', 'purim', 'friends', 'shabbat'],
+            desc: 'The iconic Israeli childhood treat — a round tea biscuit crowned with homemade Swiss meringue marshmallow and enrobed in a crisp dark chocolate shell, made from scratch at home.',
+            time: '2 hrs', servings: '20 pieces', difficulty: 'Medium'
+        }
+    ];
+
+    /* ══════════════════════════════════════════════════════════════
+       SMART EVENT PLANNER — Interactive Menu Builder
+       ══════════════════════════════════════════════════════════════ */
+
+    // Dietary classification for each recipe
+    var RECIPE_DIETARY = {
+        1:'meat',2:'pareve',3:'dairy',4:'meat',5:'pareve',6:'pareve',7:'pareve',8:'pareve',9:'pareve',10:'pareve',
+        11:'meat',12:'meat',13:'meat',14:'meat',15:'meat',16:'meat',17:'meat',18:'meat',19:'meat',20:'meat',
+        21:'pareve',22:'pareve',23:'pareve',24:'dairy',25:'pareve',26:'dairy',27:'pareve',28:'pareve',29:'pareve',30:'pareve',
+        31:'pareve',32:'pareve',33:'meat',34:'dairy',35:'pareve',36:'pareve',37:'pareve',38:'meat',39:'meat',40:'pareve',
+        41:'pareve',42:'meat',43:'meat',44:'meat',45:'meat',46:'meat',47:'pareve',48:'pareve',49:'pareve',50:'meat',
+        51:'meat',52:'pareve',53:'pareve',54:'pareve',55:'pareve',56:'pareve',57:'pareve',58:'pareve',59:'pareve',60:'dairy',
+        61:'meat',62:'pareve',63:'meat',64:'pareve',65:'pareve',66:'pareve',67:'pareve',68:'meat',69:'meat',70:'meat',
+        71:'meat',72:'meat',73:'meat',74:'meat',75:'pareve',76:'pareve',77:'pareve',78:'pareve',79:'pareve',80:'pareve',
+        81:'pareve',82:'pareve',83:'pareve',84:'pareve',85:'meat',86:'pareve',87:'dairy',88:'pareve',89:'meat',90:'pareve',
+        91:'meat',92:'pareve',93:'meat',94:'meat',95:'pareve',96:'pareve',97:'pareve',98:'meat',99:'meat',100:'pareve',
+        101:'pareve',102:'pareve',103:'dairy',104:'pareve',105:'meat',106:'pareve',107:'pareve',108:'meat',109:'pareve',110:'pareve',
+        111:'meat',112:'dairy',113:'dairy',114:'pareve',115:'pareve',116:'meat',117:'meat',118:'pareve',119:'dairy',120:'pareve'
+    };
+
+    // Tag-based filtering helpers
+    var GLUTEN_FREE_IDS = [];
+    var VEGETARIAN_IDS = [];
+    RECIPES.forEach(function(r) {
+        var t = r.tags.join(' ').toLowerCase();
+        if (t.indexOf('gluten-free') !== -1) GLUTEN_FREE_IDS.push(r.id);
+        if (t.indexOf('vegetarian') !== -1 || t.indexOf('vegan') !== -1) VEGETARIAN_IDS.push(r.id);
+    });
+
+    // ── Holiday-specific blocklists ──
+    // Chametz (leavened grains): blocked on Passover.
+    // Recipes that contain flour/semolina/noodles/couscous/bulgur/barley/wheat/phyllo
+    // as actual ingredients (not just "serve with bread" suggestions).
+    // Excludes recipes that use matzo meal or potato starch as the primary form.
+    var CHAMETZ_IDS = [
+        2, 3, 4, 6, 12, 13, 17, 20, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+        38, 42, 46, 47, 48, 49, 51, 52, 54, 55, 56, 57, 59, 60, 62, 63, 65,
+        66, 67, 68, 71, 75, 76, 77, 80, 82, 85, 88, 91, 96, 98, 100, 101,
+        102, 103, 112, 113, 114, 117, 118, 119, 120
+    ];
+
+    // Mimouna celebrates the RETURN of chametz after Passover — no restrictions.
+    // Shavuot is dairy-focused but has no chametz restriction.
+    // Yom Kippur break-fast has no chametz restriction.
+
+    // Map of event → blocked recipe IDs (hard constraints that override scoring)
+    var EVENT_BLOCKED = {
+        'passover': CHAMETZ_IDS
+    };
+
+    // Vibe → difficulty preference mapping
+    var VIBE_DIFFICULTY = {
+        comfort: { easy: 2, medium: 3, advanced: 1 },
+        elegant: { easy: 0, medium: 2, advanced: 4 },
+        casual:  { easy: 4, medium: 2, advanced: 0 }
+    };
+
+    // Vibe → origin preference (elegant favors Persian/Moroccan, casual favors Israeli, etc.)
+    var VIBE_ORIGINS = {
+        elegant: ['Persian', 'Moroccan', 'Sephardic', 'Modern Israeli'],
+        casual:  ['Israeli', 'Israeli / Levantine', 'Yemenite'],
+        comfort: ['Ashkenazi', 'Iraqi / Mizrahi', 'Moroccan']
+    };
+
+    var EVENT_CONFIG = {
+        'rosh-hashanah': {
+            name: 'Rosh Hashanah',
+            theme: 'Sweetness, circularity, and abundance for the New Year.',
+            symbols: 'Honey, apples, pomegranates, round challah, dates, fish head.',
+            menuGroups: [
+                { name: 'Starters', ids: [1, 10, 7, 5, 6, 33, 35, 66, 67, 78, 85, 104], pick: 2 },
+                { name: 'Soup', ids: [11, 14, 4, 63, 68, 91, 111], pick: 1 },
+                { name: 'Main Course', ids: [16, 22, 17, 44, 43, 61, 70, 73, 74, 108, 110, 117], pick: 1 },
+                { name: 'Sides & Bread', ids: [23, 21, 25, 52, 60, 79, 88, 109], pick: 2 },
+                { name: 'Dessert', ids: [30, 32, 57, 58, 53, 81, 82, 96, 100], pick: 2 }
+            ],
+            prepTips: [
+                { when: '3 days before', task: 'Bake the honey cake and challah. Both improve with age.' },
+                { when: '2 days before', task: 'Prepare brisket or tagine — slow-cooked mains taste better reheated.' },
+                { when: '1 day before', task: 'Make salads, dips, and chrain. Set the table.' },
+                { when: 'Day of', task: 'Reheat mains, prepare fresh sides, slice challah, and arrange the symbolic foods.' }
+            ]
+        },
+        'yom-kippur': {
+            name: 'Yom Kippur (Break Fast)',
+            theme: 'Gentle, rehydrating foods to ease back into eating after 25 hours of fasting.',
+            symbols: 'Light soups, dairy, easy digestion, hydration.',
+            menuGroups: [
+                { name: 'Light Starters', ids: [3, 7, 34, 35, 10, 36, 62, 104, 97], pick: 2 },
+                { name: 'Soup', ids: [12, 11, 80, 99], pick: 1 },
+                { name: 'Light Mains', ids: [26, 60, 3, 37], pick: 1 },
+                { name: 'Bread', ids: [23, 24, 88, 109], pick: 1 },
+                { name: 'Dessert', ids: [32, 56, 59, 100], pick: 1 }
+            ],
+            prepTips: [
+                { when: '2 days before', task: 'Bake kugel, challah, and babka. Prepare soup base.' },
+                { when: '1 day before', task: 'Finish soup, make salads and dips, set the break-fast table.' },
+                { when: 'Before the fast', task: 'Everything should be ready to serve. Set oven timers if reheating.' }
+            ]
+        },
+        'sukkot': {
+            name: 'Sukkot',
+            theme: 'Harvest celebration with hearty, autumn-friendly stuffed dishes.',
+            symbols: 'Stuffed foods, harvest vegetables, eating in the sukkah.',
+            menuGroups: [
+                { name: 'Starters', ids: [13, 8, 7, 40, 33, 36, 78, 93, 85], pick: 2 },
+                { name: 'Soup', ids: [13, 46, 14, 68, 71, 80, 91, 111], pick: 1 },
+                { name: 'Main Course', ids: [19, 17, 43, 15, 45, 61, 69, 70, 73, 108, 117], pick: 1 },
+                { name: 'Sides', ids: [21, 25, 52, 51, 79, 88, 109], pick: 2 },
+                { name: 'Dessert', ids: [30, 31, 57, 53, 83, 118], pick: 1 }
+            ],
+            prepTips: [
+                { when: '2 days before', task: 'Stuff vegetables, prepare the tagine or hamin base.' },
+                { when: '1 day before', task: 'Make soups, kugel, and side dishes. Prepare desserts.' },
+                { when: 'Day of', task: 'Reheat mains, prepare fresh salads, and set up the sukkah table.' }
+            ]
+        },
+        'hanukkah': {
+            name: 'Hanukkah',
+            theme: 'Celebrate the miracle of oil with fried foods and festive treats.',
+            symbols: 'Fried foods, oil, light, resilience.',
+            menuGroups: [
+                { name: 'Fried Starters', ids: [2, 8, 9, 37, 39, 55, 93, 95, 102], pick: 2 },
+                { name: 'Main Course', ids: [20, 16, 42, 50, 72, 87], pick: 1 },
+                { name: 'Sides', ids: [21, 10, 40, 35, 62, 84], pick: 2 },
+                { name: 'Fried Sweets', ids: [29, 28, 55, 57, 120], pick: 2 }
+            ],
+            prepTips: [
+                { when: '1 day before', task: 'Prepare doughs for sambousak and sufganiyot. Make fillings.' },
+                { when: 'Day of', task: 'Fry everything fresh — fried foods are best served immediately.' },
+                { when: 'Tip', task: 'Set up a frying station near the table so guests can eat straight from the pan.' }
+            ]
+        },
+        'purim': {
+            name: 'Purim',
+            theme: 'Joy, celebration, and festive treats to share with friends.',
+            symbols: 'Mishloach manot, festive feast (seudah), generosity.',
+            menuGroups: [
+                { name: 'Starters', ids: [1, 2, 7, 38, 39, 33, 62, 85, 78], pick: 2 },
+                { name: 'Main Course', ids: [20, 16, 42, 43, 70, 89, 115], pick: 1 },
+                { name: 'Sides', ids: [10, 21, 35, 40, 66, 104], pick: 2 },
+                { name: 'Sweets (for mishloach manot)', ids: [31, 30, 56, 59, 57, 55, 100, 114, 118, 120], pick: 2 }
+            ],
+            prepTips: [
+                { when: '3 days before', task: 'Bake cookies, mandel bread, and teiglach for mishloach manot.' },
+                { when: '1 day before', task: 'Prepare main dishes and salads. Assemble gift baskets.' },
+                { when: 'Day of', task: 'Set out the seudah feast and keep platters replenished.' }
+            ]
+        },
+        'passover': {
+            name: 'Passover',
+            theme: 'Freedom and spring, with matzah-friendly dishes (no leavened bread or chametz).',
+            symbols: 'Matzah, bitter herbs, charoset, spring vegetables, freedom.',
+            menuGroups: [
+                { name: 'Seder Starters', ids: [5, 8, 10, 58, 93, 95, 97, 104, 37], pick: 2 },
+                { name: 'Soup', ids: [11, 14], pick: 1 },
+                { name: 'Main Course', ids: [16, 22, 44, 94, 115], pick: 1 },
+                { name: 'Sides', ids: [35, 10, 109], pick: 2 },
+                { name: 'Dessert', ids: [32, 81, 58], pick: 1 }
+            ],
+            prepTips: [
+                { when: '2 days before', task: 'Prepare brisket or main dish — it reheats beautifully.' },
+                { when: '1 day before', task: 'Make matzah balls, charoset, gefilte fish, and desserts.' },
+                { when: 'Day of', task: 'Set the seder plate, prepare fresh salads, reheat soup and mains.' },
+                { when: 'Tip', task: 'Make double the charoset — guests always eat more than you expect.' }
+            ]
+        },
+        'shavuot': {
+            name: 'Shavuot',
+            theme: 'Dairy-focused celebration of the giving of the Torah.',
+            symbols: 'Dairy foods, Torah, spring harvest, the color white.',
+            menuGroups: [
+                { name: 'Dairy Starters', ids: [3, 7, 34, 35, 60, 119], pick: 2 },
+                { name: 'Main Course', ids: [26, 60, 3, 87, 103, 110], pick: 1 },
+                { name: 'Bread', ids: [24, 23, 77], pick: 1 },
+                { name: 'Dessert', ids: [32, 56, 54, 59, 81, 82, 96, 103, 112, 113], pick: 2 }
+            ],
+            prepTips: [
+                { when: '2 days before', task: 'Bake babka and challah.' },
+                { when: '1 day before', task: 'Make bourekas, kugel, and malabi. Prepare salads.' },
+                { when: 'Day of', task: 'Arrange a beautiful dairy spread and serve everything fresh.' }
+            ]
+        },
+        'mimouna': {
+            name: 'Mimouna',
+            theme: 'Sweetness, prosperity, and friendship marking the end of Passover.',
+            symbols: 'Moufleta, honey, butter, fresh flour, open doors.',
+            menuGroups: [
+                { name: 'The Star', ids: [27], pick: 1 },
+                { name: 'Sweet Treats', ids: [28, 32, 55, 57, 83, 90, 96, 112, 113], pick: 2 },
+                { name: 'Savory Sides', ids: [7, 10, 35, 40, 92, 106, 107], pick: 2 }
+            ],
+            prepTips: [
+                { when: '1 day before', task: 'Prepare dough for moufleta and sfenj. Make dips and salads.' },
+                { when: 'Day of', task: 'Make moufleta fresh on the griddle — they must be served hot and soft.' },
+                { when: 'Tip', task: 'Set out platters of honey, butter, and jam for guests to dress their moufleta.' }
+            ]
+        },
+        'shabbat': {
+            name: 'Shabbat Dinner',
+            theme: 'A warm, traditional Friday night table with timeless flavors.',
+            symbols: 'Challah, wine, candles, rest, family.',
+            menuGroups: [
+                { name: 'Starters', ids: [1, 5, 6, 7, 33, 35, 10, 40, 62, 64, 66, 67, 78, 84, 85, 86, 92, 97, 104, 106, 107], pick: 2 },
+                { name: 'Soup', ids: [11, 14, 4, 12, 63, 68, 71, 80, 91, 98, 99, 111, 116], pick: 1 },
+                { name: 'Main Course', ids: [16, 18, 17, 22, 44, 43, 15, 61, 69, 70, 72, 73, 74, 89, 94, 105, 108, 110, 115, 117], pick: 1 },
+                { name: 'Sides & Bread', ids: [23, 25, 21, 52, 51, 60, 75, 76, 77, 79, 88, 101, 109], pick: 2 },
+                { name: 'Dessert', ids: [30, 32, 31, 56, 59, 81, 82, 83, 90, 100, 120], pick: 1 }
+            ],
+            prepTips: [
+                { when: '2 days before', task: 'Bake challah (or make dough and freeze). Start slow-cooked mains.' },
+                { when: 'Friday morning', task: 'Prepare soups, salads, kugel, and desserts.' },
+                { when: 'Friday afternoon', task: 'Set the table, light candles, and let everything rest until serving.' }
+            ]
+        },
+        'shabbat-lunch': {
+            name: 'Shabbat Lunch',
+            theme: 'A leisurely, long Shabbat afternoon meal with hamin and slow-cooked dishes.',
+            symbols: 'Hamin/cholent, make-ahead dishes, community.',
+            menuGroups: [
+                { name: 'Starters & Salads', ids: [7, 35, 10, 40, 36, 33, 62, 84, 92, 104], pick: 2 },
+                { name: 'Hamin / Slow-Cooked Main', ids: [15, 18, 46, 50, 69, 71], pick: 1 },
+                { name: 'Sides', ids: [21, 25, 52, 51, 47, 48, 75, 76, 88, 101, 109], pick: 2 },
+                { name: 'Dessert', ids: [32, 56, 31, 59, 83, 100], pick: 1 }
+            ],
+            prepTips: [
+                { when: 'Friday before Shabbat', task: 'Start hamin on the blech or in a slow cooker before candle lighting.' },
+                { when: 'Shabbat morning', task: 'Salads and cold dishes should already be in the fridge, ready to serve.' }
+            ]
+        },
+        'friends': {
+            name: 'Friends & Fun',
+            theme: 'Interactive, communal, street-food inspired spread for casual hangs.',
+            symbols: 'Sharing platters, build-your-own, bold flavors.',
+            menuGroups: [
+                { name: 'Mezze & Dips', ids: [7, 9, 10, 40, 34, 36, 35, 41, 62, 64, 66, 84, 86, 92, 104, 106, 107], pick: 3 },
+                { name: 'Street Food Mains', ids: [20, 39, 38, 2, 8, 87, 95, 102, 105, 115], pick: 2 },
+                { name: 'Sides', ids: [21, 35, 10, 52, 75, 88, 109], pick: 1 },
+                { name: 'Dessert', ids: [32, 55, 56, 28, 90, 100, 112, 120], pick: 1 }
+            ],
+            prepTips: [
+                { when: '1 day before', task: 'Make dips, salads, and marinate proteins.' },
+                { when: 'Day of', task: 'Set up a mezze station and cook mains fresh. Let guests assemble their own plates.' }
+            ]
+        },
+        'vip': {
+            name: 'Important Guests',
+            theme: 'Sophisticated, artisanal dishes that showcase the best of Jewish cuisine.',
+            symbols: 'Elegance, craftsmanship, beautiful presentation.',
+            menuGroups: [
+                { name: 'Elegant Starters', ids: [4, 1, 6, 33, 42, 37, 61, 65, 82, 92, 97], pick: 2 },
+                { name: 'Soup', ids: [14, 4, 46, 91, 98], pick: 1 },
+                { name: 'Main Course', ids: [17, 16, 44, 22, 45, 61, 69, 74, 94, 105, 110, 117], pick: 1 },
+                { name: 'Sides', ids: [25, 21, 52, 60, 79, 96, 109, 110], pick: 2 },
+                { name: 'Dessert', ids: [32, 31, 54, 53, 81, 82, 96, 103], pick: 2 }
+            ],
+            prepTips: [
+                { when: '3 days before', task: 'Plan your plating. Practice any new techniques.' },
+                { when: '2 days before', task: 'Prepare slow-cooked mains and desserts.' },
+                { when: '1 day before', task: 'Make starters, sides, and garnishes. Set an elegant table.' },
+                { when: 'Day of', task: 'Focus on fresh finishing, plating, and timing each course.' }
+            ]
+        },
+        'custom': {
+            name: 'Custom Menu',
+            theme: 'Build your own menu from scratch by adding dishes from any category.',
+            symbols: 'Your choice, your rules.',
+            menuGroups: [
+                { name: 'Starters', ids: [], pick: 0 },
+                { name: 'Soup', ids: [], pick: 0 },
+                { name: 'Main Course', ids: [], pick: 0 },
+                { name: 'Sides & Bread', ids: [], pick: 0 },
+                { name: 'Dessert', ids: [], pick: 0 }
+            ],
+            prepTips: []
+        }
+    };
+
+    var SCALING = [
+        { item: 'Beef / Brisket', per: '6-8 oz cooked', factor: 0.5 },
+        { item: 'Poultry (bone-in)', per: '8-10 oz cooked', factor: 0.625 },
+        { item: 'Fish Fillets', per: '6 oz cooked', factor: 0.375 },
+        { item: 'Rice / Grains (dry)', per: '1/3 cup dry', factor: 0.15 },
+        { item: 'Salads & Veggies', per: '3-4 oz', factor: 0.2 },
+        { item: 'Challah Loaves', per: '1/4 loaf', factor: 0.25 },
+        { item: 'Appetizer Pieces', per: '3-4 pcs', factor: 3.5 }
+    ];
+
+    // ── Active menu state ──
+    var activeMenu = null; // { groups: [{ name, ids }], guests, vibe, event, dietary, complexity }
+
+    function getRecipeById(id) {
+        return RECIPES.find(function(r) { return r.id === id; });
+    }
+
+    function passesFilters(id) {
+        var dietary = activeMenu ? activeMenu.dietary : document.getElementById('planner-dietary').value;
+        var complexity = activeMenu ? activeMenu.complexity : document.getElementById('planner-complexity').value;
+        var eventVal = activeMenu ? activeMenu.event : document.getElementById('planner-event').value;
+        var r = getRecipeById(id);
+        if (!r) return false;
+
+        // Holiday-specific hard block (e.g. chametz on Passover)
+        var blocked = EVENT_BLOCKED[eventVal];
+        if (blocked && blocked.indexOf(id) !== -1) return false;
+
+        // Dietary filter (hard constraint)
+        var d = RECIPE_DIETARY[id] || 'pareve';
+        if (dietary === 'meat' && d === 'dairy') return false;
+        if (dietary === 'dairy' && d === 'meat') return false;
+        if (dietary === 'pareve' && d !== 'pareve') return false;
+        if (dietary === 'vegetarian' && d === 'meat') return false;
+        if (dietary === 'gluten-free' && GLUTEN_FREE_IDS.indexOf(id) === -1) return false;
+
+        // Complexity filter (soft — allow medium when easy requested, but not advanced)
+        if (complexity !== 'any') {
+            var diff = r.difficulty.toLowerCase();
+            if (complexity === 'easy' && diff === 'advanced') return false;
+        }
+        return true;
+    }
+
+    // ── Core scoring: how well does a recipe fit ALL user inputs? ──
+    function scoreRecipeForSelection(id, eventVal, vibe, dietary, complexity, alreadyPicked) {
+        var r = getRecipeById(id);
+        if (!r) return -100;
+        var score = 0;
+
+        // 1. Holiday relevance (biggest factor — is this dish associated with this event?)
+        var config = EVENT_CONFIG[eventVal];
+        if (config && r.holidays) {
+            if (r.holidays.indexOf(eventVal) !== -1) score += 10;
+            // Partial match on event name in tags
+            var eventName = (config.name || '').toLowerCase();
+            r.tags.forEach(function(t) {
+                var tl = t.toLowerCase();
+                if (eventName.indexOf(tl) !== -1 || tl.indexOf(eventName.split(' ')[0]) !== -1) {
+                    score += 3;
+                }
+            });
+        }
+
+        // 2. Vibe match — does difficulty align with chosen vibe?
+        var diff = r.difficulty.toLowerCase();
+        var vibePrefs = VIBE_DIFFICULTY[vibe] || {};
+        score += (vibePrefs[diff] || 0);
+
+        // 3. Vibe origin affinity — some origins feel more elegant/casual/comfort
+        var vibeOrigins = VIBE_ORIGINS[vibe] || [];
+        for (var i = 0; i < vibeOrigins.length; i++) {
+            if (r.origin.indexOf(vibeOrigins[i]) !== -1) { score += 2; break; }
+        }
+
+        // 4. Difficulty match with user's effort level preference
+        if (complexity !== 'any') {
+            if (complexity === 'easy' && diff === 'easy') score += 3;
+            else if (complexity === 'easy' && diff === 'medium') score += 1;
+            else if (complexity === 'medium' && diff === 'medium') score += 3;
+            else if (complexity === 'medium' && diff === 'easy') score += 2;
+            else if (complexity === 'advanced' && diff === 'advanced') score += 4;
+            else if (complexity === 'advanced' && diff === 'medium') score += 2;
+        }
+
+        // 5. Origin diversity — reward picks from origins not yet represented
+        if (alreadyPicked && alreadyPicked.length > 0) {
+            var originCounts = {};
+            alreadyPicked.forEach(function(pid) {
+                var pr = getRecipeById(pid);
+                if (pr) originCounts[pr.origin] = (originCounts[pr.origin] || 0) + 1;
+            });
+            if (!originCounts[r.origin]) {
+                score += 4; // new origin, great diversity
+            } else if (originCounts[r.origin] === 1) {
+                score += 0; // already have one, neutral
+            } else {
+                score -= 2; // too many from same origin
+            }
+        }
+
+        // 6. Dietary harmony — pareve is universally compatible
+        var d = RECIPE_DIETARY[id] || 'pareve';
+        if (d === 'pareve') score += 1;
+
+        // 7. Guest count awareness — for large groups, prefer easier dishes
+        if (activeMenu && activeMenu.guests > 20) {
+            if (diff === 'easy') score += 2;
+            if (diff === 'advanced') score -= 1;
+        }
+
+        return score;
+    }
+
+    function getAlternatives(courseIds, currentIds) {
+        var currentSet = {};
+        if (activeMenu) {
+            activeMenu.groups.forEach(function(g) {
+                g.ids.forEach(function(id) { currentSet[id] = true; });
+            });
+        }
+        var alts = [];
+        // First try the course's own pool
+        courseIds.forEach(function(id) {
+            if (!currentSet[id] && passesFilters(id)) alts.push(id);
+        });
+        // Then add other recipes from the same categories
+        var cats = {};
+        courseIds.forEach(function(id) {
+            var r = getRecipeById(id);
+            if (r) cats[r.cat] = true;
+        });
+        RECIPES.forEach(function(r) {
+            if (cats[r.cat] && !currentSet[r.id] && alts.indexOf(r.id) === -1 && passesFilters(r.id)) {
+                alts.push(r.id);
+            }
+        });
+        return alts;
+    }
+
+    // Score how well a candidate complements the CURRENT menu (for swap suggestions)
+    function scoreComplement(candidateId, excludeDishId) {
+        if (!activeMenu) return 0;
+        var candidate = getRecipeById(candidateId);
+        if (!candidate) return 0;
+
+        // Collect all current menu recipe IDs (excluding the dish being swapped)
+        var menuIds = [];
+        activeMenu.groups.forEach(function(g) {
+            g.ids.forEach(function(id) {
+                if (id !== excludeDishId) menuIds.push(id);
+            });
+        });
+
+        // Use the full scoring engine against the current menu context
+        var score = scoreRecipeForSelection(
+            candidateId,
+            activeMenu.event,
+            activeMenu.vibe,
+            activeMenu.dietary,
+            activeMenu.complexity,
+            menuIds
+        );
+
+        return score;
+    }
+
+    function getScoredAlternatives(courseIds, currentIds, swappingDishId) {
+        var alts = getAlternatives(courseIds, currentIds);
+        var scored = alts.map(function(id) {
+            return { id: id, score: scoreComplement(id, swappingDishId) };
+        });
+        scored.sort(function(a, b) { return b.score - a.score; });
+        return scored;
+    }
+
+    // ── Smart greedy selection: pick the best dishes one-by-one ──
+    function pickBestDishes(pool, count, eventVal, vibe, dietary, complexity, alreadyPicked) {
+        var eligible = pool.filter(function(id) { return passesFilters(id); });
+        var picked = [];
+        var allPicked = alreadyPicked ? alreadyPicked.slice() : [];
+
+        for (var i = 0; i < count && eligible.length > 0; i++) {
+            // Score each remaining candidate against what's already been picked
+            var best = null, bestScore = -Infinity, bestIdx = -1;
+            for (var j = 0; j < eligible.length; j++) {
+                var s = scoreRecipeForSelection(eligible[j], eventVal, vibe, dietary, complexity, allPicked);
+                if (s > bestScore) {
+                    bestScore = s;
+                    best = eligible[j];
+                    bestIdx = j;
+                }
+            }
+            if (best !== null) {
+                picked.push(best);
+                allPicked.push(best);
+                eligible.splice(bestIdx, 1);
+            }
+        }
+        return picked;
+    }
+
+    function generatePlan() {
+        var eventVal = document.getElementById('planner-event').value;
+        var guests = parseInt(document.getElementById('planner-guests').value) || 10;
+        var vibe = document.getElementById('planner-vibe').value;
+        var dietary = document.getElementById('planner-dietary').value;
+        var complexity = document.getElementById('planner-complexity').value;
+        var result = document.getElementById('planner-result');
+
+        if (!eventVal) {
+            result.innerHTML = '<p style="color:var(--danger);font-weight:600;">Please choose an event type to get started.</p>';
+            result.classList.add('visible');
+            return;
+        }
+
+        var config = EVENT_CONFIG[eventVal];
+        if (!config) return;
+
+        // Store all settings in activeMenu so they persist for swap scoring
+        activeMenu = { groups: [], guests: guests, vibe: vibe, event: eventVal, config: config, dietary: dietary, complexity: complexity };
+
+        // Smart greedy selection: pick dishes course-by-course,
+        // each pick is aware of everything already selected
+        var allPickedSoFar = [];
+        var menuGroups = [];
+
+        config.menuGroups.forEach(function(group) {
+            // Build expanded pool: start with event-specific picks, then add all same-category recipes
+            var pool = group.ids.slice();
+            var cats = {};
+            group.ids.forEach(function(id) {
+                var r = getRecipeById(id);
+                if (r) cats[r.cat] = true;
+            });
+            RECIPES.forEach(function(r) {
+                if (cats[r.cat] && pool.indexOf(r.id) === -1) {
+                    pool.push(r.id);
+                }
+            });
+
+            // Remove already picked
+            pool = pool.filter(function(id) { return allPickedSoFar.indexOf(id) === -1; });
+
+            var picked = pickBestDishes(pool, group.pick, eventVal, vibe, dietary, complexity, allPickedSoFar);
+            picked.forEach(function(id) { allPickedSoFar.push(id); });
+
+            menuGroups.push({ name: group.name, ids: picked, pool: group.ids });
+        });
+
+        activeMenu.groups = menuGroups;
+        renderPlan();
+    }
+
+    function renderPlan() {
+        if (!activeMenu) return;
+        var result = document.getElementById('planner-result');
+        var config = activeMenu.config;
+        var guests = activeMenu.guests;
+        var vibe = activeMenu.vibe;
+
+        var vibeLabels = { comfort: 'Comfort & Family', elegant: 'Elegant & Impressive', casual: 'Casual & Fun' };
+        var dietaryLabels = { any: 'No Restrictions', meat: 'Meat Only', dairy: 'Dairy Only', pareve: 'Pareve Only', vegetarian: 'Vegetarian', 'gluten-free': 'Gluten-Free' };
+        var effortLabels = { any: 'Any Difficulty', easy: 'Quick & Easy', medium: 'Moderate', advanced: 'Go All Out' };
+
+        var html = '';
+        html += '<h3>' + config.name + ' — Menu for ' + guests + ' Guest' + (guests !== 1 ? 's' : '') + '</h3>';
+        html += '<p><strong>Theme:</strong> ' + config.theme + '</p>';
+        if (config.symbols) html += '<p style="font-size:0.82rem;color:var(--ink-500);margin-top:-0.5rem;"><strong>Symbolic elements:</strong> ' + config.symbols + '</p>';
+        html += '<div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1rem;">';
+        html += '<span style="font-size:0.7rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:1rem;background:rgba(207,154,50,0.12);color:#8a6a1a;">' + (vibeLabels[vibe] || vibe) + '</span>';
+        if (activeMenu.dietary !== 'any') html += '<span style="font-size:0.7rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:1rem;background:rgba(47,159,132,0.12);color:#1a6e55;">' + (dietaryLabels[activeMenu.dietary] || '') + '</span>';
+        if (activeMenu.complexity !== 'any') html += '<span style="font-size:0.7rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:1rem;background:rgba(25,61,108,0.08);color:var(--ink-700);">' + (effortLabels[activeMenu.complexity] || '') + '</span>';
+        html += '</div>';
+
+        // Render each course with interactive dish cards
+        activeMenu.groups.forEach(function(group, gi) {
+            html += '<div class="menu-suggestion" data-group="' + gi + '">';
+            html += '<h4>' + group.name + '<button class="add-course-btn" onclick="addDishToGroup(' + gi + ')">+ Add Dish</button></h4>';
+
+            if (group.ids.length === 0) {
+                html += '<p style="font-size:0.8rem;color:var(--ink-500);margin:0;">No dishes selected. Click "+ Add Dish" to browse options.</p>';
+            }
+
+            group.ids.forEach(function(id, di) {
+                var r = getRecipeById(id);
+                if (!r) return;
+                html += '<div class="menu-dish" data-group="' + gi + '" data-dish="' + di + '">';
+                html += '<div class="menu-dish-info">';
+                html += '<div class="menu-dish-title"><a href="/food/recipes/' + r.slug + '.html">' + r.title + '</a></div>';
+                html += '<div class="menu-dish-meta">' + r.origin + ' &middot; ' + r.time + ' &middot; ' + r.difficulty + ' &middot; Serves ' + r.servings + '</div>';
+                html += '</div>';
+                html += '<div class="menu-dish-actions">';
+                // Swap button
+                html += '<button class="dish-action-btn swap" onclick="toggleSwapMenu(' + gi + ',' + di + ')" title="Swap dish">';
+                html += '<svg viewBox="0 0 24 24" stroke-width="2"><path d="M7 16l-4-4m0 0l4-4m-4 4h18M17 8l4 4m0 0l-4 4m4-4H3"/></svg>';
+                html += '</button>';
+                // Remove button
+                html += '<button class="dish-action-btn remove" onclick="removeDish(' + gi + ',' + di + ')" title="Remove dish">';
+                html += '<svg viewBox="0 0 24 24" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>';
+                html += '</button>';
+                html += '</div>';
+                html += '<div class="swap-dropdown" id="swap-' + gi + '-' + di + '"></div>';
+                html += '</div>';
+            });
+            html += '</div>';
+        });
+
+        // Menu summary
+        var totalDishes = 0, totalTime = 0, diffCounts = { easy: 0, medium: 0, advanced: 0 };
+        activeMenu.groups.forEach(function(g) {
+            g.ids.forEach(function(id) {
+                var r = getRecipeById(id);
+                if (r) {
+                    totalDishes++;
+                    var t = r.time.match(/(\d+)/);
+                    if (t) totalTime += parseInt(t[1]);
+                    var d = r.difficulty.toLowerCase();
+                    if (diffCounts[d] !== undefined) diffCounts[d]++;
+                }
+            });
+        });
+
+        html += '<div class="menu-summary">';
+        html += '<h4>Menu Summary</h4>';
+        html += '<span class="summary-stat"><strong>' + totalDishes + '</strong> dishes</span>';
+        html += '<span class="summary-stat"><strong>' + guests + '</strong> guests</span>';
+        if (totalTime > 0) html += '<span class="summary-stat">~<strong>' + totalTime + '</strong> min total cook time</span>';
+        if (diffCounts.easy > 0) html += '<span class="summary-stat"><strong>' + diffCounts.easy + '</strong> easy</span>';
+        if (diffCounts.medium > 0) html += '<span class="summary-stat"><strong>' + diffCounts.medium + '</strong> moderate</span>';
+        if (diffCounts.advanced > 0) html += '<span class="summary-stat"><strong>' + diffCounts.advanced + '</strong> advanced</span>';
+        html += '</div>';
+
+        // Quantity guide — dynamic based on actual dishes in the menu
+        var menuRecipeIds = [];
+        activeMenu.groups.forEach(function(g) { g.ids.forEach(function(id) { menuRecipeIds.push(id); }); });
+
+        // Detect which food categories are actually in the menu
+        var hasMeat = false, hasPoultry = false, hasFish = false, hasGrains = false;
+        var hasSalad = false, hasChallah = false, hasAppetizers = false, hasDairy = false;
+        var hasStew = false, hasBread = false;
+        menuRecipeIds.forEach(function(id) {
+            var r = getRecipeById(id);
+            if (!r) return;
+            var title = r.title.toLowerCase();
+            var desc = r.desc.toLowerCase();
+            var tags = r.tags.join(' ').toLowerCase();
+            var cat = r.cat;
+            var d = RECIPE_DIETARY[id] || 'pareve';
+
+            // Meat proteins
+            if (title.indexOf('brisket') !== -1 || title.indexOf('lamb') !== -1 || title.indexOf('beef') !== -1 ||
+                desc.indexOf('brisket') !== -1 || desc.indexOf('lamb') !== -1 || desc.indexOf('ground beef') !== -1 ||
+                title.indexOf('kishke') !== -1 || title.indexOf('holishkes') !== -1 || title.indexOf('mahshi') !== -1) hasMeat = true;
+            // Poultry
+            if (title.indexOf('chicken') !== -1 || desc.indexOf('chicken') !== -1 || title.indexOf('tbeet') !== -1 ||
+                title.indexOf('pastilla') !== -1 || title.indexOf('schnitzel') !== -1) hasPoultry = true;
+            // Fish
+            if (title.indexOf('fish') !== -1 || title.indexOf('salmon') !== -1 || title.indexOf('gefilte') !== -1 ||
+                desc.indexOf('fish') !== -1) hasFish = true;
+            // Grains/rice
+            if (title.indexOf('rice') !== -1 || title.indexOf('mejadra') !== -1 || title.indexOf('kugel') !== -1 ||
+                desc.indexOf('rice') !== -1) hasGrains = true;
+            // Salads/veggies
+            if (title.indexOf('salad') !== -1 || title.indexOf('carrot') !== -1 || cat === 'starters' ||
+                title.indexOf('hummus') !== -1 || title.indexOf('labneh') !== -1 || title.indexOf('zaalouk') !== -1 ||
+                title.indexOf('matbucha') !== -1) hasSalad = true;
+            // Challah/bread
+            if (title.indexOf('challah') !== -1 || title.indexOf('kubaneh') !== -1 || title.indexOf('jachnun') !== -1 ||
+                title.indexOf('malawach') !== -1 || title.indexOf('moufleta') !== -1) hasChallah = true;
+            // Bread (non-challah)
+            if (cat === 'breads' && !hasChallah) hasBread = true;
+            // Appetizer pieces (sambousak, knishes, bourekas, falafel, etc.)
+            if (r.servings.indexOf('pieces') !== -1 || r.servings.indexOf('patties') !== -1 ||
+                r.servings.indexOf('rolls') !== -1 || r.servings.indexOf('halves') !== -1) hasAppetizers = true;
+            // Dairy
+            if (d === 'dairy') hasDairy = true;
+            // Stew/soup
+            if (cat === 'soups' || title.indexOf('stew') !== -1 || title.indexOf('hamin') !== -1 ||
+                title.indexOf('soup') !== -1) hasStew = true;
+        });
+
+        var dynamicScaling = [];
+        if (hasMeat) dynamicScaling.push({ item: 'Beef / Lamb', per: '6-8 oz cooked', factor: 0.5, unit: ' lbs' });
+        if (hasPoultry) dynamicScaling.push({ item: 'Poultry (bone-in)', per: '8-10 oz cooked', factor: 0.625, unit: ' lbs' });
+        if (hasFish) dynamicScaling.push({ item: 'Fish Fillets', per: '6 oz cooked', factor: 0.375, unit: ' lbs' });
+        if (hasGrains) dynamicScaling.push({ item: 'Rice / Grains (dry)', per: '1/3 cup dry', factor: 0.15, unit: ' lbs' });
+        if (hasSalad) dynamicScaling.push({ item: 'Salads & Dips', per: '3-4 oz', factor: 0.2, unit: ' lbs' });
+        if (hasChallah) dynamicScaling.push({ item: 'Challah Loaves', per: '1/4 loaf', factor: 0.25, unit: ' loaves' });
+        if (hasStew) dynamicScaling.push({ item: 'Soup / Stew', per: '1-1.5 cups', factor: 0.1, unit: ' quarts' });
+        if (hasAppetizers) dynamicScaling.push({ item: 'Appetizer Pieces', per: '3-4 pcs', factor: 3.5, unit: ' pieces' });
+        if (hasDairy) dynamicScaling.push({ item: 'Cheese / Dairy', per: '2-3 oz', factor: 0.15, unit: ' lbs' });
+
+        if (dynamicScaling.length > 0) {
+            html += '<div style="overflow-x:auto;margin-top:1rem;"><h4 style="font-family:Fraunces,serif;font-size:0.95rem;margin-bottom:0.4rem;">Quantity Guide for ' + guests + ' Guests</h4>';
+            html += '<p style="font-size:0.75rem;color:var(--ink-500);margin:0 0 0.5rem;">Tailored to your menu. Scale up for hearty eaters.</p>';
+            html += '<table class="scaling-table"><thead><tr><th>Category</th><th>Per Person</th><th>For ' + guests + '</th></tr></thead><tbody>';
+            dynamicScaling.forEach(function(row) {
+                var total = Math.ceil(row.factor * guests);
+                html += '<tr><td><strong>' + row.item + '</strong></td><td>' + row.per + '</td><td><strong>' + total + '</strong>' + row.unit + '</td></tr>';
+            });
+            html += '</tbody></table></div>';
+        }
+
+        // Prep timeline
+        if (config.prepTips && config.prepTips.length > 0) {
+            html += '<div class="prep-timeline"><h4>Prep Timeline</h4>';
+            config.prepTips.forEach(function(tip) {
+                html += '<div class="timeline-item"><span class="timeline-when">' + tip.when + '</span><span>' + tip.task + '</span></div>';
+            });
+            html += '</div>';
+        }
+
+        // Vibe tips
+        var vibeText = {
+            comfort: 'Serve family-style on large platters in the center of the table. Generous portions, second helpings encouraged. Think of the table as an extension of a warm hug.',
+            elegant: 'Plate each course individually with careful garnishes. Serve courses in sequence with a brief pause between each. Consider a palate cleanser (simple lemon sorbet or sparkling water with mint) between fish and meat.',
+            casual: 'Set up stations and let people graze. Put dips on one table, mains on another, and desserts on a third. Great for mixing and mingling. Use disposable plates without guilt — the vibe matters more than the china.'
+        };
+        html += '<div style="background:rgba(207,154,50,0.06);border-left:3px solid var(--accent-gold);border-radius:0 0.6rem 0.6rem 0;padding:0.85rem 1.1rem;margin-top:0.75rem;font-size:0.82rem;color:var(--ink-700);line-height:1.55;">';
+        html += '<strong style="color:var(--accent-gold);">Hosting Tip (' + vibe.charAt(0).toUpperCase() + vibe.slice(1) + '):</strong> ' + vibeText[vibe];
+        html += '</div>';
+
+        // Shuffle + Print buttons
+        html += '<div style="text-align:center;margin-top:1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">';
+        html += '<button onclick="shuffleMenu()" class="planner-btn planner-btn-secondary" style="font-size:0.8rem;padding:0.45rem 1.1rem;">';
+        html += '<svg style="width:14px;height:14px;vertical-align:-2px;margin-right:0.3rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>';
+        html += 'Shuffle Menu</button>';
+        html += '<button onclick="printMenuRecipes()" class="planner-btn planner-btn-primary" style="font-size:0.8rem;padding:0.45rem 1.3rem;">';
+        html += '<svg style="width:14px;height:14px;vertical-align:-2px;margin-right:0.4rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>';
+        html += 'Print Recipes</button>';
+        html += '</div>';
+
+        result.innerHTML = html;
+        result.classList.add('visible');
+    }
+
+    function shuffleMenu() {
+        if (!activeMenu) return;
+        // Re-run the smart selection with randomized tie-breaking
+        var config = activeMenu.config;
+        var allPickedSoFar = [];
+        var menuGroups = [];
+
+        config.menuGroups.forEach(function(group) {
+            var pool = group.ids.slice();
+            var cats = {};
+            group.ids.forEach(function(id) {
+                var r = getRecipeById(id);
+                if (r) cats[r.cat] = true;
+            });
+            RECIPES.forEach(function(r) {
+                if (cats[r.cat] && pool.indexOf(r.id) === -1) pool.push(r.id);
+            });
+            pool = pool.filter(function(id) { return allPickedSoFar.indexOf(id) === -1; });
+
+            // Shuffle the pool before scoring so ties resolve differently
+            for (var i = pool.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+            }
+
+            var picked = pickBestDishes(pool, group.pick, activeMenu.event, activeMenu.vibe, activeMenu.dietary, activeMenu.complexity, allPickedSoFar);
+            picked.forEach(function(id) { allPickedSoFar.push(id); });
+            menuGroups.push({ name: group.name, ids: picked, pool: group.ids });
+        });
+
+        activeMenu.groups = menuGroups;
+        renderPlan();
+    }
+
+    function toggleSwapMenu(gi, di) {
+        var dropdown = document.getElementById('swap-' + gi + '-' + di);
+        // Close all other dropdowns first
+        document.querySelectorAll('.swap-dropdown.open').forEach(function(el) {
+            if (el !== dropdown) el.classList.remove('open');
+        });
+        if (dropdown.classList.contains('open')) {
+            dropdown.classList.remove('open');
+            return;
+        }
+        // Populate alternatives scored by menu complementarity
+        var group = activeMenu.groups[gi];
+        var currentDishId = group.ids[di];
+        var scored = getScoredAlternatives(group.pool, group.ids, currentDishId);
+        if (scored.length === 0) {
+            dropdown.innerHTML = '<div class="swap-option" style="color:var(--ink-500);cursor:default;">No alternative dishes available with current filters.</div>';
+        } else {
+            var topScore = scored[0].score;
+            dropdown.innerHTML = scored.map(function(item, idx) {
+                var r = getRecipeById(item.id);
+                var badge = '';
+                if (topScore > 0 && item.score >= topScore && idx < 3) {
+                    badge = '<span style="font-size:0.65rem;font-weight:700;color:#25754f;background:rgba(37,117,79,0.1);padding:0.1rem 0.4rem;border-radius:1rem;margin-left:0.4rem;">Best fit</span>';
+                }
+                return '<div class="swap-option" onclick="swapDish(' + gi + ',' + di + ',' + item.id + ')">' +
+                    '<strong>' + r.title + badge + '</strong>' +
+                    '<span>' + r.origin + ' &middot; ' + r.time + ' &middot; ' + r.difficulty + '</span></div>';
+            }).join('');
+        }
+        dropdown.classList.add('open');
+    }
+
+    function swapDish(gi, di, newId) {
+        activeMenu.groups[gi].ids[di] = newId;
+        renderPlan();
+    }
+
+    function removeDish(gi, di) {
+        activeMenu.groups[gi].ids.splice(di, 1);
+        renderPlan();
+    }
+
+    function addDishToGroup(gi) {
+        var group = activeMenu.groups[gi];
+        var alts = getAlternatives(group.pool, group.ids);
+        // Also include all recipes that pass filters and aren't in use
+        var allUsed = {};
+        activeMenu.groups.forEach(function(g) { g.ids.forEach(function(id) { allUsed[id] = true; }); });
+        RECIPES.forEach(function(r) {
+            if (!allUsed[r.id] && passesFilters(r.id) && alts.indexOf(r.id) === -1) {
+                alts.push(r.id);
+            }
+        });
+
+        if (alts.length === 0) { alert('No more dishes available with current filters.'); return; }
+
+        // Score and sort alternatives by how well they complement the menu
+        var menuIds = [];
+        activeMenu.groups.forEach(function(g) { g.ids.forEach(function(id) { menuIds.push(id); }); });
+        var scored = alts.map(function(id) {
+            return { id: id, score: scoreRecipeForSelection(id, activeMenu.event, activeMenu.vibe, activeMenu.dietary, activeMenu.complexity, menuIds) };
+        });
+        scored.sort(function(a, b) { return b.score - a.score; });
+        var topScore = scored.length > 0 ? scored[0].score : 0;
+
+        // Create a temporary overlay picker
+        var overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:100;display:flex;align-items:center;justify-content:center;';
+        var picker = document.createElement('div');
+        picker.style.cssText = 'background:#fff;border-radius:1rem;padding:1.5rem;max-width:420px;width:90%;max-height:70vh;overflow-y:auto;box-shadow:0 24px 56px rgba(0,0,0,0.3);';
+        picker.innerHTML = '<h3 style="font-family:Fraunces,serif;font-size:1.1rem;margin:0 0 0.75rem;">Add a Dish to ' + group.name + '</h3>';
+        scored.forEach(function(item, idx) {
+            var r = getRecipeById(item.id);
+            var badge = '';
+            if (topScore > 0 && item.score >= topScore && idx < 3) {
+                badge = '<span style="font-size:0.65rem;font-weight:700;color:#25754f;background:rgba(37,117,79,0.1);padding:0.1rem 0.4rem;border-radius:1rem;margin-left:0.4rem;">Best fit</span>';
+            }
+            var btn = document.createElement('div');
+            btn.className = 'swap-option';
+            btn.innerHTML = '<strong>' + r.title + badge + '</strong><span>' + r.origin + ' &middot; ' + r.time + ' &middot; ' + r.difficulty + '</span>';
+            btn.onclick = function() {
+                activeMenu.groups[gi].ids.push(item.id);
+                document.body.removeChild(overlay);
+                renderPlan();
+            };
+            picker.appendChild(btn);
+        });
+        var cancelBtn = document.createElement('button');
+        cancelBtn.textContent = 'Cancel';
+        cancelBtn.style.cssText = 'margin-top:0.75rem;padding:0.5rem 1.2rem;border:1px solid var(--line);border-radius:0.6rem;background:#fff;cursor:pointer;font-family:Manrope,sans-serif;font-weight:600;font-size:0.85rem;';
+        cancelBtn.onclick = function() { document.body.removeChild(overlay); };
+        picker.appendChild(cancelBtn);
+        overlay.appendChild(picker);
+        overlay.onclick = function(e) { if (e.target === overlay) document.body.removeChild(overlay); };
+        document.body.appendChild(overlay);
+    }
+
+    function clearPlan() {
+        var result = document.getElementById('planner-result');
+        result.classList.remove('visible');
+        result.innerHTML = '';
+        activeMenu = null;
+        document.getElementById('planner-event').value = '';
+        document.getElementById('planner-guests').value = 10;
+        document.getElementById('planner-vibe').value = 'comfort';
+        document.getElementById('planner-dietary').value = 'any';
+        document.getElementById('planner-complexity').value = 'any';
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       PRINT RECIPES — Beautiful branded PDF print
+       ══════════════════════════════════════════════════════════════ */
+    function printMenuRecipes() {
+        if (!activeMenu) return;
+
+        // Collect all selected dish IDs
+        var selectedIds = [];
+        activeMenu.groups.forEach(function(g) {
+            g.ids.forEach(function(id) { selectedIds.push(id); });
+        });
+        if (selectedIds.length === 0) return;
+
+        // Get event label for title
+        var eventLabels = {
+            'shabbat': 'Shabbat Dinner', 'rosh-hashanah': 'Rosh Hashanah', 'yom-kippur': 'Yom Kippur Break-Fast',
+            'sukkot': 'Sukkot', 'hanukkah': 'Hanukkah', 'purim': 'Purim', 'passover': 'Passover Seder',
+            'shavuot': 'Shavuot', 'birthday': 'Birthday Celebration', 'anniversary': 'Anniversary Dinner',
+            'casual': 'Casual Gathering', 'any': 'Special Occasion'
+        };
+        var eventLabel = eventLabels[activeMenu.event] || 'Menu';
+        var guests = activeMenu.guests || 10;
+
+        // Show loading overlay
+        var loadOverlay = document.createElement('div');
+        loadOverlay.style.cssText = 'position:fixed;inset:0;background:rgba(16,32,57,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;';
+        loadOverlay.innerHTML = '<div style="background:#fff;border-radius:1rem;padding:2rem 2.5rem;text-align:center;font-family:Manrope,sans-serif;box-shadow:0 24px 56px rgba(0,0,0,0.35);"><div style="font-size:1.5rem;margin-bottom:0.5rem;">📜</div><div style="font-weight:700;color:#102039;margin-bottom:0.25rem;">Preparing your recipe booklet…</div><div style="font-size:0.82rem;color:#667c9c;">Loading full recipes</div></div>';
+        document.body.appendChild(loadOverlay);
+
+        fetch('/data/recipes.json')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                document.body.removeChild(loadOverlay);
+                var allRecipes = data.recipes || [];
+                // Build a map by slug for quick lookup
+                var bySlug = {};
+                allRecipes.forEach(function(r) { bySlug[r.slug] = r; });
+                // Also map by id via RECIPES array slugs
+                var selectedRecipes = [];
+                selectedIds.forEach(function(id) {
+                    var summary = getRecipeById(id);
+                    if (!summary) return;
+                    var full = bySlug[summary.slug];
+                    if (full) selectedRecipes.push({ summary: summary, full: full });
+                    else selectedRecipes.push({ summary: summary, full: null });
+                });
+                openPrintWindow(eventLabel, guests, selectedRecipes);
+            })
+            .catch(function() {
+                document.body.removeChild(loadOverlay);
+                // Fallback: print with summary data only
+                var selectedRecipes = selectedIds.map(function(id) {
+                    return { summary: getRecipeById(id), full: null };
+                }).filter(function(r) { return r.summary; });
+                openPrintWindow(eventLabel, guests, selectedRecipes);
+            });
+    }
+
+    function openPrintWindow(eventLabel, guests, selectedRecipes) {
+        // Group by course (using activeMenu.groups order)
+        var groupedSections = [];
+        if (activeMenu && activeMenu.groups) {
+            activeMenu.groups.forEach(function(g) {
+                var dishes = g.ids.map(function(id) {
+                    return selectedRecipes.find(function(r) { return r.summary && r.summary.id === id; });
+                }).filter(Boolean);
+                if (dishes.length > 0) groupedSections.push({ name: g.name, dishes: dishes });
+            });
+        } else {
+            groupedSections = [{ name: 'Menu', dishes: selectedRecipes }];
+        }
+
+        var today = new Date();
+        var dateStr = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        // Build menu overview HTML
+        var menuOverviewHTML = groupedSections.map(function(section) {
+            return '<div class="toc-section">' +
+                '<div class="toc-course">' + section.name + '</div>' +
+                section.dishes.map(function(r) {
+                    var s = r.summary;
+                    return '<div class="toc-dish">' +
+                        '<span class="toc-dish-name">' + s.title + '</span>' +
+                        '<span class="toc-dish-origin">' + (s.origin || '') + '</span>' +
+                        '</div>';
+                }).join('') +
+                '</div>';
+        }).join('');
+
+        // Build full recipe pages HTML
+        var recipePagesHTML = selectedRecipes.map(function(r, idx) {
+            var s = r.summary;
+            var f = r.full;
+            var ingredients = f && f.ingredients ? f.ingredients : [];
+            var directions = f && f.directions ? f.directions : [];
+            var tip = f && f.tip ? f.tip : '';
+
+            var ingredientsHTML = '';
+            if (ingredients.length > 0) {
+                // Handle section headers (empty strings or strings ending in colon)
+                var liItems = ingredients.map(function(ing) {
+                    if (!ing || ing.trim() === '') return '<li class="ing-spacer"></li>';
+                    if (ing.trim().endsWith(':')) return '<li class="ing-header">' + ing.trim() + '</li>';
+                    return '<li>' + ing + '</li>';
+                }).join('');
+                ingredientsHTML = '<ul class="ingredients-list">' + liItems + '</ul>';
+            } else {
+                ingredientsHTML = '<p class="no-data">Full ingredients not available — visit the recipe page for details.</p>';
+            }
+
+            var directionsHTML = '';
+            if (directions.length > 0) {
+                directionsHTML = '<ol class="directions-list">' +
+                    directions.map(function(step) { return '<li>' + step + '</li>'; }).join('') +
+                    '</ol>';
+            } else {
+                directionsHTML = '<p class="no-data">Full directions not available — visit the recipe page for details.</p>';
+            }
+
+            var tipHTML = tip ? '<div class="recipe-tip"><span class="tip-label">Chef\'s Tip</span>' + tip + '</div>' : '';
+            var metaHTML = '<div class="recipe-meta-row">' +
+                (s.time ? '<span><strong>Total Time</strong>' + s.time + '</span>' : '') +
+                (s.servings ? '<span><strong>Serves</strong>' + s.servings + '</span>' : '') +
+                (s.difficulty ? '<span><strong>Difficulty</strong>' + s.difficulty + '</span>' : '') +
+                (s.origin ? '<span><strong>Origin</strong>' + s.origin + '</span>' : '') +
+                '</div>';
+
+            return '<div class="recipe-page' + (idx % 2 === 0 ? ' page-break-before' : '') + '">' +
+                '<div class="recipe-page-header">' +
+                '<div class="recipe-number">' + (idx + 1) + '</div>' +
+                '<div class="recipe-page-title-block">' +
+                '<h2 class="recipe-page-title">' + s.title + '</h2>' +
+                (s.origin ? '<div class="recipe-page-origin">' + s.origin + '</div>' : '') +
+                '</div>' +
+                '</div>' +
+                metaHTML +
+                (s.desc || (f && f.description) ? '<p class="recipe-description">' + (f && f.description ? f.description : s.desc) + '</p>' : '') +
+                '<div class="recipe-two-col">' +
+                '<div class="col-ingredients"><h3>Ingredients</h3>' + ingredientsHTML + '</div>' +
+                '<div class="col-directions"><h3>Directions</h3>' + directionsHTML + '</div>' +
+                '</div>' +
+                tipHTML +
+                '</div>';
+        }).join('');
+
+        var printHTML = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>' + eventLabel + ' — Recipe Booklet</title>' +
+        '<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">' +
+        '<style>' +
+        '* { box-sizing: border-box; margin: 0; padding: 0; }' +
+        'html, body { font-family: "Manrope", sans-serif; color: #102039; background: #fff; font-size: 10.5pt; line-height: 1.55; }' +
+
+        /* Cover page */
+        '.cover { page-break-after: always; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: linear-gradient(160deg, #fdf8ee 0%, #eef3fb 60%, #fdf8ee 100%); padding: 3rem 2rem; position: relative; }' +
+        '.cover::before { content: ""; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23cf9a32\' fill-opacity=\'0.04\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); opacity: 0.5; }' +
+        '.cover-logo { width: 90px; height: 90px; border-radius: 18px; box-shadow: 0 8px 32px rgba(207,154,50,0.25); margin-bottom: 1.8rem; position: relative; }' +
+        '.cover-site { font-family: "Manrope", sans-serif; font-size: 9.5pt; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #cf9a32; margin-bottom: 0.5rem; position: relative; }' +
+        '.cover-divider { width: 60px; height: 3px; background: linear-gradient(90deg, #cf9a32, #b8882a); border-radius: 2px; margin: 1rem auto; position: relative; }' +
+        '.cover-title { font-family: "Fraunces", serif; font-size: 28pt; font-weight: 700; color: #102039; line-height: 1.18; margin-bottom: 0.4rem; position: relative; }' +
+        '.cover-subtitle { font-family: "Fraunces", serif; font-size: 14pt; font-weight: 500; color: #456188; margin-bottom: 2rem; position: relative; font-style: italic; }' +
+        '.cover-meta { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; position: relative; }' +
+        '.cover-meta-item { text-align: center; }' +
+        '.cover-meta-item .val { font-family: "Fraunces", serif; font-size: 18pt; font-weight: 700; color: #1f3f76; }' +
+        '.cover-meta-item .lbl { font-size: 8pt; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #667c9c; }' +
+        '.cover-footer { position: relative; font-size: 8.5pt; color: #667c9c; margin-top: 2rem; }' +
+        '.cover-border { position: absolute; inset: 18px; border: 1.5px solid rgba(207,154,50,0.3); border-radius: 12px; pointer-events: none; }' +
+
+        /* Table of contents */
+        '.toc-page { page-break-after: always; padding: 2.5rem; }' +
+        '.toc-page h2 { font-family: "Fraunces", serif; font-size: 16pt; font-weight: 700; color: #102039; margin-bottom: 0.3rem; }' +
+        '.toc-page .section-rule { height: 2px; background: linear-gradient(90deg, #cf9a32, transparent); margin: 0.5rem 0 1.5rem; border-radius: 1px; }' +
+        '.toc-section { margin-bottom: 1.25rem; }' +
+        '.toc-course { font-size: 7.5pt; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #cf9a32; margin-bottom: 0.4rem; padding-bottom: 0.25rem; border-bottom: 1px solid rgba(207,154,50,0.2); }' +
+        '.toc-dish { display: flex; justify-content: space-between; align-items: baseline; padding: 0.3rem 0; border-bottom: 1px dotted rgba(16,32,57,0.12); }' +
+        '.toc-dish-name { font-size: 9.5pt; font-weight: 600; color: #102039; }' +
+        '.toc-dish-origin { font-size: 8pt; color: #667c9c; font-style: italic; }' +
+
+        /* Recipe pages */
+        '.recipe-page { padding: 2rem 2.5rem; border-top: 3px solid #cf9a32; margin-bottom: 0; }' +
+        '.page-break-before { page-break-before: always; }' +
+        '.recipe-page-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 0.75rem; }' +
+        '.recipe-number { width: 36px; height: 36px; min-width: 36px; border-radius: 50%; background: linear-gradient(135deg, #cf9a32, #b8882a); color: #fff; font-family: "Fraunces", serif; font-size: 13pt; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 2px; }' +
+        '.recipe-page-title { font-family: "Fraunces", serif; font-size: 15pt; font-weight: 700; color: #102039; line-height: 1.2; }' +
+        '.recipe-page-origin { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #0f7b8f; margin-top: 0.2rem; }' +
+        '.recipe-meta-row { display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem; margin-bottom: 0.75rem; background: rgba(207,154,50,0.06); border-radius: 0.5rem; padding: 0.5rem 0.75rem; }' +
+        '.recipe-meta-row span { font-size: 8pt; color: #456188; }' +
+        '.recipe-meta-row span strong { color: #102039; display: block; font-size: 7pt; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1px; }' +
+        '.recipe-description { font-size: 9pt; color: #456188; font-style: italic; margin-bottom: 1rem; line-height: 1.5; padding: 0.5rem 0.75rem; border-left: 3px solid rgba(207,154,50,0.4); }' +
+        '.recipe-two-col { display: grid; grid-template-columns: 1fr 1.65fr; gap: 1.25rem; }' +
+        '.col-ingredients h3, .col-directions h3 { font-family: "Fraunces", serif; font-size: 10.5pt; font-weight: 700; color: #1f3f76; margin-bottom: 0.5rem; padding-bottom: 0.3rem; border-bottom: 1.5px solid rgba(31,63,118,0.15); }' +
+        '.ingredients-list { list-style: none; padding: 0; }' +
+        '.ingredients-list li { font-size: 8.5pt; color: #102039; padding: 0.22rem 0; border-bottom: 1px solid rgba(16,32,57,0.07); line-height: 1.4; }' +
+        '.ingredients-list li:last-child { border-bottom: none; }' +
+        '.ing-header { font-weight: 700; color: #1f3f76 !important; font-size: 7.5pt !important; text-transform: uppercase; letter-spacing: 0.04em; padding-top: 0.5rem !important; border-bottom: none !important; }' +
+        '.ing-spacer { height: 0.3rem; border: none !important; }' +
+        '.directions-list { padding-left: 1.1rem; }' +
+        '.directions-list li { font-size: 8.5pt; color: #102039; padding: 0.3rem 0 0.3rem 0.3rem; border-bottom: 1px solid rgba(16,32,57,0.07); line-height: 1.5; }' +
+        '.directions-list li:last-child { border-bottom: none; }' +
+        '.no-data { font-size: 8.5pt; color: #667c9c; font-style: italic; }' +
+        '.recipe-tip { margin-top: 0.85rem; background: rgba(207,154,50,0.08); border-left: 3px solid #cf9a32; border-radius: 0 0.4rem 0.4rem 0; padding: 0.6rem 0.85rem; font-size: 8.5pt; color: #102039; line-height: 1.5; }' +
+        '.tip-label { font-weight: 800; color: #cf9a32; display: block; font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.25rem; }' +
+
+        /* Footer on each page */
+        '@media print {' +
+        '  @page { margin: 0.6in 0.65in; size: letter; }' +
+        '  body { font-size: 9.5pt; }' +
+        '  .cover { min-height: 9in; }' +
+        '  .recipe-two-col { grid-template-columns: 1fr 1.5fr; }' +
+        '}' +
+        '</style></head><body>' +
+
+        /* ── Cover ─────────────────────────────────────────── */
+        '<div class="cover">' +
+        '<div class="cover-border"></div>' +
+        '<img class="cover-logo" src="https://www.aletterinthescroll.com/media/images/Icon.png" alt="A Letter in the Scroll" onerror="this.style.display=\'none\'">' +
+        '<div class="cover-site">A Letter in the Scroll</div>' +
+        '<div class="cover-divider"></div>' +
+        '<div class="cover-title">' + eventLabel + '</div>' +
+        '<div class="cover-subtitle">Recipe Booklet</div>' +
+        '<div class="cover-meta">' +
+        '<div class="cover-meta-item"><div class="val">' + guests + '</div><div class="lbl">Guests</div></div>' +
+        '<div class="cover-meta-item"><div class="val">' + selectedRecipes.length + '</div><div class="lbl">Recipes</div></div>' +
+        '</div>' +
+        '<div class="cover-footer">Prepared on ' + dateStr + ' &bull; aletterinthescroll.com</div>' +
+        '</div>' +
+
+        /* ── Table of Contents ─────────────────────────────── */
+        '<div class="toc-page">' +
+        '<h2>Menu Overview</h2>' +
+        '<div class="section-rule"></div>' +
+        menuOverviewHTML +
+        '</div>' +
+
+        /* ── Recipe Pages ──────────────────────────────────── */
+        recipePagesHTML +
+
+        '</body></html>';
+
+        var printWin = window.open('', '_blank', 'width=900,height=700');
+        if (!printWin) {
+            alert('Please allow pop-ups to print the recipe booklet.');
+            return;
+        }
+        printWin.document.write(printHTML);
+        printWin.document.close();
+        printWin.onload = function() {
+            setTimeout(function() { printWin.print(); }, 600);
+        };
+    }
+
+    // Close swap dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.dish-action-btn.swap') && !e.target.closest('.swap-dropdown')) {
+            document.querySelectorAll('.swap-dropdown.open').forEach(function(el) {
+                el.classList.remove('open');
+            });
+        }
+    });
+
+    /* ══════════════════════════════════════════════════════════════
+       RECIPE RENDERING & FILTERING
+       ══════════════════════════════════════════════════════════════ */
+    var currentCategory = 'all';
+    var currentPage = 1;
+    var pageSize = 25;
+
+    function getFilteredRecipes() {
+        var searchTerm = (document.getElementById('recipe-search').value || '').toLowerCase().trim();
+        return RECIPES.filter(function(r) {
+            if (currentCategory !== 'all' && r.cat !== currentCategory) return false;
+            if (searchTerm) {
+                var searchable = (r.title + ' ' + r.origin + ' ' + r.desc + ' ' + r.tags.join(' ')).toLowerCase();
+                return searchable.indexOf(searchTerm) !== -1;
+            }
+            return true;
+        });
+    }
+
+    function renderRecipeCard(r) {
+        var tagsHtml = r.tags.map(function(t) {
+            var cls = 'recipe-tag';
+            var holidays = ['Rosh Hashanah', 'Passover', 'Hanukkah', 'Purim', 'Sukkot', 'Shavuot', 'Yom Kippur', 'Shabbat', 'Mimouna'];
+            if (holidays.indexOf(t) !== -1) cls += ' holiday';
+            if (t === 'Vegan' || t === 'Vegetarian' || t === 'Gluten-Free' || t === 'Dairy-Free') cls += ' kosher';
+            return '<span class="' + cls + '">' + t + '</span>';
+        }).join('');
+
+        return '<a class="recipe-card" href="/food/recipes/' + r.slug + '.html" data-id="' + r.id + '">' +
+            '<div class="recipe-header">' +
+                '<div class="recipe-header-text">' +
+                    '<h3 class="recipe-title">' + r.title + '</h3>' +
+                    '<p class="recipe-origin">' + r.origin + '</p>' +
+                '</div>' +
+            '</div>' +
+            '<div class="recipe-tags">' + tagsHtml + '</div>' +
+            '<p class="recipe-desc">' + r.desc + '</p>' +
+            '<div class="recipe-meta">' +
+                '<span>' + r.time + '</span>' +
+                '<span>' + r.servings + ' servings</span>' +
+                '<span>' + r.difficulty + '</span>' +
+            '</div>' +
+        '</a>';
+    }
+
+    function renderPagination(totalItems) {
+        var paginationEl = document.getElementById('pagination-controls');
+        var totalPages = Math.ceil(totalItems / pageSize);
+
+        if (totalPages <= 1) {
+            paginationEl.innerHTML = '';
+            return;
+        }
+
+        // Clamp current page
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+
+        var startItem = (currentPage - 1) * pageSize + 1;
+        var endItem = Math.min(currentPage * pageSize, totalItems);
+
+        var html = '';
+
+        // Left: info text
+        html += '<div class="pagination-info">Showing ' + startItem + '–' + endItem + ' of ' + totalItems + ' recipes</div>';
+
+        // Center: page navigation
+        html += '<div class="pagination-nav">';
+
+        // Previous button
+        html += '<button class="page-btn" onclick="goToPage(' + (currentPage - 1) + ')"' + (currentPage === 1 ? ' disabled' : '') + '>';
+        html += '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>';
+        html += '</button>';
+
+        // Page numbers with ellipsis
+        var pages = buildPageNumbers(currentPage, totalPages);
+        for (var i = 0; i < pages.length; i++) {
+            if (pages[i] === '...') {
+                html += '<span class="page-ellipsis">...</span>';
+            } else {
+                var p = pages[i];
+                html += '<button class="page-btn' + (p === currentPage ? ' active' : '') + '" onclick="goToPage(' + p + ')">' + p + '</button>';
+            }
+        }
+
+        // Next button
+        html += '<button class="page-btn" onclick="goToPage(' + (currentPage + 1) + ')"' + (currentPage === totalPages ? ' disabled' : '') + '>';
+        html += '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>';
+        html += '</button>';
+
+        html += '</div>';
+
+        // Right: page size selector
+        html += '<div class="page-size-group">';
+        html += '<label for="page-size-select">Show</label>';
+        html += '<select id="page-size-select" onchange="changePageSize(this.value)">';
+        [25, 50, 120].forEach(function(size) {
+            html += '<option value="' + size + '"' + (pageSize === size ? ' selected' : '') + '>' + (size === 120 ? 'All' : size) + '</option>';
+        });
+        html += '</select>';
+        html += '</div>';
+
+        paginationEl.innerHTML = html;
+    }
+
+    function buildPageNumbers(current, total) {
+        // Always show first, last, current, and neighbors; use ellipsis for gaps
+        if (total <= 7) {
+            var all = [];
+            for (var i = 1; i <= total; i++) all.push(i);
+            return all;
+        }
+        var pages = [];
+        pages.push(1);
+        if (current > 3) pages.push('...');
+        for (var p = Math.max(2, current - 1); p <= Math.min(total - 1, current + 1); p++) {
+            pages.push(p);
+        }
+        if (current < total - 2) pages.push('...');
+        pages.push(total);
+        return pages;
+    }
+
+    function goToPage(page) {
+        var filtered = getFilteredRecipes();
+        var totalPages = Math.ceil(filtered.length / pageSize);
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderRecipes();
+        // Scroll to top of recipe grid
+        var grid = document.getElementById('recipe-grid');
+        if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function changePageSize(newSize) {
+        pageSize = parseInt(newSize);
+        currentPage = 1;
+        renderRecipes();
+    }
+
+    function renderRecipes() {
+        var grid = document.getElementById('recipe-grid');
+        var noResults = document.getElementById('no-results');
+
+        var filtered = getFilteredRecipes();
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '';
+            noResults.style.display = 'block';
+            document.getElementById('pagination-controls').innerHTML = '';
+            return;
+        }
+        noResults.style.display = 'none';
+
+        // Paginate
+        var totalPages = Math.ceil(filtered.length / pageSize);
+        if (currentPage > totalPages) currentPage = totalPages;
+        var start = (currentPage - 1) * pageSize;
+        var end = Math.min(start + pageSize, filtered.length);
+        var pageItems = filtered.slice(start, end);
+
+        grid.innerHTML = pageItems.map(renderRecipeCard).join('');
+        renderPagination(filtered.length);
+    }
+
+    function setCategory(cat) {
+        currentCategory = cat;
+        currentPage = 1; // reset to page 1 on category change
+        document.querySelectorAll('.cat-tab').forEach(function(btn) {
+            btn.classList.toggle('active', btn.getAttribute('data-cat') === cat);
+        });
+        renderRecipes();
+    }
+
+    function filterRecipes() {
+        currentPage = 1; // reset to page 1 on search
+        renderRecipes();
+    }
+
+    // Initial render
+    document.addEventListener('DOMContentLoaded', function() {
+        renderRecipes();
+    });
+    </script>
+
+    <!-- Auth gate (redirects unauthenticated users to login) -->
+    <script type="module">
+        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { auth } from '/js/firebase.js';
+        var _authSeen = false;
+        onAuthStateChanged(auth, function(user) {
+            if (user) { _authSeen = true; return; }
+            if (_authSeen) return; // ignore transient null during token refresh
+            // Give Firebase time to restore session from IndexedDB
+            setTimeout(function() {
+                if (!auth.currentUser) {
+                    window.location.href = '/?redirect=' + encodeURIComponent(window.location.pathname);
+                }
+            }, 4000);
+        });
+    </script>
+</body>
+</html>

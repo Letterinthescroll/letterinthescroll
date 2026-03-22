@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moroccan Fish Patties (Ktzitzot Dagim) — A Letter in the Scroll</title>
+    <link rel="icon" type="image/png" href="/media/images/Icon.png">
+    <link rel="apple-touch-icon" href="/media/images/Icon.png">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="A Letter in the Scroll">
+    <meta property="og:title" content="Moroccan Fish Patties (Ktzitzot Dagim) — A Letter in the Scroll">
+    <meta property="og:description" content="Spiced fish patties simmered directly in a fiery harissa tomato sauce — a Moroccan Shabbat essential where the fish absorbs every drop of the fragrant, garlicky broth as it cooks.">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/mobile-overrides.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink-950: #102039;
+            --ink-800: #1e3558;
+            --ink-700: #2c4a75;
+            --ink-600: #456188;
+            --ink-500: #667c9c;
+            --surface: #ffffff;
+            --surface-soft: #f7fbff;
+            --surface-glass: rgba(255, 255, 255, 0.82);
+            --line: rgba(25, 61, 108, 0.16);
+            --line-strong: rgba(25, 61, 108, 0.24);
+            --accent-navy: #1f3f76;
+            --accent-teal: #0f7b8f;
+            --accent-gold: #cf9a32;
+            --accent-mint: #2f9f84;
+            --radius-xl: 1.45rem;
+            --radius-lg: 1.05rem;
+            --shadow-xl: 0 24px 56px rgba(17, 44, 84, 0.17);
+            --shadow-lg: 0 12px 30px rgba(17, 44, 84, 0.11);
+            --shadow-sm: 0 4px 12px rgba(17, 44, 84, 0.07);
+        }
+        html { scroll-behavior: smooth; background: #edf5ff; }
+        body {
+            font-family: 'Manrope', sans-serif;
+            color: var(--ink-950);
+            min-height: 100vh;
+            background:
+                radial-gradient(1200px 580px at -8% -10%, rgba(207, 154, 50, 0.18), transparent 60%),
+                radial-gradient(900px 560px at 108% -12%, rgba(36, 118, 175, 0.16), transparent 58%),
+                linear-gradient(180deg, #faf6ee 0%, #f4f8ff 47%, #faf6ee 100%);
+        }
+        .recipe-page { max-width: 52rem; margin: 0 auto; padding: 2rem 2.5rem 4rem; }
+        .recipe-back {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-size: 0.85rem; font-weight: 600; color: var(--accent-teal);
+            text-decoration: none; margin-bottom: 1.5rem;
+            transition: color 0.2s;
+        }
+        .recipe-back:hover { color: var(--accent-navy); }
+        .recipe-back svg { width: 16px; height: 16px; }
+        .recipe-header { margin-bottom: 2rem; }
+        .recipe-header h1 {
+            font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 700; color: var(--ink-950); margin: 0 0 0.5rem; line-height: 1.2;
+        }
+        .recipe-origin {
+            font-size: 0.85rem; font-weight: 600; color: var(--accent-teal);
+            text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem;
+        }
+        .recipe-desc {
+            font-size: 1rem; color: var(--ink-600); line-height: 1.7; max-width: 44rem;
+        }
+        .recipe-meta {
+            display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0;
+            margin: 1rem 0 1.25rem; padding: 0;
+            background: none; border: none; border-radius: 0; box-shadow: none;
+        }
+        .meta-item {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+        }
+        .meta-item::after {
+            content: '\00b7'; color: var(--ink-500); font-weight: 700;
+            font-size: 1rem; margin: 0 0.4rem;
+        }
+        .meta-item:last-child::after { display: none; }
+        .meta-label {
+            font-size: 0.75rem; font-weight: 600;
+            color: var(--ink-500);
+        }
+        .meta-value { font-size: 0.75rem; font-weight: 700; color: var(--ink-950); }
+        .recipe-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+        .recipe-tag {
+            font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.05em; padding: 0.2rem 0.6rem;
+            background: rgba(15, 123, 143, 0.08); color: var(--accent-teal);
+            border-radius: 2rem;
+        }
+        .recipe-section {
+            background: linear-gradient(170deg, rgba(255,255,255,0.94), rgba(252,254,255,0.87));
+            border: 1px solid var(--line); border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg); backdrop-filter: blur(8px);
+            padding: 2rem; margin-bottom: 1.5rem;
+        }
+        .recipe-section h2 {
+            font-family: 'Fraunces', serif; font-size: 1.35rem; font-weight: 700;
+            color: var(--ink-950); margin: 0 0 1rem;
+            padding-bottom: 0.6rem; border-bottom: 2px solid rgba(207,154,50,0.25);
+        }
+        .ingredients-list {
+            list-style: none; padding: 0; margin: 0;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.15rem 1.8rem;
+        }
+        .ingredients-list li {
+            position: relative;
+            padding: 0.28rem 0 0.28rem 1.1rem;
+            font-size: 0.88rem; line-height: 1.45; color: var(--ink-700);
+        }
+        .ingredients-list li::before {
+            content: ''; position: absolute; left: 0; top: 0.55rem;
+            width: 5px; height: 5px; border-radius: 50%;
+            background: var(--accent-gold);
+        }
+        .ingredients-list li.section-divider {
+            grid-column: 1 / -1; padding: 0.5rem 0 0.15rem 0;
+            font-weight: 700; font-size: 0.78rem;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            color: var(--accent-teal); border-bottom: 1px solid rgba(15,123,143,0.15);
+        }
+        .ingredients-list li.section-divider::before { display: none; }
+        @media (max-width: 640px) {
+            .ingredients-list { grid-template-columns: 1fr; }
+        }
+        .directions-list { list-style: none; padding: 0; margin: 0; counter-reset: step; }
+        .directions-list li {
+            position: relative; padding: 1rem 0 1rem 3rem;
+            border-bottom: 1px solid var(--line);
+            font-size: 0.95rem; line-height: 1.75; color: var(--ink-700);
+            counter-increment: step;
+        }
+        .directions-list li:last-child { border-bottom: none; }
+        .directions-list li::before {
+            content: counter(step);
+            position: absolute; left: 0; top: 1rem;
+            width: 2rem; height: 2rem; border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-gold), #b8882a);
+            color: #fff; font-size: 0.8rem; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .recipe-tip {
+            background: rgba(207, 154, 50, 0.08);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            padding: 1.25rem 1.5rem; margin-top: 0.5rem;
+        }
+        .recipe-tip strong { color: var(--accent-gold); font-weight: 700; }
+        .recipe-tip p { margin: 0.3rem 0 0; font-size: 0.92rem; line-height: 1.65; color: var(--ink-700); }
+        .serving-scaler {
+            display: flex; align-items: center; gap: 0.5rem;
+            margin-bottom: 1.25rem; flex-wrap: wrap;
+        }
+        .serving-scaler-label {
+            font-size: 0.82rem; font-weight: 600; color: var(--ink-600);
+        }
+        .serving-scaler-controls {
+            display: flex; align-items: center; gap: 0;
+            border: 1.5px solid var(--line-strong); border-radius: 0.6rem; overflow: hidden;
+        }
+        .serving-btn {
+            width: 36px; height: 36px; border: none;
+            background: var(--surface-soft); color: var(--ink-700);
+            font-size: 1.1rem; font-weight: 700; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s;
+        }
+        .serving-btn:hover { background: rgba(207, 154, 50, 0.15); color: var(--accent-gold); }
+        .serving-btn:active { transform: scale(0.95); }
+        .serving-count {
+            width: 50px; height: 36px; border: none; border-left: 1px solid var(--line);
+            border-right: 1px solid var(--line);
+            text-align: center; font-family: 'Manrope', sans-serif;
+            font-size: 0.95rem; font-weight: 700; color: var(--ink-950);
+            background: #fff;
+        }
+        .serving-count:focus { outline: none; background: rgba(207, 154, 50, 0.06); }
+        .serving-multiplier {
+            font-size: 0.75rem; font-weight: 600; color: var(--accent-teal);
+            padding: 0.2rem 0.55rem; background: rgba(15, 123, 143, 0.08);
+            border-radius: 1rem; margin-left: 0.4rem;
+        }
+        .serving-reset {
+            font-size: 0.72rem; font-weight: 600; color: var(--ink-500);
+            background: none; border: 1px solid var(--line); border-radius: 1rem;
+            padding: 0.2rem 0.6rem; cursor: pointer; transition: all 0.15s;
+            margin-left: 0.25rem;
+        }
+        .serving-reset:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+        .ingredient-scaled { color: var(--accent-teal); font-weight: 600; }
+        @media (max-width: 640px) {
+            .recipe-page { padding: 1.5rem 1.25rem 3rem; }
+            .recipe-section { padding: 1.5rem; }
+            .recipe-meta { gap: 0.3rem 0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="shared-header-mount"></div>
+    <main class="recipe-page">
+        <a href="/food" class="recipe-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            Back to All Recipes
+        </a>
+        <div class="recipe-header">
+            <div class="recipe-origin">Moroccan</div>
+            <h1>Moroccan Fish Patties (Ktzitzot Dagim)</h1>
+            <p class="recipe-desc">Spiced fish patties simmered directly in a fiery harissa tomato sauce — a Moroccan Shabbat essential where the fish absorbs every drop of the fragrant, garlicky broth as it cooks.</p>
+        </div>
+        <div class="recipe-meta">
+            <div class="meta-item"><span class="meta-label">Prep Time</span><span class="meta-value">20 min</span></div>
+            <div class="meta-item"><span class="meta-label">Cook Time</span><span class="meta-value">25 min</span></div>
+            <div class="meta-item"><span class="meta-label">Total Time</span><span class="meta-value">45 min</span></div>
+            <div class="meta-item"><span class="meta-label">Servings</span><span class="meta-value" id="servings-display">6</span></div>
+            <div class="meta-item"><span class="meta-label">Difficulty</span><span class="meta-value">Easy</span></div>
+        </div>
+        <div class="recipe-tags">
+            <span class="recipe-tag">Shabbat</span>
+            <span class="recipe-tag">Rosh Hashanah</span>
+            <span class="recipe-tag">Passover</span>
+        </div>
+        <div class="recipe-section">
+            <h2>Ingredients</h2>
+            <div class="serving-scaler">
+                <span class="serving-scaler-label">Adjust servings:</span>
+                <div class="serving-scaler-controls">
+                    <button class="serving-btn" onclick="changeServings(-1)" aria-label="Decrease servings">-</button>
+                    <input type="number" class="serving-count" id="serving-input" value="6" min="1" max="200" onchange="updateServings()">
+                    <button class="serving-btn" onclick="changeServings(1)" aria-label="Increase servings">+</button>
+                </div>
+                <span class="serving-multiplier" id="multiplier-badge" style="display:none;"></span>
+                <button class="serving-reset" id="reset-btn" onclick="resetServings()" style="display:none;">Reset</button>
+            </div>
+            <ul class="ingredients-list" id="ingredients-list">
+                <li class="ingredient-item">1 1/2 lbs ground white fish (cod, tilapia, or halibut)</li>
+                <li class="ingredient-item">1/2 cup breadcrumbs (use matzo meal for Passover)</li>
+                <li class="ingredient-item">1 large egg</li>
+                <li class="ingredient-item">2 tbsp fresh parsley, finely chopped</li>
+                <li class="ingredient-item">1 tsp ground cumin</li>
+                <li class="ingredient-item">1 tsp sweet paprika</li>
+                <li class="ingredient-item">1/2 tsp salt</li>
+                <li class="section-divider">For the sauce:</li>
+                <li class="ingredient-item">4 garlic cloves, minced</li>
+                <li class="ingredient-item">1 can (14 oz) crushed tomatoes</li>
+                <li class="ingredient-item">1/2 cup water</li>
+                <li class="ingredient-item">1–2 tbsp harissa paste (to taste)</li>
+                <li class="ingredient-item">2 tbsp olive oil</li>
+                <li class="ingredient-item">Salt to taste</li>
+            </ul>
+        </div>
+        <div class="recipe-section">
+            <h2>Directions</h2>
+            <ol class="directions-list">
+                <li>In a large bowl, combine the ground fish, breadcrumbs, egg, parsley, cumin, paprika, and salt. Mix until uniform. Form into 2-inch balls and set aside on a plate.</li>
+                <li>Heat the olive oil in a wide, deep skillet over medium heat. Add the minced garlic and cook 1 minute until fragrant. Stir in the harissa paste and cook 30 seconds more.</li>
+                <li>Pour in the crushed tomatoes and water. Stir to combine and bring to a gentle simmer. Cook the sauce for 10 minutes until slightly reduced.</li>
+                <li>Gently lower the fish patties into the simmering sauce one at a time. Cover the pan with a lid and simmer for 15 minutes without lifting the lid. The steam will cook the interior of each patty as the sauce reduces around them.</li>
+                <li>Serve warm with crusty bread or over rice.</li>
+            </ol>
+        </div>
+        <div class="recipe-tip">
+            <strong>Chef's Tip</strong>
+            <p>The key to Moroccan fish patties is letting them cook fully in the sauce without lifting the lid — steam finishes the interior while the sauce reduces around them.</p>
+        </div>
+    </main>
+    <div id="shared-footer-mount"></div>
+    <script src="/js/header-loader.js"></script>
+    <script src="/js/footer-loader.js"></script>
+    <script>
+    (function() {
+        var BASE_SERVINGS = 6;
+        var ingredients = [
+            { divider: false, text: "1 1/2 lbs ground white fish (cod, tilapia, or halibut)" },
+            { divider: false, text: "1/2 cup breadcrumbs (use matzo meal for Passover)" },
+            { divider: false, text: "1 large egg" },
+            { divider: false, text: "2 tbsp fresh parsley, finely chopped" },
+            { divider: false, text: "1 tsp ground cumin" },
+            { divider: false, text: "1 tsp sweet paprika" },
+            { divider: false, text: "1/2 tsp salt" },
+            { divider: true, text: "" },
+            { divider: true, text: "For the sauce:" },
+            { divider: false, text: "4 garlic cloves, minced" },
+            { divider: false, text: "1 can (14 oz) crushed tomatoes" },
+            { divider: false, text: "1/2 cup water" },
+            { divider: false, text: "1–2 tbsp harissa paste (to taste)" },
+            { divider: false, text: "2 tbsp olive oil" },
+            { divider: false, text: "Salt to taste" }
+        ];
+
+        var FRACTIONS = {
+            0.125: '1/8', 0.25: '1/4', 0.333: '1/3', 0.375: '3/8',
+            0.5: '1/2', 0.625: '5/8', 0.667: '2/3', 0.75: '3/4', 0.875: '7/8'
+        };
+
+        function parseFraction(s) {
+            s = s.trim();
+            var parts = s.split(/\s+/);
+            var total = 0;
+            for (var i = 0; i < parts.length; i++) {
+                if (parts[i].indexOf('/') !== -1) {
+                    var frac = parts[i].split('/');
+                    total += parseFloat(frac[0]) / parseFloat(frac[1]);
+                } else {
+                    var n = parseFloat(parts[i]);
+                    if (!isNaN(n)) total += n;
+                }
+            }
+            return total;
+        }
+
+        function formatNumber(n) {
+            if (n === 0) return '0';
+            var whole = Math.floor(n);
+            var frac = n - whole;
+            if (frac < 0.0625) frac = 0;
+            else if (frac < 0.1875) frac = 0.125;
+            else if (frac < 0.292) frac = 0.25;
+            else if (frac < 0.354) frac = 0.333;
+            else if (frac < 0.4375) frac = 0.375;
+            else if (frac < 0.5625) frac = 0.5;
+            else if (frac < 0.646) frac = 0.625;
+            else if (frac < 0.709) frac = 0.667;
+            else if (frac < 0.8125) frac = 0.75;
+            else if (frac < 0.9375) frac = 0.875;
+            else { whole++; frac = 0; }
+            var fracStr = FRACTIONS[frac] || '';
+            if (whole === 0 && fracStr) return fracStr;
+            if (whole > 0 && fracStr) return whole + ' ' + fracStr;
+            return '' + (whole || Math.round(n * 100) / 100);
+        }
+
+        function scaleIngredient(text, multiplier) {
+            if (multiplier === 1) return text;
+            return text.replace(/^((?:\d+\s+)?\d+\/\d+|\d+\.\d+|\d+)/, function(match) {
+                var val = parseFraction(match);
+                var scaled = val * multiplier;
+                return '<span class="ingredient-scaled">' + formatNumber(scaled) + '</span>';
+            });
+        }
+
+        function updateServings() {
+            var input = document.getElementById('serving-input');
+            var count = parseInt(input.value) || BASE_SERVINGS;
+            if (count < 1) count = 1;
+            if (count > 200) count = 200;
+            input.value = count;
+            var multiplier = count / BASE_SERVINGS;
+            var badge = document.getElementById('multiplier-badge');
+            var resetBtn = document.getElementById('reset-btn');
+            if (count !== BASE_SERVINGS) {
+                badge.textContent = multiplier < 1 ? (multiplier.toFixed(2) + 'x') : (multiplier.toFixed(1) + 'x');
+                badge.style.display = '';
+                resetBtn.style.display = '';
+            } else {
+                badge.style.display = 'none';
+                resetBtn.style.display = 'none';
+            }
+            var list = document.getElementById('ingredients-list');
+            var html = '';
+            ingredients.forEach(function(ing) {
+                if (ing.divider) {
+                    html += '<li class="section-divider">' + ing.text + '</li>';
+                } else {
+                    html += '<li class="ingredient-item">' + scaleIngredient(ing.text, multiplier) + '</li>';
+                }
+            });
+            list.innerHTML = html;
+            document.getElementById('servings-display').textContent = count;
+        }
+
+        window.changeServings = function(delta) {
+            var input = document.getElementById('serving-input');
+            var current = parseInt(input.value) || BASE_SERVINGS;
+            var next = Math.max(1, Math.min(200, current + delta));
+            input.value = next;
+            updateServings();
+        };
+
+        window.updateServings = updateServings;
+
+        window.resetServings = function() {
+            document.getElementById('serving-input').value = BASE_SERVINGS;
+            updateServings();
+        };
+    })();
+    </script>
+    <script type="module">
+        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { auth } from '/js/firebase.js';
+        var _authSeen = false;
+        onAuthStateChanged(auth, function(user) {
+            if (user) { _authSeen = true; return; }
+            if (_authSeen) return;
+            setTimeout(function() {
+                if (!auth.currentUser) {
+                    window.location.href = '/?redirect=' + encodeURIComponent(window.location.pathname);
+                }
+            }, 4000);
+        });
+    </script>
+</body>
+</html>
