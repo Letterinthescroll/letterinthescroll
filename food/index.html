@@ -2688,6 +2688,7 @@
 
         var today = new Date();
         var dateStr = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        var logoURL = 'https://www.aletterinthescroll.com/media/images/Icon.png';
 
         // Build menu overview HTML
         var menuOverviewHTML = groupedSections.map(function(section) {
@@ -2697,31 +2698,39 @@
                     var s = r.summary;
                     return '<div class="toc-dish">' +
                         '<span class="toc-dish-name">' + s.title + '</span>' +
-                        '<span class="toc-dish-origin">' + (s.origin || '') + '</span>' +
+                        '<span class="toc-dish-meta">' + (s.origin || '') + ' &middot; ' + (s.time || '') + '</span>' +
                         '</div>';
                 }).join('') +
                 '</div>';
         }).join('');
 
-        // Build full recipe pages HTML
+        // Find course name for each recipe
+        var recipeCourseMap = {};
+        groupedSections.forEach(function(section) {
+            section.dishes.forEach(function(r) {
+                if (r.summary) recipeCourseMap[r.summary.id] = section.name;
+            });
+        });
+
+        // Build full recipe pages HTML — each recipe on its own page
         var recipePagesHTML = selectedRecipes.map(function(r, idx) {
             var s = r.summary;
             var f = r.full;
             var ingredients = f && f.ingredients ? f.ingredients : [];
             var directions = f && f.directions ? f.directions : [];
             var tip = f && f.tip ? f.tip : '';
+            var courseName = recipeCourseMap[s.id] || '';
 
             var ingredientsHTML = '';
             if (ingredients.length > 0) {
-                // Handle section headers (empty strings or strings ending in colon)
                 var liItems = ingredients.map(function(ing) {
                     if (!ing || ing.trim() === '') return '<li class="ing-spacer"></li>';
                     if (ing.trim().endsWith(':')) return '<li class="ing-header">' + ing.trim() + '</li>';
-                    return '<li>' + ing + '</li>';
+                    return '<li><span class="ing-bullet"></span>' + ing + '</li>';
                 }).join('');
                 ingredientsHTML = '<ul class="ingredients-list">' + liItems + '</ul>';
             } else {
-                ingredientsHTML = '<p class="no-data">Full ingredients not available — visit the recipe page for details.</p>';
+                ingredientsHTML = '<p class="no-data">Full ingredients not available.</p>';
             }
 
             var directionsHTML = '';
@@ -2730,104 +2739,159 @@
                     directions.map(function(step) { return '<li>' + step + '</li>'; }).join('') +
                     '</ol>';
             } else {
-                directionsHTML = '<p class="no-data">Full directions not available — visit the recipe page for details.</p>';
+                directionsHTML = '<p class="no-data">Full directions not available.</p>';
             }
 
             var tipHTML = tip ? '<div class="recipe-tip"><span class="tip-label">Chef\'s Tip</span>' + tip + '</div>' : '';
-            var metaHTML = '<div class="recipe-meta-row">' +
-                (s.time ? '<span><strong>Total Time</strong>' + s.time + '</span>' : '') +
-                (s.servings ? '<span><strong>Serves</strong>' + s.servings + '</span>' : '') +
-                (s.difficulty ? '<span><strong>Difficulty</strong>' + s.difficulty + '</span>' : '') +
-                (s.origin ? '<span><strong>Origin</strong>' + s.origin + '</span>' : '') +
-                '</div>';
 
-            return '<div class="recipe-page' + (idx % 2 === 0 ? ' page-break-before' : '') + '">' +
-                '<div class="recipe-page-header">' +
-                '<div class="recipe-number">' + (idx + 1) + '</div>' +
-                '<div class="recipe-page-title-block">' +
-                '<h2 class="recipe-page-title">' + s.title + '</h2>' +
-                (s.origin ? '<div class="recipe-page-origin">' + s.origin + '</div>' : '') +
+            return '<div class="recipe-page">' +
+                '<div class="page-header-bar">' +
+                    '<img class="page-logo" src="' + logoURL + '" onerror="this.style.display=\'none\'">' +
+                    '<span class="page-header-site">A Letter in the Scroll</span>' +
+                    '<span class="page-header-sep"></span>' +
+                    '<span class="page-header-event">' + eventLabel + '</span>' +
                 '</div>' +
+                '<div class="recipe-title-row">' +
+                    '<div class="recipe-number">' + (idx + 1) + '</div>' +
+                    '<div class="recipe-title-block">' +
+                        '<h2 class="recipe-page-title">' + s.title + '</h2>' +
+                        '<div class="recipe-page-subtitle">' +
+                            (s.origin ? '<span class="recipe-page-origin">' + s.origin + '</span>' : '') +
+                            (courseName ? '<span class="recipe-page-course">' + courseName + '</span>' : '') +
+                        '</div>' +
+                    '</div>' +
                 '</div>' +
-                metaHTML +
+                '<div class="recipe-gold-rule"></div>' +
+                '<div class="recipe-meta-row">' +
+                    (s.time ? '<div class="meta-chip"><span class="meta-icon">&#9202;</span><span class="meta-val">' + s.time + '</span></div>' : '') +
+                    (s.servings ? '<div class="meta-chip"><span class="meta-icon">&#127860;</span><span class="meta-val">Serves ' + s.servings + '</span></div>' : '') +
+                    (s.difficulty ? '<div class="meta-chip"><span class="meta-icon">&#9733;</span><span class="meta-val">' + s.difficulty + '</span></div>' : '') +
+                '</div>' +
                 (s.desc || (f && f.description) ? '<p class="recipe-description">' + (f && f.description ? f.description : s.desc) + '</p>' : '') +
                 '<div class="recipe-two-col">' +
-                '<div class="col-ingredients"><h3>Ingredients</h3>' + ingredientsHTML + '</div>' +
-                '<div class="col-directions"><h3>Directions</h3>' + directionsHTML + '</div>' +
+                    '<div class="col-ingredients"><h3>Ingredients</h3>' + ingredientsHTML + '</div>' +
+                    '<div class="col-directions"><h3>Directions</h3>' + directionsHTML + '</div>' +
                 '</div>' +
                 tipHTML +
+                '<div class="page-footer-bar">' +
+                    '<span>aletterinthescroll.com</span>' +
+                    '<span>Recipe ' + (idx + 1) + ' of ' + selectedRecipes.length + '</span>' +
+                '</div>' +
+                '<div class="page-watermark"><img src="' + logoURL + '" onerror="this.style.display=\'none\'"></div>' +
                 '</div>';
         }).join('');
 
+        var css = [
+            '*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }',
+            'html, body { font-family: "Manrope", sans-serif; color: #102039; background: #fff; font-size: 10pt; line-height: 1.5; }',
+
+            /* ── Cover page ── */
+            '.cover { page-break-after: always; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 3rem 2rem; position: relative; background: linear-gradient(160deg, #fdf8ee 0%, #eef3fb 50%, #fdf8ee 100%); }',
+            '.cover::before { content: ""; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M20 0L20 40M0 20L40 20\' stroke=\'%23cf9a32\' stroke-opacity=\'.035\' stroke-width=\'.5\'/%3E%3C/svg%3E"); }',
+            '.cover-border { position: absolute; inset: 20px; border: 2px solid rgba(207,154,50,0.22); border-radius: 14px; pointer-events: none; }',
+            '.cover-inner { position: relative; z-index: 1; }',
+            '.cover-logo { width: 100px; height: 100px; border-radius: 20px; box-shadow: 0 12px 40px rgba(207,154,50,0.3); margin-bottom: 2rem; }',
+            '.cover-site { font-size: 8pt; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: #cf9a32; margin-bottom: 0.75rem; }',
+            '.cover-divider { width: 80px; height: 2.5px; background: linear-gradient(90deg, transparent, #cf9a32, transparent); margin: 0.75rem auto 1.25rem; border-radius: 2px; }',
+            '.cover-title { font-family: "Fraunces", serif; font-size: 32pt; font-weight: 700; color: #102039; line-height: 1.15; margin-bottom: 0.3rem; }',
+            '.cover-subtitle { font-family: "Fraunces", serif; font-size: 13pt; font-weight: 400; color: #456188; font-style: italic; margin-bottom: 2.5rem; }',
+            '.cover-meta { display: flex; gap: 3rem; justify-content: center; margin-bottom: 2rem; }',
+            '.cover-meta-item { text-align: center; }',
+            '.cover-meta-item .val { font-family: "Fraunces", serif; font-size: 22pt; font-weight: 700; color: #1f3f76; display: block; }',
+            '.cover-meta-item .lbl { font-size: 7pt; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #8e9bb5; }',
+            '.cover-date { font-size: 8.5pt; color: #8e9bb5; }',
+            '.cover-bottom-line { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); font-size: 7.5pt; color: #b0b8c8; letter-spacing: 0.05em; z-index: 1; }',
+
+            /* ── TOC page ── */
+            '.toc-page { page-break-after: always; padding: 2.5rem 3rem; position: relative; }',
+            '.toc-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.3rem; }',
+            '.toc-logo { width: 28px; height: 28px; border-radius: 6px; }',
+            '.toc-page h2 { font-family: "Fraunces", serif; font-size: 16pt; font-weight: 700; color: #102039; }',
+            '.toc-rule { height: 2.5px; background: linear-gradient(90deg, #cf9a32 0%, #cf9a3244 60%, transparent 100%); margin: 0.5rem 0 1.75rem; border-radius: 2px; }',
+            '.toc-section { margin-bottom: 1.5rem; }',
+            '.toc-course { font-size: 7pt; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: #cf9a32; margin-bottom: 0.5rem; padding-bottom: 0.3rem; border-bottom: 1.5px solid rgba(207,154,50,0.18); }',
+            '.toc-dish { display: flex; justify-content: space-between; align-items: baseline; padding: 0.35rem 0; border-bottom: 1px dotted rgba(16,32,57,0.1); }',
+            '.toc-dish:last-child { border-bottom: none; }',
+            '.toc-dish-name { font-size: 9.5pt; font-weight: 600; color: #102039; }',
+            '.toc-dish-meta { font-size: 7.5pt; color: #8e9bb5; font-style: italic; }',
+
+            /* ── Recipe pages ── */
+            '.recipe-page { page-break-before: always; padding: 0.4in 0 0.3in; position: relative; min-height: 100vh; display: flex; flex-direction: column; }',
+
+            /* Page header bar — logo + site + event name */
+            '.page-header-bar { display: flex; align-items: center; gap: 0.5rem; padding-bottom: 0.5rem; margin-bottom: 0.75rem; border-bottom: 1px solid rgba(16,32,57,0.08); }',
+            '.page-logo { width: 22px; height: 22px; border-radius: 5px; }',
+            '.page-header-site { font-size: 7pt; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #cf9a32; }',
+            '.page-header-sep { width: 1px; height: 12px; background: rgba(16,32,57,0.15); }',
+            '.page-header-event { font-size: 7pt; font-weight: 600; color: #8e9bb5; }',
+
+            /* Title row */
+            '.recipe-title-row { display: flex; align-items: flex-start; gap: 0.85rem; margin-bottom: 0.4rem; }',
+            '.recipe-number { width: 38px; height: 38px; min-width: 38px; border-radius: 50%; background: linear-gradient(135deg, #cf9a32, #b8882a); color: #fff; font-family: "Fraunces", serif; font-size: 14pt; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 3px; box-shadow: 0 3px 10px rgba(207,154,50,0.3); }',
+            '.recipe-title-block { flex: 1; }',
+            '.recipe-page-title { font-family: "Fraunces", serif; font-size: 16pt; font-weight: 700; color: #102039; line-height: 1.2; margin-bottom: 0.2rem; }',
+            '.recipe-page-subtitle { display: flex; align-items: center; gap: 0.6rem; }',
+            '.recipe-page-origin { font-size: 7.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #0f7b8f; }',
+            '.recipe-page-course { font-size: 7pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; background: #1f3f76; padding: 0.15rem 0.5rem; border-radius: 1rem; }',
+
+            /* Gold divider rule under title */
+            '.recipe-gold-rule { height: 2px; background: linear-gradient(90deg, #cf9a32, #cf9a3244, transparent); margin: 0.4rem 0 0.65rem; border-radius: 1px; }',
+
+            /* Meta row */
+            '.recipe-meta-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.65rem; }',
+            '.meta-chip { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 7.5pt; font-weight: 600; color: #456188; background: rgba(207,154,50,0.07); border: 1px solid rgba(207,154,50,0.15); padding: 0.25rem 0.6rem; border-radius: 2rem; }',
+            '.meta-icon { font-size: 9pt; line-height: 1; }',
+
+            /* Description */
+            '.recipe-description { font-size: 8.5pt; color: #456188; font-style: italic; margin-bottom: 0.75rem; line-height: 1.55; padding: 0.5rem 0.75rem; border-left: 3px solid rgba(207,154,50,0.4); background: rgba(207,154,50,0.03); border-radius: 0 0.3rem 0.3rem 0; }',
+
+            /* Two-column layout */
+            '.recipe-two-col { display: grid; grid-template-columns: 1fr 1.7fr; gap: 1.25rem; flex: 1; }',
+            '.col-ingredients { background: rgba(31,63,118,0.025); border: 1px solid rgba(31,63,118,0.08); border-radius: 0.5rem; padding: 0.75rem; }',
+            '.col-ingredients h3, .col-directions h3 { font-family: "Fraunces", serif; font-size: 10pt; font-weight: 700; color: #1f3f76; margin-bottom: 0.5rem; padding-bottom: 0.3rem; border-bottom: 1.5px solid rgba(31,63,118,0.12); }',
+            '.ingredients-list { list-style: none; padding: 0; }',
+            '.ingredients-list li { font-size: 8pt; color: #102039; padding: 0.25rem 0 0.25rem 0.6rem; border-bottom: 1px solid rgba(16,32,57,0.06); line-height: 1.4; position: relative; }',
+            '.ingredients-list li:last-child { border-bottom: none; }',
+            '.ing-bullet { position: absolute; left: 0; top: 0.45rem; width: 4px; height: 4px; border-radius: 50%; background: #cf9a32; }',
+            '.ing-header { font-weight: 700; color: #1f3f76 !important; font-size: 7.5pt !important; text-transform: uppercase; letter-spacing: 0.04em; padding-top: 0.6rem !important; padding-left: 0 !important; border-bottom: none !important; }',
+            '.ing-header .ing-bullet { display: none; }',
+            '.ing-spacer { height: 0.25rem; border: none !important; padding: 0 !important; }',
+            '.directions-list { padding-left: 1.2rem; }',
+            '.directions-list li { font-size: 8pt; color: #102039; padding: 0.3rem 0 0.3rem 0.25rem; border-bottom: 1px solid rgba(16,32,57,0.06); line-height: 1.55; }',
+            '.directions-list li:last-child { border-bottom: none; }',
+            '.directions-list li::marker { color: #cf9a32; font-weight: 800; font-size: 9pt; }',
+            '.no-data { font-size: 8pt; color: #8e9bb5; font-style: italic; }',
+
+            /* Chef tip box */
+            '.recipe-tip { margin-top: 0.75rem; background: linear-gradient(135deg, rgba(207,154,50,0.06), rgba(207,154,50,0.02)); border: 1px solid rgba(207,154,50,0.18); border-left: 3px solid #cf9a32; border-radius: 0 0.5rem 0.5rem 0; padding: 0.6rem 0.85rem; font-size: 8pt; color: #102039; line-height: 1.5; }',
+            '.tip-label { font-weight: 800; color: #cf9a32; display: block; font-size: 7pt; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem; }',
+
+            /* Page footer */
+            '.page-footer-bar { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 0.5rem; border-top: 1px solid rgba(16,32,57,0.08); font-size: 6.5pt; color: #b0b8c8; letter-spacing: 0.02em; }',
+
+            /* Subtle watermark logo */
+            '.page-watermark { position: absolute; bottom: 0.6in; right: 0.5in; opacity: 0.04; pointer-events: none; z-index: 0; }',
+            '.page-watermark img { width: 120px; height: 120px; }',
+
+            /* ── Print media ── */
+            '@media print {',
+            '  @page { margin: 0.5in 0.6in; size: letter; }',
+            '  body { font-size: 9pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }',
+            '  .cover { min-height: 9.5in; }',
+            '  .recipe-page { padding: 0; min-height: auto; }',
+            '  .recipe-two-col { grid-template-columns: 1fr 1.6fr; }',
+            '  .page-watermark { opacity: 0.035; }',
+            '  .meta-chip { border: 1px solid #ccc; }',
+            '  .col-ingredients { border: 1px solid #ddd; background: #fafbfd; }',
+            '}'
+        ].join(' ');
+
         var printHTML = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>' + eventLabel + ' \u2014 Recipe Booklet<\/title>' +
         '<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">' +
-        '<style>' +
-        '* { box-sizing: border-box; margin: 0; padding: 0; }' +
-        'html, body { font-family: "Manrope", sans-serif; color: #102039; background: #fff; font-size: 10.5pt; line-height: 1.55; }' +
+        '<style>' + css + '<\/style><\/head><body>' +
 
-        /* Cover page */
-        '.cover { page-break-after: always; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: linear-gradient(160deg, #fdf8ee 0%, #eef3fb 60%, #fdf8ee 100%); padding: 3rem 2rem; position: relative; }' +
-        '.cover::before { content: ""; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23cf9a32\' fill-opacity=\'0.04\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); opacity: 0.5; }' +
-        '.cover-logo { width: 90px; height: 90px; border-radius: 18px; box-shadow: 0 8px 32px rgba(207,154,50,0.25); margin-bottom: 1.8rem; position: relative; }' +
-        '.cover-site { font-family: "Manrope", sans-serif; font-size: 9.5pt; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #cf9a32; margin-bottom: 0.5rem; position: relative; }' +
-        '.cover-divider { width: 60px; height: 3px; background: linear-gradient(90deg, #cf9a32, #b8882a); border-radius: 2px; margin: 1rem auto; position: relative; }' +
-        '.cover-title { font-family: "Fraunces", serif; font-size: 28pt; font-weight: 700; color: #102039; line-height: 1.18; margin-bottom: 0.4rem; position: relative; }' +
-        '.cover-subtitle { font-family: "Fraunces", serif; font-size: 14pt; font-weight: 500; color: #456188; margin-bottom: 2rem; position: relative; font-style: italic; }' +
-        '.cover-meta { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; position: relative; }' +
-        '.cover-meta-item { text-align: center; }' +
-        '.cover-meta-item .val { font-family: "Fraunces", serif; font-size: 18pt; font-weight: 700; color: #1f3f76; }' +
-        '.cover-meta-item .lbl { font-size: 8pt; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #667c9c; }' +
-        '.cover-footer { position: relative; font-size: 8.5pt; color: #667c9c; margin-top: 2rem; }' +
-        '.cover-border { position: absolute; inset: 18px; border: 1.5px solid rgba(207,154,50,0.3); border-radius: 12px; pointer-events: none; }' +
-
-        /* Table of contents */
-        '.toc-page { page-break-after: always; padding: 2.5rem; }' +
-        '.toc-page h2 { font-family: "Fraunces", serif; font-size: 16pt; font-weight: 700; color: #102039; margin-bottom: 0.3rem; }' +
-        '.toc-page .section-rule { height: 2px; background: linear-gradient(90deg, #cf9a32, transparent); margin: 0.5rem 0 1.5rem; border-radius: 1px; }' +
-        '.toc-section { margin-bottom: 1.25rem; }' +
-        '.toc-course { font-size: 7.5pt; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #cf9a32; margin-bottom: 0.4rem; padding-bottom: 0.25rem; border-bottom: 1px solid rgba(207,154,50,0.2); }' +
-        '.toc-dish { display: flex; justify-content: space-between; align-items: baseline; padding: 0.3rem 0; border-bottom: 1px dotted rgba(16,32,57,0.12); }' +
-        '.toc-dish-name { font-size: 9.5pt; font-weight: 600; color: #102039; }' +
-        '.toc-dish-origin { font-size: 8pt; color: #667c9c; font-style: italic; }' +
-
-        /* Recipe pages */
-        '.recipe-page { padding: 2rem 2.5rem; border-top: 3px solid #cf9a32; margin-bottom: 0; }' +
-        '.page-break-before { page-break-before: always; }' +
-        '.recipe-page-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 0.75rem; }' +
-        '.recipe-number { width: 36px; height: 36px; min-width: 36px; border-radius: 50%; background: linear-gradient(135deg, #cf9a32, #b8882a); color: #fff; font-family: "Fraunces", serif; font-size: 13pt; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 2px; }' +
-        '.recipe-page-title { font-family: "Fraunces", serif; font-size: 15pt; font-weight: 700; color: #102039; line-height: 1.2; }' +
-        '.recipe-page-origin { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #0f7b8f; margin-top: 0.2rem; }' +
-        '.recipe-meta-row { display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem; margin-bottom: 0.75rem; background: rgba(207,154,50,0.06); border-radius: 0.5rem; padding: 0.5rem 0.75rem; }' +
-        '.recipe-meta-row span { font-size: 8pt; color: #456188; }' +
-        '.recipe-meta-row span strong { color: #102039; display: block; font-size: 7pt; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1px; }' +
-        '.recipe-description { font-size: 9pt; color: #456188; font-style: italic; margin-bottom: 1rem; line-height: 1.5; padding: 0.5rem 0.75rem; border-left: 3px solid rgba(207,154,50,0.4); }' +
-        '.recipe-two-col { display: grid; grid-template-columns: 1fr 1.65fr; gap: 1.25rem; }' +
-        '.col-ingredients h3, .col-directions h3 { font-family: "Fraunces", serif; font-size: 10.5pt; font-weight: 700; color: #1f3f76; margin-bottom: 0.5rem; padding-bottom: 0.3rem; border-bottom: 1.5px solid rgba(31,63,118,0.15); }' +
-        '.ingredients-list { list-style: none; padding: 0; }' +
-        '.ingredients-list li { font-size: 8.5pt; color: #102039; padding: 0.22rem 0; border-bottom: 1px solid rgba(16,32,57,0.07); line-height: 1.4; }' +
-        '.ingredients-list li:last-child { border-bottom: none; }' +
-        '.ing-header { font-weight: 700; color: #1f3f76 !important; font-size: 7.5pt !important; text-transform: uppercase; letter-spacing: 0.04em; padding-top: 0.5rem !important; border-bottom: none !important; }' +
-        '.ing-spacer { height: 0.3rem; border: none !important; }' +
-        '.directions-list { padding-left: 1.1rem; }' +
-        '.directions-list li { font-size: 8.5pt; color: #102039; padding: 0.3rem 0 0.3rem 0.3rem; border-bottom: 1px solid rgba(16,32,57,0.07); line-height: 1.5; }' +
-        '.directions-list li:last-child { border-bottom: none; }' +
-        '.no-data { font-size: 8.5pt; color: #667c9c; font-style: italic; }' +
-        '.recipe-tip { margin-top: 0.85rem; background: rgba(207,154,50,0.08); border-left: 3px solid #cf9a32; border-radius: 0 0.4rem 0.4rem 0; padding: 0.6rem 0.85rem; font-size: 8.5pt; color: #102039; line-height: 1.5; }' +
-        '.tip-label { font-weight: 800; color: #cf9a32; display: block; font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.25rem; }' +
-
-        /* Footer on each page */
-        '@media print {' +
-        '  @page { margin: 0.6in 0.65in; size: letter; }' +
-        '  body { font-size: 9.5pt; }' +
-        '  .cover { min-height: 9in; }' +
-        '  .recipe-two-col { grid-template-columns: 1fr 1.5fr; }' +
-        '}' +
-        '<\/style><\/head><body>' +
-
-        /* ── Cover ─────────────────────────────────────────── */
-        '<div class="cover">' +
-        '<div class="cover-border"></div>' +
-        '<img class="cover-logo" src="https://www.aletterinthescroll.com/media/images/Icon.png" alt="A Letter in the Scroll" onerror="this.style.display=\'none\'">' +
+        '<div class="cover"><div class="cover-border"></div><div class="cover-inner">' +
+        '<img class="cover-logo" src="' + logoURL + '" onerror="this.style.display=\'none\'">' +
         '<div class="cover-site">A Letter in the Scroll</div>' +
         '<div class="cover-divider"></div>' +
         '<div class="cover-title">' + eventLabel + '</div>' +
@@ -2836,17 +2900,17 @@
         '<div class="cover-meta-item"><div class="val">' + guests + '</div><div class="lbl">Guests</div></div>' +
         '<div class="cover-meta-item"><div class="val">' + selectedRecipes.length + '</div><div class="lbl">Recipes</div></div>' +
         '</div>' +
-        '<div class="cover-footer">Prepared on ' + dateStr + ' &bull; aletterinthescroll.com</div>' +
+        '<div class="cover-date">' + dateStr + '</div>' +
+        '</div>' +
+        '<div class="cover-bottom-line">aletterinthescroll.com</div>' +
         '</div>' +
 
-        /* ── Table of Contents ─────────────────────────────── */
         '<div class="toc-page">' +
-        '<h2>Menu Overview</h2>' +
-        '<div class="section-rule"></div>' +
+        '<div class="toc-header"><img class="toc-logo" src="' + logoURL + '" onerror="this.style.display=\'none\'"><h2>Your Menu</h2></div>' +
+        '<div class="toc-rule"></div>' +
         menuOverviewHTML +
         '</div>' +
 
-        /* ── Recipe Pages ──────────────────────────────────── */
         recipePagesHTML +
 
         '<\/body><\/html>';
