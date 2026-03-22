@@ -2759,7 +2759,7 @@
                 '</div>';
         }).join('');
 
-        var printHTML = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>' + eventLabel + ' — Recipe Booklet</title>' +
+        var printHTML = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>' + eventLabel + ' \u2014 Recipe Booklet<\/title>' +
         '<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">' +
         '<style>' +
         '* { box-sizing: border-box; margin: 0; padding: 0; }' +
@@ -2822,7 +2822,7 @@
         '  .cover { min-height: 9in; }' +
         '  .recipe-two-col { grid-template-columns: 1fr 1.5fr; }' +
         '}' +
-        '</style></head><body>' +
+        '<\/style><\/head><body>' +
 
         /* ── Cover ─────────────────────────────────────────── */
         '<div class="cover">' +
@@ -2849,7 +2849,7 @@
         /* ── Recipe Pages ──────────────────────────────────── */
         recipePagesHTML +
 
-        '</body></html>';
+        '<\/body><\/html>';
 
         var printWin = window.open('', '_blank', 'width=900,height=700');
         if (!printWin) {
