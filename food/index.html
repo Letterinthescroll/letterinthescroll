@@ -451,15 +451,95 @@
 
         /* ── Responsive ────────────────────────────────────── */
         @media (max-width: 768px) {
-            .food-container { padding: 0 1rem; }
-            .food-hero { padding: 2rem 0 1.25rem; }
-            .section-card { padding: 1.25rem; }
-            .planner-bar { flex-direction: column; }
+            .food-container { padding: 0 0.75rem; }
+            .food-hero { padding: 1.5rem 0 1rem; }
+            .food-hero h1 { font-size: 1.65rem; }
+            .food-hero p { font-size: 0.88rem; padding: 0 0.25rem; }
+
+            .section-card { padding: 1rem 0.85rem; margin-bottom: 1rem; border-radius: 1rem; }
+            .section-card h2 { font-size: 1.2rem; gap: 0.45rem; }
+            .section-subtitle { font-size: 0.8rem; margin-bottom: 1rem; }
+
+            /* Planner bar — stack everything, full-width inputs */
+            .planner-bar { flex-direction: column; gap: 0.6rem; }
+            .planner-group { width: 100%; }
             .planner-group select,
-            .planner-group input[type="number"] { width: 100%; min-width: unset; }
-            .recipe-grid { grid-template-columns: 1fr; }
-            .category-tabs { gap: 0.35rem; }
-            .cat-tab { font-size: 0.75rem; padding: 0.4rem 0.85rem; }
+            .planner-group input[type="number"] {
+                width: 100%; min-width: unset;
+                padding: 0.65rem 0.85rem;
+                font-size: 0.92rem;
+                border-radius: 0.65rem;
+            }
+            .planner-group label { font-size: 0.7rem; }
+            .planner-actions { gap: 0.5rem; }
+            .planner-btn { width: 100%; text-align: center; padding: 0.7rem 1rem; font-size: 0.9rem; }
+
+            /* Planner results */
+            .planner-result { padding: 1rem; }
+            .planner-result h3 { font-size: 1.05rem; }
+            .menu-suggestion { padding: 0.85rem; }
+            .menu-suggestion h4 { font-size: 0.85rem; flex-wrap: wrap; gap: 0.4rem; }
+            .menu-dish { padding: 0.55rem 0.6rem; gap: 0.5rem; flex-wrap: nowrap; }
+            .menu-dish-title { font-size: 0.82rem; }
+            .menu-dish-meta { font-size: 0.68rem; }
+            .menu-dish-actions { gap: 0.25rem; }
+            .dish-action-btn { width: 30px; height: 30px; }
+            .swap-dropdown { min-width: 220px; right: -0.5rem; }
+            .menu-summary { padding: 0.85rem; }
+            .summary-stat { font-size: 0.75rem; margin-right: 0.75rem; }
+            .prep-timeline { padding: 0.85rem; }
+            .timeline-item { flex-direction: column; gap: 0.2rem; font-size: 0.78rem; }
+            .timeline-when { min-width: unset; }
+            .scaling-table { font-size: 0.75rem; }
+            .scaling-table th, .scaling-table td { padding: 0.4rem 0.5rem; }
+
+            /* Search bar — taller for touch */
+            .search-bar input { padding: 0.8rem 1rem 0.8rem 2.5rem; font-size: 0.92rem; border-radius: 0.75rem; }
+
+            /* Category tabs — horizontal scroll instead of wrapping into tiny pills */
+            .category-tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                gap: 0.4rem;
+                padding-bottom: 0.25rem;
+                margin: 0 -0.85rem 1rem;
+                padding-left: 0.85rem;
+                padding-right: 0.85rem;
+            }
+            .category-tabs::-webkit-scrollbar { display: none; }
+            .cat-tab {
+                font-size: 0.78rem;
+                padding: 0.5rem 0.95rem;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+
+            /* Recipe grid — single column, compact cards */
+            .recipe-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+            .recipe-header { padding: 1rem 1rem 0.6rem; gap: 0.6rem; }
+            .recipe-title { font-size: 0.95rem; }
+            .recipe-origin { font-size: 0.68rem; }
+            .recipe-tags { padding: 0 1rem; gap: 0.3rem; margin-bottom: 0.5rem; }
+            .recipe-tag { font-size: 0.65rem; padding: 0.18rem 0.5rem; }
+            .recipe-desc { padding: 0 1rem; font-size: 0.8rem; margin-bottom: 0.6rem; }
+            .recipe-meta { padding: 0.55rem 1rem; gap: 0.75rem; font-size: 0.72rem; flex-wrap: wrap; }
+
+            /* Blobs — smaller on mobile */
+            .food-body::before { width: 200px; height: 200px; }
+            .food-body::after { width: 250px; height: 250px; }
+        }
+
+        /* Extra-small phones */
+        @media (max-width: 380px) {
+            .food-container { padding: 0 0.5rem; }
+            .section-card { padding: 0.85rem 0.65rem; }
+            .food-hero h1 { font-size: 1.4rem; }
+            .recipe-header { padding: 0.85rem 0.75rem 0.5rem; }
+            .recipe-tags { padding: 0 0.75rem; }
+            .recipe-desc { padding: 0 0.75rem; }
+            .recipe-meta { padding: 0.5rem 0.75rem; }
         }
 
         /* ── Pagination ───────────────────────────────────── */
@@ -541,9 +621,11 @@
         .page-size-group select:focus { outline: none; border-color: var(--accent-gold); }
 
         @media (max-width: 768px) {
-            .pagination-controls { flex-direction: column; align-items: stretch; text-align: center; }
-            .pagination-nav { justify-content: center; }
-            .page-size-group { justify-content: center; }
+            .pagination-controls { flex-direction: column; align-items: stretch; text-align: center; gap: 0.5rem; padding: 0.75rem 0; }
+            .pagination-nav { justify-content: center; flex-wrap: wrap; }
+            .pagination-info { font-size: 0.78rem; }
+            .page-btn { min-width: 34px; height: 34px; font-size: 0.78rem; }
+            .page-size-group { justify-content: center; font-size: 0.78rem; }
         }
 
         /* ── Footer spacing ────────────────────────────────── */
