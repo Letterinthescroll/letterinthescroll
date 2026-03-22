@@ -2712,12 +2712,14 @@
                     '<div class="rp-ing"><h3>Ingredients</h3>' + ingredientsHTML + '</div>' +
                     '<div class="rp-dir"><h3>Directions</h3>' + directionsHTML + tipHTML + '</div>' +
                 '</div>' +
-                '<div class="rp-foot">' +
-                    '<img src="' + logoURL + '" class="foot-logo" onerror="this.style.display=\'none\'">' +
-                    '<span class="foot-text">A Letter in the Scroll</span>' +
-                '</div>' +
                 '</div>';
         }).join('');
+
+        // Fixed footer that appears at the bottom of every printed page
+        var footerHTML = '<div class="print-footer">' +
+            '<img src="' + logoURL + '" class="foot-logo" onerror="this.style.display=\'none\'">' +
+            '<span class="foot-text">A Letter in the Scroll</span>' +
+            '</div>';
 
         var css = [
             '*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }',
@@ -2750,13 +2752,14 @@
             '.tip { font-size: 6pt; color: #666; margin-top: 0.25rem; border-top: 1px dotted #ddd; padding-top: 0.2rem; line-height: 1.35; }',
             '.tip strong { color: #cf9a32; }',
 
-            /* Footer with logo */
-            '.rp-foot { display: flex; align-items: center; justify-content: center; gap: 0.3rem; margin-top: auto; padding-top: 0.25rem; border-top: 1px solid #eee; }',
+            /* Footer with logo — pinned to bottom of every printed page */
+            '.rp-foot { display: none; }',
+            '.print-footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: 0.3rem; padding: 0.15rem 0 0; border-top: 1px solid #eee; }',
             '.foot-logo { width: 14px; height: 14px; border-radius: 3px; opacity: 0.5; }',
             '.foot-text { font-size: 5.5pt; color: #bbb; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; }',
 
             '@media print {',
-            '  @page { margin: 0.4in 0.5in; size: letter; }',
+            '  @page { margin: 0.4in 0.5in 0.55in; size: letter; }',
             '  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }',
             '  .rp { padding: 0; min-height: auto; }',
             '}'
@@ -2766,6 +2769,7 @@
         '<title>' + eventLabel + ' \u2014 Recipes<\/title>' +
         '<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">' +
         '<style>' + css + '<\/style><\/head><body>' +
+        footerHTML +
         recipePagesHTML +
         '<\/body><\/html>';
 
