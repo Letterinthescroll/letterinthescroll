@@ -66,6 +66,16 @@
         .recipe-desc {
             font-size: 1rem; color: var(--ink-600); line-height: 1.7; max-width: 44rem;
         }
+
+        .recipe-hero {
+            margin: 0 0 1.5rem; border-radius: var(--radius-xl);
+            overflow: hidden; box-shadow: var(--shadow-lg);
+            max-height: 380px;
+        }
+        .recipe-hero img {
+            width: 100%; height: 100%; object-fit: cover;
+            display: block; max-height: 380px;
+        }
         .recipe-meta {
             display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0;
             margin: 1rem 0 1.25rem; padding: 0;
@@ -210,6 +220,11 @@
             <h1>Sephardic Pan de España (Spanish Sponge Cake)</h1>
             <p class="recipe-desc">A magnificent oil-free sponge cake leavened entirely by whipped eggs, scented with lemon zest, and baked in an ungreased tube pan — the jewel of the Sephardic Passover dessert table and a year-round celebration cake.</p>
         </div>
+
+        <div class="recipe-hero">
+            <img src="https://images.unsplash.com/photo-1578985545062-e1b2e4be3e26?w=800&h=500&fit=crop&q=80" alt="Sephardic Pan de España (Spanish Sponge Cake)" loading="lazy">
+        </div>
+
         <div class="recipe-meta">
             <div class="meta-item"><span class="meta-label">Prep Time</span><span class="meta-value">25 min</span></div>
             <div class="meta-item"><span class="meta-label">Cook Time</span><span class="meta-value">50 min</span></div>

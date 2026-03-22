@@ -66,6 +66,16 @@
         .recipe-desc {
             font-size: 1rem; color: var(--ink-600); line-height: 1.7; max-width: 44rem;
         }
+
+        .recipe-hero {
+            margin: 0 0 1.5rem; border-radius: var(--radius-xl);
+            overflow: hidden; box-shadow: var(--shadow-lg);
+            max-height: 380px;
+        }
+        .recipe-hero img {
+            width: 100%; height: 100%; object-fit: cover;
+            display: block; max-height: 380px;
+        }
         .recipe-meta {
             display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0;
             margin: 1rem 0 1.25rem; padding: 0;
@@ -213,6 +223,11 @@
             <h1>Authentic Ashkenazi Kishke (Stuffed Derma)</h1>
             <p class="recipe-desc">A traditional Shabbat side of seasoned flour and schmaltz stuffed into a casing and roasted until crispy on the outside and dense inside. The ultimate comfort food for the cholent pot.</p>
         </div>
+
+        <div class="recipe-hero">
+            <img src="https://images.unsplash.com/photo-1588168333986-5078d3ae3976?w=800&h=500&fit=crop&q=80" alt="Authentic Ashkenazi Kishke (Stuffed Derma)" loading="lazy">
+        </div>
+
         <div class="recipe-meta">
             <div class="meta-item"><span class="meta-label">Prep Time</span><span class="meta-value">20 min</span></div>
             <div class="meta-item"><span class="meta-label">Cook Time</span><span class="meta-value">2 hrs 30 min</span></div>
