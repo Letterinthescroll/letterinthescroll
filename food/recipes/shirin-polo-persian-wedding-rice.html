@@ -171,6 +171,7 @@
         .serving-btn:hover { background: rgba(207, 154, 50, 0.15); color: var(--accent-gold); }
         .serving-btn:active { transform: scale(0.95); }
         .serving-count {
+            -webkit-appearance: textfield; -moz-appearance: textfield; appearance: textfield;
             width: 50px; height: 36px; border: none; border-left: 1px solid var(--line);
             border-right: 1px solid var(--line);
             text-align: center; font-family: 'Manrope', sans-serif;
@@ -178,6 +179,8 @@
             background: #fff;
         }
         .serving-count:focus { outline: none; background: rgba(207, 154, 50, 0.06); }
+        .serving-count::-webkit-outer-spin-button,
+        .serving-count::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .serving-multiplier {
             font-size: 0.75rem; font-weight: 600; color: var(--accent-teal);
             padding: 0.2rem 0.55rem; background: rgba(15, 123, 143, 0.08);
