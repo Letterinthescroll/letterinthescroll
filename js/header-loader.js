@@ -16,7 +16,7 @@
     'use strict';
 
     var HEADER_TEMPLATE_URL = '/includes/header.html';
-    var CACHE_KEY = 'cachedHeaderTemplate_v5';
+    var CACHE_KEY = 'cachedHeaderTemplate_v6';
     var NAV_TOKEN = '__NAV_ITEMS__';
 
     /* ── Nav items ──────────────────────────────────────────────────────── */
@@ -111,6 +111,14 @@
             '  <div class="header-container">' +
             '    <div class="header-branding-section">' +
             '      <a id="home-branding" href="/dashboard" aria-label="Go to dashboard home" class="header-branding-button" style="text-decoration:none">' +
+            '        <picture class="header-logo-default">' +
+            '          <source srcset="/media/images/logonewwhite.webp" type="image/webp">' +
+            '          <img src="/media/images/Logonewwhite.png" alt="A Letter in the Scroll logo" class="header-logo" width="36" height="36">' +
+            '        </picture>' +
+            '        <picture class="header-logo-shabbat">' +
+            '          <source srcset="/media/images/logonew.webp" type="image/webp">' +
+            '          <img src="/media/images/logonew.png" alt="A Letter in the Scroll logo" class="header-logo" width="36" height="36">' +
+            '        </picture>' +
             '        <div class="header-text">' +
             '          <h1 class="header-title">A Letter in the Scroll</h1>' +
             '          <p class="header-subtitle">Interactive Weekly Portion Study &amp; Discussion</p>' +
