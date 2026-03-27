@@ -122,6 +122,7 @@ function chavrutaDoc(subcollectionName, docId) {
 
 const USER_CHAVRUTA_CACHE_TTL_MS = 300000; // 5 minutes
 const userChavrutaCache = new Map();
+const classroomStatusCache = new Map(); // chavrutaId → { isClassroom: bool, fetchedAt: number }
 
 function getTimestampMillis(timestamp) {
   if (!timestamp) {
@@ -171,13 +172,37 @@ async function getUserChavrutaIds(userId, options = {}) {
   }
 }
 
+async function isActiveChavrutaClassroom() {
+  const chavrutaId = getActiveChavrutaId();
+  if (!chavrutaId) return false;
+  const now = Date.now();
+  const cached = classroomStatusCache.get(chavrutaId);
+  if (cached && (now - cached.fetchedAt) < USER_CHAVRUTA_CACHE_TTL_MS) {
+    return cached.isClassroom;
+  }
+  try {
+    const snap = await getDoc(doc(db, 'chavrutas', chavrutaId));
+    const isClassroom = snap.exists() && snap.data().isClassroom === true;
+    classroomStatusCache.set(chavrutaId, { isClassroom, fetchedAt: now });
+    return isClassroom;
+  } catch {
+    return false;
+  }
+}
+
 async function getWritableChavrutaIdsForUser(userId) {
+  // If the active chavruta is a classroom, scope writes to ONLY that classroom
+  // so reactions/bookmarks don't leak into the user's other study groups.
+  const activeChavrutaId = getActiveChavrutaId();
+  if (activeChavrutaId && await isActiveChavrutaClassroom()) {
+    return [activeChavrutaId];
+  }
+
   const ids = await getUserChavrutaIds(userId);
   if (ids.length > 0) {
     return ids;
   }
 
-  const activeChavrutaId = getActiveChavrutaId();
   if (activeChavrutaId) {
     return [activeChavrutaId];
   }
@@ -331,17 +356,13 @@ function showLoginRequiredOverlayAndRedirect() {
         margin: 0 auto 0.75rem;
         width: 82px;
         height: 82px;
-        border-radius: 20px;
-        background: linear-gradient(165deg, #fefefe 0%, #edf4ff 100%);
-        border: 1px solid rgba(37, 99, 235, 0.2);
-        box-shadow: 0 12px 28px rgba(37, 99, 235, 0.2);
         display: flex;
         align-items: center;
         justify-content: center;
       }
       #login-required-overlay .login-required-logo {
-        width: 56px;
-        height: 56px;
+        width: 82px;
+        height: 82px;
         object-fit: contain;
       }
       #login-required-overlay .login-required-kicker {
@@ -432,7 +453,7 @@ function showLoginRequiredOverlayAndRedirect() {
     overlay.innerHTML = `
       <div class="login-required-card">
         <div class="login-required-logo-wrap">
-          <img class="login-required-logo" src="/media/images/Icon.png" alt="A Letter in the Scroll logo" />
+          <img class="login-required-logo" src="/media/images/logonew.png" alt="A Letter in the Scroll logo" />
         </div>
         <p class="login-required-kicker">Welcome Home</p>
         <p class="login-required-title">Welcome to A Letter in the Scroll</p>
@@ -480,11 +501,24 @@ function initAuth(onAuthReady) {
 
   // Check if there's evidence of a prior session — give Firebase more time
   // to restore it. Without this, the overlay flashes on every page navigation.
-  const hasSessionHint = Boolean(
+  // Also check for Firebase's own localStorage auth keys, which persist across
+  // tabs (unlike sessionStorage which is per-tab).
+  let hasSessionHint = Boolean(
     sessionStorage.getItem('headerUserCache') ||
     localStorage.getItem('dashGroupsCache') ||
     localStorage.getItem('lastActiveChavrutaId')
   );
+  if (!hasSessionHint) {
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('firebase:authUser:')) {
+          hasSessionHint = true;
+          break;
+        }
+      }
+    } catch (_) {}
+  }
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -529,7 +563,7 @@ function initAuth(onAuthReady) {
       // Redirect unauthenticated users away from protected app pages.
       // Login and invite onboarding routes are public.
       const path = window.location.pathname.replace(/\/+$/, '') || '/';
-      const publicPaths = ['', '/', '/invite', '/join', '/about'];
+      const publicPaths = ['', '/', '/invite', '/join', '/about', '/study'];
       const isPublic = publicPaths.includes(path);
       if (!isPublic) {
         // If the compat SDK (dashboard) already has a user, skip the
@@ -539,25 +573,38 @@ function initAuth(onAuthReady) {
         }
         // Firebase fires null initially while loading persisted session from
         // IndexedDB. Give it enough time to restore before showing the overlay.
-        // Use a generous delay if we have any evidence of a prior session.
-        // Mobile devices can be very slow to restore from IndexedDB, so be generous.
-        const delay = hasSessionHint ? 12000 : 5000;
+        // Use a generous delay — mobile devices can be very slow to restore
+        // from IndexedDB, and sessionStorage hints are per-tab so may be absent
+        // even when the user is logged in.
+        const delay = hasSessionHint ? 12000 : 10000;
         if (!authRedirectTimer) {
           authRedirectTimer = setTimeout(() => {
             authRedirectTimer = null;
             // Check all possible auth sources
             if (_checkAnyAuth()) return;
+            // Also check if userWasAuthenticated was set in the meantime
+            if (userWasAuthenticated) return;
             // Double-check session hints — if they still exist, the session
             // is likely restoring slowly, so wait a bit longer.
-            const stillHasHint = Boolean(
+            let stillHasHint = Boolean(
               sessionStorage.getItem('headerUserCache') ||
               localStorage.getItem('dashGroupsCache') ||
               localStorage.getItem('lastActiveChavrutaId')
             );
+            // Also check Firebase's own auth key — always present when logged in,
+            // even in new tabs where sessionStorage is empty.
+            if (!stillHasHint) {
+              try {
+                for (let i = 0; i < localStorage.length; i++) {
+                  const k = localStorage.key(i);
+                  if (k && k.startsWith('firebase:authUser:')) { stillHasHint = true; break; }
+                }
+              } catch (_) {}
+            }
             if (stillHasHint) {
               // Give it one final chance
               setTimeout(() => {
-                if (!_checkAnyAuth()) {
+                if (!_checkAnyAuth() && !userWasAuthenticated) {
                   showLoginRequiredOverlayAndRedirect();
                 }
               }, 5000);
@@ -701,6 +748,12 @@ async function submitComment(verseRef, text, userId, username) {
   }
   if (username.trim().length > 50) {
     throw new Error('Username must be 50 characters or less');
+  }
+
+  // Safety filter: block profanity in classroom groups with safety filter on
+  const safetyOn = await isClassroomSafetyFilterEnabled();
+  if (safetyOn && containsProfanity(text)) {
+    throw new Error('Your comment was blocked by the classroom safety filter. Please remove inappropriate language and try again.');
   }
 
   try {
@@ -1710,17 +1763,36 @@ async function updateUserPresence(userId) {
     const userSnap = await getDoc(userDocRef);
     const userData = userSnap.exists() ? userSnap.data() : {};
 
-    const presenceDocRef = chavrutaDoc('presence', userId);
-    await setDoc(
-      presenceDocRef,
-      {
-        isOnline: true,
-        lastSeen: serverTimestamp(),
-        displayName: userData.displayName || userData.username || 'Friend',
-        email: userData.email || null
-      },
-      { merge: true }
-    );
+    const presenceData = {
+      isOnline: true,
+      lastSeen: serverTimestamp(),
+      displayName: userData.displayName || userData.username || 'Friend',
+      email: userData.email || null
+    };
+
+    // Write presence to ALL user's chavrutas so they appear online everywhere
+    let chavrutaIds;
+    try {
+      chavrutaIds = await getUserChavrutaIds(userId);
+    } catch (_) {
+      chavrutaIds = [];
+    }
+
+    if (chavrutaIds.length > 0) {
+      await Promise.all(
+        chavrutaIds.map((chavrutaId) =>
+          setDoc(doc(db, 'chavrutas', chavrutaId, 'presence', userId), presenceData, { merge: true })
+        )
+      );
+    } else {
+      // Fallback: write only to active chavruta if membership query failed
+      try {
+        const presenceDocRef = chavrutaDoc('presence', userId);
+        await setDoc(presenceDocRef, presenceData, { merge: true });
+      } catch (_) {
+        // No active chavruta either — skip silently
+      }
+    }
   } catch (error) {
     console.error('Error updating user presence:', error);
   }
@@ -1732,15 +1804,32 @@ async function markUserOffline(userId) {
   }
 
   try {
-    const presenceDocRef = chavrutaDoc('presence', userId);
-    await setDoc(
-      presenceDocRef,
-      {
-        isOnline: false,
-        lastSeen: serverTimestamp()
-      },
-      { merge: true }
-    );
+    const offlineData = {
+      isOnline: false,
+      lastSeen: serverTimestamp()
+    };
+
+    // Mark offline in ALL user's chavrutas (uses cached IDs when available)
+    let chavrutaIds;
+    try {
+      chavrutaIds = await getUserChavrutaIds(userId);
+    } catch (_) {
+      chavrutaIds = [];
+    }
+
+    if (chavrutaIds.length > 0) {
+      await Promise.all(
+        chavrutaIds.map((chavrutaId) =>
+          setDoc(doc(db, 'chavrutas', chavrutaId, 'presence', userId), offlineData, { merge: true })
+        )
+      );
+    } else {
+      // Fallback: write only to active chavruta
+      try {
+        const presenceDocRef = chavrutaDoc('presence', userId);
+        await setDoc(presenceDocRef, offlineData, { merge: true });
+      } catch (_) {}
+    }
     console.log('User marked as offline');
   } catch (error) {
     console.error('Error marking user offline:', error);
@@ -1995,6 +2084,12 @@ async function submitMitzvahReflection(parshaName, text, userId, username) {
   const trimmedMessage = text.trim();
   if (!trimmedMessage) {
     throw new Error('Reflection message cannot be empty');
+  }
+
+  // Safety filter: block profanity in classroom groups with safety filter on
+  const safetyOn = await isClassroomSafetyFilterEnabled();
+  if (safetyOn && containsProfanity(trimmedMessage)) {
+    throw new Error('Your reflection was blocked by the classroom safety filter. Please remove inappropriate language and try again.');
   }
 
   try {
@@ -2341,8 +2436,142 @@ function formatTimeAgo(timestamp) {
 }
 
 // ========================================
+// HEBREW FLASHCARDS
+// ========================================
+
+async function addFlashcard(userId, cardData) {
+  if (!userId) throw new Error('User not authenticated');
+  if (!cardData.word && !cardData.phrase) throw new Error('Word or phrase is required');
+  try {
+    const payload = {
+      userId,
+      word: cardData.word || '',
+      rootWord: cardData.rootWord || '',
+      definition: cardData.definition || '',
+      phrase: cardData.phrase || '',
+      phraseTranslation: cardData.phraseTranslation || '',
+      source: cardData.source || '',
+      createdAt: serverTimestamp(),
+      lastReviewed: null,
+      timesReviewed: 0,
+      confidence: 0
+    };
+    const ref = await addDoc(collection(db, 'flashcards'), payload);
+    return { id: ref.id, ...payload };
+  } catch (error) {
+    console.error('Error adding flashcard:', error);
+    throw error;
+  }
+}
+
+async function getUserFlashcards(userId) {
+  if (!userId) return [];
+  try {
+    let snapshot;
+    try {
+      snapshot = await getDocs(query(
+        collection(db, 'flashcards'),
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc')
+      ));
+    } catch (_) {
+      // Fallback if composite index not yet created
+      snapshot = await getDocs(query(
+        collection(db, 'flashcards'),
+        where('userId', '==', userId)
+      ));
+    }
+    return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (error) {
+    console.error('Error getting flashcards:', error);
+    return [];
+  }
+}
+
+async function updateFlashcard(cardId, updates) {
+  if (!cardId) throw new Error('Card ID is required');
+  try {
+    const ref = doc(db, 'flashcards', cardId);
+    await setDoc(ref, updates, { merge: true });
+  } catch (error) {
+    console.error('Error updating flashcard:', error);
+    throw error;
+  }
+}
+
+async function deleteFlashcard(cardId) {
+  if (!cardId) throw new Error('Card ID is required');
+  try {
+    await deleteDoc(doc(db, 'flashcards', cardId));
+  } catch (error) {
+    console.error('Error deleting flashcard:', error);
+    throw error;
+  }
+}
+
+// ========================================
 // EXPORTS
 // ========================================
+
+// ========================================
+// CLASSROOM / TEACHER MODE HELPERS
+// ========================================
+
+// Profanity word list for safety filter
+const PROFANITY_LIST = [
+  'fuck','shit','ass','asshole','bitch','bastard','damn','dick','crap','piss',
+  'slut','whore','cunt','cock','nigger','nigga','fag','faggot','retard','retarded',
+  'kike','spic','chink','wetback','gook','tranny','dyke'
+];
+const PROFANITY_REGEX = new RegExp('\\b(' + PROFANITY_LIST.join('|') + ')\\b', 'i');
+
+function containsProfanity(text) {
+  if (!text || typeof text !== 'string') return false;
+  return PROFANITY_REGEX.test(text);
+}
+
+/**
+ * Get the active chavruta's full document data.
+ * Returns null if no active chavruta or data can't be loaded.
+ */
+async function getActiveChavrutaData() {
+  const chavrutaId = getActiveChavrutaId();
+  if (!chavrutaId) return null;
+  try {
+    const snap = await getDoc(doc(db, 'chavrutas', chavrutaId));
+    if (!snap.exists()) return null;
+    return { id: chavrutaId, ...snap.data() };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Check if the active chavruta is a classroom and the current user is the teacher (leader).
+ */
+async function isClassroomTeacher(userId) {
+  const data = await getActiveChavrutaData();
+  if (!data) return false;
+  return data.isClassroom === true && data.leader === userId;
+}
+
+/**
+ * Check if the active chavruta has safety filter enabled.
+ */
+async function isClassroomSafetyFilterEnabled() {
+  const data = await getActiveChavrutaData();
+  if (!data) return false;
+  return data.isClassroom === true && data.safetyFilter === true;
+}
+
+/**
+ * Delete any comment in the active chavruta (for classroom teachers).
+ */
+async function deleteCommentAsTeacher(commentId) {
+  const chavrutaId = getActiveChavrutaId();
+  if (!chavrutaId || !commentId) throw new Error('Missing chavruta or comment ID');
+  await deleteDoc(doc(db, 'chavrutas', chavrutaId, 'comments', commentId));
+}
 
 export {
   db,
@@ -2405,7 +2634,16 @@ export {
   recalculateMitzvahLeaderboard,
   getMitzvahLeaderboard,
   getChavrutaBasicInfo,
-  formatTimeAgo
+  formatTimeAgo,
+  addFlashcard,
+  getUserFlashcards,
+  updateFlashcard,
+  deleteFlashcard,
+  getActiveChavrutaData,
+  isClassroomTeacher,
+  isClassroomSafetyFilterEnabled,
+  deleteCommentAsTeacher,
+  containsProfanity
 };
 
 async function getChavrutaBasicInfo(chavrutaId) {

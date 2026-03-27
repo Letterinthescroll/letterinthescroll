@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Mode - A Letter in the Scroll</title>
+    <meta name="description" content="Bring Torah learning to your classroom. Create a virtual classroom, post assignments, track student engagement, and guide study — all for free.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="A Letter in the Scroll">
+    <meta property="og:title" content="Teacher Mode — A Letter in the Scroll">
+    <meta property="og:description" content="Bring Torah learning to your classroom. Create a virtual classroom, post assignments, track student engagement, and guide study.">
+    <meta property="og:image" content="https://www.aletterinthescroll.com/media/images/welcome.jpg">
+    <meta property="og:url" content="https://www.aletterinthescroll.com/teachers">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Teacher Mode — A Letter in the Scroll">
+    <meta name="twitter:description" content="Bring Torah learning to your classroom. Create a virtual classroom, post assignments, and track student engagement.">
+    <meta name="twitter:image" content="https://www.aletterinthescroll.com/media/images/welcome.jpg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png" media="(prefers-color-scheme: light)"><link rel="icon" type="image/svg+xml" href="/media/images/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/shabbat.css">
+    <link rel="stylesheet" href="/css/mobile-overrides.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-ink: #0c1a3e;
+            --bg-deep: #16285e;
+            --bg-mid: #1e3a8a;
+            --gold: #d4af37;
+            --gold-soft: #f2d47b;
+            --ink-900: #0f172a;
+            --ink-700: #334155;
+            --ink-600: #475569;
+            --paper: #f6f8ff;
+            --panel: rgba(255, 255, 255, 0.82);
+            --panel-border: rgba(15, 37, 86, 0.15);
+            --panel-shadow: 0 22px 44px rgba(8, 24, 59, 0.16);
+            --indigo: #4338ca;
+            --indigo-light: #6366f1;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--ink-900);
+            background:
+                radial-gradient(circle at 85% 8%, rgba(67, 56, 202, 0.12) 0%, transparent 32%),
+                radial-gradient(circle at 6% 26%, rgba(39, 94, 196, 0.16) 0%, transparent 34%),
+                linear-gradient(180deg, #eef2ff 0%, #f8f9fd 38%, #f3f6ff 100%);
+            min-height: 100vh;
+        }
+
+        /* ── Hero ── */
+        .teacher-hero {
+            position: relative;
+            overflow: hidden;
+            padding: clamp(5rem, 10vw, 8rem) 1.25rem clamp(4rem, 8vw, 6rem);
+            text-align: center;
+            background: linear-gradient(145deg, #1a1048 0%, #2d1b69 30%, #4338ca 70%, #6366f1 100%);
+            isolation: isolate;
+        }
+
+        .teacher-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(130deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 42%),
+                repeating-linear-gradient(125deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 12px);
+            z-index: -2;
+        }
+
+        .teacher-hero::after {
+            content: '';
+            position: absolute;
+            width: 480px; height: 480px;
+            top: -220px; right: -120px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            box-shadow: 0 0 0 60px rgba(255, 255, 255, 0.03);
+            z-index: -1;
+            animation: heroOrbit 40s linear infinite;
+        }
+
+        @keyframes heroOrbit {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-inner {
+            max-width: 980px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.36rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 999px;
+            color: rgba(255, 255, 255, 0.85);
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            font-size: 0.71rem;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.08);
+            margin-bottom: 1.35rem;
+            opacity: 0;
+            animation: heroFadeUp 800ms ease forwards;
+            animation-delay: 200ms;
+        }
+
+        .hero-icon-large {
+            display: block;
+            margin: 0 auto 1.2rem;
+            opacity: 0;
+            animation: heroFadeUp 800ms ease forwards;
+            animation-delay: 350ms;
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 6vw, 4rem);
+            line-height: 1.12;
+            color: #ffffff;
+            margin: 0 auto 1.3rem;
+            max-width: 24ch;
+            letter-spacing: -0.01em;
+            font-weight: 700;
+            text-wrap: balance;
+            opacity: 0;
+            animation: heroFadeUp 800ms ease forwards;
+            animation-delay: 500ms;
+        }
+
+        .hero-title .accent {
+            color: var(--gold-soft);
+            font-style: italic;
+        }
+
+        .hero-subtitle {
+            max-width: 62ch;
+            margin: 0 auto 2.2rem;
+            color: rgba(230, 238, 255, 0.88);
+            font-size: clamp(1rem, 2.4vw, 1.14rem);
+            line-height: 1.8;
+            opacity: 0;
+            animation: heroFadeUp 800ms ease forwards;
+            animation-delay: 700ms;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.85rem 2.2rem;
+            background: linear-gradient(135deg, var(--gold), #e8c24a);
+            color: #1a1048;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-radius: 999px;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.35);
+            transition: transform 0.2s, box-shadow 0.2s;
+            opacity: 0;
+            animation: heroFadeUp 800ms ease forwards;
+            animation-delay: 900ms;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(212, 175, 55, 0.45);
+        }
+
+        @keyframes heroFadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-divider {
+            height: 0;
+            border: 0;
+            margin: 0;
+            background: none;
+        }
+
+        /* ── Stage ── */
+        .teacher-stage { position: relative; overflow: hidden; }
+
+        .teacher-stage::before,
+        .teacher-stage::after {
+            content: '';
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+            animation: floatHalo 18s ease-in-out infinite alternate;
+        }
+
+        .teacher-stage::before {
+            width: 420px; height: 420px;
+            top: 300px; left: -170px;
+            background: radial-gradient(circle, rgba(67, 56, 202, 0.1) 0%, transparent 70%);
+        }
+
+        .teacher-stage::after {
+            width: 360px; height: 360px;
+            top: 900px; right: -120px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, transparent 68%);
+            animation-delay: 4s;
+        }
+
+        @media (max-width: 768px) {
+            .teacher-stage::before,
+            .teacher-stage::after {
+                display: none;
+            }
+        }
+
+        @keyframes floatHalo {
+            0%   { transform: translate3d(0, 0, 0) scale(1); opacity: 0.7; }
+            100% { transform: translate3d(0, -16px, 0) scale(1.03); opacity: 1; }
+        }
+
+        /* ── Content ── */
+        .teacher-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: clamp(2.3rem, 4vw, 3.2rem) 1.2rem 4.5rem;
+        }
+
+        /* ── Panel ── */
+        .teacher-panel {
+            position: relative;
+            max-width: 960px;
+            margin: 0 auto 1.4rem;
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            box-shadow: var(--panel-shadow);
+            border-radius: 24px;
+            backdrop-filter: blur(4px);
+            padding: clamp(1.5rem, 3.5vw, 2.45rem) clamp(1.2rem, 4vw, 2.5rem);
+            overflow: hidden;
+        }
+
+        .teacher-panel::before {
+            content: '';
+            position: absolute;
+            top: -30%; right: -22%;
+            width: 300px; height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(67, 56, 202, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .teacher-panel h2 {
+            margin: 0 0 1.15rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.7rem, 3vw, 2.35rem);
+            line-height: 1.2;
+            color: #1e1b5e;
+            text-wrap: balance;
+            letter-spacing: -0.01em;
+        }
+
+        .panel-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.42rem;
+            margin-bottom: 0.7rem;
+            padding: 0.34rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(67, 56, 202, 0.06);
+            border: 1px solid rgba(67, 56, 202, 0.14);
+            color: #4338ca;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .teacher-panel p {
+            color: var(--ink-700);
+            font-size: 1.02rem;
+            line-height: 1.86;
+            margin: 0 0 1rem;
+        }
+
+        .teacher-panel p:last-child { margin-bottom: 0; }
+
+        /* ── Feature grid ── */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin: 1.3rem 0 0.6rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(67, 56, 202, 0.04) 0%, rgba(99, 102, 241, 0.06) 100%);
+            border: 1px solid rgba(67, 56, 202, 0.12);
+            border-radius: 16px;
+            padding: 1.3rem 1.15rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(67, 56, 202, 0.1);
+        }
+
+        .feature-card-icon {
+            width: 40px; height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4338ca, #6366f1);
+            border-radius: 12px;
+            margin-bottom: 0.85rem;
+            color: white;
+        }
+
+        .feature-card h4 {
+            margin: 0 0 0.45rem;
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: #1e1b5e;
+        }
+
+        .feature-card p {
+            margin: 0;
+            font-size: 0.88rem;
+            line-height: 1.65;
+            color: var(--ink-600);
+        }
+
+        /* ── Steps ── */
+        .steps-list {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0 0.5rem;
+            counter-reset: step;
+        }
+
+        .steps-list li {
+            counter-increment: step;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            padding: 1.1rem 0;
+            border-bottom: 1px solid rgba(67, 56, 202, 0.08);
+        }
+
+        .steps-list li:last-child { border-bottom: 0; }
+
+        .step-num {
+            flex-shrink: 0;
+            width: 36px; height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4338ca, #6366f1);
+            border-radius: 50%;
+            color: white;
+            font-weight: 800;
+            font-size: 0.82rem;
+        }
+
+        .step-content h4 {
+            margin: 0 0 0.25rem;
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: #1e1b5e;
+        }
+
+        .step-content p {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: var(--ink-600);
+        }
+
+        /* ── Quote block ── */
+        .quote-block {
+            margin: 1.3rem 0;
+            border-left: 3px solid var(--indigo);
+            background: linear-gradient(120deg, rgba(238, 242, 255, 0.82) 0%, rgba(255, 255, 255, 0.7) 100%);
+            border-radius: 0 14px 14px 0;
+            padding: 1.1rem 1.2rem 1.1rem 1.35rem;
+        }
+
+        .quote-block blockquote {
+            margin: 0 0 0.6rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.06rem, 2.2vw, 1.32rem);
+            line-height: 1.6;
+            color: #1e1b5e;
+            font-style: italic;
+        }
+
+        .quote-block cite {
+            font-style: normal;
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #51607e;
+            font-weight: 600;
+        }
+
+        /* ── Highlight card ── */
+        .highlight-card {
+            margin: 1.3rem 0;
+            background: linear-gradient(125deg, rgba(30, 27, 94, 0.96) 0%, rgba(67, 56, 202, 0.97) 100%);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.35rem 1.15rem;
+            color: #dbe7ff;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+        }
+
+        .highlight-card h3 {
+            margin: 0 0 0.65rem;
+            font-size: 0.88rem;
+            letter-spacing: 0.11em;
+            text-transform: uppercase;
+            color: var(--gold-soft);
+            font-weight: 700;
+        }
+
+        .highlight-card p {
+            margin: 0;
+            color: #f2f6ff;
+            font-size: 0.97rem;
+            line-height: 1.8;
+        }
+
+        /* ── CTA banner ── */
+        .cta-banner {
+            max-width: 960px;
+            margin: 1rem auto 0;
+            background: linear-gradient(135deg, #1a1048 0%, #4338ca 60%, #6366f1 100%);
+            border-radius: 24px;
+            padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 2.5rem);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-banner::before {
+            content: '';
+            position: absolute;
+            top: -60%; right: -20%;
+            width: 400px; height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .cta-banner h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            color: white;
+            margin: 0 0 0.7rem;
+            position: relative;
+        }
+
+        .cta-banner p {
+            color: rgba(230, 238, 255, 0.85);
+            font-size: 1.02rem;
+            line-height: 1.7;
+            margin: 0 0 1.6rem;
+            max-width: 52ch;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+        }
+
+        .cta-banner-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        .cta-btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, var(--gold), #e8c24a);
+            color: #1a1048;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-radius: 999px;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .cta-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(212, 175, 55, 0.45);
+        }
+
+        .cta-btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 999px;
+            text-decoration: none;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .cta-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* ── FAQ ── */
+        .faq-item {
+            border-bottom: 1px solid rgba(67, 56, 202, 0.1);
+            padding: 1rem 0;
+        }
+
+        .faq-item:last-child { border-bottom: 0; }
+
+        .faq-q {
+            font-weight: 700;
+            font-size: 0.98rem;
+            color: #1e1b5e;
+            margin: 0 0 0.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .faq-q::before {
+            content: 'Q';
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px; height: 24px;
+            background: linear-gradient(135deg, #4338ca, #6366f1);
+            color: white;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 800;
+        }
+
+        .faq-a {
+            margin: 0;
+            padding-left: 2.1rem;
+            font-size: 0.92rem;
+            line-height: 1.75;
+            color: var(--ink-600);
+        }
+
+        /* ── Reveal animation ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Application form ── */
+        .app-form-wrap {
+            max-width: 960px;
+            margin: 1rem auto 0;
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            box-shadow: var(--panel-shadow);
+            border-radius: 24px;
+            backdrop-filter: blur(4px);
+            padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 2.5rem);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-form-wrap::before {
+            content: '';
+            position: absolute;
+            top: -30%; right: -22%;
+            width: 300px; height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(67, 56, 202, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .app-form-wrap h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.7rem, 3vw, 2.35rem);
+            color: #1e1b5e;
+            margin: 0 0 0.5rem;
+            text-wrap: balance;
+        }
+
+        .app-form-wrap > p {
+            color: var(--ink-600);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin: 0 0 1.8rem;
+            max-width: 60ch;
+        }
+
+        .app-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.1rem;
+            position: relative;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #1e1b5e;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.72rem 0.9rem;
+            border: 1.5px solid rgba(67, 56, 202, 0.18);
+            border-radius: 12px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.92rem;
+            color: var(--ink-900);
+            background: rgba(255, 255, 255, 0.7);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #4338ca;
+            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(15, 23, 42, 0.35);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-submit-btn {
+            grid-column: 1 / -1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.85rem 2.2rem;
+            background: linear-gradient(135deg, #4338ca, #6366f1);
+            color: white;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(67, 56, 202, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .form-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(67, 56, 202, 0.4);
+        }
+
+        .form-submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .form-success.visible {
+            display: block;
+        }
+
+        .form-success-icon {
+            width: 56px; height: 56px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, #4338ca, #6366f1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-success h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            color: #1e1b5e;
+            margin: 0 0 0.6rem;
+        }
+
+        .form-success p {
+            color: var(--ink-600);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            max-width: 48ch;
+            margin: 0 auto;
+        }
+
+        .form-login-prompt {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(67, 56, 202, 0.04);
+            border: 1px dashed rgba(67, 56, 202, 0.2);
+            border-radius: 14px;
+        }
+
+        .form-login-prompt p {
+            margin: 0 0 0.8rem;
+            color: var(--ink-600);
+            font-size: 0.92rem;
+        }
+
+        .form-login-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.6rem;
+            background: linear-gradient(135deg, #4338ca, #6366f1);
+            color: white;
+            font-weight: 700;
+            font-size: 0.88rem;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .form-login-btn:hover { transform: translateY(-1px); }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-banner-actions {
+                flex-direction: column;
+            }
+
+            .app-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen" data-header-fallback="true" data-no-shabbat-banner="true">
+
+<div id="shared-header-mount" style="background:linear-gradient(135deg,#1a1048 0%,#2d1b69 45%,#4338ca 100%);min-height:64px"></div>
+<script src="/js/header-loader.js"></script>
+
+<section class="teacher-stage">
+    <section class="teacher-hero">
+        <div class="hero-inner">
+            <div class="hero-badge">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"/></svg>
+                Teacher Mode
+            </div>
+            <svg class="hero-icon-large" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+            </svg>
+            <h1 class="hero-title">Bring Torah to Your <span class="accent">Classroom</span></h1>
+            <p class="hero-subtitle">Create a virtual classroom on A Letter in the Scroll. Assign weekly parsha readings, post announcements, track student engagement, and guide meaningful Torah study &mdash; all completely free.</p>
+            <a href="#apply" class="hero-cta" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'});return false;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                Apply to Be a Teacher
+            </a>
+        </div>
+    </section>
+
+    <hr class="hero-divider">
+
+    <main class="teacher-content">
+
+        <!-- Panel 1: What Is Teacher Mode -->
+        <article class="teacher-panel reveal" data-reveal>
+            <p class="panel-kicker">Overview</p>
+            <h2>What Is Teacher Mode?</h2>
+            <p>Teacher Mode transforms A Letter in the Scroll from a personal Torah study tool into a full classroom experience. As a teacher, you create a dedicated classroom space where your students join using a simple invite code. Everything they do &mdash; reading, commenting, reacting &mdash; stays scoped to your classroom.</p>
+            <p>Think of it like Google Classroom, but built specifically for Torah learning. You can post announcements, create assignments tied to specific parsha chapters, and see at a glance which students are engaging with the material each week.</p>
+            <div class="highlight-card">
+                <h3>Built for Jewish Educators</h3>
+                <p>Whether you teach at a day school, yeshiva, synagogue, or run a private study group, Teacher Mode gives you the tools to guide your students through the weekly Torah portion with accountability and community. And it's completely free &mdash; no subscriptions, no trials, no ads.</p>
+            </div>
+        </article>
+
+        <!-- Panel 2: Features -->
+        <article class="teacher-panel reveal" data-reveal>
+            <p class="panel-kicker">Features</p>
+            <h2>Everything You Get as a Teacher</h2>
+            <p>Teacher Mode gives you a dedicated classroom dashboard with powerful tools designed specifically for Torah education.</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    </div>
+                    <h4>Announcements</h4>
+                    <p>Post updates to your entire classroom. Students see announcements in the Stream tab as soon as they open the classroom.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M9 16l2 2 4-4"/></svg>
+                    </div>
+                    <h4>Assignments</h4>
+                    <p>Create assignments with a title, description, due date, and specific parsha/chapter references so students know exactly what to study.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                    </div>
+                    <h4>Student Management</h4>
+                    <p>See all members at a glance, approve join requests, and manage your classroom roster with up to 80 students.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                    </div>
+                    <h4>Private Messaging</h4>
+                    <p>Send direct messages to individual students. Conversations stay private between you and the student within the classroom.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    </div>
+                    <h4>Weekly Activity Analytics</h4>
+                    <p>See which students commented, hearted, or highlighted verses this week. Quickly verify that students completed their assignments.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <h4>Scoped Reactions</h4>
+                    <p>When students study in your classroom, their hearts, highlights, and comments stay within the classroom &mdash; they won't leak to other groups.</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Panel 3: How to Get Started -->
+        <article class="teacher-panel reveal" data-reveal>
+            <p class="panel-kicker">Getting Started</p>
+            <h2>Set Up Your Classroom in 3 Minutes</h2>
+            <p>No complicated onboarding, no waiting for approval. You can have your first classroom running today.</p>
+            <ol class="steps-list">
+                <li>
+                    <span class="step-num">1</span>
+                    <div class="step-content">
+                        <h4>Create an Account</h4>
+                        <p>Sign up for a free account on A Letter in the Scroll using your email or Google login. It takes about 30 seconds.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-num">2</span>
+                    <div class="step-content">
+                        <h4>Toggle Teacher Mode & Create a Classroom</h4>
+                        <p>On your Dashboard, toggle on <strong>Teacher Mode</strong> (the graduation cap icon at the top). Then click <strong>Create Study Group</strong> and check the <strong>"Create as Classroom"</strong> option. Name your classroom and set your preferences.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-num">3</span>
+                    <div class="step-content">
+                        <h4>Share the Invite Code</h4>
+                        <p>Every classroom gets a unique invite code. Share it with your students &mdash; they enter the code on their Dashboard to join instantly. You can also enable join-approval if you want to vet each student first.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-num">4</span>
+                    <div class="step-content">
+                        <h4>Post Your First Assignment</h4>
+                        <p>Open your classroom, switch to the Stream tab, and create your first assignment. Link it to a specific parsha chapter, set a due date, and your students will see it the moment they open the classroom.</p>
+                    </div>
+                </li>
+            </ol>
+        </article>
+
+        <!-- Panel 4: How Students Join -->
+        <article class="teacher-panel reveal" data-reveal>
+            <p class="panel-kicker">For Students</p>
+            <h2>How Your Students Join</h2>
+            <p>Joining a classroom is just as simple. Students don't need a special account type &mdash; any free account works.</p>
+            <ol class="steps-list">
+                <li>
+                    <span class="step-num">1</span>
+                    <div class="step-content">
+                        <h4>Create a Free Account</h4>
+                        <p>Students sign up at <strong>aletterinthescroll.com</strong> with their email or Google account.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-num">2</span>
+                    <div class="step-content">
+                        <h4>Enter the Invite Code</h4>
+                        <p>On the Dashboard, students click <strong>"Join Study Group"</strong> and enter the classroom invite code you shared with them.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-num">3</span>
+                    <div class="step-content">
+                        <h4>Start Studying</h4>
+                        <p>Once joined, students can open the classroom, read the weekly parsha, comment on verses, heart meaningful passages, and complete assignments. Everything they do is visible to you in the Activity tab.</p>
+                    </div>
+                </li>
+            </ol>
+        </article>
+
+        <!-- Panel 5: FAQ -->
+        <article class="teacher-panel reveal" data-reveal>
+            <p class="panel-kicker">FAQ</p>
+            <h2>Common Questions</h2>
+
+            <div class="faq-item">
+                <p class="faq-q">Is Teacher Mode really free?</p>
+                <p class="faq-a">Yes, completely. A Letter in the Scroll is a non-profit project. There are no subscriptions, no premium tiers, and no ads. Teacher Mode is included at no cost.</p>
+            </div>
+
+            <div class="faq-item">
+                <p class="faq-q">How many students can join a classroom?</p>
+                <p class="faq-a">Each classroom supports up to 80 students. If you need more, you can create multiple classrooms.</p>
+            </div>
+
+            <div class="faq-item">
+                <p class="faq-q">Can students be in multiple classrooms?</p>
+                <p class="faq-a">Absolutely. Students can join as many classrooms and study groups as they like. Their activity in each classroom stays separate.</p>
+            </div>
+
+            <div class="faq-item">
+                <p class="faq-q">Can I moderate comments?</p>
+                <p class="faq-a">Yes. As the classroom leader, you can delete any comment or chat message within your classroom. There's also an optional safety filter that screens for inappropriate language.</p>
+            </div>
+
+            <div class="faq-item">
+                <p class="faq-q">What content can my students study?</p>
+                <p class="faq-a">Students have access to the full weekly Torah portion (parsha) with bilingual Hebrew-English text, classical commentary, and verse-by-verse study. They can also access Psalms, prayers, holidays, and songs.</p>
+            </div>
+
+            <div class="faq-item">
+                <p class="faq-q">Can I see what my students are doing?</p>
+                <p class="faq-a">Yes. The Activity tab in your classroom shows a weekly breakdown of each student's engagement &mdash; how many comments, hearts, and highlights they've made. You can verify at a glance who completed their assignments.</p>
+            </div>
+
+            <div class="faq-item">
+                <p class="faq-q">Do I need any technical skills?</p>
+                <p class="faq-a">Not at all. If you can send an email, you can run a classroom. The interface is designed to be intuitive for educators of all backgrounds.</p>
+            </div>
+        </article>
+
+        <!-- Panel 6: Quote -->
+        <article class="teacher-panel reveal" data-reveal>
+            <div class="quote-block">
+                <blockquote>"Make for yourself a teacher, acquire for yourself a friend, and judge every person favorably."</blockquote>
+                <cite>Pirkei Avot 1:6</cite>
+            </div>
+            <p>The tradition of learning together is at the heart of Jewish life. Teacher Mode brings this ancient tradition into the digital age, empowering educators to guide their students through Torah with the same warmth and accountability of a physical classroom.</p>
+        </article>
+
+        <!-- Application Form -->
+        <div id="apply" class="app-form-wrap reveal" data-reveal>
+            <p class="panel-kicker">Apply</p>
+            <h2>Apply to Create a Classroom</h2>
+            <p>To keep classrooms meaningful and prevent spam, we ask teachers to fill out a short application. Once submitted, you'll be able to create your classroom right away from the Dashboard.</p>
+
+            <!-- Login prompt (shown when not signed in) -->
+            <div id="form-login-prompt" class="form-login-prompt" style="display:none;">
+                <p>Please sign in to your account first so we can link your application.</p>
+                <button class="form-login-btn" onclick="signInForApplication()">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                    Sign In with Google
+                </button>
+            </div>
+
+            <!-- The form (shown when signed in) -->
+            <form id="teacher-app-form" class="app-form" style="display:none;" onsubmit="submitApplication(event)">
+                <div class="form-group">
+                    <label for="app-name">Full Name</label>
+                    <input type="text" id="app-name" placeholder="e.g. Rabbi David Cohen" required minlength="2" maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label for="app-email">Email Address</label>
+                    <input type="email" id="app-email" placeholder="you@school.edu" required>
+                </div>
+                <div class="form-group">
+                    <label for="app-institution">Where Do You Teach?</label>
+                    <input type="text" id="app-institution" placeholder="e.g. Yeshivat Or Torah, private tutor, synagogue" required minlength="2" maxlength="200">
+                </div>
+                <div class="form-group">
+                    <label for="app-subject">What Do You Teach?</label>
+                    <input type="text" id="app-subject" placeholder="e.g. Chumash, Tanakh, Jewish History, Bar/Bat Mitzvah prep" required minlength="2" maxlength="200">
+                </div>
+                <div class="form-group full-width">
+                    <label for="app-students">Estimated Number of Students</label>
+                    <select id="app-students">
+                        <option value="1-10">1 &ndash; 10</option>
+                        <option value="11-25">11 &ndash; 25</option>
+                        <option value="26-50">26 &ndash; 50</option>
+                        <option value="51-80">51 &ndash; 80</option>
+                    </select>
+                </div>
+                <div class="form-group full-width">
+                    <label for="app-notes">Anything else you'd like us to know? <span style="font-weight:400;text-transform:none;letter-spacing:0;opacity:0.6">(optional)</span></label>
+                    <textarea id="app-notes" placeholder="e.g. I'd love to use this for my weekly parsha class with 8th graders..." maxlength="1000"></textarea>
+                </div>
+                <button type="submit" class="form-submit-btn" id="app-submit-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                    Submit Application
+                </button>
+            </form>
+
+            <!-- Success message -->
+            <div id="form-success" class="form-success">
+                <div class="form-success-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <h3>Application Submitted!</h3>
+                <p>Thank you for applying. You can now go to your Dashboard, toggle on Teacher Mode, and create your classroom.</p>
+                <a href="/dashboard" class="cta-btn-primary" style="margin-top:1.2rem;display:inline-flex;">
+                    Go to Dashboard
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+        </div>
+
+    </main>
+</section>
+
+<!-- Reveal observer -->
+<script>
+(function() {
+    var els = document.querySelectorAll('[data-reveal]');
+    if (!els.length) return;
+    if ('IntersectionObserver' in window) {
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    obs.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.12 });
+        els.forEach(function(el) { obs.observe(el); });
+    } else {
+        els.forEach(function(el) { el.classList.add('visible'); });
+    }
+})();
+</script>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script>
+(function() {
+    firebase.initializeApp({
+        apiKey:"AIzaSyCpDtcBpKvjLwihnL2bizxBFxXD6Qn8Lb4",
+        authDomain:"letterinthescroll.firebaseapp.com",
+        projectId:"letterinthescroll",
+        storageBucket:"letterinthescroll.firebasestorage.app",
+        messagingSenderId:"625129870318",
+        appId:"1:625129870318:web:a654e97b734faa3b4df4ff",
+        measurementId:"G-LYSXTDEPVG"
+    });
+    var auth = firebase.auth();
+    var db = firebase.firestore();
+    var currentUser = null;
+
+    var formEl = document.getElementById('teacher-app-form');
+    var loginPrompt = document.getElementById('form-login-prompt');
+    var successEl = document.getElementById('form-success');
+
+    auth.onAuthStateChanged(function(user) {
+        currentUser = user;
+        if (user) {
+            loginPrompt.style.display = 'none';
+            // Check if user already submitted an application
+            db.collection('teacherApplications').where('userId', '==', user.uid).get().then(function(snap) {
+                if (!snap.empty) {
+                    formEl.style.display = 'none';
+                    successEl.classList.add('visible');
+                } else {
+                    formEl.style.display = '';
+                    // Pre-fill email
+                    var emailInput = document.getElementById('app-email');
+                    if (emailInput && !emailInput.value) emailInput.value = user.email || '';
+                    // Pre-fill name from profile
+                    if (user.displayName) {
+                        var nameInput = document.getElementById('app-name');
+                        if (nameInput && !nameInput.value) nameInput.value = user.displayName;
+                    }
+                }
+            });
+        } else {
+            loginPrompt.style.display = '';
+            formEl.style.display = 'none';
+        }
+    });
+
+    window.signInForApplication = function() {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider).catch(function(err) {
+            if (err.code !== 'auth/popup-closed-by-user') {
+                alert('Sign-in failed: ' + err.message);
+            }
+        });
+    };
+
+    window.submitApplication = function(e) {
+        e.preventDefault();
+        if (!currentUser) { alert('Please sign in first.'); return; }
+
+        var btn = document.getElementById('app-submit-btn');
+        btn.disabled = true;
+        btn.textContent = 'Submitting...';
+
+        var data = {
+            userId: currentUser.uid,
+            email: document.getElementById('app-email').value.trim(),
+            fullName: document.getElementById('app-name').value.trim(),
+            institution: document.getElementById('app-institution').value.trim(),
+            subject: document.getElementById('app-subject').value.trim(),
+            estimatedStudents: document.getElementById('app-students').value,
+            notes: (document.getElementById('app-notes').value || '').trim(),
+            submittedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        db.collection('teacherApplications').add(data).then(function() {
+            formEl.style.display = 'none';
+            successEl.classList.add('visible');
+        }).catch(function(err) {
+            console.error('Application submit error:', err);
+            alert('Something went wrong: ' + (err.message || err));
+            btn.disabled = false;
+            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg> Submit Application';
+        });
+    };
+})();
+</script>
+
+<div id="shared-footer-mount"></div>
+<script src="/js/sidebar-nav.js"></script>
+<script src="/js/footer-loader.js"></script>
+</body>
+</html>

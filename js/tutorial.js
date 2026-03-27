@@ -29,7 +29,7 @@
 
     /* ── SVG icons ─────────────────────────────────────────────────────── */
     var ICONS = {
-        welcome: '<img src="/media/images/Icon.png" width="26" height="26" alt="A Letter in the Scroll" style="border-radius:4px;">',
+        welcome: '<img src="/media/images/Logonewwhite.png" width="26" height="26" alt="A Letter in the Scroll" style="border-radius:50%;">',
         nav: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/></svg>',
         inspiration: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="1.8"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/></svg>',
         tehillim: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>',

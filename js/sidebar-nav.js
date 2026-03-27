@@ -69,14 +69,15 @@
         brand.className = 'site-sidebar-brand';
         brand.setAttribute('aria-hidden', 'true');
         var brandImg = document.createElement('img');
-        brandImg.src = getAssetPath('IconOnly.png');
+        brandImg.src = getAssetPath('logonew.png');
         brandImg.alt = '';
         brandImg.style.width = '28px';
         brandImg.style.height = '28px';
         brandImg.style.objectFit = 'contain';
         brandImg.style.display = 'block';
+        brandImg.style.borderRadius = '50%';
         brandImg.addEventListener('error', function () {
-            this.src = getAssetPath('Icon.png');
+            this.src = getAssetPath('logonew.png');
         }, { once: true });
         brand.appendChild(brandImg);
 
@@ -120,6 +121,42 @@
         bookmarkBtn.innerHTML = '<svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg><span class="header-btn-text">Bookmarks</span>';
         accountSection.appendChild(bookmarkBtn);
 
+        var flashcardsBtn = document.createElement('a');
+        flashcardsBtn.href = '/flashcards';
+        flashcardsBtn.className = 'header-btn header-btn-secondary';
+        flashcardsBtn.title = 'My flashcards';
+        flashcardsBtn.innerHTML = '<svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="6" width="15" height="11" rx="1.5" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4h13a1.5 1.5 0 011.5 1.5V15"/></svg><span class="header-btn-text">Flashcards</span>';
+        flashcardsBtn.addEventListener('click', function (e) {
+            if (localStorage.getItem('alits_hebrew_study_mode') === 'true') return;
+            e.preventDefault();
+            closeDrawer();
+            if (document.getElementById('study-mode-gate-modal')) return;
+            var ov = document.createElement('div');
+            ov.id = 'study-mode-gate-modal';
+            ov.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);backdrop-filter:blur(4px)';
+            ov.innerHTML =
+                '<div style="background:#fff;border-radius:1.35rem;padding:2rem 2rem 1.6rem;max-width:380px;width:90%;box-shadow:0 24px 60px rgba(0,0,0,.18);text-align:center">' +
+                '<div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#f0f7ff,#ede9fe);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem"><svg width="22" height="22" fill="none" stroke="#6d28d9" viewBox="0 0 24 24"><rect x="3" y="6" width="15" height="11" rx="1.5" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4h13a1.5 1.5 0 011.5 1.5V15"/></svg></div>' +
+                '<div style="font-size:1.1rem;font-weight:700;color:#1a1a2e;margin-bottom:.45rem">Hebrew Study Mode is off</div>' +
+                '<div style="font-size:.82rem;color:#6b7280;line-height:1.6;margin-bottom:1.4rem">Flashcards are part of Hebrew Study Mode — a feature that lets you save words as you read and review them with spaced repetition.<br><br>Turn it on in Settings to get started.</div>' +
+                '<div style="display:flex;gap:.55rem;justify-content:center">' +
+                '<button id="smg-close2" style="padding:.52rem 1.2rem;border-radius:2rem;font-size:.78rem;font-weight:600;cursor:pointer;border:none;background:#f3f4f6;color:#374151">Maybe later</button>' +
+                '<button id="smg-settings2" style="padding:.52rem 1.2rem;border-radius:2rem;font-size:.78rem;font-weight:600;cursor:pointer;border:none;background:#1a1a2e;color:#fff">Go to Settings</button>' +
+                '</div></div>';
+            document.body.appendChild(ov);
+            ov.addEventListener('click', function (ev) { if (ev.target === ov) ov.remove(); });
+            ov.querySelector('#smg-close2').addEventListener('click', function () { ov.remove(); });
+            ov.querySelector('#smg-settings2').addEventListener('click', function () { window.location.href = '/settings#sec-hebrew-study'; });
+        });
+        accountSection.appendChild(flashcardsBtn);
+
+        var journalBtn = document.createElement('a');
+        journalBtn.href = '/journal';
+        journalBtn.className = 'header-btn header-btn-secondary';
+        journalBtn.title = 'Spiritual journal';
+        journalBtn.innerHTML = '<svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg><span class="header-btn-text">Journal</span>';
+        accountSection.appendChild(journalBtn);
+
         var settingsBtn = document.createElement('a');
         settingsBtn.href = '/settings';
         settingsBtn.className = 'header-btn header-btn-secondary';
@@ -151,13 +188,9 @@
 
         document.body.appendChild(sidebar);
 
-        // ── Move user pill/dropdown to bottom of sidebar (above sign out) ──
-        var userPill = clonedActions.querySelector('.header-user-pill');
+        // ── Remove user pill from sidebar clone (not needed — account section has links) ──
         var userDropdownContainer = clonedActions.querySelector('#header-user-dropdown-container');
-        var pillToMove = userDropdownContainer || (userPill ? userPill.parentElement : null);
-        if (pillToMove && accountSection.contains(signOutBtn)) {
-            accountSection.insertBefore(pillToMove, signOutBtn);
-        }
+        if (userDropdownContainer) userDropdownContainer.remove();
 
         // ── Highlight the active page in the sidebar clone ──
         (function highlightActivePage() {

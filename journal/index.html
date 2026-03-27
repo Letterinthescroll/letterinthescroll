@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spiritual Journal — A Letter in the Scroll</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png" media="(prefers-color-scheme: light)"><link rel="icon" type="image/svg+xml" href="/media/images/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" sizes="180x180" href="/media/images/apple-touch-icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="A Letter in the Scroll">
+    <meta property="og:title" content="Spiritual Journal — A Letter in the Scroll">
+    <meta property="og:description" content="Reflect on your spiritual growth, record mitzvot, and track your journey toward becoming your best self.">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/shabbat.css">
+    <link rel="stylesheet" href="/css/mobile-overrides.css">
+    <script defer src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink-950: #2d3436;
+            --ink-800: #3d4f5f;
+            --ink-700: #4a6274;
+            --ink-600: #607d8b;
+            --ink-500: #8a9baa;
+            --surface: #fffefb;
+            --surface-soft: #f9f7f3;
+            --surface-glass: rgba(255, 254, 251, 0.85);
+            --line: rgba(139, 125, 107, 0.16);
+            --line-strong: rgba(139, 125, 107, 0.28);
+            --accent-sage: #7ba08a;
+            --accent-sage-deep: #5e8a6e;
+            --accent-warm: #c4a265;
+            --accent-lavender: #9b8ec4;
+            --accent-rose: #c4929a;
+            --accent-navy: #4a6274;
+            --accent-teal: #6a9fa8;
+            --accent-gold: #c4a265;
+            --accent-mint: #7ba08a;
+            --danger: #c4929a;
+            --radius-xl: 1.25rem;
+            --radius-lg: 0.9rem;
+            --shadow-card: 0 1px 4px rgba(100,80,60,0.04), 0 4px 18px rgba(100,80,60,0.03);
+            --shadow-card-hover: 0 6px 24px rgba(100,80,60,0.08);
+            --shadow-lg: 0 12px 36px rgba(100,80,60,0.10);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        html:has(.journal-body) {
+            background: #f5f2ed !important;
+        }
+        html:has(.journal-body),
+        html:has(.journal-body) body {
+            overflow-x: clip !important;
+        }
+
+        .journal-body {
+            font-family: 'Manrope', sans-serif !important;
+            color: var(--ink-950);
+            min-height: 100vh;
+            background:
+                radial-gradient(900px 500px at 15% 20%, rgba(123, 160, 138, 0.09), transparent 55%),
+                radial-gradient(700px 500px at 85% 30%, rgba(155, 142, 196, 0.06), transparent 50%),
+                radial-gradient(500px 400px at 50% 70%, rgba(196, 162, 101, 0.04), transparent 55%),
+                linear-gradient(180deg, #f5f2ed 0%, #faf7f2 35%, #f2efe9 65%, #f5f2ed 100%) !important;
+        }
+
+        /* ── Gentle floating orbs ── */
+        .journal-body::before,
+        .journal-body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .journal-body::before {
+            width: 400px; height: 400px;
+            top: 15%; right: -100px;
+            background: radial-gradient(circle, rgba(155, 142, 196, 0.06), transparent 70%);
+            animation: breathe 18s ease-in-out infinite;
+        }
+        .journal-body::after {
+            width: 350px; height: 350px;
+            bottom: 15%; left: -80px;
+            background: radial-gradient(circle, rgba(123, 160, 138, 0.06), transparent 70%);
+            animation: breathe 22s ease-in-out infinite reverse;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.08); opacity: 1; }
+        }
+        @keyframes dotPulse {
+            0%, 80%, 100% { opacity: 0.15; transform: scale(0.85); }
+            40% { opacity: 1; transform: scale(1); }
+        }
+
+        /* ── Cards ── */
+        .j-card {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-card);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        .j-card:hover {
+            box-shadow: var(--shadow-card-hover);
+        }
+
+        /* ── Hero ── */
+        .journal-hero {
+            position: relative;
+            overflow: hidden;
+            padding: clamp(2rem, 4.5vw, 3.5rem) 1.25rem clamp(1.5rem, 3vw, 2.5rem);
+            text-align: center;
+            background: linear-gradient(145deg, #1a2a3a 0%, #243548 40%, #2d4458 100%);
+            width: 100%;
+            isolation: isolate;
+        }
+        #journal-hero-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .hero-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.3rem 0.9rem;
+            border: 1px solid rgba(123, 160, 138, 0.35);
+            border-radius: 999px;
+            color: rgba(200, 220, 210, 0.9);
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            font-size: 0.68rem;
+            font-weight: 700;
+            background: rgba(123, 160, 138, 0.1);
+            margin-bottom: 1.2rem;
+            opacity: 0;
+            animation: heroFadeUp 800ms ease forwards 200ms;
+        }
+        .hero-hebrew {
+            display: block;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.6rem, 4vw, 2.8rem);
+            font-weight: 700;
+            line-height: 0.95;
+            color: rgba(255, 255, 255, 0.08);
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.04em;
+            direction: rtl;
+            opacity: 0;
+            animation: heroFadeUp 800ms ease forwards 400ms;
+        }
+        .journal-hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.4rem, 3.5vw, 2.1rem);
+            line-height: 1.15;
+            color: #f0ece5;
+            margin: 0 auto 1rem;
+            max-width: 18ch;
+            letter-spacing: -0.01em;
+            font-weight: 700;
+            opacity: 0;
+            animation: heroFadeUp 800ms ease forwards 600ms;
+        }
+        .journal-hero h1 .hero-gold {
+            color: rgba(196, 183, 150, 0.9);
+            font-style: italic;
+        }
+        .journal-hero-sub {
+            max-width: 48ch;
+            margin: 0 auto;
+            color: rgba(220, 215, 205, 0.7);
+            font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+            line-height: 1.7;
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            opacity: 0;
+            animation: heroFadeUp 800ms ease forwards 800ms;
+        }
+        @keyframes heroFadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Streak badge ── */
+        .streak-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            background: rgba(123,160,138,0.1);
+            color: var(--accent-sage-deep);
+            border: 1px solid rgba(123,160,138,0.2);
+        }
+
+        /* ── Top row: stats + milestone ── */
+        .journal-top-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.85rem;
+        }
+        .stat-card {
+            text-align: center;
+            padding: 1.2rem 0.5rem;
+            border-radius: var(--radius-xl);
+            background: var(--surface);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-card);
+        }
+        .milestone-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .stat-number {
+            font-family: 'Fraunces', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--accent-sage-deep);
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.62rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--ink-500);
+            margin-top: 0.35rem;
+        }
+
+        /* ── Two-column layout: composer + suggestions ── */
+        .journal-two-col {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        /* ── New Entry Form ── */
+        .entry-composer {
+            padding: 1.5rem;
+        }
+        .composer-tabs {
+            display: flex;
+            gap: 0.35rem;
+            margin-bottom: 1rem;
+            background: var(--surface-soft);
+            border-radius: 0.7rem;
+            padding: 0.25rem;
+        }
+        .composer-tab {
+            flex: 1;
+            padding: 0.5rem 0.6rem;
+            border-radius: 0.55rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--ink-500);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            text-align: center;
+        }
+        .composer-tab:hover {
+            color: var(--ink-700);
+            background: rgba(255,255,255,0.7);
+        }
+        .composer-tab.active {
+            color: var(--accent-sage-deep);
+            background: var(--surface);
+            box-shadow: 0 1px 4px rgba(100,80,60,0.06);
+        }
+
+        .j-textarea {
+            width: 100%;
+            min-height: 130px;
+            padding: 0.95rem 1.1rem;
+            border: 1.5px solid var(--line);
+            border-radius: var(--radius-lg);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.08rem;
+            line-height: 1.7;
+            color: var(--ink-950);
+            background: var(--surface-soft);
+            resize: vertical;
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+        .j-textarea:focus {
+            outline: none;
+            border-color: var(--accent-sage);
+            box-shadow: 0 0 0 3px rgba(123,160,138,0.12);
+            background: var(--surface);
+        }
+        .j-textarea::placeholder {
+            color: var(--ink-500);
+            opacity: 0.5;
+            font-style: italic;
+        }
+
+        .j-input {
+            width: 100%;
+            padding: 0.6rem 0.9rem;
+            border: 1.5px solid var(--line);
+            border-radius: var(--radius-lg);
+            font-size: 0.85rem;
+            font-family: inherit;
+            color: var(--ink-950);
+            background: var(--surface-soft);
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+        .j-input:focus {
+            outline: none;
+            border-color: var(--accent-sage);
+            box-shadow: 0 0 0 3px rgba(123,160,138,0.12);
+            background: var(--surface);
+        }
+
+        /* Mood selector */
+        .mood-selector {
+            display: flex;
+            gap: 0.45rem;
+            flex-wrap: wrap;
+        }
+        .mood-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--ink-600);
+            background: var(--surface-soft);
+            border: 1.5px solid var(--line);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .mood-btn:hover {
+            border-color: var(--line-strong);
+            background: var(--surface);
+        }
+        .mood-btn.selected {
+            border-color: var(--accent-sage);
+            background: rgba(123,160,138,0.08);
+            color: var(--accent-sage-deep);
+        }
+        .mood-btn .mood-emoji {
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        /* Tags */
+        .tag-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+        }
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.3rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1.5px solid transparent;
+            font-family: inherit;
+        }
+        .tag-pill.tag-gratitude { background: rgba(123,160,138,0.1); color: #5e8a6e; border-color: rgba(123,160,138,0.2); }
+        .tag-pill.tag-mitzvah { background: rgba(196,162,101,0.1); color: #9a7e40; border-color: rgba(196,162,101,0.2); }
+        .tag-pill.tag-prayer { background: rgba(155,142,196,0.1); color: #7a6daa; border-color: rgba(155,142,196,0.18); }
+        .tag-pill.tag-kindness { background: rgba(196,146,154,0.1); color: #a06670; border-color: rgba(196,146,154,0.18); }
+        .tag-pill.tag-learning { background: rgba(106,159,168,0.1); color: #4a8a94; border-color: rgba(106,159,168,0.18); }
+        .tag-pill.tag-growth { background: rgba(155,142,196,0.1); color: #7a6daa; border-color: rgba(155,142,196,0.18); }
+        .tag-pill.selected {
+            box-shadow: 0 0 0 2px rgba(123,160,138,0.2);
+            transform: scale(1.04);
+        }
+
+        /* Save button */
+        .j-btn-save {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.65rem 1.6rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, var(--accent-sage), var(--accent-sage-deep));
+            box-shadow: 0 2px 10px rgba(123,160,138,0.25);
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: inherit;
+        }
+        .j-btn-save:hover {
+            box-shadow: 0 4px 18px rgba(123,160,138,0.35);
+            transform: translateY(-1px);
+        }
+        .j-btn-save:active { transform: translateY(0); }
+        .j-btn-save:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .j-btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.55rem 1.2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--ink-700);
+            background: var(--surface);
+            border: 1.5px solid var(--line);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .j-btn-secondary:hover { background: var(--surface-soft); border-color: var(--line-strong); }
+
+        /* ── Inspiration banner ── */
+        .inspiration-card {
+            background: linear-gradient(135deg, rgba(123,160,138,0.06), rgba(196,162,101,0.05), rgba(155,142,196,0.04));
+            border: 1px solid rgba(123,160,138,0.14);
+            border-radius: var(--radius-xl);
+            padding: 1.3rem 1.6rem;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .inspiration-card::before {
+            content: '\201C';
+            position: absolute;
+            top: -0.2rem;
+            left: 0.9rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            color: rgba(123,160,138,0.12);
+            line-height: 1;
+        }
+        .inspiration-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.08rem;
+            font-style: italic;
+            line-height: 1.65;
+            color: var(--ink-700);
+            padding-left: 0.5rem;
+        }
+        .inspiration-source {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--accent-sage-deep);
+            margin-top: 0.5rem;
+            padding-left: 0.5rem;
+        }
+        .inspiration-card:hover {
+            border-color: rgba(123,160,138,0.25);
+            box-shadow: 0 2px 14px rgba(123,160,138,0.08);
+        }
+
+        /* ── Suggestions ── */
+        .suggestions-grid {
+            display: grid;
+            gap: 0.5rem;
+        }
+        .suggestion-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.65rem;
+            padding: 0.7rem 0.8rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--line);
+            background: var(--surface-soft);
+            transition: all 0.2s;
+            position: relative;
+        }
+        .suggestion-item:hover {
+            background: rgba(123,160,138,0.05);
+            border-color: rgba(123,160,138,0.22);
+            box-shadow: 0 2px 8px rgba(94,138,110,0.06);
+        }
+        .suggestion-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .suggestion-text {
+            font-size: 0.8rem;
+            color: var(--ink-700);
+            line-height: 1.5;
+            flex: 1;
+        }
+        .add-goal-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.28rem;
+            padding: 0.28rem 0.6rem;
+            border-radius: 999px;
+            border: 1.5px solid rgba(94,138,110,0.3);
+            background: rgba(123,160,138,0.07);
+            color: var(--accent-sage-deep);
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.15s, transform 0.15s, background 0.15s, border-color 0.15s;
+            letter-spacing: 0.02em;
+            align-self: center;
+        }
+        .suggestion-item:hover .add-goal-btn,
+        .for-you-item:hover .add-goal-btn {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .add-goal-btn:hover {
+            background: rgba(123,160,138,0.15);
+            border-color: var(--accent-sage);
+        }
+        .add-goal-btn.saved {
+            background: rgba(94,138,110,0.12);
+            border-color: var(--accent-sage);
+            color: var(--accent-sage-deep);
+            opacity: 1 !important;
+            transform: scale(1) !important;
+        }
+
+        /* ── Growth Goals ── */
+        /* ── Growth Goals Card ── */
+        #goals-card {
+            background: linear-gradient(135deg, #fdfcf8 0%, #f8f5ef 100%);
+            border: 1px solid rgba(196,162,101,0.15);
+            padding: 1.4rem 1.6rem;
+        }
+        .goals-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .goals-title-group {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+        .goals-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--ink-950);
+        }
+        .goals-add-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.38rem 1rem;
+            border-radius: 999px;
+            border: 1.5px solid rgba(94,138,110,0.4);
+            background: rgba(123,160,138,0.08);
+            color: var(--accent-sage-deep);
+            font-size: 0.76rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.01em;
+        }
+        .goals-add-btn:hover {
+            background: rgba(123,160,138,0.15);
+            border-color: var(--accent-sage);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(94,138,110,0.15);
+        }
+        .goals-input-row {
+            display: flex;
+            gap: 0.5rem;
+            align-items: stretch;
+            margin-bottom: 1rem;
+            background: var(--surface);
+            border: 1.5px solid rgba(123,160,138,0.3);
+            border-radius: var(--radius-lg);
+            padding: 0.3rem 0.4rem 0.3rem 0.75rem;
+            box-shadow: 0 2px 8px rgba(94,138,110,0.08);
+        }
+        .goals-input {
+            flex: 1;
+            border: none !important;
+            background: transparent !important;
+            padding: 0.3rem 0 !important;
+            box-shadow: none !important;
+            font-size: 0.85rem !important;
+        }
+        .goals-input:focus { outline: none; box-shadow: none !important; }
+        .goals-input-row:focus-within {
+            border-color: var(--accent-sage);
+            box-shadow: 0 0 0 3px rgba(123,160,138,0.12);
+        }
+        .goals-save-btn {
+            padding: 0.38rem 1rem !important;
+            font-size: 0.78rem !important;
+            white-space: nowrap;
+            border-radius: var(--radius-lg) !important;
+        }
+        .goals-cancel-btn {
+            background: none;
+            border: none;
+            color: var(--ink-500);
+            font-size: 0.78rem;
+            cursor: pointer;
+            padding: 0.38rem 0.6rem;
+            border-radius: var(--radius-lg);
+            transition: color 0.2s;
+        }
+        .goals-cancel-btn:hover { color: var(--ink-700); }
+        .goals-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+        .goal-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7rem;
+            padding: 0.75rem 0.95rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--line);
+            background: var(--surface);
+            transition: all 0.25s;
+            cursor: pointer;
+        }
+        .goal-item:hover {
+            border-color: rgba(123,160,138,0.25);
+            box-shadow: 0 2px 8px rgba(100,80,60,0.04);
+        }
+        .goal-item.done {
+            background: rgba(123,160,138,0.04);
+            border-color: rgba(123,160,138,0.18);
+        }
+        .goal-item.done .goal-text {
+            text-decoration: line-through;
+            color: var(--ink-500);
+        }
+        .goal-checkbox {
+            width: 19px;
+            height: 19px;
+            border-radius: 6px;
+            border: 2px solid rgba(139,125,107,0.3);
+            background: var(--surface);
+            cursor: pointer;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            margin-top: 1px;
+        }
+        .goal-item:hover .goal-checkbox {
+            border-color: var(--accent-sage);
+        }
+        .goal-item.done .goal-checkbox {
+            background: var(--accent-sage);
+            border-color: var(--accent-sage);
+        }
+        .goal-checkbox svg { display: none; }
+        .goal-item.done .goal-checkbox svg { display: block; }
+        .goal-text {
+            flex: 1;
+            font-size: 0.84rem;
+            color: var(--ink-700);
+            line-height: 1.55;
+        }
+        .goal-delete-btn {
+            background: none;
+            border: none;
+            color: var(--ink-500);
+            cursor: pointer;
+            padding: 0.1rem;
+            opacity: 0;
+            transition: opacity 0.2s, color 0.2s;
+            flex-shrink: 0;
+        }
+        .goal-item:hover .goal-delete-btn { opacity: 1; }
+        .goal-delete-btn:hover { color: var(--danger); }
+        .goals-empty {
+            padding: 1.5rem 1rem;
+            text-align: center;
+            border: 1.5px dashed rgba(139,125,107,0.2);
+            border-radius: var(--radius-lg);
+        }
+        .goals-empty p {
+            font-size: 0.83rem;
+            color: var(--ink-500);
+            font-style: italic;
+            line-height: 1.6;
+        }
+        .goals-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 0.85rem;
+            padding-top: 0.85rem;
+            border-top: 1px solid var(--line);
+        }
+        .goals-progress-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--line);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .goals-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-sage), var(--accent-teal));
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+        .goals-progress-label {
+            font-size: 0.72rem;
+            color: var(--ink-500);
+            white-space: nowrap;
+        }
+
+        /* ── For You Section ── */
+        .for-you-section {
+            margin-bottom: 0;
+        }
+        .for-you-header {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-bottom: 0.7rem;
+        }
+        .for-you-label {
+            font-family: 'Fraunces', serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--accent-warm);
+            letter-spacing: 0.02em;
+        }
+        .for-you-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+        .for-you-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            padding: 0.7rem 0.85rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(196,162,101,0.22);
+            background: linear-gradient(135deg, rgba(196,162,101,0.06) 0%, rgba(196,162,101,0.02) 100%);
+            transition: all 0.2s;
+        }
+        .for-you-item:hover {
+            background: linear-gradient(135deg, rgba(196,162,101,0.1) 0%, rgba(196,162,101,0.04) 100%);
+            border-color: rgba(196,162,101,0.35);
+            box-shadow: 0 2px 8px rgba(196,162,101,0.08);
+        }
+        .for-you-star {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(196,162,101,0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .for-you-text {
+            font-size: 0.78rem;
+            color: var(--ink-800);
+            line-height: 1.5;
+            flex: 1;
+        }
+        .suggestions-divider {
+            height: 1px;
+            background: var(--line);
+            margin: 0.9rem 0;
+        }
+        .suggestions-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.6rem;
+        }
+        .suggestions-title {
+            font-family: 'Fraunces', serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--ink-800);
+        }
+        .shuffle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.28rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid var(--line-strong);
+            background: var(--surface-soft);
+            color: var(--ink-600);
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.02em;
+        }
+        .shuffle-btn:hover {
+            background: rgba(123,160,138,0.08);
+            border-color: rgba(123,160,138,0.3);
+            color: var(--accent-sage-deep);
+        }
+        .shuffle-btn.spinning svg {
+            animation: spin 0.4s linear;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Timeline ── */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent-sage), var(--line), transparent);
+            border-radius: 2px;
+        }
+
+        .timeline-entry {
+            position: relative;
+            margin-bottom: 1.25rem;
+            animation: fadeUp 0.35s ease-out both;
+        }
+        .timeline-entry .timeline-dot {
+            position: absolute;
+            left: -2rem;
+            top: 1.2rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 2.5px solid var(--accent-sage);
+            z-index: 2;
+            transition: all 0.25s;
+        }
+        .timeline-entry:hover .timeline-dot {
+            background: var(--accent-sage);
+            box-shadow: 0 0 0 4px rgba(123,160,138,0.15);
+        }
+        .timeline-entry.type-mitzvah .timeline-dot { border-color: var(--accent-warm); }
+        .timeline-entry.type-mitzvah:hover .timeline-dot { background: var(--accent-warm); box-shadow: 0 0 0 4px rgba(196,162,101,0.15); }
+        .timeline-entry.type-prayer .timeline-dot { border-color: var(--accent-lavender); }
+        .timeline-entry.type-prayer:hover .timeline-dot { background: var(--accent-lavender); box-shadow: 0 0 0 4px rgba(155,142,196,0.15); }
+        .timeline-entry.type-gratitude .timeline-dot { border-color: var(--accent-sage); }
+        .timeline-entry.type-kindness .timeline-dot { border-color: var(--accent-rose); }
+        .timeline-entry.type-kindness:hover .timeline-dot { background: var(--accent-rose); box-shadow: 0 0 0 4px rgba(196,146,154,0.15); }
+
+        .entry-card {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-card);
+            padding: 1.15rem 1.3rem;
+            transition: all 0.3s;
+            cursor: default;
+        }
+        .entry-card:hover {
+            box-shadow: var(--shadow-card-hover);
+            border-color: var(--line-strong);
+        }
+        .entry-date {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--ink-500);
+        }
+        .entry-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.62rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .badge-reflection { background: rgba(106,159,168,0.1); color: #4a8a94; }
+        .badge-mitzvah { background: rgba(196,162,101,0.12); color: #9a7e40; }
+        .badge-gratitude { background: rgba(123,160,138,0.1); color: #5e8a6e; }
+        .badge-prayer { background: rgba(155,142,196,0.1); color: #7a6daa; }
+        .badge-kindness { background: rgba(196,146,154,0.1); color: #a06670; }
+        .badge-learning { background: rgba(106,159,168,0.1); color: #4a8a94; }
+        .badge-growth { background: rgba(155,142,196,0.1); color: #7a6daa; }
+
+        .entry-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.02rem;
+            line-height: 1.7;
+            color: var(--ink-800);
+            margin-top: 0.5rem;
+        }
+        .entry-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            margin-top: 0.6rem;
+        }
+        .entry-tag {
+            font-size: 0.62rem;
+            font-weight: 600;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            background: var(--surface-soft);
+            color: var(--ink-500);
+            border: 1px solid var(--line);
+        }
+        .entry-mood {
+            font-size: 0.85rem;
+        }
+
+        .entry-actions {
+            display: flex;
+            gap: 0.3rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .entry-card:hover .entry-actions {
+            opacity: 1;
+        }
+        .entry-action-btn {
+            background: none;
+            border: none;
+            color: var(--ink-500);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 0.35rem;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+        }
+        .entry-action-btn:hover {
+            color: var(--ink-800);
+            background: var(--surface-soft);
+        }
+        .entry-action-btn.delete-btn:hover {
+            color: #b56b73;
+            background: rgba(196,146,154,0.08);
+        }
+
+        /* ── Month divider ── */
+        .month-divider {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.5rem 0 1rem -2rem;
+            padding-left: 2rem;
+        }
+        .month-divider-label {
+            font-family: 'Fraunces', serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--ink-700);
+            white-space: nowrap;
+        }
+        .month-divider-line {
+            flex: 1;
+            height: 1px;
+            background: var(--line);
+        }
+
+        /* ── Filter bar ── */
+        .filter-bar {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+        .filter-chip {
+            padding: 0.35rem 0.7rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--ink-500);
+            background: var(--surface);
+            border: 1.5px solid var(--line);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .filter-chip:hover {
+            border-color: var(--line-strong);
+            color: var(--ink-700);
+        }
+        .filter-chip.active {
+            background: var(--accent-sage-deep);
+            color: #fff;
+            border-color: var(--accent-sage-deep);
+        }
+
+        /* ── Empty state ── */
+        .empty-state {
+            text-align: center;
+            padding: 3.5rem 1.5rem;
+        }
+        .empty-icon {
+            width: 68px;
+            height: 68px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(123,160,138,0.1), rgba(196,162,101,0.08));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+        .empty-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--ink-800);
+            margin-bottom: 0.5rem;
+        }
+        .empty-desc {
+            font-size: 0.85rem;
+            color: var(--ink-500);
+            max-width: 340px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* ── Animations ── */
+        .fade-in { animation: fadeIn 0.5s ease-out both; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+        .fd1{animation-delay:.06s} .fd2{animation-delay:.12s} .fd3{animation-delay:.18s}
+        .fd4{animation-delay:.24s} .fd5{animation-delay:.30s} .fd6{animation-delay:.36s}
+
+        .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.3); border-top: 2.5px solid #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Confirm dialog ── */
+        .confirm-overlay {
+            position: fixed; inset: 0; z-index: 1000;
+            background: rgba(45,52,54,0.35);
+            backdrop-filter: blur(6px);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.25s;
+        }
+        .confirm-overlay.show {
+            opacity: 1; pointer-events: auto;
+        }
+        .confirm-dialog {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            padding: 1.75rem;
+            max-width: 340px;
+            width: 90%;
+            text-align: center;
+        }
+        .confirm-dialog h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--ink-950);
+            margin-bottom: 0.5rem;
+        }
+        .confirm-dialog p {
+            font-size: 0.82rem;
+            color: var(--ink-500);
+            line-height: 1.55;
+            margin-bottom: 1.25rem;
+        }
+
+        /* ── Search ── */
+        .j-search {
+            position: relative;
+        }
+        .j-search input {
+            width: 100%;
+            padding: 0.55rem 0.85rem 0.55rem 2.2rem;
+            border: 1.5px solid var(--line);
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-family: inherit;
+            color: var(--ink-950);
+            background: var(--surface);
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+        .j-search input:focus {
+            outline: none;
+            border-color: var(--accent-sage);
+            box-shadow: 0 0 0 3px rgba(123,160,138,0.12);
+        }
+        .j-search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--ink-500);
+            pointer-events: none;
+        }
+
+        /* ── Section label ── */
+        .section-label {
+            font-size: 0.62rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--ink-500);
+            margin-bottom: 0.75rem;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .journal-two-col { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .journal-hero { padding: clamp(1.5rem, 3.5vw, 2.5rem) 1rem clamp(1rem, 2.5vw, 2rem); }
+            .journal-top-row { grid-template-columns: repeat(2, 1fr); }
+            .stat-number { font-size: 1.3rem; }
+            .entry-composer { padding: 1.15rem; }
+            .j-textarea { min-height: 100px; font-size: 1rem; }
+            .entry-card { padding: 0.9rem 1rem; }
+            .entry-actions { opacity: 1; }
+            .month-divider { margin-left: -2rem; padding-left: 2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .journal-top-row { grid-template-columns: repeat(2, 1fr); }
+            .composer-tabs { flex-wrap: wrap; }
+            .mood-selector { gap: 0.35rem; }
+            .mood-btn { padding: 0.35rem 0.6rem; font-size: 0.72rem; }
+        }
+    </style>
+</head>
+<body class="journal-body min-h-screen">
+
+<!-- Header -->
+<div id="shared-header-mount" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%);min-height:64px"></div>
+<script src="/js/header-loader.js"></script>
+
+<!-- Hero (full-bleed, outside main) -->
+<section class="journal-hero" id="journal-hero-section" style="display:none">
+    <canvas id="journal-hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+        <div class="hero-badge">
+            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            Private &amp; Personal
+        </div>
+        <h1>Spiritual <span class="hero-gold">Journal</span></h1>
+        <p class="journal-hero-sub">A quiet place to reflect, grow, and become your best self</p>
+    </div>
+</section>
+
+<!-- Main -->
+<main class="max-w-7xl mx-auto px-5 sm:px-8 pb-12">
+
+    <!-- Loading -->
+    <div id="loading-state" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6rem 1rem;gap:1rem;">
+        <div style="display:flex;gap:0.45rem;align-items:center;">
+            <span style="width:7px;height:7px;border-radius:50%;background:var(--accent-sage);opacity:0;animation:dotPulse 1.4s ease-in-out infinite 0s"></span>
+            <span style="width:7px;height:7px;border-radius:50%;background:var(--accent-sage);opacity:0;animation:dotPulse 1.4s ease-in-out infinite 0.2s"></span>
+            <span style="width:7px;height:7px;border-radius:50%;background:var(--accent-sage);opacity:0;animation:dotPulse 1.4s ease-in-out infinite 0.4s"></span>
+        </div>
+    </div>
+
+    <!-- Content (hidden until auth) -->
+    <div id="main-content" class="hidden">
+
+        <!-- Stats + Milestones Row -->
+        <div class="journal-top-row fade-in fd2 mt-6 mb-5">
+            <div class="stat-card">
+                <div class="stat-number" id="stat-entries">0</div>
+                <div class="stat-label">Entries</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-streak">0</div>
+                <div class="stat-label">Day Streak</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-mitzvot">0</div>
+                <div class="stat-label">Mitzvot</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-goals">0</div>
+                <div class="stat-label">Goals Done</div>
+            </div>
+        </div>
+
+        <!-- Daily Inspiration Banner -->
+        <div class="inspiration-card fade-in fd3 mb-5" id="inspiration-card" style="cursor:pointer" title="Click for new inspiration">
+            <p class="inspiration-text" id="inspiration-text"></p>
+            <p class="inspiration-source" id="inspiration-source"></p>
+        </div>
+
+        <!-- Growth Goals Checklist -->
+        <div class="fade-in fd3 mb-5" id="goals-card" style="background:linear-gradient(135deg,#fdfcf8 0%,#f8f5ef 100%);border:1px solid rgba(196,162,101,0.18);border-radius:var(--radius-xl);padding:1.4rem 1.6rem;box-shadow:var(--shadow-card)">
+            <div class="goals-header-row">
+                <div class="goals-title-group">
+                    <svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--accent-sage-deep);flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                    <h3 class="goals-title">Growth Goals</h3>
+                </div>
+                <button class="goals-add-btn" id="goals-add-btn">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                    New Goal
+                </button>
+            </div>
+
+            <!-- Add goal input (hidden by default) -->
+            <div class="goals-input-row" id="goals-input-row" style="display:none">
+                <input type="text" class="goals-input" id="goals-input" placeholder="What spiritual goal do you want to commit to?" maxlength="200">
+                <button class="j-btn-save goals-save-btn" id="goals-save-btn">
+                    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                    Save
+                </button>
+                <button class="goals-cancel-btn" id="goals-cancel-btn">Cancel</button>
+            </div>
+
+            <!-- Goals list -->
+            <div class="goals-list" id="goals-list"></div>
+
+            <!-- Empty state -->
+            <div class="goals-empty" id="goals-empty">
+                <p>Set a spiritual goal and check it off when you've grown.<br>Your goals are private and saved to your account.</p>
+            </div>
+
+            <!-- Progress bar (hidden when empty) -->
+            <div class="goals-progress" id="goals-progress" style="display:none">
+                <div class="goals-progress-bar"><div class="goals-progress-fill" id="goals-progress-fill" style="width:0%"></div></div>
+                <span class="goals-progress-label" id="goals-progress-label">0 / 0 done</span>
+            </div>
+        </div>
+
+        <!-- Two-column: Composer + Suggestions -->
+        <div class="journal-two-col fade-in fd3 mb-5">
+
+            <!-- New Entry Composer -->
+            <div class="j-card">
+                <div class="entry-composer">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;color:var(--ink-950)">New Entry</h2>
+                        <div class="streak-badge" id="streak-badge" style="display:none">
+                            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--accent-warm)"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/></svg>
+                            <span id="streak-text"></span>
+                        </div>
+                    </div>
+
+                    <!-- Entry type tabs -->
+                    <div class="composer-tabs" id="composer-tabs">
+                        <button class="composer-tab active" data-type="reflection">Reflection</button>
+                        <button class="composer-tab" data-type="mitzvah">Mitzvah</button>
+                        <button class="composer-tab" data-type="gratitude">Gratitude</button>
+                        <button class="composer-tab" data-type="prayer">Prayer</button>
+                        <button class="composer-tab" data-type="kindness">Kindness</button>
+                    </div>
+
+                    <!-- Title (optional) -->
+                    <div class="mb-3">
+                        <input type="text" class="j-input" id="entry-title" placeholder="Title (optional)" maxlength="120">
+                    </div>
+
+                    <!-- Text area -->
+                    <div class="mb-3">
+                        <textarea class="j-textarea" id="entry-text" placeholder="What's on your heart today? Reflect on a moment, a mitzvah, or something you're grateful for..."></textarea>
+                    </div>
+
+                    <!-- Mood -->
+                    <div class="mb-3">
+                        <label class="section-label">How are you feeling?</label>
+                        <div class="mood-selector" id="mood-selector">
+                            <button class="mood-btn" data-mood="grateful">Grateful</button>
+                            <button class="mood-btn" data-mood="peaceful">Peaceful</button>
+                            <button class="mood-btn" data-mood="inspired">Inspired</button>
+                            <button class="mood-btn" data-mood="hopeful">Hopeful</button>
+                            <button class="mood-btn" data-mood="joyful">Joyful</button>
+                            <button class="mood-btn" data-mood="reflective">Reflective</button>
+                            <button class="mood-btn" data-mood="determined">Determined</button>
+                            <button class="mood-btn" data-mood="humble">Humble</button>
+                        </div>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="mb-4">
+                        <label class="section-label">Tags</label>
+                        <div class="tag-pills" id="tag-selector">
+                            <button class="tag-pill tag-gratitude" data-tag="gratitude">Gratitude</button>
+                            <button class="tag-pill tag-mitzvah" data-tag="mitzvah">Mitzvah</button>
+                            <button class="tag-pill tag-prayer" data-tag="prayer">Prayer</button>
+                            <button class="tag-pill tag-kindness" data-tag="kindness">Kindness</button>
+                            <button class="tag-pill tag-learning" data-tag="learning">Torah Learning</button>
+                            <button class="tag-pill tag-growth" data-tag="growth">Personal Growth</button>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-between">
+                        <button class="j-btn-save" id="save-entry-btn">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Save Entry
+                        </button>
+                        <span class="text-xs" style="color:var(--ink-500);opacity:0.6" id="save-status"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suggestions Panel -->
+            <div class="j-card suggestions-panel" style="padding:1.25rem 1.35rem;">
+                <!-- For You Section -->
+                <div class="for-you-section" id="for-you-section">
+                    <div class="for-you-header">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--accent-warm);flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                        <span class="for-you-label">Specifically for you</span>
+                    </div>
+                    <div class="for-you-grid" id="for-you-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="suggestions-divider"></div>
+
+                <!-- General suggestions + shuffle -->
+                <div class="suggestions-header-row">
+                    <h3 class="suggestions-title">Ideas for Growth</h3>
+                    <button class="shuffle-btn" id="shuffle-suggestions-btn" title="Shuffle suggestions">
+                        <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        Shuffle
+                    </button>
+                </div>
+                <div class="suggestions-grid" id="suggestions-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline Header -->
+        <div class="flex items-center justify-between mb-4 fade-in fd4">
+            <h2 style="font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;color:var(--ink-950)">Your Journey</h2>
+            <div class="flex items-center gap-3">
+                <div class="j-search" style="width:200px">
+                    <svg class="j-search-icon" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M21 21l-4.35-4.35"/></svg>
+                    <input type="text" id="search-entries" placeholder="Search entries...">
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter chips -->
+        <div class="filter-bar mb-4 fade-in fd5" id="filter-bar">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="reflection">Reflections</button>
+            <button class="filter-chip" data-filter="mitzvah">Mitzvot</button>
+            <button class="filter-chip" data-filter="gratitude">Gratitude</button>
+            <button class="filter-chip" data-filter="prayer">Prayer</button>
+            <button class="filter-chip" data-filter="kindness">Kindness</button>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline fade-in fd6" id="timeline">
+            <!-- Entries are injected here by JS -->
+        </div>
+
+        <!-- Empty state -->
+        <div class="empty-state fade-in" id="empty-state" style="display:none">
+            <div class="empty-icon"><svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:var(--accent-sage)"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></div>
+            <div class="empty-title">Begin Your Journey</div>
+            <div class="empty-desc">Every great journey starts with a single step. Write your first entry and watch your spiritual growth unfold over time.</div>
+        </div>
+
+        <!-- Load more -->
+        <div class="text-center mt-4" id="load-more-container" style="display:none">
+            <button class="j-btn-secondary" id="load-more-btn">Load More Entries</button>
+        </div>
+    </div>
+</main>
+
+<!-- Delete Confirmation Dialog -->
+<div class="confirm-overlay" id="confirm-overlay">
+    <div class="confirm-dialog">
+        <h3>Delete Entry?</h3>
+        <p>This reflection will be permanently removed. This cannot be undone.</p>
+        <div class="flex items-center justify-center gap-3">
+            <button class="j-btn-secondary" id="confirm-cancel">Cancel</button>
+            <button class="j-btn-save" id="confirm-delete" style="background:linear-gradient(135deg, var(--danger), #e05258);box-shadow:0 2px 10px rgba(185,62,69,0.3)">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div id="shared-footer-mount"></div>
+<script src="/js/footer-loader.js"></script>
+
+<!-- Auth + Journal Script -->
+<script src="/js/page-auth.js" type="module"></script>
+<script src="/js/journal.js" type="module"></script>
+
+<!-- Wavy strands canvas — deferred until hero is visible -->
+<script type="module">
+import { createNoise3D } from 'https://esm.sh/simplex-noise@4';
+
+(function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Wait for hero to become visible (journal.js sets display:'' on auth)
+    var observer = new MutationObserver(function (mutations) {
+        var hero = document.getElementById('journal-hero-section');
+        if (hero && hero.style.display !== 'none') {
+            observer.disconnect();
+            initCanvas();
+        }
+    });
+    observer.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['style','class'] });
+
+    function initCanvas() {
+        var canvas = document.getElementById('journal-hero-canvas');
+        if (!canvas) return;
+
+        var ctx    = canvas.getContext('2d');
+        var noise  = createNoise3D();
+        var nt     = 0;
+        var animId;
+        var blur   = 10;
+        var speed  = 0.002;
+        var waveW  = 50;
+        var bgFill = '#1a2a3a';
+        var opacity = 0.5;
+        var colors = ['#5eead4', '#2dd4bf', '#14b8a6', '#a78bfa', '#c4b5fd'];
+
+        var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+        function resize() {
+            var hero = canvas.parentElement;
+            canvas.width  = hero.offsetWidth  || window.innerWidth;
+            canvas.height = hero.offsetHeight || 480;
+            if (!isSafari) ctx.filter = 'blur(' + blur + 'px)';
+        }
+
+        function drawWaves() {
+            var w = canvas.width, h = canvas.height;
+            nt += speed;
+            for (var i = 0; i < 5; i++) {
+                ctx.beginPath();
+                ctx.lineWidth   = waveW;
+                ctx.strokeStyle = colors[i % colors.length];
+                for (var x = 0; x < w; x += 5) {
+                    var y = noise(x / 800, 0.3 * i, nt) * 100;
+                    ctx.lineTo(x, y + h * 0.5);
+                }
+                ctx.stroke();
+                ctx.closePath();
+            }
+        }
+
+        function render() {
+            ctx.fillStyle  = bgFill;
+            ctx.globalAlpha = opacity;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            drawWaves();
+            animId = requestAnimationFrame(render);
+        }
+
+        if (isSafari) canvas.style.filter = 'blur(' + blur + 'px)';
+
+        resize();
+        window.addEventListener('resize', resize);
+        render();
+
+        document.addEventListener('visibilitychange', function () {
+            if (document.hidden) cancelAnimationFrame(animId);
+            else render();
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

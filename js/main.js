@@ -81,15 +81,19 @@ import {
     recalculateMitzvahLeaderboard,
     getMitzvahLeaderboard,
     formatTimeAgo,
-    getActiveChavrutaId
+    getActiveChavrutaId,
+    addFlashcard,
+    isClassroomTeacher,
+    deleteCommentAsTeacher
 } from './firebase.js';
 
-import { collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, query, where, getDocs, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 let verseCommentCounts = {};
 let verseReactionCounts = {};
 let userReactions = {};
 let isAuthReady = false;
+let _isClassroomTeacher = false; // set on auth ready
 let bookmarkedVerses = new Set();
 let verseBookmarkCounts = {};
 let bookmarkedQuoteIds = new Set();
@@ -101,6 +105,50 @@ const verseDisplayTexts = {};
 const verseInteractorsCache = new Map(); // key: `${verseRef}__${interactionType}`
 const INTERACTORS_CACHE_TTL = 60000; // 1 minute cache
 let activeTooltipFetch = null;
+
+/**
+ * Wrapper around displayComments that resolves proper display names
+ * from user profiles and adds classroom teacher moderation buttons.
+ */
+const _commentNameCache = {};
+async function resolveCommentNames(commentsArray) {
+    const unknownUids = [];
+    commentsArray.forEach(c => {
+        if (c.userId && !_commentNameCache[c.userId]) unknownUids.push(c.userId);
+    });
+    if (unknownUids.length) {
+        await Promise.all([...new Set(unknownUids)].map(async uid => {
+            try {
+                const snap = await getDoc(doc(db, 'users', uid));
+                if (snap.exists()) {
+                    const d = snap.data();
+                    _commentNameCache[uid] = d.displayName || d.firstName || d.email || '';
+                }
+            } catch { /* ignore */ }
+        }));
+    }
+}
+
+function displayCommentsWithModeration(commentsArray) {
+    // Resolve proper names then render
+    resolveCommentNames(commentsArray).then(() => {
+        const userId = getCurrentUserId();
+        const opts = { nameCache: _commentNameCache };
+        if (_isClassroomTeacher && userId) {
+            opts.canModerate = true;
+            opts.currentUserId = userId;
+            opts.onDelete = async (commentId) => {
+                try {
+                    await deleteCommentAsTeacher(commentId);
+                } catch (err) {
+                    console.error('Failed to delete comment:', err);
+                    alert('Failed to delete comment. Please try again.');
+                }
+            };
+        }
+        displayComments(commentsArray, opts);
+    });
+}
 
 // User presence tracking
 let lastUserId = null;
@@ -972,7 +1020,7 @@ function setupEventListeners() {
             const parshaName = state.allParshas[state.currentParshaIndex]?.name || 'Torah Portion';
             const generalChatRef = `PARSHA:${parshaRef}`;
             openCommentsPanel(generalChatRef, (ref) => {
-                listenForComments(ref, displayComments);
+                listenForComments(ref, displayCommentsWithModeration);
             }, parshaName);
         });
     }
@@ -985,7 +1033,7 @@ function setupEventListeners() {
             const parshaName = state.allParshas[state.currentParshaIndex]?.name || 'Torah Portion';
             const generalChatRef = `PARSHA:${parshaRef}`;
             openCommentsPanel(generalChatRef, (ref) => {
-                listenForComments(ref, displayComments);
+                listenForComments(ref, displayCommentsWithModeration);
             }, parshaName);
         });
     }
@@ -3196,7 +3244,12 @@ async function handleReactionClick(verseRef, reactionType) {
     const userId = getCurrentUserId();
 
     if (!userId) {
-        alert('Please wait, connecting...');
+        alert('Please sign in and join a study group first to interact with verses.');
+        return;
+    }
+
+    if (!getActiveChavrutaId()) {
+        alert('Please first join a study group to interact with verses.');
         return;
     }
 
@@ -3317,7 +3370,14 @@ function updateHeaderUserDropdown(user, userProfile) {
                             </svg>
                             Bookmarks
                         </a>
-                        <a href="/settings" class="header-dropdown-item" role="menuitem">
+                        <a href="/flashcards" class="header-dropdown-item" role="menuitem" onclick="if(localStorage.getItem('alits_hebrew_study_mode')!=='true'){event.preventDefault();showStudyModeGateModal();}">
+                            <svg class="header-dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <rect x="3" y="6" width="15" height="11" rx="1.5" stroke-width="2"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4h13a1.5 1.5 0 011.5 1.5V15"/>
+                            </svg>
+                            Flashcards
+                        </a>
+                        <a href="/settings" id="header-settings-link" class="header-dropdown-item" role="menuitem">
                             <svg class="header-dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -3390,12 +3450,50 @@ function updateHeaderUserDropdown(user, userProfile) {
                     console.error('Sign-out error:', error);
                 }
             });
+
         }
     } else {
         if (dropdownContainer) {
             dropdownContainer.remove();
         }
     }
+}
+
+function showStudyModeGateModal() {
+    if (document.getElementById('study-mode-gate-modal')) return;
+    const overlay = document.createElement('div');
+    overlay.id = 'study-mode-gate-modal';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);animation:smgFadeIn .18s ease';
+    overlay.innerHTML = `
+        <style>
+            @keyframes smgFadeIn{from{opacity:0}to{opacity:1}}
+            @keyframes smgSlideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+            #study-mode-gate-modal .smg-card{background:#fff;border-radius:1.35rem;padding:2rem 2rem 1.6rem;max-width:380px;width:90%;box-shadow:0 24px 60px rgba(0,0,0,.18);animation:smgSlideUp .22s ease;text-align:center}
+            #study-mode-gate-modal .smg-icon{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#f0f7ff,#ede9fe);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}
+            #study-mode-gate-modal .smg-title{font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:700;color:#1a1a2e;margin-bottom:.45rem}
+            #study-mode-gate-modal .smg-body{font-size:.82rem;color:#6b7280;line-height:1.6;margin-bottom:1.4rem}
+            #study-mode-gate-modal .smg-actions{display:flex;gap:.55rem;justify-content:center}
+            #study-mode-gate-modal .smg-btn{padding:.52rem 1.2rem;border-radius:2rem;font-size:.78rem;font-weight:600;cursor:pointer;border:none;font-family:'Poppins',sans-serif;transition:all .15s}
+            #study-mode-gate-modal .smg-btn-primary{background:#1a1a2e;color:#fff}
+            #study-mode-gate-modal .smg-btn-primary:hover{background:#2d2d4e}
+            #study-mode-gate-modal .smg-btn-secondary{background:#f3f4f6;color:#374151}
+            #study-mode-gate-modal .smg-btn-secondary:hover{background:#e5e7eb}
+        </style>
+        <div class="smg-card">
+            <div class="smg-icon">
+                <svg width="22" height="22" fill="none" stroke="#6d28d9" viewBox="0 0 24 24"><rect x="3" y="6" width="15" height="11" rx="1.5" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4h13a1.5 1.5 0 011.5 1.5V15"/></svg>
+            </div>
+            <div class="smg-title">Hebrew Study Mode is off</div>
+            <div class="smg-body">Flashcards are part of Hebrew Study Mode — a feature that lets you save words as you read and review them with spaced repetition.<br><br>Turn it on in Settings to get started.</div>
+            <div class="smg-actions">
+                <button class="smg-btn smg-btn-secondary" id="smg-close">Maybe later</button>
+                <button class="smg-btn smg-btn-primary" id="smg-settings">Go to Settings</button>
+            </div>
+        </div>`;
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+    overlay.querySelector('#smg-close').addEventListener('click', () => overlay.remove());
+    overlay.querySelector('#smg-settings').addEventListener('click', () => { window.location.href = '/settings#sec-hebrew-study'; });
 }
 
 function updateChavrutaContextBar() {
@@ -3444,6 +3542,9 @@ async function handleAuthStateChange(user) {
 
         updateChavrutaContextBar();
 
+        // Check if this user is a classroom teacher for the active chavruta
+        isClassroomTeacher(user.uid).then(val => { _isClassroomTeacher = val; }).catch(() => {});
+
         // Set the user's email so display name can be extracted from it
         setCurrentUserEmail(user.email);
         updateUsernameDisplay();
@@ -3462,6 +3563,21 @@ async function handleAuthStateChange(user) {
 
         // Upgrade the header with a user profile dropdown
         updateHeaderUserDropdown(user, userProfile);
+
+        // Check if birthday is missing — show notification dot on Settings link
+        try {
+            const userDocSnap = await getDoc(doc(db, 'users', user.uid));
+            if (userDocSnap.exists() && !userDocSnap.data().birthDateGregorian) {
+                const settingsLink = document.getElementById('header-settings-link');
+                if (settingsLink && !settingsLink.querySelector('.settings-notif-dot')) {
+                    settingsLink.href = '/settings/?section=birthday';
+                    const dot = document.createElement('span');
+                    dot.className = 'settings-notif-dot';
+                    dot.title = 'Complete your profile';
+                    settingsLink.appendChild(dot);
+                }
+            }
+        } catch (_) {}
 
         // Cache user info for instant rendering on next page load
         try {
@@ -3653,7 +3769,12 @@ async function handleBookmarkClick(verseRef, bookmarkBtn) {
     const userId = getCurrentUserId();
 
     if (!userId) {
-        alert('Please sign in to bookmark verses');
+        alert('Please sign in and join a study group first to bookmark verses.');
+        return;
+    }
+
+    if (!getActiveChavrutaId()) {
+        alert('Please first join a study group to bookmark verses.');
         return;
     }
 
@@ -4682,7 +4803,7 @@ function handleTextClick(e) {
         if (verseContainer) {
             const verseRef = verseContainer.dataset.ref;
             openCommentsPanel(verseRef, (ref) => {
-                listenForComments(ref, displayComments);
+                listenForComments(ref, displayCommentsWithModeration);
             });
         }
         return;
@@ -4701,7 +4822,7 @@ function handleTextClick(e) {
         }
         const verseRef = verseContainer.dataset.ref;
         openCommentsPanel(verseRef, (ref) => {
-            listenForComments(ref, displayComments);
+            listenForComments(ref, displayCommentsWithModeration);
         });
     }
 }
@@ -4772,10 +4893,24 @@ function transliterateHebrew(heb) {
                 con = consonants[ch] ?? '';
             }
 
+            // Patach furtivum: ח/ע/ה with patach at end of word → "aCH" not "CHa"
+            if (vowel === 'a' && (ch === '\u05D7' || ch === '\u05E2' || ch === '\u05D4')) {
+                let isFinal = true;
+                for (let k = j; k < chars.length; k++) {
+                    const kcp = chars[k].codePointAt(0);
+                    if (kcp >= 0x05D0 && kcp <= 0x05EA) { isFinal = false; break; }
+                }
+                if (isFinal) {
+                    result += 'a' + con;
+                    i = j;
+                    continue;
+                }
+            }
+
             result += con + vowel;
             i = j;
-        } else if (ch === '-' || ch === ' ') {
-            result += ch; i++;
+        } else if (ch === '-' || ch === ' ' || ch === '\u05BE') {
+            result += ' '; i++;
         } else {
             i++;
         }
@@ -4789,8 +4924,7 @@ function handleHebrewWordSelection() {
     if (!selection || selection.isCollapsed) return;
 
     const selectedText = selection.toString().trim();
-    // Only act on a single word (no whitespace)
-    if (!selectedText || /\s/.test(selectedText)) return;
+    if (!selectedText) return;
 
     // Must be selected inside a Hebrew text element
     const anchorNode = selection.anchorNode;
@@ -4798,11 +4932,93 @@ function handleHebrewWordSelection() {
     const parentEl = anchorNode.nodeType === Node.TEXT_NODE ? anchorNode.parentElement : anchorNode;
     if (!parentEl || !parentEl.closest('.hebrew-text')) return;
 
+    // Highlighting a multi-word phrase never auto-triggers a flashcard panel.
+    // Use the flashcard FAB (bottom-left) to manually create a card.
+    const isPhrase = /\s/.test(selectedText);
+    if (isPhrase) return;
+
     // Strip nikud (vowel points + cantillation marks) for the API query
     const baseWord = selectedText.replace(/[\u0591-\u05C7]/g, '');
     if (!baseWord) return;
 
-    lookupHebrewWordSefaria(baseWord, selectedText);
+    lookupHebrewWordSefaria(baseWord, selectedText, selectedText);
+}
+
+function isHebrewStudyModeEnabled() {
+    return localStorage.getItem('alits_hebrew_study_mode') === 'true';
+}
+
+async function lookupHebrewPhraseStudy(phrase) {
+    const titleEl = document.querySelector('.info-panel-title');
+    if (titleEl) titleEl.textContent = 'Phrase Translation';
+    showKeywordDefinition(phrase, 'Looking up translation...');
+
+    try {
+        // Try to get the translation from the verse's already-loaded English text
+        let translation = '';
+        const sel = window.getSelection();
+        if (sel && sel.anchorNode) {
+            const el = sel.anchorNode.nodeType === Node.TEXT_NODE ? sel.anchorNode.parentElement : sel.anchorNode;
+            const verseContainer = el ? el.closest('.verse-container[data-ref]') : null;
+            if (verseContainer) {
+                const verseRef = verseContainer.dataset.ref;
+                if (verseDisplayTexts[verseRef] && verseDisplayTexts[verseRef].english) {
+                    translation = verseDisplayTexts[verseRef].english;
+                } else {
+                    const engEl = verseContainer.querySelector('.english-text');
+                    if (engEl) translation = engEl.textContent.trim();
+                }
+            }
+        }
+
+        // If we couldn't get it from the DOM, try Sefaria search API
+        if (!translation) {
+            try {
+                const q = phrase.replace(/[\u0591-\u05C7]/g, '').trim();
+                const url = `https://www.sefaria.org/api/search/text/${encodeURIComponent(q)}?size=1`;
+                const resp = await fetch(url);
+                if (resp.ok) {
+                    const data = await resp.json();
+                    const hit = data.hits && data.hits.hits && data.hits.hits[0];
+                    if (hit && hit._source) {
+                        const ref = hit._source.ref;
+                        if (ref) {
+                            const textResp = await fetch(`https://www.sefaria.org/api/texts/${encodeURIComponent(ref)}?context=0&pad=0`);
+                            if (textResp.ok) {
+                                const textData = await textResp.json();
+                                let t = textData.text || '';
+                                if (Array.isArray(t)) t = t.join(' ');
+                                if (t) translation = t.replace(/<[^>]+>/g, '');
+                            }
+                        }
+                    }
+                }
+            } catch (_) {}
+        }
+
+        if (!translation) {
+            translation = 'Translation not available — you can add your own below.';
+        }
+
+        const infoContent = document.getElementById('info-content');
+        infoContent.classList.remove('info-content-bookmarks');
+
+        let html = `<div class="sdict-word-header">`;
+        html += `<span class="sdict-word-display" style="font-size:1.3rem;">${escapeHtmlLocal(phrase)}</span>`;
+        html += `</div>`;
+        html += `<div class="sdict-senses sdict-senses--l1" style="margin-top:0.75rem;">`;
+        html += `<p class="sdict-def" style="font-size:0.95rem;color:#334155;">${escapeHtmlLocal(translation)}</p>`;
+        html += `</div>`;
+
+        html += buildFlashcardCreatorHTMLStudy(phrase, translation, true);
+
+        infoContent.innerHTML = html;
+        showInfoPanel();
+        attachFlashcardListenersStudy(phrase, '', translation, true);
+    } catch (err) {
+        console.error('Phrase lookup failed:', err);
+        showKeywordDefinition(phrase, 'Could not translate phrase. You can still create a flashcard.');
+    }
 }
 
 function hebrewConsonantMatchScore(selectedConsonants, headword) {
@@ -4842,7 +5058,55 @@ function hebrewConsonantMatchScore(selectedConsonants, headword) {
     return 0;
 }
 
-async function lookupHebrewWordSefaria(word, displayWord) {
+function hebrewVowelSimilarity(selectedWord, headword) {
+    if (!selectedWord || !headword) return 0;
+    // Strip cantillation marks (U+0591-U+05AF) but keep vowels (U+05B0-U+05C7)
+    const stripCantillation = s => s.replace(/[\u0591-\u05AF]/g, '');
+    const sel = stripCantillation(selectedWord);
+    const head = stripCantillation(headword);
+    // Extract only the vowel/nikkud marks (U+05B0-U+05C7)
+    const vowelsOf = s => s.replace(/[^\u05B0-\u05C7]/g, '');
+    // Also strip common prefixes from selected word to align with headword root
+    const PREFIXES = ['ו', 'ה', 'ל', 'ב', 'כ', 'מ', 'ש'];
+    const consonantsOf = s => s.replace(/[\u05B0-\u05C7]/g, '');
+    const headCons = consonantsOf(head);
+    let bestSel = sel;
+    let s = sel;
+    const candidates = [sel];
+    for (let i = 0; i < 2; i++) {
+        let stripped = false;
+        for (const p of PREFIXES) {
+            const sCons = consonantsOf(s);
+            if (sCons.startsWith(p) && sCons.length > p.length) {
+                let pos = 0;
+                for (let j = 0; j < s.length; j++) {
+                    if (s[j] === p) { pos = j + 1; break; }
+                }
+                while (pos < s.length && s.charCodeAt(pos) >= 0x05B0 && s.charCodeAt(pos) <= 0x05C7) pos++;
+                s = s.slice(pos);
+                candidates.push(s);
+                stripped = true;
+                break;
+            }
+        }
+        if (!stripped) break;
+    }
+    for (const cand of candidates) {
+        if (consonantsOf(cand) === headCons) { bestSel = cand; break; }
+    }
+    const selVowels = vowelsOf(bestSel);
+    const headVowels = vowelsOf(head);
+    if (selVowels.length === 0 && headVowels.length === 0) return 1;
+    if (selVowels.length === 0 || headVowels.length === 0) return 0;
+    const maxLen = Math.max(selVowels.length, headVowels.length);
+    let matches = 0;
+    for (let i = 0; i < Math.min(selVowels.length, headVowels.length); i++) {
+        if (selVowels[i] === headVowels[i]) matches++;
+    }
+    return matches / maxLen;
+}
+
+async function lookupHebrewWordSefaria(word, displayWord, originalWord) {
     const titleEl = document.querySelector('.info-panel-title');
     if (titleEl) titleEl.textContent = 'Definition';
     showKeywordDefinition(displayWord, 'Loading definition...');
@@ -4858,11 +5122,16 @@ async function lookupHebrewWordSefaria(word, displayWord) {
             return;
         }
 
-        // Sort entries: exact consonant match first, then non-Jastrow, then rest
+        // Sort entries: exact consonant match first, then vowel similarity, then non-Jastrow
         const sorted = [...data].sort((a, b) => {
             const scoreA = hebrewConsonantMatchScore(word, a.headword || '');
             const scoreB = hebrewConsonantMatchScore(word, b.headword || '');
             if (scoreB !== scoreA) return scoreB - scoreA;
+            if (originalWord) {
+                const vowelA = hebrewVowelSimilarity(originalWord, a.headword || '');
+                const vowelB = hebrewVowelSimilarity(originalWord, b.headword || '');
+                if (vowelB !== vowelA) return vowelB - vowelA;
+            }
             const jA = a.parent_lexicon === 'Jastrow Dictionary' ? 1 : 0;
             const jB = b.parent_lexicon === 'Jastrow Dictionary' ? 1 : 0;
             return jA - jB;
@@ -4895,8 +5164,15 @@ async function lookupHebrewWordSefaria(word, displayWord) {
             html += `</div></details>`;
         }
 
+        const rootWord = primary.headword || displayWord;
+        const firstDef = extractFirstDefinitionStudy(primary);
+        const rootTranslit = transliterateHebrew(rootWord) || '';
+        html += buildFlashcardCreatorHTMLStudy(rootWord, firstDef, false, rootTranslit);
+
         infoContent.innerHTML = html;
         showInfoPanel();
+
+        attachFlashcardListenersStudy(displayWord, rootWord, firstDef, false);
     } catch (err) {
         console.error('Sefaria lexicon lookup failed:', err);
         showKeywordDefinition(displayWord, 'Could not load definition. Please try again.');
@@ -4963,6 +5239,116 @@ function escapeHtmlLocal(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+function buildFlashcardCreatorHTMLStudy(word, definition, isPhrase = false, translit = '') {
+    if (!isHebrewStudyModeEnabled()) return '';
+    const safeWord = escapeHtmlLocal(word);
+    const safeDef = escapeHtmlLocal(definition);
+    const safeTranslit = translit ? escapeHtmlLocal(translit) : '';
+    const translitLine = safeTranslit
+        ? `<p style="font-size:0.8rem;color:#86868b;font-style:italic;margin:0.15rem 0 0;letter-spacing:0.02em;">${safeTranslit}</p>`
+        : '';
+    return `
+    <div class="fc-creator" style="margin-top:1rem;">
+        <div style="background:#fff;border-radius:.85rem;border:1px solid #e5e5ea;box-shadow:0 1px 3px rgba(0,0,0,0.05);overflow:hidden;">
+            <div style="padding:.7rem .9rem;display:flex;align-items:center;gap:.4rem;border-bottom:1px solid #f0f0f2;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="15" height="11" rx="1.5"/><path d="M7 4h13a1.5 1.5 0 011.5 1.5V15"/></svg>
+                <span style="font-size:.72rem;font-weight:600;color:#1d1d1f;letter-spacing:.01em;">Add to Flashcards</span>
+            </div>
+            <div style="padding:.7rem .9rem .45rem;text-align:center;">
+                <p style="font-size:1.3rem;font-weight:700;color:#1d1d1f;direction:rtl;line-height:1.3;">${safeWord}</p>
+                ${translitLine}
+            </div>
+            <div style="padding:0 .9rem .85rem;">
+                <label style="font-size:.65rem;font-weight:600;color:#86868b;letter-spacing:.02em;display:block;margin-bottom:.25rem;">Definition</label>
+                <textarea id="flashcard-def-input" rows="2" placeholder="Type or edit the definition..." style="width:100%;border:1px solid #d2d2d7;border-radius:.5rem;padding:.4rem .55rem;font-size:.8rem;color:#1d1d1f;resize:vertical;font-family:-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif;background:#fafafa;outline:none;transition:border-color .2s,box-shadow .2s;line-height:1.5;" onfocus="this.style.borderColor='#0071e3';this.style.boxShadow='0 0 0 3px rgba(0,113,227,0.12)';this.style.background='#fff'" onblur="this.style.borderColor='#d2d2d7';this.style.boxShadow='none';this.style.background='#fafafa'">${safeDef}</textarea>
+            </div>
+        </div>
+        <div style="display:flex;gap:.4rem;margin-top:.45rem;">
+            <button id="flashcard-save-btn" style="flex:1;padding:.5rem .8rem;background:#1d1d1f;color:#fff;border:none;border-radius:2rem;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.3rem;font-family:-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif;" onmouseover="this.style.background='#424245'" onmouseout="this.style.background='#1d1d1f'">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                Save Card
+            </button>
+            <a href="/flashcards" id="flashcard-view-btn" style="display:none;padding:.5rem .8rem;background:#fff;color:#1d1d1f;border:1px solid #d2d2d7;border-radius:2rem;font-size:.78rem;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;transition:all .15s;align-items:center;justify-content:center;gap:.25rem;font-family:-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif;" onmouseover="this.style.background='#f5f5f7';this.style.borderColor='#c5c5c9'" onmouseout="this.style.background='#fff';this.style.borderColor='#d2d2d7'">
+                Review Cards
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+        <div id="flashcard-msg" style="display:none;margin-top:.35rem;font-size:.72rem;padding:.35rem .6rem;border-radius:.4rem;text-align:center;"></div>
+    </div>`;
+}
+
+function extractFirstDefinitionStudy(entry) {
+    if (!entry || !entry.content || !entry.content.senses) return '';
+    const senses = entry.content.senses;
+    function findFirst(arr) {
+        for (const s of arr) {
+            if (s.definition) {
+                return s.definition.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ').trim();
+            }
+            if (s.senses && s.senses.length > 0) {
+                const found = findFirst(s.senses);
+                if (found) return found;
+            }
+        }
+        return '';
+    }
+    return findFirst(senses);
+}
+
+function attachFlashcardListenersStudy(originalWord, rootWord, definition, isPhrase) {
+    const saveBtn = document.getElementById('flashcard-save-btn');
+    if (!saveBtn) return;
+    saveBtn.addEventListener('click', async () => {
+        const userId = getCurrentUserId();
+        if (!userId) {
+            showFlashcardMsgStudy('Please sign in to create flashcards.', 'error');
+            return;
+        }
+        const defInput = document.getElementById('flashcard-def-input');
+        const editedDef = defInput ? defInput.value.trim() : definition;
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;"></span> Saving...';
+        try {
+            const display = isPhrase ? originalWord : (rootWord || originalWord);
+            await addFlashcard(userId, {
+                word: isPhrase ? '' : originalWord,
+                rootWord: rootWord || '',
+                definition: editedDef,
+                phrase: isPhrase ? originalWord : '',
+                phraseTranslation: isPhrase ? editedDef : '',
+                transliteration: transliterateHebrew(display) || '',
+                source: 'Study'
+            });
+            saveBtn.style.background = '#34c759';
+            saveBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Saved';
+            const viewBtn = document.getElementById('flashcard-view-btn');
+            if (viewBtn) { viewBtn.style.display = 'flex'; }
+            showFlashcardMsgStudy('Flashcard created successfully!', 'success');
+        } catch (err) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = 'Save Card';
+            saveBtn.style.background = '#1d1d1f';
+            showFlashcardMsgStudy('Failed to save flashcard. Please try again.', 'error');
+        }
+    });
+}
+
+function showFlashcardMsgStudy(text, type) {
+    const msg = document.getElementById('flashcard-msg');
+    if (!msg) return;
+    msg.style.display = 'block';
+    msg.textContent = text;
+    if (type === 'success') {
+        msg.style.background = '#ecfdf5';
+        msg.style.color = '#065f46';
+        msg.style.border = '1px solid #a7f3d0';
+    } else {
+        msg.style.background = '#fef2f2';
+        msg.style.color = '#991b1b';
+        msg.style.border = '1px solid #fecaca';
+    }
 }
 
 function getCommentariesForVerse(verseRef) {
@@ -5939,4 +6325,11 @@ window.addEventListener('beforeunload', handleUserOffline);
 window.addEventListener('pagehide', handleUserOffline);
 document.addEventListener('visibilitychange', handleVisibilityChange);
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', () => {
+    init();
+    // Show modal if redirected from flashcards page without study mode
+    if (new URLSearchParams(window.location.search).get('fc_gate') === '1') {
+        history.replaceState(null, '', window.location.pathname);
+        showStudyModeGateModal();
+    }
+});

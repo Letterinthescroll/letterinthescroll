@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Jewish Table — A Letter in the Scroll</title>
-    <link rel="icon" type="image/png" href="/media/images/Icon.png">
-    <link rel="apple-touch-icon" href="/media/images/Icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png" media="(prefers-color-scheme: light)"><link rel="icon" type="image/svg+xml" href="/media/images/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" sizes="180x180" href="/media/images/apple-touch-icon.png">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="A Letter in the Scroll">
     <meta property="og:title" content="The Jewish Table — A Letter in the Scroll">
@@ -266,6 +266,11 @@
         }
         .summary-stat strong { color: var(--ink-950); }
 
+        .menu-harmony {
+            background: linear-gradient(135deg, rgba(15,123,143,0.04), rgba(47,159,132,0.06));
+            border: 1px solid rgba(15,123,143,0.15);
+            border-radius: 0.75rem; padding: 1rem 1.25rem; margin-top: 0.75rem;
+        }
         .prep-timeline {
             background: #fff; border: 1px solid var(--line);
             border-radius: 0.75rem; padding: 1rem 1.25rem; margin-top: 0.75rem;
@@ -487,6 +492,7 @@
             .swap-dropdown { min-width: 220px; right: -0.5rem; }
             .menu-summary { padding: 0.85rem; }
             .summary-stat { font-size: 0.75rem; margin-right: 0.75rem; }
+            .menu-harmony { padding: 0.85rem; }
             .prep-timeline { padding: 0.85rem; }
             .timeline-item { flex-direction: column; gap: 0.2rem; font-size: 0.78rem; }
             .timeline-when { min-width: unset; }
@@ -1902,6 +1908,131 @@
         comfort: ['Ashkenazi', 'Iraqi / Mizrahi', 'Moroccan']
     };
 
+    // ── Deep Recipe Intelligence Profiles ──
+    // Each recipe's protein, flavor signature, cooking method, weight, serve temp, and prep logistics
+    var RECIPE_PROFILES = {
+        1: { protein:'fish', legume:false, flavors:['spicy','acidic','warm_spice','herby','savory'], method:'simmered', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        2: { protein:'none', legume:true, flavors:['sweet','warm_spice','savory'], method:'fried', weight:2, temp:'hot', lastMin:true, makeAhead:false },
+        3: { protein:'none', legume:false, flavors:['warm_spice'], method:'no_cook', weight:1, temp:'cold', lastMin:false, makeAhead:false },
+        4: { protein:'poultry', legume:true, flavors:['warm_spice','herby','savory'], method:'simmered', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        5: { protein:'fish', legume:false, flavors:['sweet','acidic','savory'], method:'boiled', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        6: { protein:'fish', legume:false, flavors:['acidic'], method:'fried', weight:2, temp:'hot', lastMin:true, makeAhead:false },
+        7: { protein:'none', legume:true, flavors:['acidic','warm_spice','nutty','savory'], method:'other', weight:1, temp:'cold', lastMin:false, makeAhead:false },
+        8: { protein:'red_meat', legume:false, flavors:['warm_spice','savory'], method:'fried', weight:3, temp:'hot', lastMin:true, makeAhead:false },
+        9: { protein:'none', legume:true, flavors:['spicy','warm_spice','herby','nutty','savory'], method:'slow_cooked', weight:1, temp:'hot', lastMin:false, makeAhead:false },
+        10: { protein:'none', legume:false, flavors:['spicy','acidic','warm_spice','herby','savory'], method:'other', weight:1, temp:'cold', lastMin:false, makeAhead:true },
+        11: { protein:'poultry', legume:false, flavors:['warm_spice','herby','savory'], method:'slow_cooked', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        12: { protein:'poultry', legume:true, flavors:['spicy','acidic','warm_spice','herby','savory'], method:'slow_cooked', weight:2, temp:'hot', lastMin:false, makeAhead:true },
+        13: { protein:'red_meat', legume:false, flavors:['acidic','warm_spice','herby','savory'], method:'simmered', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        14: { protein:'poultry', legume:false, flavors:['acidic','warm_spice','herby','savory'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        15: { protein:'red_meat', legume:true, flavors:['sweet','warm_spice','savory'], method:'slow_cooked', weight:3, temp:'hot', lastMin:false, makeAhead:true },
+        16: { protein:'red_meat', legume:false, flavors:['sweet','warm_spice','herby','savory'], method:'simmered', weight:3, temp:'hot', lastMin:false, makeAhead:true },
+        17: { protein:'red_meat', legume:false, flavors:['sweet','warm_spice','herby','nutty','savory'], method:'simmered', weight:3, temp:'hot', lastMin:false, makeAhead:true },
+        18: { protein:'poultry', legume:false, flavors:['warm_spice'], method:'slow_cooked', weight:2, temp:'hot', lastMin:false, makeAhead:true },
+        19: { protein:'red_meat', legume:false, flavors:['acidic','warm_spice','herby','savory'], method:'simmered', weight:3, temp:'hot', lastMin:false, makeAhead:false },
+        20: { protein:'poultry', legume:false, flavors:['acidic','nutty','savory'], method:'fried', weight:2, temp:'hot', lastMin:true, makeAhead:false },
+        21: { protein:'none', legume:true, flavors:['warm_spice','savory'], method:'fried', weight:2, temp:'hot', lastMin:true, makeAhead:false },
+        22: { protein:'fish', legume:false, flavors:['sweet','warm_spice','herby','savory'], method:'no_cook', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        23: { protein:'none', legume:false, flavors:['sweet'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        24: { protein:'none', legume:false, flavors:['sweet'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:true },
+        25: { protein:'none', legume:false, flavors:['sweet'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        26: { protein:'none', legume:false, flavors:['sweet','warm_spice'], method:'baked', weight:2, temp:'hot', lastMin:false, makeAhead:true },
+        27: { protein:'none', legume:false, flavors:['sweet'], method:'other', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        28: { protein:'none', legume:false, flavors:['sweet'], method:'fried', weight:2, temp:'hot', lastMin:true, makeAhead:false },
+        29: { protein:'none', legume:false, flavors:['sweet','warm_spice'], method:'fried', weight:2, temp:'hot', lastMin:true, makeAhead:false },
+        30: { protein:'none', legume:false, flavors:['sweet','warm_spice'], method:'other', weight:2, temp:'cold', lastMin:false, makeAhead:true },
+        31: { protein:'none', legume:false, flavors:['sweet','warm_spice','nutty'], method:'other', weight:2, temp:'cold', lastMin:false, makeAhead:true },
+        32: { protein:'none', legume:false, flavors:['sweet','nutty'], method:'no_cook', weight:1, temp:'cold', lastMin:false, makeAhead:false },
+        33: { protein:'poultry', legume:false, flavors:['herby','savory'], method:'boiled', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        34: { protein:'none', legume:false, flavors:['herby','nutty'], method:'other', weight:1, temp:'cold', lastMin:false, makeAhead:false },
+        35: { protein:'none', legume:false, flavors:['acidic','herby','savory'], method:'no_cook', weight:1, temp:'cold', lastMin:false, makeAhead:true },
+        36: { protein:'none', legume:false, flavors:['spicy','acidic','warm_spice','herby','savory'], method:'baked', weight:1, temp:'cold', lastMin:false, makeAhead:true },
+        37: { protein:'none', legume:false, flavors:['warm_spice'], method:'fried', weight:2, temp:'hot', lastMin:true, makeAhead:true },
+        38: { protein:'red_meat', legume:false, flavors:['acidic','warm_spice','nutty','savory'], method:'other', weight:3, temp:'hot', lastMin:false, makeAhead:true },
+        39: { protein:'red_meat', legume:false, flavors:['sweet','warm_spice','herby','nutty','savory'], method:'grilled', weight:3, temp:'hot', lastMin:false, makeAhead:false },
+        40: { protein:'none', legume:false, flavors:['sweet','spicy','warm_spice','savory'], method:'slow_cooked', weight:1, temp:'cold', lastMin:false, makeAhead:false },
+        41: { protein:'none', legume:false, flavors:['spicy','acidic','warm_spice','savory'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:true },
+        42: { protein:'poultry', legume:false, flavors:['sweet','warm_spice','nutty','savory'], method:'other', weight:3, temp:'hot', lastMin:false, makeAhead:false },
+        43: { protein:'red_meat', legume:false, flavors:['sweet','acidic','savory'], method:'slow_cooked', weight:3, temp:'hot', lastMin:false, makeAhead:true },
+        44: { protein:'poultry', legume:false, flavors:['sweet','warm_spice','nutty','savory'], method:'simmered', weight:2, temp:'hot', lastMin:false, makeAhead:true },
+        45: { protein:'red_meat', legume:true, flavors:['acidic','warm_spice','herby','savory'], method:'fried', weight:3, temp:'hot', lastMin:true, makeAhead:true },
+        46: { protein:'red_meat', legume:false, flavors:['sweet','acidic','warm_spice','savory'], method:'simmered', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        47: { protein:'none', legume:false, flavors:['sweet'], method:'slow_cooked', weight:2, temp:'hot', lastMin:false, makeAhead:true },
+        48: { protein:'none', legume:false, flavors:['sweet'], method:'slow_cooked', weight:2, temp:'hot', lastMin:false, makeAhead:true },
+        49: { protein:'none', legume:false, flavors:['sweet'], method:'fried', weight:2, temp:'hot', lastMin:true, makeAhead:false },
+        50: { protein:'red_meat', legume:false, flavors:['sweet','acidic','savory'], method:'fried', weight:3, temp:'hot', lastMin:true, makeAhead:true },
+        51: { protein:'red_meat', legume:false, flavors:['savory'], method:'baked', weight:3, temp:'hot', lastMin:false, makeAhead:true },
+        52: { protein:'none', legume:false, flavors:['acidic','savory'], method:'baked', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        53: { protein:'none', legume:false, flavors:['sweet','acidic'], method:'boiled', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        54: { protein:'none', legume:false, flavors:['sweet','acidic'], method:'no_cook', weight:1, temp:'cold', lastMin:false, makeAhead:false },
+        55: { protein:'none', legume:false, flavors:['sweet','warm_spice'], method:'fried', weight:2, temp:'hot', lastMin:true, makeAhead:false },
+        56: { protein:'none', legume:false, flavors:['sweet','nutty'], method:'baked', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        57: { protein:'none', legume:false, flavors:['sweet','nutty'], method:'boiled', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        58: { protein:'none', legume:false, flavors:['warm_spice','nutty'], method:'other', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        59: { protein:'none', legume:false, flavors:['sweet','nutty'], method:'baked', weight:2, temp:'cold', lastMin:false, makeAhead:true },
+        60: { protein:'none', legume:false, flavors:['warm_spice','savory'], method:'baked', weight:2, temp:'hot', lastMin:false, makeAhead:true },
+        61: { protein:'red_meat', legume:false, flavors:['herby','savory'], method:'other', weight:3, temp:'hot', lastMin:false, makeAhead:false },
+        62: { protein:'none', legume:false, flavors:['acidic','warm_spice','nutty','savory'], method:'baked', weight:1, temp:'cold', lastMin:false, makeAhead:false },
+        63: { protein:'red_meat', legume:false, flavors:['savory'], method:'simmered', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        64: { protein:'none', legume:false, flavors:['spicy','acidic'], method:'slow_cooked', weight:1, temp:'hot', lastMin:false, makeAhead:false },
+        65: { protein:'fish', legume:false, flavors:['acidic'], method:'fried', weight:2, temp:'hot', lastMin:true, makeAhead:false },
+        66: { protein:'none', legume:false, flavors:['sweet','spicy','acidic','warm_spice','nutty','savory'], method:'baked', weight:1, temp:'hot', lastMin:false, makeAhead:false },
+        67: { protein:'fish', legume:false, flavors:['spicy','warm_spice','herby','savory'], method:'simmered', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        68: { protein:'red_meat', legume:false, flavors:['acidic','warm_spice','savory'], method:'simmered', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        69: { protein:'red_meat', legume:false, flavors:['savory'], method:'slow_cooked', weight:2, temp:'hot', lastMin:false, makeAhead:true },
+        70: { protein:'red_meat', legume:false, flavors:['sweet','acidic','warm_spice'], method:'simmered', weight:3, temp:'hot', lastMin:false, makeAhead:false },
+        71: { protein:'red_meat', legume:true, flavors:['sweet','spicy','warm_spice','savory'], method:'slow_cooked', weight:2, temp:'hot', lastMin:false, makeAhead:true },
+        72: { protein:'poultry', legume:false, flavors:['warm_spice','nutty','savory'], method:'simmered', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        73: { protein:'red_meat', legume:false, flavors:['sweet','acidic','warm_spice'], method:'simmered', weight:3, temp:'hot', lastMin:false, makeAhead:false },
+        74: { protein:'red_meat', legume:false, flavors:['sweet','acidic','savory'], method:'slow_cooked', weight:3, temp:'hot', lastMin:false, makeAhead:false },
+        75: { protein:'none', legume:false, flavors:['sweet','savory'], method:'slow_cooked', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        76: { protein:'none', legume:false, flavors:['sweet'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        77: { protein:'none', legume:false, flavors:['sweet'], method:'slow_cooked', weight:2, temp:'hot', lastMin:false, makeAhead:true },
+        78: { protein:'none', legume:true, flavors:['mild'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        79: { protein:'none', legume:false, flavors:['sweet','warm_spice','savory'], method:'slow_cooked', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        80: { protein:'red_meat', legume:false, flavors:['herby','savory'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:true },
+        81: { protein:'none', legume:false, flavors:['sweet','acidic'], method:'baked', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        82: { protein:'none', legume:false, flavors:['sweet'], method:'no_cook', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        83: { protein:'none', legume:false, flavors:['sweet','warm_spice'], method:'other', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        84: { protein:'none', legume:true, flavors:['acidic','herby','nutty'], method:'fried', weight:1, temp:'cold', lastMin:true, makeAhead:false },
+        85: { protein:'red_meat', legume:false, flavors:['warm_spice','nutty'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        86: { protein:'none', legume:false, flavors:['warm_spice','herby','savory'], method:'baked', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        87: { protein:'none', legume:false, flavors:['herby'], method:'fried', weight:2, temp:'hot', lastMin:true, makeAhead:false },
+        88: { protein:'none', legume:false, flavors:['sweet','warm_spice'], method:'baked', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        89: { protein:'red_meat', legume:false, flavors:['acidic','warm_spice','savory'], method:'simmered', weight:3, temp:'hot', lastMin:false, makeAhead:false },
+        90: { protein:'none', legume:false, flavors:['warm_spice'], method:'other', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        91: { protein:'red_meat', legume:false, flavors:['sweet','acidic','warm_spice','savory'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        92: { protein:'none', legume:true, flavors:['acidic','warm_spice','herby','nutty','savory'], method:'slow_cooked', weight:1, temp:'cold', lastMin:false, makeAhead:false },
+        93: { protein:'red_meat', legume:false, flavors:['warm_spice','savory'], method:'fried', weight:3, temp:'hot', lastMin:true, makeAhead:false },
+        94: { protein:'red_meat', legume:false, flavors:['warm_spice','herby','nutty','savory'], method:'baked', weight:3, temp:'hot', lastMin:false, makeAhead:false },
+        95: { protein:'none', legume:false, flavors:['warm_spice','herby','savory'], method:'fried', weight:2, temp:'hot', lastMin:true, makeAhead:false },
+        96: { protein:'none', legume:false, flavors:['sweet','warm_spice','nutty'], method:'other', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        97: { protein:'none', legume:false, flavors:['savory'], method:'slow_cooked', weight:3, temp:'hot', lastMin:false, makeAhead:true },
+        98: { protein:'red_meat', legume:true, flavors:['acidic','warm_spice','savory'], method:'simmered', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        99: { protein:'poultry', legume:false, flavors:['acidic','warm_spice','herby','savory'], method:'simmered', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        100: { protein:'none', legume:false, flavors:['sweet','nutty'], method:'other', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        101: { protein:'none', legume:false, flavors:['sweet'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        102: { protein:'none', legume:false, flavors:['sweet','spicy','acidic'], method:'fried', weight:2, temp:'hot', lastMin:true, makeAhead:false },
+        103: { protein:'none', legume:false, flavors:['sweet'], method:'baked', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        104: { protein:'none', legume:false, flavors:['acidic','warm_spice','herby','savory'], method:'slow_cooked', weight:1, temp:'cold', lastMin:false, makeAhead:true },
+        105: { protein:'poultry', legume:false, flavors:['warm_spice','savory'], method:'grilled', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        106: { protein:'none', legume:false, flavors:['spicy','warm_spice','savory'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        107: { protein:'none', legume:false, flavors:['warm_spice','herby','savory'], method:'no_cook', weight:1, temp:'cold', lastMin:false, makeAhead:false },
+        108: { protein:'red_meat', legume:false, flavors:['sweet','warm_spice','savory'], method:'baked', weight:3, temp:'hot', lastMin:false, makeAhead:false },
+        109: { protein:'none', legume:false, flavors:['savory'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:true },
+        110: { protein:'none', legume:false, flavors:['sweet'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        111: { protein:'poultry', legume:false, flavors:['warm_spice','savory'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        112: { protein:'none', legume:false, flavors:['sweet','warm_spice'], method:'simmered', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        113: { protein:'none', legume:false, flavors:['sweet'], method:'other', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        114: { protein:'none', legume:false, flavors:['sweet','warm_spice','nutty'], method:'other', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        115: { protein:'fish', legume:false, flavors:['acidic','warm_spice','savory'], method:'simmered', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        116: { protein:'red_meat', legume:false, flavors:['spicy','warm_spice','savory'], method:'no_cook', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        117: { protein:'red_meat', legume:true, flavors:['spicy','warm_spice'], method:'simmered', weight:3, temp:'hot', lastMin:false, makeAhead:false },
+        118: { protein:'none', legume:false, flavors:['sweet','nutty'], method:'baked', weight:2, temp:'cold', lastMin:false, makeAhead:false },
+        119: { protein:'none', legume:false, flavors:['warm_spice','nutty'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:false },
+        120: { protein:'none', legume:false, flavors:['sweet','nutty'], method:'other', weight:2, temp:'cold', lastMin:false, makeAhead:false }
+    };
+
     var EVENT_CONFIG = {
         'rosh-hashanah': {
             name: 'Rosh Hashanah',
@@ -2160,17 +2291,46 @@
         return true;
     }
 
-    // ── Core scoring: how well does a recipe fit ALL user inputs? ──
+    // ── Helper: analyze what's already in the menu ──
+    function analyzeMenuState(alreadyPicked) {
+        var state = {
+            proteins: {}, methods: {}, flavors: {}, weights: [],
+            temps: { hot: 0, cold: 0 }, origins: {},
+            lastMinCount: 0, makeAheadCount: 0, totalPicked: 0
+        };
+        if (!alreadyPicked || alreadyPicked.length === 0) return state;
+        alreadyPicked.forEach(function(pid) {
+            var pr = getRecipeById(pid);
+            var pp = RECIPE_PROFILES[pid];
+            if (!pr || !pp) return;
+            state.totalPicked++;
+            state.proteins[pp.protein] = (state.proteins[pp.protein] || 0) + 1;
+            state.methods[pp.method] = (state.methods[pp.method] || 0) + 1;
+            pp.flavors.forEach(function(f) { state.flavors[f] = (state.flavors[f] || 0) + 1; });
+            state.weights.push(pp.weight);
+            state.temps[pp.temp] = (state.temps[pp.temp] || 0) + 1;
+            state.origins[pr.origin] = (state.origins[pr.origin] || 0) + 1;
+            if (pp.lastMin) state.lastMinCount++;
+            if (pp.makeAhead) state.makeAheadCount++;
+        });
+        return state;
+    }
+
+    // ── Core scoring: how well does a recipe fit ALL user inputs + the rest of the menu? ──
     function scoreRecipeForSelection(id, eventVal, vibe, dietary, complexity, alreadyPicked) {
         var r = getRecipeById(id);
+        var p = RECIPE_PROFILES[id];
         if (!r) return -100;
+        if (!p) p = { protein:'none', legume:false, flavors:['mild'], method:'other', weight:2, temp:'hot', lastMin:false, makeAhead:false };
         var score = 0;
 
-        // 1. Holiday relevance (biggest factor — is this dish associated with this event?)
+        // Build a picture of the menu so far
+        var menu = analyzeMenuState(alreadyPicked);
+
+        // ── 1. Holiday relevance (strongest signal) ──
         var config = EVENT_CONFIG[eventVal];
         if (config && r.holidays) {
             if (r.holidays.indexOf(eventVal) !== -1) score += 10;
-            // Partial match on event name in tags
             var eventName = (config.name || '').toLowerCase();
             r.tags.forEach(function(t) {
                 var tl = t.toLowerCase();
@@ -2180,18 +2340,18 @@
             });
         }
 
-        // 2. Vibe match — does difficulty align with chosen vibe?
+        // ── 2. Vibe match — difficulty alignment ──
         var diff = r.difficulty.toLowerCase();
         var vibePrefs = VIBE_DIFFICULTY[vibe] || {};
         score += (vibePrefs[diff] || 0);
 
-        // 3. Vibe origin affinity — some origins feel more elegant/casual/comfort
+        // ── 3. Vibe origin affinity ──
         var vibeOrigins = VIBE_ORIGINS[vibe] || [];
         for (var i = 0; i < vibeOrigins.length; i++) {
             if (r.origin.indexOf(vibeOrigins[i]) !== -1) { score += 2; break; }
         }
 
-        // 4. Difficulty match with user's effort level preference
+        // ── 4. Effort level preference ──
         if (complexity !== 'any') {
             if (complexity === 'easy' && diff === 'easy') score += 3;
             else if (complexity === 'easy' && diff === 'medium') score += 1;
@@ -2201,30 +2361,109 @@
             else if (complexity === 'advanced' && diff === 'medium') score += 2;
         }
 
-        // 5. Origin diversity — reward picks from origins not yet represented
-        if (alreadyPicked && alreadyPicked.length > 0) {
-            var originCounts = {};
-            alreadyPicked.forEach(function(pid) {
-                var pr = getRecipeById(pid);
-                if (pr) originCounts[pr.origin] = (originCounts[pr.origin] || 0) + 1;
-            });
-            if (!originCounts[r.origin]) {
-                score += 4; // new origin, great diversity
-            } else if (originCounts[r.origin] === 1) {
-                score += 0; // already have one, neutral
-            } else {
-                score -= 2; // too many from same origin
+        // ── 5. Origin diversity ──
+        if (menu.totalPicked > 0) {
+            if (!menu.origins[r.origin]) {
+                score += 4;
+            } else if (menu.origins[r.origin] >= 2) {
+                score -= 2;
             }
         }
 
-        // 6. Dietary harmony — pareve is universally compatible
+        // ── 6. Dietary harmony ──
         var d = RECIPE_DIETARY[id] || 'pareve';
         if (d === 'pareve') score += 1;
 
-        // 7. Guest count awareness — for large groups, prefer easier dishes
-        if (activeMenu && activeMenu.guests > 20) {
+        // ── 7. Guest count awareness ──
+        var guests = activeMenu ? activeMenu.guests : 10;
+        if (guests > 20) {
             if (diff === 'easy') score += 2;
             if (diff === 'advanced') score -= 1;
+        }
+
+        // ══════════════════════════════════════════════════
+        //  NEW: Deep Menu Harmony Intelligence
+        // ══════════════════════════════════════════════════
+
+        // ── 8. Protein diversity — avoid two dishes with same protein, reward variety ──
+        if (p.protein !== 'none' && menu.totalPicked > 0) {
+            var proteinCount = menu.proteins[p.protein] || 0;
+            if (proteinCount === 0) {
+                score += 5; // new protein type = great
+            } else if (proteinCount === 1) {
+                score -= 2; // second of same protein = meh
+            } else {
+                score -= 5; // third+ = strongly avoid
+            }
+            // Bonus: if menu has no protein yet and this adds one
+            var totalProteins = (menu.proteins['fish'] || 0) + (menu.proteins['poultry'] || 0) + (menu.proteins['red_meat'] || 0);
+            if (totalProteins === 0) score += 2;
+        }
+
+        // ── 9. Flavor balance — reward flavors the menu is missing ──
+        if (menu.totalPicked > 0) {
+            var missingFlavors = ['sweet','spicy','acidic','warm_spice','herby','nutty'];
+            var flavorBonus = 0;
+            p.flavors.forEach(function(f) {
+                if (missingFlavors.indexOf(f) !== -1 && !menu.flavors[f]) {
+                    flavorBonus += 2; // new flavor dimension
+                } else if (menu.flavors[f] && menu.flavors[f] >= 3) {
+                    flavorBonus -= 1; // already over-represented
+                }
+            });
+            score += Math.min(flavorBonus, 6); // cap the bonus
+        }
+
+        // ── 10. Weight & richness balance — avoid all-heavy or all-light menus ──
+        if (menu.weights.length > 0) {
+            var avgWeight = menu.weights.reduce(function(a, b) { return a + b; }, 0) / menu.weights.length;
+            // If menu is trending heavy (avg > 2.2), reward lighter dishes
+            if (avgWeight > 2.2 && p.weight === 1) score += 3;
+            if (avgWeight > 2.2 && p.weight === 3) score -= 2;
+            // If menu is trending light (avg < 1.6), reward heartier dishes
+            if (avgWeight < 1.6 && p.weight >= 2) score += 2;
+            if (avgWeight < 1.6 && p.weight === 1) score -= 1;
+        }
+
+        // ── 11. Temperature variety — ensure mix of hot and cold ──
+        if (menu.totalPicked >= 2) {
+            var hotRatio = menu.temps.hot / menu.totalPicked;
+            // If everything is hot, reward cold dishes
+            if (hotRatio > 0.8 && p.temp === 'cold') score += 3;
+            // If everything is cold, reward hot dishes
+            if (hotRatio < 0.3 && p.temp === 'hot') score += 3;
+        }
+
+        // ── 12. Cooking method diversity — avoid 3+ fried or all same method ──
+        if (menu.totalPicked > 0) {
+            var methodCount = menu.methods[p.method] || 0;
+            if (p.method === 'fried') {
+                if (methodCount >= 2) score -= 4; // too much fried food
+                else if (methodCount >= 1) score -= 1;
+            } else if (methodCount === 0) {
+                score += 2; // new method = interesting variety
+            } else if (methodCount >= 2) {
+                score -= 1; // getting repetitive
+            }
+        }
+
+        // ── 13. Prep logistics — avoid too many last-minute dishes ──
+        if (p.lastMin) {
+            if (menu.lastMinCount >= 2) {
+                score -= 4; // host can't fry 3+ things at once
+            } else if (menu.lastMinCount >= 1) {
+                score -= 1;
+            }
+        }
+        // Reward make-ahead friendly dishes (easier for host)
+        if (p.makeAhead && menu.lastMinCount >= 1) {
+            score += 2; // balance out the last-minute items
+        }
+
+        // ── 14. For large groups, strongly prefer make-ahead and avoid last-minute ──
+        if (guests >= 15) {
+            if (p.makeAhead) score += 2;
+            if (p.lastMin && guests >= 25) score -= 2;
         }
 
         return score;
@@ -2520,14 +2759,124 @@
             html += '</tbody></table></div>';
         }
 
-        // Prep timeline
+        // ── Menu Harmony Analysis (smart insights about the generated menu) ──
+        var harmonyState = analyzeMenuState(menuRecipeIds);
+        var harmonyInsights = [];
+
+        // Protein diversity insight
+        var proteinTypes = [];
+        if (harmonyState.proteins['fish']) proteinTypes.push('fish');
+        if (harmonyState.proteins['poultry']) proteinTypes.push('poultry');
+        if (harmonyState.proteins['red_meat']) proteinTypes.push('red meat');
+        if (proteinTypes.length >= 2) harmonyInsights.push('Protein variety: ' + proteinTypes.join(', '));
+        else if (proteinTypes.length === 1) harmonyInsights.push('Features ' + proteinTypes[0]);
+
+        // Flavor coverage insight
+        var flavorNames = { sweet: 'Sweet', spicy: 'Spicy', acidic: 'Bright/Acidic', warm_spice: 'Warm Spices', herby: 'Fresh Herbs', nutty: 'Nutty' };
+        var coveredFlavors = [];
+        ['sweet','spicy','acidic','warm_spice','herby','nutty'].forEach(function(f) {
+            if (harmonyState.flavors[f]) coveredFlavors.push(flavorNames[f]);
+        });
+        if (coveredFlavors.length >= 4) harmonyInsights.push('Flavor range: ' + coveredFlavors.join(', '));
+
+        // Weight balance insight
+        if (harmonyState.weights.length > 0) {
+            var avgW = harmonyState.weights.reduce(function(a, b) { return a + b; }, 0) / harmonyState.weights.length;
+            if (avgW >= 1.8 && avgW <= 2.3) harmonyInsights.push('Well-balanced weight — light starters, hearty mains');
+            else if (avgW > 2.3) harmonyInsights.push('Rich, indulgent spread — perfect for a feast');
+            else harmonyInsights.push('Light and refreshing menu');
+        }
+
+        // Temperature mix
+        if (harmonyState.temps.hot > 0 && harmonyState.temps.cold > 0) {
+            harmonyInsights.push('Temperature variety: ' + harmonyState.temps.hot + ' hot, ' + harmonyState.temps.cold + ' cold');
+        }
+
+        // Method variety
+        var methodNames = { fried: 'Fried', baked: 'Oven-baked', slow_cooked: 'Slow-cooked', simmered: 'Simmered', grilled: 'Grilled', no_cook: 'No-cook fresh', boiled: 'Boiled' };
+        var usedMethods = [];
+        for (var m in harmonyState.methods) {
+            if (harmonyState.methods[m] > 0 && methodNames[m]) usedMethods.push(methodNames[m]);
+        }
+        if (usedMethods.length >= 3) harmonyInsights.push('Cooking methods: ' + usedMethods.join(', '));
+
+        // Prep logistics insight
+        if (harmonyState.lastMinCount <= 1 && harmonyState.makeAheadCount >= 2) {
+            harmonyInsights.push('Host-friendly: mostly make-ahead, minimal last-minute cooking');
+        } else if (harmonyState.lastMinCount >= 2) {
+            harmonyInsights.push('Heads up: ' + harmonyState.lastMinCount + ' dishes need last-minute attention');
+        }
+
+        // Origin diversity
+        var uniqueOrigins = Object.keys(harmonyState.origins).length;
+        if (uniqueOrigins >= 4) harmonyInsights.push('Spans ' + uniqueOrigins + ' culinary traditions');
+        else if (uniqueOrigins >= 2) harmonyInsights.push('Draws from ' + uniqueOrigins + ' regional traditions');
+
+        if (harmonyInsights.length > 0) {
+            html += '<div class="menu-harmony">';
+            html += '<h4 style="font-family:Fraunces,serif;font-size:0.95rem;margin:0 0 0.5rem;display:flex;align-items:center;gap:0.4rem;"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="var(--accent-teal)" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Menu Harmony</h4>';
+            html += '<div style="display:flex;flex-wrap:wrap;gap:0.35rem;">';
+            harmonyInsights.forEach(function(insight) {
+                html += '<span style="font-size:0.72rem;font-weight:600;padding:0.25rem 0.65rem;border-radius:1rem;background:rgba(15,123,143,0.08);color:var(--accent-teal);border:1px solid rgba(15,123,143,0.12);">' + insight + '</span>';
+            });
+            html += '</div></div>';
+        }
+
+        // ── Dynamic Prep Timeline (generated from actual dishes selected) ──
+        var prepDays = { '3_days': [], '2_days': [], '1_day': [], 'morning': [], 'last_min': [] };
+        menuRecipeIds.forEach(function(id) {
+            var r = getRecipeById(id);
+            var pp = RECIPE_PROFILES[id];
+            if (!r || !pp) return;
+            var name = r.title.split('(')[0].trim(); // short name
+            if (pp.method === 'slow_cooked') {
+                prepDays['2_days'].push(name + ' (slow-cook: start early, it only gets better)');
+            } else if (pp.makeAhead && pp.weight >= 2) {
+                prepDays['2_days'].push(name + ' (makes ahead beautifully)');
+            } else if (pp.makeAhead) {
+                prepDays['1_day'].push(name + ' (prepare ahead and refrigerate)');
+            } else if (r.cat === 'sweets' && !pp.lastMin) {
+                prepDays['1_day'].push(name + ' (bake/set a day ahead)');
+            } else if (r.cat === 'breads' && !pp.lastMin) {
+                prepDays['2_days'].push(name + ' (bake ahead — improves with age)');
+            } else if (pp.temp === 'cold' && r.cat === 'starters') {
+                prepDays['1_day'].push(name + ' (prep and chill overnight)');
+            } else if (pp.lastMin) {
+                prepDays['last_min'].push(name + ' (cook fresh right before serving)');
+            } else {
+                prepDays['morning'].push(name + ' (cook day-of, serve when ready)');
+            }
+        });
+
+        html += '<div class="prep-timeline"><h4>Smart Prep Timeline</h4>';
+        var timelineLabels = {
+            '3_days': '3 days before',
+            '2_days': '2 days before',
+            '1_day': '1 day before',
+            'morning': 'Day of (morning)',
+            'last_min': 'Just before serving'
+        };
+        var hasTimeline = false;
+        ['3_days','2_days','1_day','morning','last_min'].forEach(function(phase) {
+            if (prepDays[phase].length > 0) {
+                hasTimeline = true;
+                html += '<div class="timeline-item"><span class="timeline-when">' + timelineLabels[phase] + '</span><span>' + prepDays[phase].join('<br>') + '</span></div>';
+            }
+        });
+        // Add event-specific tips that don't overlap with dynamic ones
         if (config.prepTips && config.prepTips.length > 0) {
-            html += '<div class="prep-timeline"><h4>Prep Timeline</h4>';
+            config.prepTips.forEach(function(tip) {
+                if (tip.when === 'Tip') {
+                    html += '<div class="timeline-item"><span class="timeline-when">' + tip.when + '</span><span>' + tip.task + '</span></div>';
+                }
+            });
+        }
+        if (!hasTimeline && config.prepTips) {
             config.prepTips.forEach(function(tip) {
                 html += '<div class="timeline-item"><span class="timeline-when">' + tip.when + '</span><span>' + tip.task + '</span></div>';
             });
-            html += '</div>';
         }
+        html += '</div>';
 
         // Vibe tips
         var vibeText = {
@@ -2755,7 +3104,7 @@
     }
 
     function openPrintWindow(eventLabel, guests, selectedRecipes) {
-        var logoURL = 'https://www.aletterinthescroll.com/media/images/Icon.png';
+        var logoURL = 'https://www.aletterinthescroll.com/media/images/logonew.png';
 
         // Build recipe pages — each on its own page, compact to fit one page
         var recipePagesHTML = selectedRecipes.map(function(r, idx) {

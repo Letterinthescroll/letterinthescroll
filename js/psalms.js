@@ -14,7 +14,8 @@ import {
     getUserBirthday,
     recordUserLogin,
     updateUserPresence,
-    markUserOffline
+    markUserOffline,
+    addFlashcard
 } from './firebase.js';
 import {
     showInfoPanel,
@@ -1266,10 +1267,51 @@ function escapeHtmlLocal(str) {
 }
 
 function transliterateHebrew(word) {
-    const MAP = {'א':'','ב':'v','ג':'g','ד':'d','ה':'h','ו':'v','ז':'z','ח':'ch','ט':'t','י':'y','כ':'kh','ך':'kh','ל':'l','מ':'m','ם':'m','נ':'n','ן':'n','ס':'s','ע':'','פ':'f','ף':'f','צ':'ts','ץ':'ts','ק':'k','ר':'r','ש':'sh','ת':'t'};
-    const base = word.replace(/[\u0591-\u05C7]/g, '');
+    if (!word) return null;
+    const CONS = {'א':'','ב':'v','ג':'g','ד':'d','ה':'h','ו':'v','ז':'z','ח':'ch','ט':'t','י':'y','כ':'kh','ך':'kh','ל':'l','מ':'m','ם':'m','נ':'n','ן':'n','ס':'s','ע':'','פ':'f','ף':'f','צ':'ts','ץ':'ts','ק':'k','ר':'r','ש':'sh','ת':'t'};
+    const VOWELS = {'\u05B0':'e','\u05B1':'e','\u05B2':'a','\u05B3':'o','\u05B4':'i','\u05B5':'e','\u05B6':'e','\u05B7':'a','\u05B8':'a','\u05B9':'o','\u05BA':'o','\u05BB':'u','\u05BC':'','\u05BD':''};
+    // Strip cantillation marks (0591-05AF) but keep vowels (05B0-05BD) and letters
+    const cleaned = word.replace(/[\u0591-\u05AF]/g, '');
     let result = '';
-    for (const ch of base) result += MAP[ch] || '';
+    const chars = [...cleaned];
+    for (let i = 0; i < chars.length; i++) {
+        const ch = chars[i];
+        const code = ch.charCodeAt(0);
+        if (code >= 0x05B0 && code <= 0x05BD) {
+            // Shva at word end is silent
+            if (code === 0x05B0 && i === chars.length - 1) continue;
+            // Patach furtivum: patach before final ח/ע/ה is pronounced before the consonant
+            if (code === 0x05B7) {
+                // Look ahead — is the next char a final guttural with no more letters after?
+                const nextCh = chars[i + 1];
+                if (nextCh && (nextCh === 'ח' || nextCh === 'ע' || nextCh === 'ה')) {
+                    // Check if this guttural is truly final (no more consonants after it)
+                    let isFinal = true;
+                    for (let k = i + 2; k < chars.length; k++) {
+                        const kc = chars[k].charCodeAt(0);
+                        if (kc >= 0x05D0 && kc <= 0x05EA) { isFinal = false; break; }
+                    }
+                    if (isFinal) {
+                        result += 'a' + (CONS[nextCh] || '');
+                        i++; // skip the guttural consonant
+                        continue;
+                    }
+                }
+            }
+            const v = VOWELS[ch] || '';
+            if (v) result += v;
+        } else if (CONS[ch] !== undefined) {
+            // Vav with holam (וֹ) or shuruk (וּ) — don't double-output
+            if (ch === 'ו') {
+                const next = chars[i + 1];
+                if (next === '\u05B9' || next === '\u05BA') { result += 'o'; i++; continue; }
+                if (next === '\u05BC') { result += 'u'; i++; continue; }
+            }
+            result += CONS[ch];
+        } else if (ch === ' ' || ch === '־' || ch === '-') {
+            result += ' ';
+        }
+    }
     return result || null;
 }
 
@@ -1277,14 +1319,99 @@ function handleHebrewWordSelection() {
     const selection = window.getSelection();
     if (!selection || selection.isCollapsed) return;
     const selectedText = selection.toString().trim();
-    if (!selectedText || /\s/.test(selectedText)) return;
+    if (!selectedText) return;
     const anchorNode = selection.anchorNode;
     if (!anchorNode) return;
     const parentEl = anchorNode.nodeType === Node.TEXT_NODE ? anchorNode.parentElement : anchorNode;
     if (!parentEl || !parentEl.closest('.hebrew-text')) return;
+    const isPhrase = /\s/.test(selectedText);
+    if (isPhrase && isHebrewStudyMode()) {
+        lookupHebrewPhrase(selectedText);
+        return;
+    }
+    if (isPhrase) return;
     const baseWord = selectedText.replace(/[\u0591-\u05C7]/g, '');
     if (!baseWord) return;
-    lookupHebrewWordSefaria(baseWord, selectedText);
+    lookupHebrewWordSefaria(baseWord, selectedText, selectedText);
+}
+
+function isHebrewStudyMode() {
+    return localStorage.getItem('alits_hebrew_study_mode') === 'true';
+}
+
+async function lookupHebrewPhrase(phrase) {
+    const titleEl = document.querySelector('.info-panel-title');
+    if (titleEl) titleEl.textContent = 'Phrase Translation';
+    showKeywordDefinition(phrase, 'Looking up translation...');
+
+    try {
+        // Try to get the translation from the verse's already-loaded English text
+        let translation = '';
+        const sel = window.getSelection();
+        if (sel && sel.anchorNode) {
+            const el = sel.anchorNode.nodeType === Node.TEXT_NODE ? sel.anchorNode.parentElement : sel.anchorNode;
+            const verseContainer = el ? el.closest('.verse-container[data-ref]') : null;
+            if (verseContainer) {
+                const verseRef = verseContainer.dataset.ref;
+                // First try the cached display text
+                if (verseDisplayTexts[verseRef]) {
+                    translation = verseDisplayTexts[verseRef];
+                } else {
+                    // Fall back to the English text element in the DOM
+                    const engEl = verseContainer.querySelector('.english-text');
+                    if (engEl) translation = engEl.textContent.trim();
+                }
+            }
+        }
+
+        // If we couldn't get it from the DOM, try Sefaria search API
+        if (!translation) {
+            try {
+                const q = phrase.replace(/[\u0591-\u05C7]/g, '').trim();
+                const url = `https://www.sefaria.org/api/search/text/${encodeURIComponent(q)}?size=1`;
+                const resp = await fetch(url);
+                if (resp.ok) {
+                    const data = await resp.json();
+                    const hit = data.hits && data.hits.hits && data.hits.hits[0];
+                    if (hit && hit._source) {
+                        const ref = hit._source.ref;
+                        if (ref) {
+                            const textResp = await fetch(`https://www.sefaria.org/api/texts/${encodeURIComponent(ref)}?context=0&pad=0`);
+                            if (textResp.ok) {
+                                const textData = await textResp.json();
+                                let t = textData.text || '';
+                                if (Array.isArray(t)) t = t.join(' ');
+                                if (t) translation = t.replace(/<[^>]+>/g, '');
+                            }
+                        }
+                    }
+                }
+            } catch (_) {}
+        }
+
+        if (!translation) {
+            translation = 'Translation not available — you can add your own below.';
+        }
+
+        const infoContent = document.getElementById('info-content');
+        infoContent.classList.remove('info-content-bookmarks');
+
+        let html = `<div class="sdict-word-header">`;
+        html += `<span class="sdict-word-display" style="font-size:1.3rem;">${escapeHtmlLocal(phrase)}</span>`;
+        html += `</div>`;
+        html += `<div class="sdict-senses sdict-senses--l1" style="margin-top:0.75rem;">`;
+        html += `<p class="sdict-def" style="font-size:0.95rem;color:#334155;">${escapeHtmlLocal(translation)}</p>`;
+        html += `</div>`;
+
+        html += buildFlashcardCreatorHTML(phrase, translation, true);
+
+        infoContent.innerHTML = html;
+        showInfoPanel();
+        attachFlashcardListeners(phrase, '', translation, true);
+    } catch (err) {
+        console.error('Phrase lookup failed:', err);
+        showKeywordDefinition(phrase, 'Could not translate phrase. You can still create a flashcard.');
+    }
 }
 
 function hebrewConsonantMatchScore(selectedConsonants, headword) {
@@ -1314,6 +1441,58 @@ function hebrewConsonantMatchScore(selectedConsonants, headword) {
         }
     }
     return 0;
+}
+
+function hebrewVowelSimilarity(selectedWord, headword) {
+    if (!selectedWord || !headword) return 0;
+    // Strip cantillation marks (U+0591-U+05AF) but keep vowels (U+05B0-U+05C7)
+    const stripCantillation = s => s.replace(/[\u0591-\u05AF]/g, '');
+    const sel = stripCantillation(selectedWord);
+    const head = stripCantillation(headword);
+    // Extract only the vowel/nikkud marks (U+05B0-U+05C7)
+    const vowelsOf = s => s.replace(/[^\u05B0-\u05C7]/g, '');
+    // Also strip common prefixes from selected word to align with headword root
+    const PREFIXES = ['ו', 'ה', 'ל', 'ב', 'כ', 'מ', 'ש'];
+    const consonantsOf = s => s.replace(/[\u05B0-\u05C7]/g, '');
+    const headCons = consonantsOf(head);
+    let bestSel = sel;
+    let s = sel;
+    const candidates = [sel];
+    for (let i = 0; i < 2; i++) {
+        let stripped = false;
+        for (const p of PREFIXES) {
+            const sCons = consonantsOf(s);
+            if (sCons.startsWith(p) && sCons.length > p.length) {
+                // Find the position of the prefix consonant in s (including its vowels)
+                let pos = 0;
+                for (let j = 0; j < s.length; j++) {
+                    if (s[j] === p) { pos = j + 1; break; }
+                }
+                // Skip any trailing vowel marks attached to the prefix
+                while (pos < s.length && s.charCodeAt(pos) >= 0x05B0 && s.charCodeAt(pos) <= 0x05C7) pos++;
+                s = s.slice(pos);
+                candidates.push(s);
+                stripped = true;
+                break;
+            }
+        }
+        if (!stripped) break;
+    }
+    // Pick the candidate whose consonants best match the headword
+    for (const cand of candidates) {
+        if (consonantsOf(cand) === headCons) { bestSel = cand; break; }
+    }
+    const selVowels = vowelsOf(bestSel);
+    const headVowels = vowelsOf(head);
+    if (selVowels.length === 0 && headVowels.length === 0) return 1;
+    if (selVowels.length === 0 || headVowels.length === 0) return 0;
+    // Count matching vowels at each position
+    const maxLen = Math.max(selVowels.length, headVowels.length);
+    let matches = 0;
+    for (let i = 0; i < Math.min(selVowels.length, headVowels.length); i++) {
+        if (selVowels[i] === headVowels[i]) matches++;
+    }
+    return matches / maxLen;
 }
 
 function renderSefariaEntry(entry, displayWord, showSource) {
@@ -1356,7 +1535,7 @@ function renderSefariaSenses(senses, level) {
     return html;
 }
 
-async function lookupHebrewWordSefaria(word, displayWord) {
+async function lookupHebrewWordSefaria(word, displayWord, originalWord) {
     const titleEl = document.querySelector('.info-panel-title');
     if (titleEl) titleEl.textContent = 'Definition';
     showKeywordDefinition(displayWord, 'Loading definition...');
@@ -1376,6 +1555,13 @@ async function lookupHebrewWordSefaria(word, displayWord) {
             const scoreA = hebrewConsonantMatchScore(word, a.headword || '');
             const scoreB = hebrewConsonantMatchScore(word, b.headword || '');
             if (scoreB !== scoreA) return scoreB - scoreA;
+            // When consonant scores are tied, prefer the headword whose vowels
+            // (nikkud) most closely match the original selected word
+            if (originalWord) {
+                const vowelA = hebrewVowelSimilarity(originalWord, a.headword || '');
+                const vowelB = hebrewVowelSimilarity(originalWord, b.headword || '');
+                if (vowelB !== vowelA) return vowelB - vowelA;
+            }
             const jA = a.parent_lexicon === 'Jastrow Dictionary' ? 1 : 0;
             const jB = b.parent_lexicon === 'Jastrow Dictionary' ? 1 : 0;
             return jA - jB;
@@ -1404,11 +1590,128 @@ async function lookupHebrewWordSefaria(word, displayWord) {
             html += `</div></details>`;
         }
 
+        const rootWord = primary.headword || displayWord;
+        const firstDef = extractFirstDefinition(primary);
+        const rootTranslit = transliterateHebrew(rootWord) || '';
+        html += buildFlashcardCreatorHTML(rootWord, firstDef, false, rootTranslit);
+
         infoContent.innerHTML = html;
         showInfoPanel();
+
+        attachFlashcardListeners(displayWord, rootWord, firstDef, false);
     } catch (err) {
         console.error('Sefaria lexicon lookup failed:', err);
         showKeywordDefinition(displayWord, 'Could not load definition. Please try again.');
+    }
+}
+
+function buildFlashcardCreatorHTML(word, definition, isPhrase = false, translit = '') {
+    if (!isHebrewStudyMode()) return '';
+    const safeWord = escapeHtmlLocal(word);
+    const safeDef = escapeHtmlLocal(definition);
+    const safeTranslit = translit ? escapeHtmlLocal(translit) : '';
+    const translitLine = safeTranslit
+        ? `<p style="font-size:0.8rem;color:#86868b;font-style:italic;margin:0.15rem 0 0;letter-spacing:0.02em;">${safeTranslit}</p>`
+        : '';
+    return `
+    <div class="fc-creator" style="margin-top:1rem;">
+        <div style="background:#fff;border-radius:.85rem;border:1px solid #e5e5ea;box-shadow:0 1px 3px rgba(0,0,0,0.05);overflow:hidden;">
+            <div style="padding:.7rem .9rem;display:flex;align-items:center;gap:.4rem;border-bottom:1px solid #f0f0f2;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="15" height="11" rx="1.5"/><path d="M7 4h13a1.5 1.5 0 011.5 1.5V15"/></svg>
+                <span style="font-size:.72rem;font-weight:600;color:#1d1d1f;letter-spacing:.01em;">Add to Flashcards</span>
+            </div>
+            <div style="padding:.7rem .9rem .45rem;text-align:center;">
+                <p style="font-size:1.3rem;font-weight:700;color:#1d1d1f;direction:rtl;line-height:1.3;">${safeWord}</p>
+                ${translitLine}
+            </div>
+            <div style="padding:0 .9rem .85rem;">
+                <label style="font-size:.65rem;font-weight:600;color:#86868b;letter-spacing:.02em;display:block;margin-bottom:.25rem;">Definition</label>
+                <textarea id="flashcard-def-input" rows="2" placeholder="Type or edit the definition..." style="width:100%;border:1px solid #d2d2d7;border-radius:.5rem;padding:.4rem .55rem;font-size:.8rem;color:#1d1d1f;resize:vertical;font-family:-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif;background:#fafafa;outline:none;transition:border-color .2s,box-shadow .2s;line-height:1.5;" onfocus="this.style.borderColor='#0071e3';this.style.boxShadow='0 0 0 3px rgba(0,113,227,0.12)';this.style.background='#fff'" onblur="this.style.borderColor='#d2d2d7';this.style.boxShadow='none';this.style.background='#fafafa'">${safeDef}</textarea>
+            </div>
+        </div>
+        <div style="display:flex;gap:.4rem;margin-top:.45rem;">
+            <button id="flashcard-save-btn" style="flex:1;padding:.5rem .8rem;background:#1d1d1f;color:#fff;border:none;border-radius:2rem;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.3rem;font-family:-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif;" onmouseover="this.style.background='#424245'" onmouseout="this.style.background='#1d1d1f'">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                Save Card
+            </button>
+            <a href="/flashcards" id="flashcard-view-btn" style="display:none;padding:.5rem .8rem;background:#fff;color:#1d1d1f;border:1px solid #d2d2d7;border-radius:2rem;font-size:.78rem;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;transition:all .15s;align-items:center;justify-content:center;gap:.25rem;font-family:-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif;" onmouseover="this.style.background='#f5f5f7';this.style.borderColor='#c5c5c9'" onmouseout="this.style.background='#fff';this.style.borderColor='#d2d2d7'">
+                Review Cards
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+        <div id="flashcard-msg" style="display:none;margin-top:.35rem;font-size:.72rem;padding:.35rem .6rem;border-radius:.4rem;text-align:center;"></div>
+    </div>`;
+}
+
+function extractFirstDefinition(entry) {
+    if (!entry || !entry.content || !entry.content.senses) return '';
+    const senses = entry.content.senses;
+    function findFirst(arr) {
+        for (const s of arr) {
+            if (s.definition) {
+                return s.definition.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ').trim();
+            }
+            if (s.senses && s.senses.length > 0) {
+                const found = findFirst(s.senses);
+                if (found) return found;
+            }
+        }
+        return '';
+    }
+    return findFirst(senses);
+}
+
+function attachFlashcardListeners(originalWord, rootWord, definition, isPhrase) {
+    const saveBtn = document.getElementById('flashcard-save-btn');
+    if (!saveBtn) return;
+    saveBtn.addEventListener('click', async () => {
+        const userId = getCurrentUserId();
+        if (!userId) {
+            showFlashcardMsg('Please sign in to create flashcards.', 'error');
+            return;
+        }
+        const defInput = document.getElementById('flashcard-def-input');
+        const editedDef = defInput ? defInput.value.trim() : definition;
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;"></span> Saving...';
+        try {
+            const display = isPhrase ? originalWord : (rootWord || originalWord);
+            await addFlashcard(userId, {
+                word: isPhrase ? '' : originalWord,
+                rootWord: rootWord || '',
+                definition: editedDef,
+                phrase: isPhrase ? originalWord : '',
+                phraseTranslation: isPhrase ? editedDef : '',
+                transliteration: transliterateHebrew(display) || '',
+                source: 'Psalms'
+            });
+            saveBtn.style.background = '#34c759';
+            saveBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Saved';
+            const viewBtn = document.getElementById('flashcard-view-btn');
+            if (viewBtn) { viewBtn.style.display = 'flex'; }
+            showFlashcardMsg('Flashcard created successfully!', 'success');
+        } catch (err) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = 'Save Card';
+            saveBtn.style.background = '#1d1d1f';
+            showFlashcardMsg('Failed to save flashcard. Please try again.', 'error');
+        }
+    });
+}
+
+function showFlashcardMsg(text, type) {
+    const msg = document.getElementById('flashcard-msg');
+    if (!msg) return;
+    msg.style.display = 'block';
+    msg.textContent = text;
+    if (type === 'success') {
+        msg.style.background = '#ecfdf5';
+        msg.style.color = '#065f46';
+        msg.style.border = '1px solid #a7f3d0';
+    } else {
+        msg.style.background = '#fef2f2';
+        msg.style.color = '#991b1b';
+        msg.style.border = '1px solid #fecaca';
     }
 }
 

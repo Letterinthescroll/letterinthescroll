@@ -19,7 +19,7 @@
     <meta name="twitter:title" content="About — A Letter in the Scroll">
     <meta name="twitter:description" content="Every Jewish soul is a letter in the Torah. Discover the story behind A Letter in the Scroll.">
     <meta name="twitter:image" content="https://www.aletterinthescroll.com/media/images/welcome.jpg">
-    <link rel="icon" type="image/png" href="/media/images/Icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png" media="(prefers-color-scheme: light)"><link rel="icon" type="image/svg+xml" href="/media/images/favicon-dark.svg" media="(prefers-color-scheme: dark)">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/shabbat.css">
     <link rel="stylesheet" href="/css/mobile-overrides.css">
@@ -186,10 +186,10 @@
         }
 
         .hero-divider {
-            height: 2px;
+            height: 0;
             border: 0;
             margin: 0;
-            background: linear-gradient(90deg, transparent 8%, var(--gold) 50%, transparent 92%);
+            background: none;
         }
 
         /* ── Floating background accents ── */
@@ -625,6 +625,21 @@
             gap: 0.65rem;
         }
 
+        @media (max-width: 639px) {
+            .bento-card {
+                aspect-ratio: auto;
+                min-height: 0;
+                padding: 0.85em;
+                border-radius: 14px;
+                gap: 0.4em;
+            }
+            .bento-card::after { border-radius: 14px; }
+            .bento-icon { width: 1.4rem; height: 1.4rem; }
+            .bento-label { font-size: 0.58em; }
+            .bento-title { font-size: 1em; margin-bottom: 0.15em; }
+            .bento-desc { font-size: 0.72em; line-height: 1.5; }
+            .bento-watermark { font-size: 3.5em; }
+        }
         @media (min-width: 640px) {
             .bento-grid { grid-template-columns: repeat(2, 1fr); }
         }
@@ -786,7 +801,6 @@
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
                     About Us
                 </div>
-                <span class="hero-hebrew" aria-hidden="true">אוֹת בַּתּוֹרָה</span>
                 <h1 class="hero-title">A Letter in the Scroll: <span class="gold">Every Jew Is a Letter in One Living Torah</span></h1>
                 <p class="hero-subtitle">The Zohar teaches that every Jewish soul is a letter in the Torah. The Baal Shem Tov expanded on this beautiful idea, teaching that the Jewish people itself is a living Sefer Torah, and every single Jew is one of its letters. Just as a Torah scroll is rendered invalid when even a single letter is flawed or missing, no Jewish community is whole when even one voice goes unheard.</p>
                 <div class="hero-scroll" aria-hidden="true">

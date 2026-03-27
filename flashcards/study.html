@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Flashcards — A Letter in the Scroll</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png" media="(prefers-color-scheme: light)"><link rel="icon" type="image/svg+xml" href="/media/images/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" sizes="180x180" href="/media/images/apple-touch-icon.png">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/shabbat.css">
+    <link rel="stylesheet" href="/css/mobile-overrides.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&family=Frank+Ruhl+Libre:wght@400;700&family=Playpen+Sans+Hebrew:wght@100..800&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Gveret Levin';
+            src: url('/flashcards/Gveret Levin Alef Alef Alef.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans','SF Pro Display',sans-serif;background:#f0f2f8;min-height:100vh;-webkit-font-smoothing:antialiased}
+        .hidden{display:none!important}
+
+        /* ─── Page layout ─── */
+        .st-page{max-width:1180px;margin:0 auto;padding:1.5rem 1.5rem 4rem}
+
+        /* ─── Two-column layout on desktop ─── */
+        .st-layout{display:grid;grid-template-columns:1fr 280px;gap:1.25rem;align-items:start}
+        .st-main-col{min-width:0}
+        .st-sidebar{display:flex;flex-direction:column;gap:1rem}
+
+        /* ─── Top Bar ─── */
+        .st-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+        .st-back{display:inline-flex;align-items:center;gap:.3rem;font-size:.78rem;font-weight:600;color:#6b7280;text-decoration:none;padding:.38rem .75rem;border-radius:2rem;transition:all .15s;border:1px solid rgba(0,0,0,.1);background:rgba(255,255,255,.7);cursor:pointer;backdrop-filter:blur(6px);font-family:'Poppins',sans-serif}
+        .st-back:hover{background:rgba(255,255,255,.95);color:#1a1a2e;border-color:rgba(0,0,0,.18)}
+        .st-top-right{display:flex;align-items:center;gap:.45rem}
+        .st-icon-btn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:1px solid rgba(0,0,0,.1);background:rgba(255,255,255,.7);color:#6b7280;cursor:pointer;transition:all .15s;backdrop-filter:blur(6px)}
+        .st-icon-btn:hover{background:rgba(255,255,255,.95);color:#1a1a2e;border-color:rgba(0,0,0,.18)}
+        .st-icon-btn.active{background:#1a1a2e;color:#fff;border-color:#1a1a2e}
+
+        /* ─── Hero/header band ─── */
+        @keyframes heroShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        .st-hero{background:linear-gradient(130deg,#ffffff 0%,#f0f7ff 25%,#faf5ff 50%,#fff7f0 75%,#f0fff8 100%);background-size:300% 300%;animation:heroShift 12s ease infinite;border-radius:1.35rem;padding:1.5rem 1.75rem 1.35rem;margin-bottom:1.25rem;position:relative;overflow:hidden;border:1px solid rgba(0,0,0,.06);box-shadow:0 2px 16px rgba(0,0,0,.05),0 1px 3px rgba(0,0,0,.04)}
+        .st-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 80% at 85% 0%,rgba(167,139,250,.08),transparent),radial-gradient(ellipse 45% 60% at 5% 100%,rgba(52,211,153,.07),transparent);pointer-events:none}
+        .st-hero-sub{font-size:.76rem;color:#6b7280;margin-top:.2rem;position:relative;z-index:1}
+
+        /* ─── Inline mode/dir pills ─── */
+        .st-pill-group{display:flex;background:rgba(255,255,255,.7);border-radius:2rem;padding:2px;border:1px solid rgba(0,0,0,.1);backdrop-filter:blur(6px)}
+        .st-pill{padding:.3rem .7rem;font-size:.7rem;font-weight:600;color:#6b7280;cursor:pointer;border:none;background:none;border-radius:2rem;transition:all .15s;display:inline-flex;align-items:center;gap:.22rem;white-space:nowrap;font-family:'Poppins',sans-serif}
+        .st-pill:hover{color:#1a1a2e;background:rgba(255,255,255,.6)}
+        .st-pill.active{background:#1a1a2e;color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+
+        /* ─── Back btn / icon btn for light hero ─── */
+
+        /* ─── Hero title row ─── */
+        .st-hero-title-row{display:flex;align-items:baseline;gap:.6rem;margin:.9rem 0 .55rem;position:relative;z-index:1}
+        .st-hero-title{font-family:'Poppins',sans-serif;font-size:1.25rem;font-weight:700;color:#1a1a2e;line-height:1.1}
+        .st-hero-count{font-size:.72rem;color:#9ca3af;font-weight:500}
+
+        /* ─── Mastery bar ─── */
+        .st-mastery-bar{display:flex;height:7px;border-radius:6px;overflow:hidden;background:rgba(0,0,0,.07);margin:0 0 .55rem;position:relative;z-index:1;gap:2px}
+        .st-mastery-seg{transition:width .5s cubic-bezier(.4,0,.2,1);min-width:0;border-radius:3px}
+        .st-mastery-seg.mastered{background:linear-gradient(90deg,#60a5fa,#93c5fd)}
+        .st-mastery-seg.familiar{background:linear-gradient(90deg,#34d399,#6ee7b7)}
+        .st-mastery-seg.learning{background:linear-gradient(90deg,#fbbf24,#fcd34d)}
+        .st-mastery-seg.new-seg{background:rgba(0,0,0,.15)}
+        .st-mastery-legend{display:flex;gap:.75rem;flex-wrap:wrap;position:relative;z-index:1}
+        .st-mastery-item{display:flex;align-items:center;gap:.25rem;font-size:.65rem;color:#9ca3af;font-weight:500}
+        .st-hero .st-mastery-item{color:#6b7280}
+        .st-mastery-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+        .st-mastery-dot.mastered{background:#60a5fa}.st-mastery-dot.familiar{background:#34d399}.st-mastery-dot.learning{background:#fbbf24}.st-mastery-dot.new-dot{background:#d1d5db}
+
+        /* ─── Progress ─── */
+        .st-progress-row{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+        .st-progress-wrap{flex:1;height:4px;background:#e5e5ea;border-radius:3px;overflow:hidden}
+        .st-progress-fill{height:100%;background:linear-gradient(90deg,#3b5bdb,#60a5fa);border-radius:3px;transition:width .4s ease}
+        .st-progress-text{font-size:.7rem;font-weight:600;color:#86868b;white-space:nowrap}
+
+        /* ─── Study card container ─── */
+        .st-card-container{background:#fff;border-radius:1.15rem;padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06),0 8px 32px rgba(0,0,0,.04)}
+
+        /* ─── Flip Card ─── */
+        .st-card-wrap{width:100%;height:300px;perspective:1200px;cursor:pointer;-webkit-tap-highlight-color:transparent;margin-bottom:1rem}
+        .st-card-wrap.both-mode{height:360px}
+        .st-card-inner{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
+        .st-card-inner.flipped{transform:rotateY(180deg)}
+        .st-card-front,.st-card-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:.85rem;padding:2rem 1.75rem;display:flex;flex-direction:column;align-items:center;justify-content:center}
+        .st-card-front{background:linear-gradient(145deg,#dbeafe 0%,#eff6ff 45%,#e0f2fe 100%);border:1px solid rgba(147,197,253,.4);color:#1e3a8a;box-shadow:0 6px 28px rgba(59,130,246,.12),0 1px 4px rgba(59,130,246,.06)}
+        .st-card-back{background:#fff;border:1px solid #e8e8ed;box-shadow:0 4px 20px rgba(0,0,0,.06);transform:rotateY(180deg)}
+        .st-front-main{font-size:2.8rem;font-weight:700;line-height:1.2;text-align:center;color:#1a1a2e;font-family:'Poppins',sans-serif}
+        .st-front-main.hebrew{font-family:'Poppins',sans-serif;direction:rtl;color:#1a1a2e}
+        /* Hebrew script variants */
+        .heb-block{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:800;font-style:normal}
+        .heb-cursive{font-family:'Gveret Levin','Playpen Sans Hebrew',cursive;font-optical-sizing:auto;direction:rtl;font-weight:600;font-style:normal}
+        /* Both mode — stacked split panel */
+        .heb-split{display:flex;flex-direction:column;align-items:center;width:100%;gap:0}
+        .heb-split-row{display:flex;flex-direction:column;align-items:center;width:100%;padding:.55rem 0}
+        .heb-split-row+.heb-split-row{border-top:1px solid rgba(0,0,0,.08)}
+        .heb-split-label{font-family:'Poppins',sans-serif;font-size:.52rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.2rem;opacity:.45}
+        .heb-split-row.block-row .heb-split-label{color:#1e3a8a}
+        .heb-split-row.cursive-row .heb-split-label{color:#6d28d9}
+        .heb-split-row .heb-block{color:#1a1a2e}
+        .heb-split-row .heb-cursive{color:#3b0764}
+        .st-front-sub{font-size:.75rem;color:#93c5fd;font-style:italic;margin-top:.35rem;font-family:'Poppins',sans-serif}
+        .st-hint{font-size:.66rem;color:#bfdbfe;margin-top:1.2rem;display:flex;align-items:center;gap:.25rem;font-family:'Poppins',sans-serif}
+        .st-back-main{font-size:1.45rem;font-weight:700;margin-bottom:.3rem;text-align:center;color:#1a1a2e;font-family:'Poppins',sans-serif}
+        .st-back-main.hebrew{font-family:'Poppins',sans-serif;direction:rtl;font-size:1.7rem}
+        .st-back-translit{font-size:.74rem;color:#86868b;font-style:italic;margin-bottom:.55rem;font-family:'Poppins',sans-serif}
+        .st-back-secondary{font-size:.95rem;color:#374151;line-height:1.6;text-align:center;max-width:380px;font-family:'Poppins',sans-serif}
+        .st-back-phrase{font-size:.76rem;color:#6b7280;font-style:italic;margin-top:.45rem;text-align:center;font-family:'Poppins',sans-serif}
+
+        /* ─── Confidence ─── */
+        .st-confidence{display:none;gap:.4rem;width:100%}
+        .st-confidence.visible{display:flex}
+        .st-conf-btn{flex:1;padding:.55rem .2rem;border-radius:.6rem;font-size:.76rem;font-weight:600;cursor:pointer;border:1.5px solid;transition:all .15s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:.1rem}
+        .st-conf-label{font-size:.58rem;opacity:.5;font-weight:500}
+        .st-conf-again{border-color:#fecaca;color:#dc2626;background:#fff}.st-conf-again:hover{background:#fef2f2;border-color:#fca5a5}
+        .st-conf-hard{border-color:#fed7aa;color:#ea580c;background:#fff}.st-conf-hard:hover{background:#fff7ed;border-color:#fdba74}
+        .st-conf-good{border-color:#bef264;color:#4d7c0f;background:#fff}.st-conf-good:hover{background:#f7fee7;border-color:#a3e635}
+        .st-conf-easy{border-color:#a7f3d0;color:#059669;background:#fff}.st-conf-easy:hover{background:#ecfdf5;border-color:#6ee7b7}
+
+        /* ─── Type Mode ─── */
+        .st-type-area{width:100%}
+        .st-type-card{background:linear-gradient(145deg,#dbeafe 0%,#eff6ff 45%,#e0f2fe 100%);border:1px solid rgba(147,197,253,.4);border-radius:.85rem;padding:2rem 1.75rem 1.75rem;text-align:center;box-shadow:0 6px 28px rgba(59,130,246,.12),0 1px 4px rgba(59,130,246,.06);margin-bottom:.85rem}
+        .st-type-prompt{font-size:.66rem;color:#93c5fd;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem;font-weight:600}
+        .st-type-stimulus{font-size:1.1rem;color:#1a1a2e;line-height:1.5;max-width:400px;margin:0 auto;font-family:'Poppins',sans-serif}
+        .st-type-stimulus.hebrew{font-family:'Poppins',sans-serif;direction:rtl;font-size:2rem;font-weight:700;line-height:1.25;color:#1a1a2e}
+        .st-type-input-row{display:flex;gap:.4rem;align-items:stretch}
+        .st-type-input{flex:1;padding:.62rem .8rem;border:2px solid #d2d2d7;border-radius:.6rem;font-size:1.05rem;text-align:center;color:#1d1d1f;outline:none;transition:border-color .2s,box-shadow .2s;background:#fff}
+        .st-type-input.hebrew{font-family:'Poppins',sans-serif;direction:rtl;font-size:1.15rem}
+        .st-type-input:focus{border-color:#0071e3;box-shadow:0 0 0 3px rgba(0,113,227,.1)}
+        .st-type-input.correct{border-color:#34c759;background:#f0fdf4}
+        .st-type-input.incorrect{border-color:#dc2626;background:#fef2f2}
+        .st-type-submit{padding:.62rem 1rem;background:#1d1d1f;color:#fff;border:none;border-radius:.6rem;font-weight:600;font-size:.8rem;cursor:pointer;transition:background .15s;white-space:nowrap}
+        .st-type-submit:hover{background:#424245}
+        .st-type-feedback{margin-top:.6rem;padding:.6rem .85rem;border-radius:.6rem;font-size:.82rem;text-align:center;display:none}
+        .st-type-feedback.show{display:block}
+        .st-type-feedback.correct{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+        .st-type-feedback.incorrect{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+        .st-type-answer{font-weight:700}
+        .st-type-answer.hebrew{font-family:'Poppins',sans-serif;direction:rtl;font-size:1.2rem}
+        .st-type-btns{display:flex;gap:.35rem;justify-content:center;margin-top:.45rem}
+        .st-sm-btn{padding:.35rem .75rem;border-radius:.4rem;font-size:.74rem;font-weight:600;cursor:pointer;transition:all .15s}
+        .st-sm-btn.ghost{background:none;border:1px solid #d2d2d7;color:#86868b}
+        .st-sm-btn.ghost:hover{background:#e5e5ea;color:#1d1d1f}
+        .st-sm-btn.primary{background:#1d1d1f;border:none;color:#fff;display:none}
+        .st-sm-btn.primary:hover{background:#424245}
+        .st-sm-btn.primary.show{display:inline-flex}
+
+        /* ─── Drawer ─── */
+        .st-drawer-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:9998;opacity:0;pointer-events:none;transition:opacity .2s}
+        .st-drawer-backdrop.open{opacity:1;pointer-events:auto}
+        .st-drawer{position:fixed;top:0;right:0;bottom:0;width:min(320px,85vw);background:#fff;z-index:9999;transform:translateX(100%);transition:transform .25s cubic-bezier(.32,1.2,.54,1);box-shadow:-8px 0 32px rgba(0,0,0,.1);display:flex;flex-direction:column;overflow-y:auto}
+        .st-drawer.open{transform:translateX(0)}
+        .st-drawer-header{display:flex;align-items:center;justify-content:space-between;padding:1.15rem 1.15rem .85rem;border-bottom:1px solid #f0f0f2}
+        .st-drawer-title{font-size:.92rem;font-weight:700;color:#1d1d1f}
+        .st-drawer-close{width:28px;height:28px;border-radius:50%;border:none;background:#f0f0f2;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#636366;transition:all .15s}
+        .st-drawer-close:hover{background:#e5e5ea;color:#1d1d1f}
+        .st-drawer-body{padding:1rem 1.15rem 2rem;flex:1}
+        .st-drawer-section{margin-bottom:1.15rem}
+        .st-drawer-label{font-size:.65rem;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+        .st-drawer-chips{display:flex;gap:.3rem;flex-wrap:wrap}
+        .st-dchip{padding:.32rem .65rem;border-radius:2rem;font-size:.72rem;font-weight:600;cursor:pointer;border:1px solid #d2d2d7;background:#fff;color:#636366;transition:all .15s;white-space:nowrap}
+        .st-dchip:hover{border-color:#86868b;color:#1d1d1f}
+        .st-dchip.active{background:#1d1d1f;color:#fff;border-color:#1d1d1f}
+        .st-dchip-count{font-size:.6rem;font-weight:700;opacity:.5;margin-left:.15rem}
+        .st-drawer .st-mastery-legend{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.4rem}
+        .st-drawer .st-mastery-item{display:flex;align-items:center;gap:.25rem;font-size:.65rem;color:#86868b;font-weight:500}
+        .st-drawer .st-mastery-dot.new-dot{background:#d1d5db}
+        .st-drawer-apply{width:100%;padding:.6rem;background:#1d1d1f;color:#fff;border:none;border-radius:.6rem;font-weight:600;font-size:.82rem;cursor:pointer;transition:background .15s;margin-top:.5rem}
+        .st-drawer-apply:hover{background:#424245}
+
+        /* ─── Empty / Complete ─── */
+        .st-state{text-align:center;padding:3rem 1.5rem}
+        .st-state-icon{width:56px;height:56px;margin:0 auto 1rem;border-radius:50%;display:flex;align-items:center;justify-content:center}
+        .st-state-icon.empty{background:#e5e5ea}.st-state-icon.done{background:#d1fae5}
+        .st-state-title{font-size:1.1rem;font-weight:700;color:#1d1d1f;margin-bottom:.25rem;font-family:'Cormorant Garamond',serif}
+        .st-state-text{font-size:.82rem;line-height:1.6;color:#86868b;max-width:340px;margin:0 auto}
+        .st-complete-stats{display:flex;gap:1.5rem;justify-content:center;margin:1rem 0}
+        .st-complete-stat{text-align:center}
+        .st-complete-stat-num{font-size:1.5rem;font-weight:700;color:#1d1d1f;font-family:'Cormorant Garamond',serif}
+        .st-complete-stat-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:#aeaeb2}
+        .st-btn{padding:.55rem 1.15rem;background:#1d1d1f;color:#fff;border:none;border-radius:.55rem;font-weight:600;font-size:.8rem;cursor:pointer;transition:background .15s;margin:.2rem}
+        .st-btn:hover{background:#424245}
+        .st-btn.secondary{background:#fff;color:#1d1d1f;border:1px solid #d2d2d7}
+        .st-btn.secondary:hover{background:#f5f5f7}
+
+        /* ─── Loading ─── */
+        .st-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5rem 1rem;gap:.75rem}
+
+        /* ─── Kbd ─── */
+        .st-kbd-row{display:flex;justify-content:center;gap:.8rem;margin-top:.3rem}
+        .st-kbd{font-size:.6rem;color:#c7c7cc;font-weight:500;display:inline-flex;align-items:center;gap:.2rem}
+        .st-kbd kbd{background:#e5e5ea;border-radius:3px;padding:1px 4px;font-size:.56rem;font-weight:700;font-family:-apple-system,monospace;color:#636366}
+
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)}}
+        .fade-up{animation:slideUp .3s ease-out both}
+        .shake{animation:shake .4s ease}
+
+        /* ─── Sidebar widgets ─── */
+        .st-sidebar-card{background:#fff;border-radius:1rem;padding:1.1rem 1.15rem;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+        .st-sidebar-title{font-size:.65rem;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.65rem}
+        .st-sidebar-stat-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;font-size:.76rem}
+        .st-sidebar-stat-label{display:flex;align-items:center;gap:.35rem;color:#48484a}
+        .st-sidebar-stat-val{font-weight:700;color:#1d1d1f;font-size:.78rem}
+        .st-stat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+        .st-stat-dot.mastered{background:#60a5fa}.st-stat-dot.familiar{background:#34d399}.st-stat-dot.learning{background:#fbbf24}.st-stat-dot.new-dot{background:#d1d5db}
+        .st-sidebar-divider{border:none;border-top:1px solid #f0f0f2;margin:.6rem 0}
+        .st-sidebar-settings-btn{width:100%;padding:.5rem;background:none;border:1px solid #e5e5ea;border-radius:.55rem;font-size:.74rem;font-weight:600;color:#636366;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:.35rem}
+        .st-sidebar-settings-btn:hover{background:#f5f5f7;color:#1d1d1f;border-color:#c7c7cc}
+
+        /* ─── Script Practice Mode ─── */
+        .sp-wrap{width:100%}
+        .sp-direction{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#9ca3af;text-align:center;margin-bottom:.5rem;font-family:'Poppins',sans-serif}
+        .sp-prompt-card{background:linear-gradient(145deg,#dbeafe 0%,#eff6ff 45%,#e0f2fe 100%);border:1px solid rgba(147,197,253,.4);border-radius:.9rem;padding:1.75rem 1rem;text-align:center;margin-bottom:1.1rem;box-shadow:0 4px 18px rgba(59,130,246,.1)}
+        .sp-prompt-letter{font-size:4rem;line-height:1;direction:rtl;display:block;margin-bottom:.25rem}
+        .sp-prompt-name{font-size:.7rem;color:#6b7280;font-family:'Poppins',sans-serif}
+        .sp-choices{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-bottom:.75rem}
+        .sp-choice{padding:1rem .5rem;border-radius:.75rem;border:1.5px solid #e5e7eb;background:#fff;cursor:pointer;transition:all .18s;text-align:center;font-size:2.4rem;direction:rtl;line-height:1;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+        .sp-choice:hover{border-color:#93c5fd;background:#eff6ff;transform:translateY(-1px);box-shadow:0 4px 12px rgba(59,130,246,.12)}
+        .sp-choice.correct{border-color:#34d399;background:#ecfdf5;animation:correctPop .35s ease}
+        .sp-choice.wrong{border-color:#fca5a5;background:#fef2f2;animation:shake .4s ease}
+        .sp-choice.reveal{border-color:#34d399;background:#ecfdf5}
+        .sp-choice:disabled{cursor:default;transform:none}
+        .sp-feedback{text-align:center;font-size:.8rem;font-weight:600;font-family:'Poppins',sans-serif;min-height:1.4rem;margin-bottom:.5rem}
+        .sp-feedback.correct{color:#059669}.sp-feedback.wrong{color:#dc2626}
+        .sp-score{display:flex;justify-content:center;gap:1.5rem;margin-bottom:.65rem}
+        .sp-score-item{text-align:center}
+        .sp-score-num{font-size:1.35rem;font-weight:700;color:#1a1a2e;font-family:'Poppins',sans-serif;line-height:1}
+        .sp-score-label{font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:#9ca3af;font-family:'Poppins',sans-serif}
+        @keyframes correctPop{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+
+        @media(max-width:860px){
+            .st-layout{grid-template-columns:1fr}
+            .st-sidebar{display:none}
+        }
+        @media(max-width:640px){
+            .st-page{padding:.75rem .75rem 3rem}
+            .st-hero{padding:1rem 1rem .9rem;border-radius:1rem;margin-bottom:1rem}
+            .st-hero-title{font-size:1.05rem}
+            .st-hero-count{font-size:.65rem}
+            .st-topbar{gap:.35rem}
+            .st-back{padding:.3rem .55rem;font-size:.7rem}
+            .st-pill{padding:.25rem .5rem;font-size:.62rem}
+            .st-pill-group{padding:1.5px}
+            .st-icon-btn{width:30px;height:30px}
+            .st-mastery-bar{height:5px;margin-bottom:.4rem}
+            .st-mastery-item{font-size:.58rem}
+            .st-card-container{padding:1rem;border-radius:1rem}
+            .st-card-wrap{height:260px;border-radius:.85rem}
+            .st-front-main{font-size:2rem}
+            .st-front-sub{font-size:.68rem}
+            .st-hint{font-size:.6rem}
+            .st-back-main{font-size:1.2rem}
+            .st-back-secondary{font-size:.85rem}
+            .st-rate-bar{gap:.35rem;padding:.75rem 0 0}
+            .st-rate-btn{padding:.55rem .5rem;font-size:.65rem;min-width:0;flex:1}
+            .st-type-stimulus.hebrew{font-size:1.6rem}
+            .st-type-input{font-size:.9rem;padding:.55rem .7rem}
+            .st-kbd-row{display:none}
+            .st-progress-row{font-size:.62rem}
+            .sp-prompt-letter{font-size:3.5rem!important}
+            .sp-choices{grid-template-columns:repeat(2,1fr);gap:.5rem}
+            .sp-choice{font-size:2rem!important;padding:.7rem}
+            .sp-score-num{font-size:1.1rem}
+            .st-drawer{width:92vw;max-width:340px}
+        }
+    </style>
+</head>
+<body>
+
+<div id="shared-header-mount" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%);min-height:64px"></div>
+<script src="/js/header-loader.js"></script>
+
+<!-- Settings Drawer -->
+<div class="st-drawer-backdrop" id="drawer-backdrop"></div>
+<div class="st-drawer" id="drawer">
+    <div class="st-drawer-header">
+        <span class="st-drawer-title">Study Settings</span>
+        <button class="st-drawer-close" id="drawer-close">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+    </div>
+    <div class="st-drawer-body" id="drawer-body"></div>
+</div>
+
+<div class="st-page">
+    <div id="st-loading" class="st-loading">
+        <div style="width:28px;height:28px;border:2.5px solid #e5e5ea;border-top-color:#1d1d1f;border-radius:50%;animation:spin .7s linear infinite"></div>
+        <p style="font-size:.82rem;color:#86868b;">Loading your flashcards...</p>
+    </div>
+    <div id="st-app" class="hidden"></div>
+</div>
+
+<script type="module">
+import { initAuth, getCurrentUserId, getUserFlashcards, updateFlashcard } from '/js/firebase.js';
+import '/js/page-auth.js';
+
+// ── Study mode gate ──
+if (localStorage.getItem('alits_hebrew_study_mode') !== 'true') {
+    window.location.replace('/?fc_gate=1');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════════
+function transliterate(w){
+    if(!w)return'';
+    const C={'\u05D0':'','\u05D1':'v','\u05D2':'g','\u05D3':'d','\u05D4':'h','\u05D5':'v','\u05D6':'z','\u05D7':'ch','\u05D8':'t','\u05D9':'y','\u05DB':'kh','\u05DA':'kh','\u05DC':'l','\u05DE':'m','\u05DD':'m','\u05E0':'n','\u05DF':'n','\u05E1':'s','\u05E2':'','\u05E4':'f','\u05E3':'f','\u05E6':'ts','\u05E5':'ts','\u05E7':'k','\u05E8':'r','\u05E9':'sh','\u05EA':'t'};
+    const V={'\u05B0':'e','\u05B1':'e','\u05B2':'a','\u05B3':'o','\u05B4':'i','\u05B5':'e','\u05B6':'e','\u05B7':'a','\u05B8':'a','\u05B9':'o','\u05BA':'o','\u05BB':'u','\u05BC':'','\u05BD':''};
+    const cl=w.replace(/[\u0591-\u05AF]/g,'');let r='';const ch=[...cl];
+    for(let i=0;i<ch.length;i++){const c=ch[i],cd=c.charCodeAt(0);
+        if(cd>=0x05B0&&cd<=0x05BD){if(cd===0x05B0&&i===ch.length-1)continue;if(cd===0x05B7){const n=ch[i+1];if(n&&(n==='\u05D7'||n==='\u05E2'||n==='\u05D4')){let f=true;for(let k=i+2;k<ch.length;k++){if(ch[k].charCodeAt(0)>=0x05D0&&ch[k].charCodeAt(0)<=0x05EA){f=false;break;}}if(f){r+='a'+(C[n]||'');i++;continue;}}}const v=V[c]||'';if(v)r+=v;}
+        else if(C[c]!==undefined){if(c==='\u05D5'){const n=ch[i+1];if(n==='\u05B9'||n==='\u05BA'){r+='o';i++;continue;}if(n==='\u05BC'){r+='u';i++;continue;}}r+=C[c];}
+        else if(c===' '||c==='\u05BE'||c==='-')r+=' ';}
+    return r;
+}
+function esc(t){if(!t)return'';const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
+function srData(c){return{interval:c.srInterval||0,ease:c.srEase||2.5,confidence:c.confidence||0,lastReviewed:c.lastReviewed?(c.lastReviewed.toDate?c.lastReviewed.toDate():new Date(c.lastReviewed)):null,timesReviewed:c.timesReviewed||0};}
+function isDue(c){const s=srData(c);if(!s.lastReviewed||s.interval===0)return true;return new Date()>=new Date(s.lastReviewed.getTime()+s.interval*864e5);}
+function cardStatus(c){const s=srData(c);if(s.timesReviewed===0)return'new';if(s.interval<7)return'learning';if(s.interval<21)return'familiar';return'mastered';}
+function computeSR(c,q){
+    const s=srData(c);let e=s.ease,iv=s.interval;
+    if(q===0){
+        // Again — reset to 0, show again this session
+        iv=0;e=Math.max(1.3,e-.2);
+    }else if(q===1){
+        // Hard — small step forward, ease penalty
+        if(iv===0)iv=1;else if(iv===1)iv=2;else iv=Math.max(1,Math.round(iv*1.2));
+        e=Math.max(1.3,e-.15);
+    }else if(q===2){
+        // Good — standard SM-2 steps
+        if(iv===0)iv=1;else if(iv===1)iv=3;else iv=Math.round(iv*e);
+    }else{
+        // Easy — accelerated steps, ease bonus
+        if(iv===0)iv=3;else if(iv<=3)iv=7;else iv=Math.round(iv*e*1.3);
+        e=Math.min(3.5,e+.15);
+    }
+    return{srInterval:iv,srEase:Math.round(e*100)/100,confidence:q,lastReviewed:new Date(),timesReviewed:(s.timesReviewed||0)+1};
+}
+function fmtIv(d){return d===0?'Now':d===1?'1d':d<7?d+'d':d<30?Math.round(d/7)+'w':Math.round(d/30)+'mo';}
+function getDisp(c){return c.phrase||c.rootWord||c.word||'';}
+function getDef(c){return c.phrase?(c.phraseTranslation||c.definition):c.definition;}
+function getTr(c){return c.transliteration||transliterate(getDisp(c));}
+function getSrc(c){return c.source||'general';}
+function norm(s){return s.replace(/[\u0591-\u05BD\u05BF-\u05C7\s\u05BE\-]/g,'').toLowerCase().trim();}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+// ═══════════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════════
+let allCards=[], studyQueue=[], studyIndex=0, sessionCorrect=0, sessionTotal=0, sessionResults=[];
+const SAVED_KEYS=['scriptMode','translitPlacement','mode','direction','order'];
+function loadSettings(){try{const raw=localStorage.getItem('alits_study_settings');if(raw){const p=JSON.parse(raw);SAVED_KEYS.forEach(k=>{if(p[k]!==undefined)S[k]=p[k];});}}catch(_){}}
+function saveSettings(){try{const out={};SAVED_KEYS.forEach(k=>out[k]=S[k]);localStorage.setItem('alits_study_settings',JSON.stringify(out));}catch(_){}}
+const S={mode:'flip',direction:'he-en',order:'smart',filter:'all',translitPlacement:'back',scriptMode:'block'};
+loadSettings();
+
+const app=document.getElementById('st-app');
+const drawer=document.getElementById('drawer');
+const backdrop=document.getElementById('drawer-backdrop');
+
+// ═══════════════════════════════════════════════════════════════════
+// DRAWER
+// ═══════════════════════════════════════════════════════════════════
+function openDrawer(){
+    renderDrawerBody();
+    drawer.classList.add('open');
+    backdrop.classList.add('open');
+}
+function closeDrawer(){drawer.classList.remove('open');backdrop.classList.remove('open');}
+document.getElementById('drawer-close').addEventListener('click',closeDrawer);
+backdrop.addEventListener('click',closeDrawer);
+
+function renderDrawerBody(){
+    const counts={new:0,learning:0,familiar:0,mastered:0,due:0};
+    allCards.forEach(c=>{counts[cardStatus(c)]++;if(isDue(c))counts.due++;});
+    const total=allCards.length;
+    const sources={}; allCards.forEach(c=>{const s=getSrc(c);sources[s]=(sources[s]||0)+1;});
+    const srcArr=Object.entries(sources).sort((a,b)=>b[1]-a[1]);
+    const pct=n=>total?((n/total)*100).toFixed(1):0;
+
+    document.getElementById('drawer-body').innerHTML=`
+        <!-- Mastery -->
+        <div class="st-drawer-section">
+            <div class="st-drawer-label">Your Progress</div>
+            <div class="st-mastery-bar" style="margin-bottom:.35rem">
+                <div class="st-mastery-seg mastered" style="width:${pct(counts.mastered)}%"></div>
+                <div class="st-mastery-seg familiar" style="width:${pct(counts.familiar)}%"></div>
+                <div class="st-mastery-seg learning" style="width:${pct(counts.learning)}%"></div>
+                <div class="st-mastery-seg new-seg" style="width:${pct(counts.new)}%"></div>
+            </div>
+            <div class="st-mastery-legend">
+                <span class="st-mastery-item"><span class="st-mastery-dot mastered"></span>Mastered ${counts.mastered}</span>
+                <span class="st-mastery-item"><span class="st-mastery-dot familiar"></span>Familiar ${counts.familiar}</span>
+                <span class="st-mastery-item"><span class="st-mastery-dot learning"></span>Learning ${counts.learning}</span>
+                <span class="st-mastery-item"><span class="st-mastery-dot new-dot"></span>New ${counts.new}</span>
+            </div>
+        </div>
+
+        <!-- Order -->
+        <div class="st-drawer-section">
+            <div class="st-drawer-label">Card Order</div>
+            <div class="st-drawer-chips" data-setting="order">
+                <button class="st-dchip ${S.order==='smart'?'active':''}" data-v="smart">Smart</button>
+                <button class="st-dchip ${S.order==='random'?'active':''}" data-v="random">Random</button>
+                <button class="st-dchip ${S.order==='newest'?'active':''}" data-v="newest">Newest</button>
+                <button class="st-dchip ${S.order==='alpha'?'active':''}" data-v="alpha">A-Z</button>
+            </div>
+        </div>
+
+        <!-- Filter -->
+        <div class="st-drawer-section">
+            <div class="st-drawer-label">Cards to Study</div>
+            <div class="st-drawer-chips" data-setting="filter">
+                <button class="st-dchip ${S.filter==='all'?'active':''}" data-v="all">All<span class="st-dchip-count">${total}</span></button>
+                <button class="st-dchip ${S.filter==='due'?'active':''}" data-v="due">Due<span class="st-dchip-count">${counts.due}</span></button>
+                <button class="st-dchip ${S.filter==='new'?'active':''}" data-v="new">New<span class="st-dchip-count">${counts.new}</span></button>
+                <button class="st-dchip ${S.filter==='learning'?'active':''}" data-v="learning">Learning<span class="st-dchip-count">${counts.learning}</span></button>
+                <button class="st-dchip ${S.filter==='mastered'?'active':''}" data-v="mastered">Mastered<span class="st-dchip-count">${counts.mastered}</span></button>
+                ${srcArr.length>1?srcArr.map(([s,n])=>`<button class="st-dchip ${S.filter==='source:'+s?'active':''}" data-v="source:${esc(s)}">${esc(s.charAt(0).toUpperCase()+s.slice(1))}<span class="st-dchip-count">${n}</span></button>`).join(''):''}
+            </div>
+        </div>
+
+        <!-- Transliteration placement -->
+        <div class="st-drawer-section">
+            <div class="st-drawer-label">Transliteration</div>
+            <div class="st-drawer-chips" data-setting="translitPlacement">
+                <button class="st-dchip ${S.translitPlacement==='front'?'active':''}" data-v="front">Front of card</button>
+                <button class="st-dchip ${S.translitPlacement==='back'?'active':''}" data-v="back">Back of card</button>
+                <button class="st-dchip ${S.translitPlacement==='none'?'active':''}" data-v="none">Hidden</button>
+            </div>
+        </div>
+
+        <!-- Script mode -->
+        <div class="st-drawer-section">
+            <div class="st-drawer-label">Hebrew Script</div>
+            <div class="st-drawer-chips" data-setting="scriptMode">
+                <button class="st-dchip ${S.scriptMode==='block'?'active':''}" data-v="block">Block Print</button>
+                <button class="st-dchip ${S.scriptMode==='cursive'?'active':''}" data-v="cursive">Cursive</button>
+                <button class="st-dchip ${S.scriptMode==='both'?'active':''}" data-v="both">Both</button>
+            </div>
+        </div>
+
+        <!-- Cursive Practice -->
+        <div class="st-drawer-section">
+            <div class="st-drawer-label">Script Practice</div>
+            <button class="st-drawer-apply" id="drawer-cursive-practice" style="background:linear-gradient(135deg,#7c3aed,#a78bfa);margin-bottom:.5rem">
+                <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:inline;vertical-align:middle;margin-right:.3rem"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                Cursive Practice
+            </button>
+        </div>
+
+        <button class="st-drawer-apply" id="drawer-apply">Apply & Restart</button>
+    `;
+
+    // Wire chips
+    document.querySelectorAll('#drawer-body .st-drawer-chips').forEach(group=>{
+        const key=group.dataset.setting;
+        group.querySelectorAll('.st-dchip').forEach(chip=>{
+            chip.addEventListener('click',()=>{
+                group.querySelectorAll('.st-dchip').forEach(c=>c.classList.remove('active'));
+                chip.classList.add('active');
+                S[key]=chip.dataset.v;
+                saveSettings();
+            });
+        });
+    });
+    document.getElementById('drawer-apply').addEventListener('click',()=>{
+        saveSettings();
+        closeDrawer();
+        startSession();
+    });
+    document.getElementById('drawer-cursive-practice').addEventListener('click',()=>{
+        closeDrawer();
+        startScriptPractice();
+    });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// QUEUE BUILDING
+// ═══════════════════════════════════════════════════════════════════
+function getFiltered(){
+    const f=S.filter;
+    if(f==='all')return[...allCards];
+    if(f==='due')return allCards.filter(isDue);
+    if(f==='new')return allCards.filter(c=>cardStatus(c)==='new');
+    if(f==='learning')return allCards.filter(c=>cardStatus(c)==='learning');
+    if(f==='familiar')return allCards.filter(c=>cardStatus(c)==='familiar');
+    if(f==='mastered')return allCards.filter(c=>cardStatus(c)==='mastered');
+    if(f.startsWith('source:'))return allCards.filter(c=>getSrc(c)===f.slice(7));
+    return[...allCards];
+}
+
+function buildQueue(){
+    let cards=getFiltered();
+    if(!cards.length)return[];
+    const o=S.order;
+    if(o==='smart'){
+        const due=cards.filter(c=>isDue(c)&&(c.timesReviewed||0)>0);
+        const nw=cards.filter(c=>!(c.timesReviewed||0));
+        const rest=cards.filter(c=>!isDue(c)&&(c.timesReviewed||0)>0);
+        due.sort((a,b)=>(a.confidence||0)-(b.confidence||0));
+        shuffle(nw);
+        rest.sort((a,b)=>{const an=(a.lastReviewed?.toDate?.()?.getTime()||0)+(a.srInterval||0)*864e5;const bn=(b.lastReviewed?.toDate?.()?.getTime()||0)+(b.srInterval||0)*864e5;return an-bn;});
+        cards=[...due,...nw.slice(0,15)];
+        if(cards.length<5&&rest.length)cards.push(...rest.slice(0,15-cards.length));
+    }else if(o==='random'){shuffle(cards);}
+    else if(o==='newest'){cards.sort((a,b)=>(b.createdAt?.toDate?.()?.getTime()||0)-(a.createdAt?.toDate?.()?.getTime()||0));}
+    else if(o==='alpha'){cards.sort((a,b)=>getDisp(a).localeCompare(getDisp(b),'he'));}
+    return cards;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SESSION
+// ═══════════════════════════════════════════════════════════════════
+function startSession(){
+    studyQueue=buildQueue();studyIndex=0;sessionCorrect=0;sessionTotal=0;sessionResults=[];
+    renderSession();
+}
+
+function masteryHtml(){
+    const mc={new:0,learning:0,familiar:0,mastered:0};
+    allCards.forEach(c=>mc[cardStatus(c)]++);
+    const t=allCards.length||1;
+    return`<div class="st-mastery-bar"><div class="st-mastery-seg mastered" style="width:${(mc.mastered/t*100).toFixed(1)}%"></div><div class="st-mastery-seg familiar" style="width:${(mc.familiar/t*100).toFixed(1)}%"></div><div class="st-mastery-seg learning" style="width:${(mc.learning/t*100).toFixed(1)}%"></div><div class="st-mastery-seg new-seg" style="width:${(mc.new/t*100).toFixed(1)}%"></div></div>`;
+}
+
+function sidebarHtml(){
+    const mc={new:0,learning:0,familiar:0,mastered:0};
+    allCards.forEach(c=>mc[cardStatus(c)]++);
+    const t=allCards.length||1;
+    const due=allCards.filter(isDue).length;
+    const pctMastered=Math.round(mc.mastered/t*100);
+    return`
+    <div class="st-sidebar-card">
+        <div class="st-sidebar-title">Your Progress</div>
+        <div class="st-mastery-bar" style="margin-bottom:.6rem">
+            <div class="st-mastery-seg mastered" style="width:${(mc.mastered/t*100).toFixed(1)}%"></div>
+            <div class="st-mastery-seg familiar" style="width:${(mc.familiar/t*100).toFixed(1)}%"></div>
+            <div class="st-mastery-seg learning" style="width:${(mc.learning/t*100).toFixed(1)}%"></div>
+            <div class="st-mastery-seg new-seg" style="width:${(mc.new/t*100).toFixed(1)}%"></div>
+        </div>
+        <div class="st-sidebar-stat-row"><span class="st-sidebar-stat-label"><span class="st-stat-dot mastered"></span>Mastered</span><span class="st-sidebar-stat-val">${mc.mastered}</span></div>
+        <div class="st-sidebar-stat-row"><span class="st-sidebar-stat-label"><span class="st-stat-dot familiar"></span>Familiar</span><span class="st-sidebar-stat-val">${mc.familiar}</span></div>
+        <div class="st-sidebar-stat-row"><span class="st-sidebar-stat-label"><span class="st-stat-dot learning"></span>Learning</span><span class="st-sidebar-stat-val">${mc.learning}</span></div>
+        <div class="st-sidebar-stat-row"><span class="st-sidebar-stat-label"><span class="st-stat-dot new-dot"></span>New</span><span class="st-sidebar-stat-val">${mc.new}</span></div>
+        <hr class="st-sidebar-divider">
+        <div class="st-sidebar-stat-row" style="margin-bottom:0"><span class="st-sidebar-stat-label" style="color:#86868b;font-size:.7rem">${pctMastered}% mastered · ${due} due today</span></div>
+    </div>
+    <div class="st-sidebar-card">
+        <div class="st-sidebar-title">Session</div>
+        <div class="st-sidebar-stat-row"><span class="st-sidebar-stat-label" style="color:#86868b">Mode</span><span class="st-sidebar-stat-val" style="text-transform:capitalize">${S.mode}</span></div>
+        <div class="st-sidebar-stat-row"><span class="st-sidebar-stat-label" style="color:#86868b">Direction</span><span class="st-sidebar-stat-val">${S.direction==='he-en'?'He → En':'En → He'}</span></div>
+        <div class="st-sidebar-stat-row"><span class="st-sidebar-stat-label" style="color:#86868b">Order</span><span class="st-sidebar-stat-val" style="text-transform:capitalize">${S.order}</span></div>
+        <hr class="st-sidebar-divider">
+        <button class="st-sidebar-settings-btn" id="sidebar-open-settings">
+            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+            Study Settings
+        </button>
+    </div>`;
+}
+
+function renderSession(){
+    if(!studyQueue.length){renderEmpty();return;}
+    if(studyIndex>=studyQueue.length){renderComplete();return;}
+    const total=studyQueue.length;
+    const pct=((studyIndex/total)*100).toFixed(0);
+
+    app.innerHTML=`
+    <div class="st-hero">
+        <div class="st-topbar">
+            <a href="/flashcards" class="st-back"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>Back</a>
+            <div class="st-top-right">
+                <div class="st-pill-group" id="ses-mode">
+                    <button class="st-pill ${S.mode==='flip'?'active':''}" data-v="flip">Flip</button>
+                    <button class="st-pill ${S.mode==='type'?'active':''}" data-v="type">Type</button>
+                </div>
+                <div class="st-pill-group" id="ses-dir">
+                    <button class="st-pill ${S.direction==='he-en'?'active':''}" data-v="he-en" title="Show Hebrew, answer English">He→En</button>
+                    <button class="st-pill ${S.direction==='en-he'?'active':''}" data-v="en-he" title="Show English, answer Hebrew">En→He</button>
+                </div>
+                <button class="st-icon-btn" id="open-settings" title="Study settings">
+                    <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                </button>
+            </div>
+        </div>
+        <div class="st-hero-title-row">
+            <span class="st-hero-title">Hebrew Flashcards</span>
+            <span class="st-hero-count">${total} card${total!==1?'s':''} · ${S.filter==='all'?'all cards':S.filter}</span>
+        </div>
+        ${masteryHtml()}
+        <div class="st-mastery-legend">
+            <span class="st-mastery-item"><span class="st-mastery-dot mastered"></span>Mastered</span>
+            <span class="st-mastery-item"><span class="st-mastery-dot familiar"></span>Familiar</span>
+            <span class="st-mastery-item"><span class="st-mastery-dot learning"></span>Learning</span>
+            <span class="st-mastery-item"><span class="st-mastery-dot new-dot"></span>New</span>
+        </div>
+    </div>
+    <div class="st-layout">
+        <div class="st-main-col">
+            <div class="st-progress-row">
+                <div class="st-progress-wrap"><div class="st-progress-fill" style="width:${pct}%"></div></div>
+                <span class="st-progress-text">${studyIndex+1} / ${total}</span>
+            </div>
+            <div class="st-card-container">
+                <div id="st-card-area" class="fade-up"></div>
+            </div>
+            <div class="st-kbd-row" id="st-kbd"></div>
+        </div>
+        <div class="st-sidebar">${sidebarHtml()}</div>
+    </div>`;
+
+    // Wire inline pills
+    wirePills('ses-mode',v=>{S.mode=v;saveSettings();renderCardArea();});
+    wirePills('ses-dir',v=>{S.direction=v;saveSettings();renderCardArea();});
+    document.getElementById('open-settings').addEventListener('click',openDrawer);
+    document.getElementById('sidebar-open-settings')?.addEventListener('click',openDrawer);
+
+    renderCardArea();
+}
+
+function wirePills(id,fn){
+    const el=document.getElementById(id);if(!el)return;
+    el.querySelectorAll('.st-pill').forEach(p=>{
+        p.addEventListener('click',()=>{el.querySelectorAll('.st-pill').forEach(x=>x.classList.remove('active'));p.classList.add('active');fn(p.dataset.v);});
+    });
+}
+
+function renderCardArea(){if(S.mode==='flip')renderFlip();else renderType();}
+
+// ── Hebrew script renderer ──
+function hebScriptHtml(text,cls='st-front-main'){
+    const sm=S.scriptMode;
+    const isFront=cls==='st-front-main';
+    if(sm==='both'){
+        const bigSz=isFront?'2.4rem':'1.55rem';
+        const smSz=isFront?'2.1rem':'1.35rem';
+        return`<div class="heb-split">
+            <div class="heb-split-row block-row">
+                <span class="heb-split-label">Block Print</span>
+                <span class="heb-block" style="font-size:${bigSz}">${esc(text)}</span>
+            </div>
+            <div class="heb-split-row cursive-row">
+                <span class="heb-split-label">Cursive</span>
+                <span class="heb-cursive" style="font-size:${smSz}">${esc(text)}</span>
+            </div>
+        </div>`;
+    }
+    const fontCls=sm==='cursive'?'heb-cursive':'heb-block';
+    return`<div class="${cls} hebrew ${fontCls}">${esc(text)}</div>`;
+}
+
+// ── Flip ──
+function renderFlip(){
+    const area=document.getElementById('st-card-area');
+    const kbd=document.getElementById('st-kbd');
+    const card=studyQueue[studyIndex];
+    const heb=getDisp(card),def=getDef(card),tr=getTr(card);
+    const phrase=card.phrase&&card.rootWord?card.phrase:'';
+    const ivs=[0,1,2,3].map(q=>computeSR(card,q).srInterval);
+    const dir=S.direction;
+    const frontIsHeb=dir==='he-en';
+    const backIsHeb=dir==='en-he';
+    const showTranslitFront=tr&&frontIsHeb&&S.translitPlacement==='front';
+    const showTranslitBack=tr&&(backIsHeb?true:S.translitPlacement!=='none')&&S.translitPlacement!=='front';
+
+    const frontHtml=frontIsHeb
+        ?`${hebScriptHtml(heb,'st-front-main')}${showTranslitFront?`<div class="st-front-sub">${esc(tr)}</div>`:''}`
+        :`<div class="st-front-main">${esc(def)}</div>`;
+
+    const backHebHtml=hebScriptHtml(heb,'st-back-main');
+    const backTranslit=tr&&S.translitPlacement!=='none'?`<div class="st-back-translit">${esc(tr)}</div>`:'';
+
+    const sm=S.scriptMode;
+    const hebSecondary=sm==='both'
+        ?`<div class="heb-split" style="margin-top:.5rem;width:100%">
+            <div class="heb-split-row block-row">
+                <span class="heb-split-label">Block Print</span>
+                <span class="heb-block" style="font-size:1.5rem">${esc(heb)}</span>
+            </div>
+            <div class="heb-split-row cursive-row">
+                <span class="heb-split-label">Cursive</span>
+                <span class="heb-cursive" style="font-size:1.3rem">${esc(heb)}</span>
+            </div>
+          </div>`
+        :`<div style="direction:rtl;text-align:center;margin-top:.35rem;font-size:1.25rem;font-weight:800;color:#1a1a2e" class="${sm==='cursive'?'heb-cursive':'heb-block'}">${esc(heb)}</div>`;
+
+    const backHtml=backIsHeb
+        ?`${backHebHtml}${backTranslit}<div class="st-back-secondary">${esc(def)}</div>`
+        :`<div class="st-back-main">${esc(def)}</div>${hebSecondary}${backTranslit}`;
+
+    area.innerHTML=`
+    <div class="st-card-wrap${sm==='both'?' both-mode':''}" id="st-flip-card">
+        <div class="st-card-inner" id="st-card-inner">
+            <div class="st-card-front">
+                ${frontHtml}
+                <div class="st-hint"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>Tap to reveal</div>
+            </div>
+            <div class="st-card-back">
+                ${backHtml}
+                ${phrase?`<div class="st-back-phrase">${esc(phrase)}</div>`:''}
+            </div>
+        </div>
+    </div>
+    <div class="st-confidence" id="st-confidence">
+        <button class="st-conf-btn st-conf-again" data-q="0">Again<span class="st-conf-label">${fmtIv(ivs[0])}</span></button>
+        <button class="st-conf-btn st-conf-hard" data-q="1">Hard<span class="st-conf-label">${fmtIv(ivs[1])}</span></button>
+        <button class="st-conf-btn st-conf-good" data-q="2">Good<span class="st-conf-label">${fmtIv(ivs[2])}</span></button>
+        <button class="st-conf-btn st-conf-easy" data-q="3">Easy<span class="st-conf-label">${fmtIv(ivs[3])}</span></button>
+    </div>`;
+    kbd.innerHTML=`<span class="st-kbd"><kbd>Space</kbd> flip</span><span class="st-kbd"><kbd>1</kbd>Again <kbd>2</kbd>Hard <kbd>3</kbd>Good <kbd>4</kbd>Easy</span>`;
+    document.getElementById('st-flip-card').addEventListener('click',()=>{
+        const inner=document.getElementById('st-card-inner');
+        inner.classList.toggle('flipped');
+        document.getElementById('st-confidence').classList.toggle('visible',inner.classList.contains('flipped'));
+    });
+    document.getElementById('st-confidence').querySelectorAll('.st-conf-btn').forEach(b=>{
+        b.addEventListener('click',e=>{e.stopPropagation();rateCard(parseInt(b.dataset.q),true);});
+    });
+}
+
+// ── Type ──
+function renderType(){
+    const area=document.getElementById('st-card-area');
+    const kbd=document.getElementById('st-kbd');
+    const card=studyQueue[studyIndex];
+    const heb=getDisp(card),def=getDef(card),tr=getTr(card);
+    const dir=S.direction;
+    const stim=dir==='he-en'?heb:def;
+    const stimIsHeb=dir==='he-en';
+    const answer=dir==='he-en'?def:heb;
+    const ansIsHeb=dir==='en-he';
+    const prompt=dir==='he-en'?'Type the English meaning:':'Type the Hebrew word:';
+
+    const typeStimHtml=stimIsHeb
+        ?(S.scriptMode==='both'
+            ?`<div class="st-type-stimulus hebrew"><span class="heb-block">${esc(stim)}</span> <span class="heb-cursive" style="font-size:.75em;color:#5a6a8a">${esc(stim)}</span></div>`
+            :`<div class="st-type-stimulus hebrew ${S.scriptMode==='cursive'?'heb-cursive':'heb-block'}">${esc(stim)}</div>`)
+        :`<div class="st-type-stimulus">${esc(stim)}</div>`;
+    const typeTranslitHtml=stimIsHeb&&tr&&S.translitPlacement==='front'
+        ?`<div style="font-size:.74rem;color:#9ca3af;font-style:italic;margin-top:.25rem">${esc(tr)}</div>`:'' ;
+
+    area.innerHTML=`
+    <div class="st-type-area">
+        <div class="st-type-card" style="min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+            <div class="st-type-prompt">${prompt}</div>
+            ${typeStimHtml}
+            ${typeTranslitHtml}
+        </div>
+        <div class="st-type-input-row">
+            <input type="text" class="st-type-input ${ansIsHeb?'hebrew':''}" id="st-type-input" placeholder="${ansIsHeb?'...':'Type answer...'}" autocomplete="off" autofocus>
+            <button class="st-type-submit" id="st-type-submit">Check</button>
+        </div>
+        <div class="st-type-btns">
+            <button class="st-sm-btn ghost" id="st-type-skip">Show Answer</button>
+            <button class="st-sm-btn primary" id="st-type-next">Next</button>
+        </div>
+        <div class="st-type-feedback" id="st-type-feedback"></div>
+    </div>`;
+    kbd.innerHTML=`<span class="st-kbd"><kbd>Enter</kbd> check / next</span>`;
+
+    const input=document.getElementById('st-type-input');
+    const subBtn=document.getElementById('st-type-submit');
+    const skipBtn=document.getElementById('st-type-skip');
+    const fb=document.getElementById('st-type-feedback');
+    const nextBtn=document.getElementById('st-type-next');
+    let done=false;
+
+    function check(){
+        if(done)return;const val=input.value.trim();if(!val)return;
+        done=true;sessionTotal++;
+        const correct=ansIsHeb?norm(val)===norm(answer):val.toLowerCase().trim()===answer.toLowerCase().trim()||norm(val)===norm(answer)||answer.toLowerCase().includes(val.toLowerCase());
+        input.classList.add(correct?'correct':'incorrect');
+        if(!correct)input.classList.add('shake');
+        input.disabled=true;subBtn.style.display='none';skipBtn.style.display='none';
+        const aHtml=ansIsHeb?`<span class="st-type-answer hebrew">${esc(answer)}</span>${tr?' <span style="font-size:.74rem;color:#86868b;font-style:italic">('+esc(tr)+')</span>':''}`:`<span class="st-type-answer">${esc(answer)}</span>`;
+        if(correct){sessionCorrect++;sessionResults.push({id:card.id,ok:true});fb.className='st-type-feedback show correct';fb.innerHTML='Correct! '+aHtml;rateCard(2);}
+        else{sessionResults.push({id:card.id,ok:false});fb.className='st-type-feedback show incorrect';fb.innerHTML='Answer: '+aHtml;rateCard(0);}
+        nextBtn.classList.add('show');nextBtn.focus();
+    }
+    function skip(){
+        if(done)return;done=true;sessionTotal++;sessionResults.push({id:card.id,ok:false});
+        input.disabled=true;subBtn.style.display='none';skipBtn.style.display='none';
+        const aHtml=ansIsHeb?`<span class="st-type-answer hebrew">${esc(answer)}</span>${tr?' <span style="font-size:.74rem;color:#86868b;font-style:italic">('+esc(tr)+')</span>':''}`:`<span class="st-type-answer">${esc(answer)}</span>`;
+        fb.className='st-type-feedback show incorrect';fb.innerHTML='Answer: '+aHtml;rateCard(0);
+        nextBtn.classList.add('show');nextBtn.focus();
+    }
+
+    subBtn.addEventListener('click',check);
+    skipBtn.addEventListener('click',skip);
+    nextBtn.addEventListener('click',()=>renderSession());
+    input.addEventListener('keydown',e=>{if(e.key==='Enter'){if(done)renderSession();else check();}});
+    setTimeout(()=>input.focus(),60);
+}
+
+// ── Rate & advance ──
+async function rateCard(q, fromFlip=false){
+    const card=studyQueue[studyIndex];if(!card)return;
+    const upd=computeSR(card,q);
+    // Track session stats (flip mode tracks here; type mode tracks in check/skip)
+    if(fromFlip){
+        sessionTotal++;
+        if(q>=2)sessionCorrect++;
+        sessionResults.push({id:card.id,ok:q>=2});
+    }
+    try{await updateFlashcard(card.id,upd);const i=allCards.findIndex(c=>c.id===card.id);if(i!==-1)Object.assign(allCards[i],upd);}catch(_){}
+    if(q===0)studyQueue.push({...card,...upd});
+    studyIndex++;
+    if(S.mode==='flip')renderSession();
+}
+
+// ── Empty ──
+function renderEmpty(){
+    app.innerHTML=`
+    <div class="st-hero">
+        <div class="st-topbar">
+            <a href="/flashcards" class="st-back"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>Back</a>
+            <button class="st-icon-btn" id="open-settings-empty" title="Study settings"><svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg></button>
+        </div>
+        ${masteryHtml()}
+    </div>
+    <div class="st-layout">
+        <div class="st-main-col">
+            <div class="st-card-container st-state fade-up">
+                <div class="st-state-icon empty"><svg width="24" height="24" fill="none" stroke="#86868b" viewBox="0 0 24 24" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+                <p class="st-state-title">All caught up!</p>
+                <p class="st-state-text">No cards match your current filter. Open settings to change which cards to study.</p>
+            </div>
+        </div>
+        <div class="st-sidebar">${sidebarHtml()}</div>
+    </div>`;
+    document.getElementById('open-settings-empty').addEventListener('click',openDrawer);
+    document.getElementById('sidebar-open-settings')?.addEventListener('click',openDrawer);
+
+}
+
+// ── Complete ──
+function renderComplete(){
+    const acc=sessionTotal>0?Math.round(sessionCorrect/sessionTotal*100):0;
+    const missed=new Set(sessionResults.filter(r=>!r.ok).map(r=>r.id));
+    app.innerHTML=`
+    <div class="st-hero">
+        <div class="st-topbar">
+            <a href="/flashcards" class="st-back"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>Back</a>
+        </div>
+        ${masteryHtml()}
+        <div class="st-mastery-legend">
+            <span class="st-mastery-item"><span class="st-mastery-dot mastered"></span>Mastered</span>
+            <span class="st-mastery-item"><span class="st-mastery-dot familiar"></span>Familiar</span>
+            <span class="st-mastery-item"><span class="st-mastery-dot learning"></span>Learning</span>
+            <span class="st-mastery-item"><span class="st-mastery-dot new-dot"></span>New</span>
+        </div>
+    </div>
+    <div class="st-layout">
+        <div class="st-main-col">
+            <div class="st-card-container st-state fade-up">
+                <div class="st-state-icon done"><svg width="28" height="28" fill="none" stroke="#059669" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                <p class="st-state-title">Session Complete</p>
+                <div class="st-complete-stats">
+                    <div class="st-complete-stat"><div class="st-complete-stat-num">${sessionTotal}</div><div class="st-complete-stat-label">Reviewed</div></div>
+                    <div class="st-complete-stat"><div class="st-complete-stat-num">${acc}%</div><div class="st-complete-stat-label">Accuracy</div></div>
+                    ${missed.size?`<div class="st-complete-stat"><div class="st-complete-stat-num" style="color:#dc2626">${missed.size}</div><div class="st-complete-stat-label">Missed</div></div>`:''}
+                </div>
+                <p class="st-state-text" style="margin-bottom:1rem">Consistent practice is the key to mastering Hebrew.</p>
+                <div>
+                    ${missed.size?`<button class="st-btn" id="st-study-missed">Study Missed</button>`:''}
+                    <button class="st-btn ${missed.size?'secondary':''}" id="st-again">Study Again</button>
+                </div>
+            </div>
+        </div>
+        <div class="st-sidebar">${sidebarHtml()}</div>
+    </div>`;
+    document.getElementById('st-again').addEventListener('click',startSession);
+    document.getElementById('st-study-missed')?.addEventListener('click',()=>{
+        studyQueue=allCards.filter(c=>missed.has(c.id));
+        if(S.order==='random')shuffle(studyQueue);
+        studyIndex=0;sessionCorrect=0;sessionTotal=0;sessionResults=[];
+        renderSession();
+    });
+    document.getElementById('sidebar-open-settings')?.addEventListener('click',openDrawer);
+
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SCRIPT PRACTICE MODE
+// ═══════════════════════════════════════════════════════════════════
+const ALEPH_BET=[
+    {block:'א', cursive:'א'},
+    {block:'ב', cursive:'ב'},
+    {block:'ג', cursive:'ג'},
+    {block:'ד', cursive:'ד'},
+    {block:'ה', cursive:'ה'},
+    {block:'ו', cursive:'ו'},
+    {block:'ז', cursive:'ז'},
+    {block:'ח', cursive:'ח'},
+    {block:'ט', cursive:'ט'},
+    {block:'י', cursive:'י'},
+    {block:'כ', cursive:'כ'},
+    {block:'ך', cursive:'ך'}, // final Kaf
+    {block:'ל', cursive:'ל'},
+    {block:'מ', cursive:'מ'},
+    {block:'ם', cursive:'ם'}, // final Mem
+    {block:'נ', cursive:'נ'},
+    {block:'ן', cursive:'ן'}, // final Nun
+    {block:'ס', cursive:'ס'},
+    {block:'ע', cursive:'ע'},
+    {block:'פ', cursive:'פ'},
+    {block:'ף', cursive:'ף'}, // final Pe
+    {block:'צ', cursive:'צ'},
+    {block:'ץ', cursive:'ץ'}, // final Tsadi
+    {block:'ק', cursive:'ק'},
+    {block:'ר', cursive:'ר'},
+    {block:'ש', cursive:'ש'},
+    {block:'ת', cursive:'ת'},
+];
+
+let spQueue=[], spIndex=0, spCorrect=0, spTotal=0, spRound='block-to-cursive';
+
+function startScriptPractice(){
+    // alternate rounds: show block → pick cursive, then show cursive → pick block
+    spRound='block-to-cursive';
+    spQueue=shuffle([...ALEPH_BET,...ALEPH_BET]); // 44 questions, each letter twice
+    spIndex=0; spCorrect=0; spTotal=0;
+    renderScriptSession();
+}
+
+function renderScriptSession(){
+    if(spIndex>=spQueue.length){renderScriptComplete();return;}
+    // alternate direction every question for variety
+    spRound=(spIndex%2===0)?'block-to-cursive':'cursive-to-block';
+    const correct=spQueue[spIndex];
+    const wrongPool=ALEPH_BET.filter(l=>l.block!==correct.block);
+    shuffle(wrongPool);
+    const choices=shuffle([correct,...wrongPool.slice(0,3)]);
+    const pct=((spIndex/spQueue.length)*100).toFixed(0);
+
+    const promptLetter=spRound==='block-to-cursive'?correct.block:correct.cursive;
+    const promptFont=spRound==='block-to-cursive'?'heb-block':'heb-cursive';
+    const promptLabel=spRound==='block-to-cursive'?'Block Print → pick the Cursive':'Cursive → pick the Block Print';
+    const choiceFont=spRound==='block-to-cursive'?'heb-cursive':'heb-block';
+
+    app.innerHTML=`
+    <div class="st-hero">
+        <div class="st-topbar">
+            <a href="/flashcards" class="st-back"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>Back</a>
+            <div class="st-top-right">
+                <button class="st-back" id="sp-exit-btn" style="color:#6d28d9;border-color:#c4b5fd;background:rgba(245,243,255,.7)">Exit Practice</button>
+            </div>
+        </div>
+        <div class="st-hero-title-row">
+            <span class="st-hero-title">Cursive Practice</span>
+            <span class="st-hero-count">${spIndex+1} / ${spQueue.length}</span>
+        </div>
+        <div class="st-progress-row" style="margin:.5rem 0 0">
+            <div class="st-progress-wrap"><div class="st-progress-fill" style="width:${pct}%;background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div>
+        </div>
+    </div>
+    <div class="st-layout">
+        <div class="st-main-col">
+            <div class="st-card-container fade-up">
+                <div class="sp-wrap">
+                    <div class="sp-score">
+                        <div class="sp-score-item"><div class="sp-score-num" style="color:#059669">${spCorrect}</div><div class="sp-score-label">Correct</div></div>
+                        <div class="sp-score-item"><div class="sp-score-num" style="color:#dc2626">${spTotal-spCorrect}</div><div class="sp-score-label">Wrong</div></div>
+                    </div>
+                    <div class="sp-direction">${promptLabel}</div>
+                    <div class="sp-prompt-card">
+                        <span class="sp-prompt-letter ${promptFont}">${promptLetter}</span>
+                    </div>
+                    <div class="sp-choices">
+                        ${choices.map(c=>`<button class="sp-choice ${choiceFont}" data-key="${c.block}">${spRound==='block-to-cursive'?c.cursive:c.block}</button>`).join('')}
+                    </div>
+                    <div class="sp-feedback" id="sp-feedback"></div>
+                </div>
+            </div>
+        </div>
+        <div class="st-sidebar">${sidebarHtml()}</div>
+    </div>`;
+
+    document.getElementById('sp-exit-btn').addEventListener('click',()=>renderSession());
+    document.getElementById('sidebar-open-settings')?.addEventListener('click',openDrawer);
+
+
+    const fb=document.getElementById('sp-feedback');
+    document.querySelectorAll('.sp-choice').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            document.querySelectorAll('.sp-choice').forEach(b=>b.disabled=true);
+            spTotal++;
+            const isCorrect=btn.dataset.key===correct.block;
+            if(isCorrect){
+                spCorrect++;
+                btn.classList.add('correct');
+                fb.className='sp-feedback correct';
+                fb.textContent='Correct!';
+            } else {
+                btn.classList.add('wrong');
+                // highlight the right answer
+                document.querySelectorAll('.sp-choice').forEach(b=>{if(b.dataset.key===correct.block)b.classList.add('reveal');});
+                fb.className='sp-feedback wrong';
+                fb.textContent='Not quite — see the highlighted answer';
+            }
+            spIndex++;
+            setTimeout(()=>renderScriptSession(), isCorrect?600:1200);
+        });
+    });
+}
+
+function renderScriptComplete(){
+    const acc=spTotal>0?Math.round(spCorrect/spTotal*100):0;
+    app.innerHTML=`
+    <div class="st-hero">
+        <div class="st-topbar">
+            <a href="/flashcards" class="st-back"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>Back</a>
+        </div>
+        ${masteryHtml()}
+    </div>
+    <div class="st-layout">
+        <div class="st-main-col">
+            <div class="st-card-container st-state fade-up">
+                <div class="st-state-icon done"><svg width="28" height="28" fill="none" stroke="#7c3aed" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></div>
+                <p class="st-state-title">Practice Complete!</p>
+                <div class="st-complete-stats">
+                    <div class="st-complete-stat"><div class="st-complete-stat-num">${spTotal}</div><div class="st-complete-stat-label">Questions</div></div>
+                    <div class="st-complete-stat"><div class="st-complete-stat-num" style="color:#7c3aed">${acc}%</div><div class="st-complete-stat-label">Accuracy</div></div>
+                </div>
+                <p class="st-state-text" style="margin-bottom:1rem">${acc>=90?'Excellent! You really know your Hebrew script!':acc>=70?'Good work — keep practising the cursive forms!':'Keep going — repetition is the key to reading cursive!'}</p>
+                <div>
+                    <button class="st-btn" id="sp-again" style="background:#7c3aed">Practice Again</button>
+                    <button class="st-btn secondary" id="sp-back">Back to Flashcards</button>
+                </div>
+            </div>
+        </div>
+        <div class="st-sidebar">${sidebarHtml()}</div>
+    </div>`;
+    document.getElementById('sp-again').addEventListener('click',startScriptPractice);
+    document.getElementById('sp-back').addEventListener('click',()=>renderSession());
+    document.getElementById('sidebar-open-settings')?.addEventListener('click',openDrawer);
+
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// KEYBOARD SHORTCUTS
+// ═══════════════════════════════════════════════════════════════════
+document.addEventListener('keydown',e=>{
+    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+    if(S.mode!=='flip')return;
+    const inner=document.getElementById('st-card-inner');if(!inner)return;
+    if(e.key===' '||e.key==='Enter'){e.preventDefault();inner.classList.toggle('flipped');document.getElementById('st-confidence')?.classList.toggle('visible',inner.classList.contains('flipped'));}
+    else if(inner.classList.contains('flipped')){const m={'1':0,'2':1,'3':2,'4':3};if(m[e.key]!==undefined)rateCard(m[e.key],true);}
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════
+initAuth(async(user)=>{
+    if(!user)return;
+    try{allCards=await getUserFlashcards(getCurrentUserId());}catch(e){console.error(e);}
+    document.getElementById('st-loading').classList.add('hidden');
+    app.classList.remove('hidden');
+    startSession();
+});
+</script>
+<script src="/js/sidebar-nav.js"></script>
+</body>
+</html>

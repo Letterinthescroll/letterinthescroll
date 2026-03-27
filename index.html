@@ -6,10 +6,9 @@
     <title>A Letter in the Scroll</title>
     <meta name="description" content="Interactive Torah study with friends. Join a chavruta, explore weekly parsha insights, and learn together in community.">
     <link rel="canonical" href="https://www.aletterinthescroll.com/">
-    <link rel="icon" type="image/png" href="/media/images/Icon.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/media/images/Icon.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/media/images/Icon.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/media/images/Icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png" media="(prefers-color-scheme: light)"><link rel="icon" type="image/svg+xml" href="/media/images/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" sizes="16x16" href="/media/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/media/images/apple-touch-icon.png">
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="A Letter in the Scroll">
@@ -412,9 +411,7 @@
 
                         <!-- Card Header with Logo -->
                         <div class="text-center pt-10 pb-5 px-8">
-                            <div style="display:inline-flex;align-items:center;justify-content:center;width:80px;height:80px;border-radius:1.1rem;background:linear-gradient(145deg,#fff,#faf7f0);border:1.5px solid rgba(200,154,53,0.22);box-shadow:0 4px 20px rgba(200,154,53,0.12),0 1px 3px rgba(0,0,0,0.06);margin-bottom:1.25rem;">
-                                <img src="media/images/IconOnly.png" alt="A Letter in the Scroll" style="width:56px;height:56px;border-radius:0.6rem;">
-                            </div>
+                            <img src="media/images/logonew.png" alt="A Letter in the Scroll" style="width:80px;height:80px;margin-bottom:1.25rem;display:block;margin-left:auto;margin-right:auto;">
                             <h2 id="login-greeting" class="font-heading" style="font-size:1.9rem;font-weight:700;color:#1a2744;letter-spacing:-0.01em;">Welcome</h2>
                             <p id="login-subtitle" style="color:#6b7280;font-size:0.85rem;margin-top:0.4rem;line-height:1.6;max-width:280px;margin-left:auto;margin-right:auto;">Create an account or sign in to start studying Torah together.</p>
                             <script>
@@ -887,7 +884,16 @@
         auth.getRedirectResult().then(async function(result) {
             if (result && result.user) {
                 const user = result.user;
-                await syncUserProfile(user, user.displayName, false);
+                // Check if this is a brand-new user (first-time Google sign-up via redirect)
+                var isNewGoogleRedirectUser = false;
+                try {
+                    var existingSnap = await db.collection('users').doc(user.uid).get();
+                    isNewGoogleRedirectUser = !existingSnap.exists;
+                } catch (_) {}
+                await syncUserProfile(user, user.displayName, isNewGoogleRedirectUser);
+                if (isNewGoogleRedirectUser) {
+                    try { sessionStorage.setItem('alits_just_created', '1'); } catch (_) {}
+                }
                 const code = resolveInviteCode();
                 if (code.length === INVITE_CODE_LENGTH) {
                     const found = await processInviteCode(code, user);
@@ -1106,7 +1112,7 @@
             }
         }
 
-        auth.onAuthStateChanged(function(user) {
+        auth.onAuthStateChanged(async function(user) {
             if (!user || authFlowInProgress || signingOut) {
                 return;
             }
@@ -1123,6 +1129,17 @@
                     }
                 }).catch(function() {});
             } catch(e) {}
+
+            // For Google sign-in (redirect flow): detect first-time users before
+            // syncUserProfile creates their profile, so the tutorial triggers.
+            if (!sessionStorage.getItem('alits_just_created')) {
+                try {
+                    var profileSnap = await db.collection('users').doc(user.uid).get();
+                    if (!profileSnap.exists) {
+                        try { sessionStorage.setItem('alits_just_created', '1'); } catch(_) {}
+                    }
+                } catch(_) {}
+            }
 
             syncUserProfile(user).finally(function() {
                 const inviteCode = resolveInviteCode();
@@ -1168,7 +1185,16 @@
             try {
                 const result = await auth.signInWithPopup(googleProvider);
                 const user = result.user;
-                await syncUserProfile(user, user.displayName, false);
+                // Check if this is a brand-new user (first-time Google sign-up)
+                var isNewGoogleUser = false;
+                try {
+                    var existingSnap = await db.collection('users').doc(user.uid).get();
+                    isNewGoogleUser = !existingSnap.exists;
+                } catch (_) {}
+                await syncUserProfile(user, user.displayName, isNewGoogleUser);
+                if (isNewGoogleUser) {
+                    try { sessionStorage.setItem('alits_just_created', '1'); } catch (_) {}
+                }
                 showSuccess('Signed in with Google. Redirecting...');
 
                 const code = resolveInviteCode();

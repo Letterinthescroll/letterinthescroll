@@ -4,414 +4,667 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Settings — A Letter in the Scroll</title>
-    <link rel="icon" type="image/png" href="/media/images/Icon.png">
-    <link rel="apple-touch-icon" href="/media/images/Icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png" media="(prefers-color-scheme: light)"><link rel="icon" type="image/svg+xml" href="/media/images/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" sizes="180x180" href="/media/images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/shabbat.css">
     <link rel="stylesheet" href="/css/mobile-overrides.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f5f7fc; }
-        .font-heading { font-family: 'Cormorant Garamond', serif; }
-        .card { background: #fff; border-radius: 1.25rem; border: 1px solid rgba(20,40,100,0.08); box-shadow: 0 4px 20px rgba(22,40,94,0.07); }
-        .input-field { transition: border-color 0.2s, box-shadow 0.2s; }
-        .input-field:focus { border-color: #274ea8; box-shadow: 0 0 0 3px rgba(39,78,168,0.15); }
-        .gold-line { height: 2px; background: linear-gradient(90deg, transparent, #c89a35, transparent); }
-        .red-line { height: 2px; background: linear-gradient(90deg, transparent, #ef4444, transparent); }
-        .fade-up { animation: fadeUp 0.45s ease-out both; }
-        @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-        .fd1{animation-delay:.05s} .fd2{animation-delay:.1s} .fd3{animation-delay:.15s} .fd4{animation-delay:.2s} .fd5{animation-delay:.25s}
-        .spinner { width:20px; height:20px; border:3px solid rgba(255,255,255,0.35); border-top:3px solid #fff; border-radius:50%; animation:spin 0.7s linear infinite; display:inline-block; }
-        @keyframes spin { to { transform:rotate(360deg); } }
+        :root {
+            --ink-950: #102039;
+            --ink-800: #1e3558;
+            --ink-700: #2c4a75;
+            --ink-600: #456188;
+            --ink-500: #667c9c;
+            --surface: #ffffff;
+            --surface-soft: #f7fbff;
+            --surface-glass: rgba(255, 255, 255, 0.82);
+            --line: rgba(25, 61, 108, 0.16);
+            --line-strong: rgba(25, 61, 108, 0.24);
+            --accent-navy: #1f3f76;
+            --accent-teal: #0f7b8f;
+            --accent-gold: #cf9a32;
+            --accent-mint: #2f9f84;
+            --danger: #b93e45;
+            --success: #25754f;
+            --radius-xl: 1.45rem;
+            --radius-lg: 1.05rem;
+            --shadow-card: 0 1px 3px rgba(17,44,84,0.06), 0 4px 16px rgba(17,44,84,0.04);
+            --shadow-card-hover: 0 4px 20px rgba(17,44,84,0.10);
+        }
+
         html { scroll-behavior: smooth; }
 
-        /* Jump-nav sidebar */
-        .jump-nav { position: sticky; top: 5.5rem; }
-        .jump-group-label {
-            font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 0.12em; color: #94a3b8; padding: 0.5rem 0.75rem 0.25rem;
+        html:has(.settings-body) {
+            background: #edf5ff !important;
         }
-        .jump-link {
-            display: block; padding: 0.4rem 0.75rem; border-radius: 0.5rem;
-            font-size: 0.82rem; font-weight: 500; color: #64748b;
+        html:has(.settings-body),
+        html:has(.settings-body) body {
+            overflow-x: visible !important;
+        }
+
+        .settings-body {
+            font-family: 'Manrope', sans-serif !important;
+            color: var(--ink-950);
+            min-height: 100vh;
+            background:
+                radial-gradient(1200px 580px at -8% -10%, rgba(36, 118, 175, 0.12), transparent 60%),
+                radial-gradient(900px 560px at 108% -12%, rgba(209, 154, 53, 0.12), transparent 58%),
+                linear-gradient(180deg, #f4f8ff 0%, #f7f4ee 50%, #edf5ff 100%) !important;
+        }
+
+        /* ── Cards ── */
+        .s-card {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow-card);
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+        .s-card:hover { box-shadow: var(--shadow-card-hover); }
+
+        /* ── Section headers ── */
+        .s-section-badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.14em; padding: 0.35rem 0.85rem;
+            border-radius: 999px; margin-bottom: 1.25rem;
+        }
+
+        /* ── Inputs ── */
+        .s-input {
+            width: 100%; padding: 0.65rem 0.9rem;
+            border: 1.5px solid var(--line);
+            border-radius: var(--radius-lg);
+            font-size: 0.875rem; font-family: inherit;
+            color: var(--ink-950); background: var(--surface-soft);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .s-input:focus {
+            outline: none;
+            border-color: var(--accent-navy);
+            box-shadow: 0 0 0 3px rgba(31,63,118,0.12);
+            background: var(--surface);
+        }
+        .s-input::placeholder { color: var(--ink-500); opacity: 0.6; }
+
+        /* ── Buttons ── */
+        .s-btn-primary {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.6rem 1.4rem; font-size: 0.825rem; font-weight: 700;
+            color: #fff; border: none; border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, var(--accent-navy), #3461a5);
+            box-shadow: 0 2px 8px rgba(31,63,118,0.25);
+            cursor: pointer; transition: all 0.2s; font-family: inherit;
+        }
+        .s-btn-primary:hover { box-shadow: 0 4px 16px rgba(31,63,118,0.35); transform: translateY(-1px); }
+        .s-btn-primary:active { transform: translateY(0); }
+        .s-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .s-btn-secondary {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.55rem 1.2rem; font-size: 0.825rem; font-weight: 600;
+            color: var(--ink-700); background: var(--surface);
+            border: 1.5px solid var(--line); border-radius: var(--radius-lg);
+            cursor: pointer; transition: all 0.15s; font-family: inherit;
+        }
+        .s-btn-secondary:hover { background: var(--surface-soft); border-color: var(--line-strong); }
+
+        .s-btn-danger {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.6rem 1.4rem; font-size: 0.825rem; font-weight: 700;
+            color: #fff; border: none; border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, #c13038, #e05258);
+            box-shadow: 0 2px 8px rgba(193,48,56,0.25);
+            cursor: pointer; transition: all 0.2s; font-family: inherit;
+        }
+        .s-btn-danger:hover { box-shadow: 0 4px 16px rgba(193,48,56,0.35); transform: translateY(-1px); }
+        .s-btn-danger:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .s-btn-outline-danger {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.55rem 1.2rem; font-size: 0.825rem; font-weight: 600;
+            color: var(--danger); background: transparent;
+            border: 1.5px solid rgba(185,62,69,0.3); border-radius: var(--radius-lg);
+            cursor: pointer; transition: all 0.15s; font-family: inherit;
+        }
+        .s-btn-outline-danger:hover { background: rgba(185,62,69,0.06); border-color: rgba(185,62,69,0.5); }
+
+        .s-btn-teal {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.6rem 1.4rem; font-size: 0.825rem; font-weight: 700;
+            color: #fff; border: none; border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, #0d8a7a, #14b8a6);
+            box-shadow: 0 2px 8px rgba(13,138,122,0.25);
+            cursor: pointer; transition: all 0.2s; font-family: inherit;
+        }
+        .s-btn-teal:hover { box-shadow: 0 4px 16px rgba(13,138,122,0.35); transform: translateY(-1px); }
+
+        /* ── Toggle ── */
+        .s-toggle {
+            position: relative; width: 48px; height: 26px;
+            background: #c5cdd8; border-radius: 999px;
+            cursor: pointer; transition: background 0.25s;
+            flex-shrink: 0; border: none;
+        }
+        .s-toggle.active { background: var(--accent-navy); }
+        .s-toggle-thumb {
+            position: absolute; top: 3px; left: 3px;
+            width: 20px; height: 20px; background: #fff;
+            border-radius: 50%; transition: transform 0.25s;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+        }
+        .s-toggle.active .s-toggle-thumb { transform: translateX(22px); }
+
+        /* ── Sidebar nav ── */
+        .settings-nav { position: sticky; top: 5.5rem; }
+        .nav-section-label {
+            font-size: 0.6rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.14em; color: var(--ink-500); opacity: 0.7;
+            padding: 0.75rem 0.85rem 0.3rem;
+        }
+        .nav-item {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.45rem 0.85rem; border-radius: 0.6rem;
+            font-size: 0.8rem; font-weight: 500; color: var(--ink-600);
             text-decoration: none; transition: all 0.15s;
         }
-        .jump-link:hover { background: #f0f4ff; color: #16285e; }
+        .nav-item:hover { background: rgba(31,63,118,0.06); color: var(--ink-950); }
+        .nav-item.active { background: rgba(31,63,118,0.08); color: var(--accent-navy); font-weight: 700; }
+        .nav-item svg { width: 14px; height: 14px; opacity: 0.6; flex-shrink: 0; }
+        .nav-item:hover svg { opacity: 1; }
 
-        /* Section group header */
-        .group-header {
-            display: flex; align-items: center; gap: 0.75rem;
-            margin-bottom: 0.75rem; padding-top: 0.5rem;
+        .nav-divider { height: 1px; background: var(--line); margin: 0.6rem 0.85rem; }
+
+        /* ── Misc ── */
+        .s-label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--ink-800); margin-bottom: 0.4rem; }
+        .s-hint { font-size: 0.72rem; color: var(--ink-500); margin-top: 0.3rem; line-height: 1.4; }
+        .s-divider { height: 1px; background: var(--line); margin: 1.25rem 0; }
+        .gold-accent { height: 2px; background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); }
+
+        .s-notice {
+            display: flex; align-items: flex-start; gap: 0.65rem;
+            padding: 0.75rem 1rem; border-radius: var(--radius-lg);
+            font-size: 0.8rem; line-height: 1.5;
         }
-        .group-header-icon {
-            width: 2rem; height: 2rem; border-radius: 0.5rem;
-            display: flex; align-items: center; justify-content: center;
+        .s-notice svg { flex-shrink: 0; margin-top: 1px; }
+        .s-notice-info { background: rgba(31,63,118,0.06); border: 1px solid rgba(31,63,118,0.12); color: var(--ink-700); }
+        .s-notice-success { background: rgba(37,117,79,0.08); border: 1px solid rgba(37,117,79,0.18); color: #1a5e3e; }
+        .s-notice-warning { background: rgba(207,154,50,0.1); border: 1px solid rgba(207,154,50,0.25); color: #8a6b18; }
+        .s-notice-error { background: rgba(185,62,69,0.06); border: 1px solid rgba(185,62,69,0.15); color: var(--danger); }
+
+        .s-msg { font-size: 0.8rem; padding: 0.65rem 1rem; border-radius: var(--radius-lg); }
+
+        /* Fade-in */
+        .fade-in { animation: fadeIn 0.4s ease-out both; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fd1{animation-delay:.04s} .fd2{animation-delay:.08s} .fd3{animation-delay:.12s}
+        .fd4{animation-delay:.16s} .fd5{animation-delay:.20s}
+
+        .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.3); border-top: 2.5px solid #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Page header ── */
+        .settings-hero {
+            padding: 2.5rem 0 1.5rem;
         }
-        .group-header-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem; font-weight: 600; color: #0f172a;
+        .settings-hero h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 2rem; font-weight: 600;
+            color: var(--ink-950);
         }
 
-        /* Toggle switch */
-        .toggle-track {
-            position: relative; width: 44px; height: 24px;
-            background: #cbd5e1; border-radius: 999px;
-            cursor: pointer; transition: background 0.2s;
-            flex-shrink: 0;
+        /* ── Toggle row ── */
+        .toggle-row {
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
         }
-        .toggle-track.active { background: #2563eb; }
-        .toggle-thumb {
-            position: absolute; top: 2px; left: 2px;
-            width: 20px; height: 20px; background: #fff;
-            border-radius: 50%; transition: transform 0.2s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-        }
-        .toggle-track.active .toggle-thumb { transform: translateX(20px); }
+        .toggle-row-text { flex: 1; min-width: 0; }
+        .toggle-row-title { font-size: 0.875rem; font-weight: 700; color: var(--ink-950); }
+        .toggle-row-desc { font-size: 0.78rem; color: var(--ink-500); margin-top: 0.2rem; line-height: 1.45; }
+
+        /* ── Card internal section ── */
+        .s-card-header { padding: 1.25rem 1.5rem 0; }
+        .s-card-body { padding: 1rem 1.5rem 1.5rem; }
+        .s-card-title { font-size: 0.925rem; font-weight: 700; color: var(--ink-950); }
+        .s-card-desc { font-size: 0.78rem; color: var(--ink-500); margin-top: 0.15rem; line-height: 1.45; }
 
         @media (max-width: 768px) {
-            .settings-sidebar { display: none; }
+            .settings-sidebar-col { display: none; }
+            .settings-hero h1 { font-size: 1.6rem; }
+            .s-card-header { padding: 1rem 1.15rem 0; }
+            .s-card-body { padding: 0.85rem 1.15rem 1.15rem; }
+        }
+
+        /* Birthday highlight animation */
+        .birthday-highlight {
+            border-color: rgba(185,62,69,0.4) !important;
+            box-shadow: 0 0 0 3px rgba(185,62,69,0.12), var(--shadow-card) !important;
         }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="settings-body min-h-screen">
 
-<!-- ═══ HEADER ═══ -->
+<!-- Header -->
 <div id="shared-header-mount" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%);min-height:64px"></div>
-    <script src="/js/header-loader.js"></script>
+<script src="/js/header-loader.js"></script>
 
-<!-- ═══ MAIN ═══ -->
-<main class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+<!-- Main -->
+<main class="max-w-5xl mx-auto px-4 sm:px-6">
 
     <!-- Loading -->
-    <div id="loading-state" class="flex flex-col items-center justify-center py-24 gap-3">
-        <div class="w-8 h-8 border-3 rounded-full" style="border:3px solid #dde3f0;border-top-color:#c89a35;animation:spin 0.7s linear infinite"></div>
-        <p class="text-sm text-slate-400">Loading…</p>
+    <div id="loading-state" class="flex flex-col items-center justify-center py-32 gap-3">
+        <div class="w-8 h-8 rounded-full" style="border:3px solid var(--line);border-top-color:var(--accent-gold);animation:spin 0.7s linear infinite"></div>
+        <p class="text-sm" style="color:var(--ink-500)">Loading settings...</p>
     </div>
 
     <!-- Content -->
     <div id="main-content" class="hidden">
-        <!-- Page title + user info -->
-        <div class="mb-7 fade-up fd1 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <div>
-                <p class="text-xs font-bold uppercase tracking-widest text-blue-600/60 mb-1">Account</p>
-                <h1 class="font-heading text-4xl font-semibold text-slate-900" style="font-family:'Cormorant Garamond',serif">Settings</h1>
-                <div class="gold-line mt-3 w-28"></div>
-            </div>
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" id="avatar-circle" style="background:linear-gradient(135deg,#16285e,#2f56ab)">?</div>
+
+        <!-- Page header -->
+        <div class="settings-hero fade-in fd1">
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                 <div>
-                    <p id="sidebar-name" class="text-sm font-semibold text-slate-700 truncate max-w-[200px]"></p>
-                    <p id="sidebar-email" class="text-xs text-slate-400 truncate max-w-[200px]"></p>
+                    <p class="text-xs font-bold uppercase tracking-widest mb-1" style="color:var(--accent-gold);letter-spacing:0.16em">Account</p>
+                    <h1>Settings</h1>
+                    <div class="gold-accent mt-3" style="width:5rem"></div>
+                </div>
+                <div class="flex items-center gap-3 pb-1">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" id="avatar-circle" style="background:linear-gradient(135deg,var(--accent-navy),#3461a5)">?</div>
+                    <div>
+                        <p id="sidebar-name" class="text-sm font-semibold truncate max-w-[200px]" style="color:var(--ink-950)"></p>
+                        <p id="sidebar-email" class="text-xs truncate max-w-[200px]" style="color:var(--ink-500)"></p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="flex gap-8">
+        <div class="flex gap-8 pb-12" style="padding-top:0.5rem">
 
-            <!-- ── Jump-nav sidebar ── -->
-            <aside class="settings-sidebar w-44 shrink-0 fade-up fd2">
-                <nav class="jump-nav space-y-0.5">
-                    <p class="jump-group-label">Account</p>
-                    <a href="#sec-profile" class="jump-link">Profile</a>
-                    <a href="#sec-email" class="jump-link">Email</a>
-                    <a href="#sec-password" class="jump-link">Password</a>
-                    <a href="#sec-birthday" class="jump-link">Birthday</a>
+            <!-- Sidebar nav -->
+            <aside class="settings-sidebar-col shrink-0 fade-in fd2" style="width:180px">
+                <nav class="settings-nav space-y-0.5">
+                    <p class="nav-section-label">Account</p>
+                    <a href="#sec-profile" class="nav-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        Profile
+                    </a>
+                    <a href="#sec-email" class="nav-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        Email
+                    </a>
+                    <a href="#sec-password" class="nav-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        Password
+                    </a>
+                    <a href="#sec-birthday" class="nav-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        Birthday
+                    </a>
 
-                    <p class="jump-group-label mt-3">Preferences</p>
-                    <a href="#sec-shabbat" class="jump-link">Shabbat Mode</a>
-                    <a href="#sec-newsletter" class="jump-link">Newsletter</a>
-                    <a href="#sec-tutorial" class="jump-link">Tutorial</a>
+                    <p class="nav-section-label" style="padding-top:1rem">Preferences</p>
+                    <a href="#sec-shabbat" class="nav-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"/></svg>
+                        Shabbat Mode
+                    </a>
+                    <a href="#sec-hebrew-study" class="nav-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        Hebrew Study
+                    </a>
+                    <a href="#sec-teacher" class="nav-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                        Teacher Mode
+                    </a>
+                    <a href="#sec-newsletter" class="nav-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2"/></svg>
+                        Newsletter
+                    </a>
+                    <a href="#sec-tutorial" class="nav-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                        Tutorial
+                    </a>
 
-                    <p class="jump-group-label mt-3">Danger Zone</p>
-                    <a href="#sec-delete" class="jump-link text-red-400 hover:text-red-600 hover:bg-red-50">Delete Account</a>
+                    <div class="nav-divider"></div>
 
-                    <div class="gold-line my-3"></div>
-                    <button onclick="signOutUser()" class="jump-link w-full text-left text-red-500 hover:bg-red-50 hover:text-red-600 flex items-center gap-2">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                        Sign Out
-                    </button>
-                    <a href="/dashboard" class="jump-link text-blue-500 hover:text-blue-700 flex items-center gap-2 mt-1">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    <a href="/dashboard" class="nav-item" style="color:var(--accent-navy)">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                         Back to Home
                     </a>
+                    <button onclick="signOutUser()" class="nav-item w-full text-left" style="color:var(--danger)">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                        Sign Out
+                    </button>
                 </nav>
             </aside>
 
-            <!-- ── Main content column ── -->
-            <div class="flex-1 space-y-5 min-w-0 fade-up fd3">
+            <!-- Main content column -->
+            <div class="flex-1 min-w-0 space-y-4 fade-in fd3">
 
-                <!-- ═══════════════ ACCOUNT GROUP ═══════════════ -->
-                <div class="group-header" id="group-account">
-                    <div class="group-header-icon bg-blue-50">
-                        <svg class="w-4 h-4 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9.953 9.953 0 0112 15c2.601 0 4.97.993 6.758 2.619M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    </div>
-                    <h2 class="group-header-title">Account</h2>
+                <!-- ════════════ ACCOUNT SECTION ════════════ -->
+                <div class="s-section-badge" style="background:rgba(31,63,118,0.07);color:var(--accent-navy)">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    Account
                 </div>
 
                 <!-- Profile -->
-                <div id="sec-profile" class="card p-6 sm:p-7 scroll-mt-24">
-                    <h3 class="font-semibold text-slate-800 text-base mb-1">Profile</h3>
-                    <p class="text-sm text-slate-400 mb-4">Your display name is shown to study partners in your groups.</p>
-                    <div class="gold-line mb-5"></div>
-                    <div id="profile-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
-                    <div id="profile-locked" class="hidden mb-4 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-                        <p class="text-sm font-semibold text-amber-800">Display name has been set</p>
-                        <p class="text-xs text-amber-600 mt-1">Your display name can only be changed once and has already been updated. Contact the group leader if you need to change it again.</p>
+                <div id="sec-profile" class="s-card scroll-mt-24">
+                    <div class="s-card-header">
+                        <p class="s-card-title">Display Name</p>
+                        <p class="s-card-desc">Shown to study partners in your groups.</p>
                     </div>
-                    <form id="profile-form" onsubmit="saveProfile(event)" class="space-y-4">
-                        <div>
-                            <label for="profile-name" class="block text-sm font-semibold text-slate-700 mb-1.5">Display Name</label>
-                            <input type="text" id="profile-name" minlength="2" maxlength="50" required placeholder="Your full name"
-                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
-                            <p class="text-xs text-slate-400 mt-1">Between 2–50 characters.</p>
-                            <p class="text-xs text-amber-600 mt-1 font-medium">You can only change your display name once. Choose carefully!</p>
+                    <div class="s-divider" style="margin:0.75rem 1.5rem"></div>
+                    <div class="s-card-body">
+                        <div id="profile-msg" class="hidden s-msg mb-3"></div>
+                        <div id="profile-locked" class="hidden mb-3">
+                            <div class="s-notice s-notice-warning">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                <div>
+                                    <p class="font-bold" style="font-size:0.825rem">Display name has been set</p>
+                                    <p style="font-size:0.72rem;margin-top:0.15rem;opacity:0.85">Your display name can only be changed once. Contact the group leader if you need to change it again.</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-3">
-                            <button type="submit" id="profile-btn"
-                                class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
-                                style="background:linear-gradient(135deg,#16285e,#2f56ab)">Save Changes</button>
-                            <button type="button" onclick="cancelEdit('profile')" class="px-5 py-2.5 text-sm font-medium text-slate-500 hover:text-slate-700 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all">Cancel</button>
-                        </div>
-                    </form>
+                        <form id="profile-form" onsubmit="saveProfile(event)" class="space-y-3">
+                            <div>
+                                <label for="profile-name" class="s-label">Display Name</label>
+                                <input type="text" id="profile-name" minlength="2" maxlength="50" required placeholder="Your full name" class="s-input">
+                                <p class="s-hint">Between 2-50 characters. You can only change this once.</p>
+                            </div>
+                            <div class="flex items-center gap-2 pt-1">
+                                <button type="submit" id="profile-btn" class="s-btn-primary">Save Changes</button>
+                                <button type="button" onclick="cancelEdit('profile')" class="s-btn-secondary">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
                 <!-- Email -->
-                <div id="sec-email" class="card p-6 sm:p-7 scroll-mt-24">
-                    <h3 class="font-semibold text-slate-800 text-base mb-1">Email Address</h3>
-                    <p class="text-sm text-slate-400 mb-4">Update the email you use to sign in.</p>
-                    <div class="gold-line mb-5"></div>
-                    <div id="google-notice" class="hidden mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800">
-                        <strong>Signed in with Google.</strong> Your email is managed by your Google account and cannot be changed here.
+                <div id="sec-email" class="s-card scroll-mt-24">
+                    <div class="s-card-header">
+                        <p class="s-card-title">Email Address</p>
+                        <p class="s-card-desc">The email you use to sign in to your account.</p>
                     </div>
-                    <div id="email-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
-                    <form id="email-form" onsubmit="saveEmail(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">New Email Address</label>
-                            <input type="email" id="new-email" required placeholder="new@example.com" autocomplete="email"
-                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                    <div class="s-divider" style="margin:0.75rem 1.5rem"></div>
+                    <div class="s-card-body">
+                        <div id="google-notice" class="hidden mb-3">
+                            <div class="s-notice s-notice-info">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <div><strong>Signed in with Google.</strong> Your email is managed by your Google account and cannot be changed here.</div>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Current Password <span class="text-slate-400 font-normal">(to confirm it's you)</span></label>
-                            <input type="password" id="email-current-pw" required placeholder="Your current password" autocomplete="current-password"
-                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
-                        </div>
-                        <button type="submit" id="email-btn"
-                            class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
-                            style="background:linear-gradient(135deg,#16285e,#2f56ab)">Update Email</button>
-                    </form>
+                        <div id="email-msg" class="hidden s-msg mb-3"></div>
+                        <form id="email-form" onsubmit="saveEmail(event)" class="space-y-3">
+                            <div>
+                                <label class="s-label">New Email Address</label>
+                                <input type="email" id="new-email" required placeholder="new@example.com" autocomplete="email" class="s-input">
+                            </div>
+                            <div>
+                                <label class="s-label">Current Password <span style="color:var(--ink-500);font-weight:400">(to confirm identity)</span></label>
+                                <input type="password" id="email-current-pw" required placeholder="Your current password" autocomplete="current-password" class="s-input">
+                            </div>
+                            <div class="pt-1">
+                                <button type="submit" id="email-btn" class="s-btn-primary">Update Email</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
                 <!-- Password -->
-                <div id="sec-password" class="card p-6 sm:p-7 scroll-mt-24">
-                    <h3 class="font-semibold text-slate-800 text-base mb-1">Password</h3>
-                    <p class="text-sm text-slate-400 mb-4">Choose a strong password with at least 6 characters.</p>
-                    <div class="gold-line mb-5"></div>
-                    <div id="google-pw-notice" class="hidden mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800">
-                        <strong>Signed in with Google.</strong> Your password is managed by Google. Use <a href="https://myaccount.google.com/security" target="_blank" class="underline">Google Account Security</a> to change it.
+                <div id="sec-password" class="s-card scroll-mt-24">
+                    <div class="s-card-header">
+                        <p class="s-card-title">Password</p>
+                        <p class="s-card-desc">Choose a strong password with at least 6 characters.</p>
                     </div>
-                    <div id="pw-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
-                    <form id="pw-form" onsubmit="savePassword(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Current Password</label>
-                            <input type="password" id="pw-current" required placeholder="Your current password" autocomplete="current-password"
-                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                    <div class="s-divider" style="margin:0.75rem 1.5rem"></div>
+                    <div class="s-card-body">
+                        <div id="google-pw-notice" class="hidden mb-3">
+                            <div class="s-notice s-notice-info">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <div><strong>Signed in with Google.</strong> Use <a href="https://myaccount.google.com/security" target="_blank" style="text-decoration:underline;font-weight:600">Google Account Security</a> to change your password.</div>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">New Password</label>
-                            <input type="password" id="pw-new" required minlength="6" placeholder="At least 6 characters" autocomplete="new-password"
-                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
+                        <div id="pw-msg" class="hidden s-msg mb-3"></div>
+                        <form id="pw-form" onsubmit="savePassword(event)" class="space-y-3">
+                            <div>
+                                <label class="s-label">Current Password</label>
+                                <input type="password" id="pw-current" required placeholder="Your current password" autocomplete="current-password" class="s-input">
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="s-label">New Password</label>
+                                    <input type="password" id="pw-new" required minlength="6" placeholder="At least 6 characters" autocomplete="new-password" class="s-input">
+                                </div>
+                                <div>
+                                    <label class="s-label">Confirm Password</label>
+                                    <input type="password" id="pw-confirm" required placeholder="Re-enter new password" autocomplete="new-password" class="s-input">
+                                </div>
+                            </div>
+                            <div class="pt-1">
+                                <button type="submit" id="pw-btn" class="s-btn-primary">Update Password</button>
+                            </div>
+                        </form>
+                        <div class="s-divider"></div>
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm" style="color:var(--ink-500)">Forgot your password?</p>
+                            <button onclick="sendPasswordReset()" class="s-btn-secondary" style="font-size:0.78rem;padding:0.4rem 0.9rem">
+                                Send Reset Email
+                            </button>
                         </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Confirm New Password</label>
-                            <input type="password" id="pw-confirm" required placeholder="Re-enter new password" autocomplete="new-password"
-                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
-                        </div>
-                        <button type="submit" id="pw-btn"
-                            class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
-                            style="background:linear-gradient(135deg,#16285e,#2f56ab)">Update Password</button>
-                    </form>
-                    <div class="mt-5 pt-5 border-t border-slate-100">
-                        <p class="text-sm text-slate-500 mb-3">Forgot your current password?</p>
-                        <button onclick="sendPasswordReset()" class="text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors">
-                            Send a password reset email &rarr;
-                        </button>
-                        <div id="reset-msg" class="hidden mt-3 text-sm px-4 py-3 rounded-xl"></div>
+                        <div id="reset-msg" class="hidden s-msg mt-3"></div>
                     </div>
                 </div>
 
                 <!-- Birthday -->
-                <div id="sec-birthday" class="card p-6 sm:p-7 scroll-mt-24">
-                    <h3 class="font-semibold text-slate-800 text-base mb-1">Date of Birth</h3>
-                    <p class="text-sm text-slate-400 mb-4">Used to calculate your personal daily Psalm from the Hebrew calendar.</p>
-                    <div class="gold-line mb-5"></div>
-                    <div id="birthday-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
-                    <form id="birthday-form" onsubmit="saveBirthday(event)" class="space-y-4">
-                        <div>
-                            <label for="birthday-input" class="block text-sm font-semibold text-slate-700 mb-1.5">Date of Birth</label>
-                            <input type="date" id="birthday-input" autocomplete="bday"
-                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
-                            <p class="text-xs text-slate-400 mt-1">Enter your Gregorian (English) birthday — we'll calculate the Hebrew date automatically.</p>
-                        </div>
-                        <div>
-                            <label for="birthday-timezone" class="block text-sm font-semibold text-slate-700 mb-1.5">Place of Birth (for timezone)</label>
-                            <select id="birthday-timezone"
-                                class="input-field w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800 bg-white">
-                                <option value="">— Select your birth region —</option>
-                                <optgroup label="Americas">
-                                    <option value="America/New_York">Eastern US/Canada (New York, Toronto)</option>
-                                    <option value="America/Chicago">Central US/Canada (Chicago, Dallas)</option>
-                                    <option value="America/Denver">Mountain US/Canada (Denver, Calgary)</option>
-                                    <option value="America/Los_Angeles">Pacific US/Canada (Los Angeles, Vancouver)</option>
-                                    <option value="America/Sao_Paulo">Brazil (São Paulo, Rio)</option>
-                                    <option value="America/Argentina/Buenos_Aires">Argentina (Buenos Aires)</option>
-                                </optgroup>
-                                <optgroup label="Europe">
-                                    <option value="Europe/London">UK / Ireland (London, Dublin)</option>
-                                    <option value="Europe/Paris">Western Europe (Paris, Berlin, Rome)</option>
-                                    <option value="Europe/Athens">Eastern Europe (Athens, Kyiv, Bucharest)</option>
-                                    <option value="Europe/Moscow">Russia (Moscow)</option>
-                                </optgroup>
-                                <optgroup label="Middle East &amp; Africa">
-                                    <option value="Asia/Jerusalem">Israel (Jerusalem, Tel Aviv)</option>
-                                    <option value="Europe/Istanbul">Turkey (Istanbul)</option>
-                                    <option value="Asia/Dubai">Gulf States (Dubai, Riyadh)</option>
-                                    <option value="Africa/Johannesburg">South Africa (Johannesburg)</option>
-                                </optgroup>
-                                <optgroup label="Asia &amp; Oceania">
-                                    <option value="Asia/Kolkata">India (Mumbai, Delhi)</option>
-                                    <option value="Asia/Shanghai">China (Shanghai, Beijing)</option>
-                                    <option value="Asia/Tokyo">Japan / Korea (Tokyo, Seoul)</option>
-                                    <option value="Australia/Sydney">Australia (Sydney, Melbourne)</option>
-                                </optgroup>
-                            </select>
-                        </div>
-                        <div id="birthday-hebrew-preview" class="hidden p-4 bg-blue-50 border border-blue-100 rounded-xl">
-                            <p class="text-xs font-bold uppercase tracking-widest text-blue-600/70 mb-1">Hebrew Calendar Date</p>
-                            <p id="birthday-hebrew-text" class="text-sm font-semibold text-slate-700"></p>
-                        </div>
-                        <button type="submit" id="birthday-btn"
-                            class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
-                            style="background:linear-gradient(135deg,#16285e,#2f56ab)">Save Birthday</button>
-                    </form>
+                <div id="sec-birthday" class="s-card scroll-mt-24">
+                    <div class="s-card-header">
+                        <p class="s-card-title">Date of Birth</p>
+                        <p class="s-card-desc">Used to calculate your personal daily Psalm from the Hebrew calendar.</p>
+                    </div>
+                    <div class="s-divider" style="margin:0.75rem 1.5rem"></div>
+                    <div class="s-card-body">
+                        <div id="birthday-msg" class="hidden s-msg mb-3"></div>
+                        <form id="birthday-form" onsubmit="saveBirthday(event)" class="space-y-3">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label for="birthday-input" class="s-label">Date of Birth</label>
+                                    <input type="date" id="birthday-input" autocomplete="bday" class="s-input">
+                                    <p class="s-hint">Gregorian (English) date — Hebrew date is calculated automatically.</p>
+                                </div>
+                                <div>
+                                    <label for="birthday-timezone" class="s-label">Birth Region (timezone)</label>
+                                    <select id="birthday-timezone" class="s-input" style="background:var(--surface-soft)">
+                                        <option value="">-- Select region --</option>
+                                        <optgroup label="Americas">
+                                            <option value="America/New_York">Eastern US/Canada (New York, Toronto)</option>
+                                            <option value="America/Chicago">Central US/Canada (Chicago, Dallas)</option>
+                                            <option value="America/Denver">Mountain US/Canada (Denver, Calgary)</option>
+                                            <option value="America/Los_Angeles">Pacific US/Canada (Los Angeles, Vancouver)</option>
+                                            <option value="America/Sao_Paulo">Brazil (Sao Paulo, Rio)</option>
+                                            <option value="America/Argentina/Buenos_Aires">Argentina (Buenos Aires)</option>
+                                        </optgroup>
+                                        <optgroup label="Europe">
+                                            <option value="Europe/London">UK / Ireland (London, Dublin)</option>
+                                            <option value="Europe/Paris">Western Europe (Paris, Berlin, Rome)</option>
+                                            <option value="Europe/Athens">Eastern Europe (Athens, Kyiv, Bucharest)</option>
+                                            <option value="Europe/Moscow">Russia (Moscow)</option>
+                                        </optgroup>
+                                        <optgroup label="Middle East & Africa">
+                                            <option value="Asia/Jerusalem">Israel (Jerusalem, Tel Aviv)</option>
+                                            <option value="Europe/Istanbul">Turkey (Istanbul)</option>
+                                            <option value="Asia/Dubai">Gulf States (Dubai, Riyadh)</option>
+                                            <option value="Africa/Johannesburg">South Africa (Johannesburg)</option>
+                                        </optgroup>
+                                        <optgroup label="Asia & Oceania">
+                                            <option value="Asia/Kolkata">India (Mumbai, Delhi)</option>
+                                            <option value="Asia/Shanghai">China (Shanghai, Beijing)</option>
+                                            <option value="Asia/Tokyo">Japan / Korea (Tokyo, Seoul)</option>
+                                            <option value="Australia/Sydney">Australia (Sydney, Melbourne)</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="birthday-hebrew-preview" class="hidden">
+                                <div class="s-notice s-notice-info">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                    <div>
+                                        <p style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;opacity:0.7;margin-bottom:0.15rem">Hebrew Calendar Date</p>
+                                        <p id="birthday-hebrew-text" class="font-bold" style="font-size:0.875rem"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-1">
+                                <button type="submit" id="birthday-btn" class="s-btn-primary">Save Birthday</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
-                <!-- ═══════════════ PREFERENCES GROUP ═══════════════ -->
-                <div class="group-header mt-4" id="group-preferences">
-                    <div class="group-header-icon bg-indigo-50">
-                        <svg class="w-4 h-4 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
-                    </div>
-                    <h2 class="group-header-title">Preferences</h2>
+                <!-- ════════════ PREFERENCES SECTION ════════════ -->
+                <div class="s-section-badge" style="background:rgba(15,123,143,0.08);color:var(--accent-teal);margin-top:1.75rem">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                    Preferences
                 </div>
 
                 <!-- Shabbat Mode -->
-                <div id="sec-shabbat" class="card p-6 sm:p-7 scroll-mt-24">
-                    <div class="flex items-start justify-between gap-4">
-                        <div class="min-w-0">
-                            <h3 class="font-semibold text-slate-800 text-base mb-1">Shabbat Mode</h3>
-                            <p class="text-sm text-slate-400">Every Friday through Saturday evening, the site transforms with a special Shabbat design, banner, and music. Turn this off if you prefer the standard look.</p>
+                <div id="sec-shabbat" class="s-card scroll-mt-24">
+                    <div style="padding:1.25rem 1.5rem">
+                        <div class="toggle-row">
+                            <div class="toggle-row-text">
+                                <p class="toggle-row-title">Shabbat Mode</p>
+                                <p class="toggle-row-desc">Every Friday through Saturday evening, the site transforms with a special Shabbat design, banner, and music.</p>
+                            </div>
+                            <div id="shabbat-toggle" class="s-toggle active" onclick="toggleShabbatMode()" role="switch" aria-checked="true" tabindex="0">
+                                <div class="s-toggle-thumb"></div>
+                            </div>
                         </div>
-                        <div id="shabbat-toggle" class="toggle-track active" onclick="toggleShabbatMode()" role="switch" aria-checked="true" tabindex="0">
-                            <div class="toggle-thumb"></div>
-                        </div>
+                        <div id="shabbat-toggle-msg" class="hidden s-msg mt-3" style="background:rgba(31,63,118,0.06);border:1px solid rgba(31,63,118,0.12);color:var(--ink-700)"></div>
                     </div>
-                    <div id="shabbat-toggle-msg" class="hidden mt-3 text-sm px-4 py-2.5 rounded-xl bg-blue-50 border border-blue-100 text-blue-700"></div>
+                </div>
+
+                <!-- Hebrew Study Mode -->
+                <div id="sec-hebrew-study" class="s-card scroll-mt-24">
+                    <div style="padding:1.25rem 1.5rem">
+                        <div class="toggle-row">
+                            <div class="toggle-row-text">
+                                <p class="toggle-row-title">Hebrew Study Mode</p>
+                                <p class="toggle-row-desc">Highlight Hebrew words on Study and Psalms pages to create flashcards. Review on the <a href="/flashcards" style="color:var(--accent-navy);font-weight:600;text-decoration:underline">Flashcards</a> page.</p>
+                            </div>
+                            <div id="hebrew-study-toggle" class="s-toggle" onclick="toggleHebrewStudyMode()" role="switch" aria-checked="false" tabindex="0">
+                                <div class="s-toggle-thumb"></div>
+                            </div>
+                        </div>
+                        <div id="hebrew-study-toggle-msg" class="hidden s-msg mt-3" style="background:rgba(31,63,118,0.06);border:1px solid rgba(31,63,118,0.12);color:var(--ink-700)"></div>
+                    </div>
+                </div>
+
+                <!-- Teacher Mode -->
+                <div id="sec-teacher" class="s-card scroll-mt-24">
+                    <div style="padding:1.25rem 1.5rem">
+                        <div class="toggle-row">
+                            <div class="toggle-row-text">
+                                <p class="toggle-row-title">Teacher Mode</p>
+                                <p class="toggle-row-desc">For educators and group leaders. When enabled, you can create <strong>Classrooms</strong> — large study groups for up to 80 students with moderation tools, safety filters, and full control over members and comments.</p>
+                            </div>
+                            <div id="teacher-mode-toggle" class="s-toggle" onclick="toggleTeacherMode()" role="switch" aria-checked="false" tabindex="0">
+                                <div class="s-toggle-thumb"></div>
+                            </div>
+                        </div>
+                        <div id="teacher-mode-toggle-msg" class="hidden s-msg mt-3" style="background:rgba(31,63,118,0.06);border:1px solid rgba(31,63,118,0.12);color:var(--ink-700)"></div>
+                    </div>
                 </div>
 
                 <!-- Newsletter -->
-                <div id="sec-newsletter" class="card p-6 sm:p-7 scroll-mt-24">
-                    <h3 class="font-semibold text-slate-800 text-base mb-1">Weekly Dvar Torah Newsletter</h3>
-                    <p class="text-sm text-slate-400 mb-4">Receive a thoughtful Dvar Torah every Friday to carry into Shabbat.</p>
-                    <div class="gold-line mb-5"></div>
-                    <div id="nl-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
-                    <div id="nl-subscribed" class="hidden">
-                        <div class="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl mb-4">
-                            <svg class="w-5 h-5 text-green-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                            <div>
-                                <p class="text-sm font-semibold text-green-800">You're subscribed!</p>
-                                <p class="text-xs text-green-600 mt-0.5">Sent to <strong id="nl-sub-email"></strong> every Friday.</p>
+                <div id="sec-newsletter" class="s-card scroll-mt-24">
+                    <div class="s-card-header">
+                        <p class="s-card-title">Weekly Dvar Torah Newsletter</p>
+                        <p class="s-card-desc">Receive a thoughtful Dvar Torah every Friday to carry into Shabbat.</p>
+                    </div>
+                    <div class="s-divider" style="margin:0.75rem 1.5rem"></div>
+                    <div class="s-card-body">
+                        <div id="nl-msg" class="hidden s-msg mb-3"></div>
+                        <div id="nl-subscribed" class="hidden">
+                            <div class="s-notice s-notice-success mb-3">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <div>
+                                    <p class="font-bold" style="font-size:0.825rem">You're subscribed</p>
+                                    <p style="font-size:0.72rem;margin-top:0.1rem;opacity:0.85">Sent to <strong id="nl-sub-email"></strong> every Friday.</p>
+                                </div>
                             </div>
+                            <button onclick="unsubscribeNewsletter()" id="nl-unsub-btn" class="s-btn-outline-danger">Unsubscribe</button>
                         </div>
-                        <button onclick="unsubscribeNewsletter()" id="nl-unsub-btn"
-                            class="px-5 py-2 text-sm font-medium text-red-600 hover:text-white hover:bg-red-500 rounded-xl border border-red-200 hover:border-red-500 transition-all">Unsubscribe</button>
-                    </div>
-                    <div id="nl-not-subscribed" class="hidden">
-                        <p class="text-sm text-slate-600 mb-3">You're not currently subscribed.</p>
-                        <button onclick="subscribeNewsletter()" id="nl-sub-btn"
-                            class="px-6 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all"
-                            style="background:linear-gradient(135deg,#16285e,#2f56ab)">Subscribe with <span id="nl-user-email"></span></button>
-                    </div>
-                    <div id="nl-loading" class="flex items-center gap-2">
-                        <div class="spinner" style="border-color:rgba(0,0,0,0.1);border-top-color:#16285e"></div>
-                        <span class="text-sm text-slate-400">Checking subscription…</span>
+                        <div id="nl-not-subscribed" class="hidden">
+                            <p style="font-size:0.82rem;color:var(--ink-500);margin-bottom:0.75rem">You're not currently subscribed.</p>
+                            <button onclick="subscribeNewsletter()" id="nl-sub-btn" class="s-btn-primary">Subscribe with <span id="nl-user-email"></span></button>
+                        </div>
+                        <div id="nl-loading" class="flex items-center gap-2">
+                            <div class="spinner" style="border-color:var(--line);border-top-color:var(--accent-navy)"></div>
+                            <span style="font-size:0.8rem;color:var(--ink-500)">Checking subscription...</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Tutorial -->
-                <div id="sec-tutorial" class="card p-6 sm:p-7 scroll-mt-24">
-                    <div class="flex items-start justify-between gap-4">
-                        <div class="min-w-0">
-                            <h3 class="font-semibold text-slate-800 text-base mb-1">Site Tutorial</h3>
-                            <p class="text-sm text-slate-400">Replay the guided walkthrough to learn about every feature of the site.</p>
+                <div id="sec-tutorial" class="s-card scroll-mt-24">
+                    <div style="padding:1.25rem 1.5rem">
+                        <div class="toggle-row">
+                            <div class="toggle-row-text">
+                                <p class="toggle-row-title">Site Tutorial</p>
+                                <p class="toggle-row-desc">Replay the guided walkthrough to learn about every feature of the site.</p>
+                            </div>
+                            <button onclick="replayTutorialFromSettings()" id="tutorial-replay-btn" class="s-btn-teal">Replay Tour</button>
                         </div>
-                        <button onclick="replayTutorialFromSettings()" id="tutorial-replay-btn"
-                            class="px-5 py-2 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all shrink-0"
-                            style="background:linear-gradient(135deg,#0d9488,#14b8a6)">Replay Tour</button>
                     </div>
                 </div>
 
-                <!-- ═══════════════ DANGER ZONE ═══════════════ -->
-                <div class="group-header mt-4" id="group-danger">
-                    <div class="group-header-icon bg-red-50">
-                        <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    </div>
-                    <h2 class="group-header-title text-red-700">Danger Zone</h2>
-                </div>
-
-                <!-- Sign Out -->
-                <div class="card p-6 sm:p-7 scroll-mt-24">
-                    <div class="flex items-start justify-between gap-4">
-                        <div class="min-w-0">
-                            <h3 class="font-semibold text-slate-800 text-base mb-1">Sign Out</h3>
-                            <p class="text-sm text-slate-400">Sign out of your account on this device. You can sign back in anytime.</p>
-                        </div>
-                        <button onclick="signOutUser()"
-                            class="px-5 py-2 text-sm font-bold text-red-600 rounded-xl border border-red-200 hover:bg-red-50 transition-all shrink-0">Sign Out</button>
-                    </div>
+                <!-- ════════════ DANGER ZONE ════════════ -->
+                <div class="s-section-badge" style="background:rgba(185,62,69,0.07);color:var(--danger);margin-top:1.75rem">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Danger Zone
                 </div>
 
                 <!-- Delete Account -->
-                <div id="sec-delete" class="card p-6 sm:p-7 scroll-mt-24 border-red-200">
-                    <h3 class="font-semibold text-red-700 text-base mb-1">Delete Account</h3>
-                    <p class="text-sm text-slate-400 mb-4">Permanently delete your account and all associated data.</p>
-                    <div class="red-line mb-5"></div>
-                    <div class="p-4 rounded-xl border border-red-200 bg-red-50 mb-4">
-                        <p class="text-sm font-semibold text-red-800 mb-2">This action is permanent and cannot be undone</p>
-                        <ul class="text-xs text-red-700 space-y-0.5 list-disc list-inside">
-                            <li>Your profile, display name, and all personal data will be erased</li>
-                            <li>All your comments, reactions, and bookmarks will be deleted</li>
-                            <li>Your study group memberships will be removed</li>
-                            <li>Your newsletter subscription will be cancelled</li>
-                            <li>Your Firebase authentication account will be deleted</li>
-                        </ul>
+                <div id="sec-delete" class="s-card scroll-mt-24" style="border-color:rgba(185,62,69,0.2)">
+                    <div class="s-card-header">
+                        <p class="s-card-title" style="color:var(--danger)">Delete Account</p>
+                        <p class="s-card-desc">Permanently delete your account and all associated data.</p>
                     </div>
-                    <div id="delete-msg" class="hidden mb-4 text-sm px-4 py-3 rounded-xl"></div>
-                    <div id="delete-step-1">
-                        <p class="text-sm text-slate-600 mb-3">Enter your password to confirm:</p>
-                        <div class="flex flex-col sm:flex-row gap-3 items-start">
-                            <input type="password" id="delete-password" required placeholder="Enter your password"
-                                class="input-field flex-1 px-4 py-2.5 border-2 border-slate-200 rounded-xl text-sm focus:outline-none text-slate-800">
-                            <button type="button" onclick="confirmDeleteAccount()" id="delete-btn"
-                                class="px-5 py-2.5 text-sm font-bold text-white rounded-xl shadow hover:shadow-lg transition-all shrink-0"
-                                style="background:linear-gradient(135deg,#dc2626,#ef4444)">Delete My Account</button>
+                    <div style="height:1px;background:rgba(185,62,69,0.12);margin:0.75rem 1.5rem"></div>
+                    <div class="s-card-body">
+                        <div class="s-notice s-notice-error mb-4">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <div>
+                                <p class="font-bold" style="font-size:0.825rem;margin-bottom:0.35rem">This action is permanent and cannot be undone</p>
+                                <ul style="font-size:0.72rem;line-height:1.6;list-style:disc;padding-left:1rem;opacity:0.85">
+                                    <li>Your profile, display name, and all personal data will be erased</li>
+                                    <li>All comments, reactions, and bookmarks will be deleted</li>
+                                    <li>Study group memberships will be removed</li>
+                                    <li>Newsletter subscription will be cancelled</li>
+                                    <li>Firebase authentication account will be deleted</li>
+                                </ul>
+                            </div>
                         </div>
-                        <div id="delete-google-notice" class="hidden mt-3 p-3 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800">
-                            <strong>Google account detected.</strong> No password needed — click the button to proceed.
+                        <div id="delete-msg" class="hidden s-msg mb-3"></div>
+                        <div id="delete-step-1">
+                            <div id="delete-password-row" class="mb-3">
+                                <label class="s-label">Enter your password to confirm</label>
+                                <input type="password" id="delete-password" required placeholder="Your password" class="s-input" style="max-width:320px">
+                            </div>
+                            <div id="delete-google-notice" class="hidden mb-3">
+                                <div class="s-notice s-notice-info">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <div><strong>Google account detected.</strong> No password needed — click the button and confirm with Google to proceed.</div>
+                                </div>
+                            </div>
+                            <button type="button" onclick="confirmDeleteAccount()" id="delete-btn" class="s-btn-danger">Delete My Account</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Bottom spacer -->
                 <div class="h-8"></div>
             </div>
         </div>
@@ -419,7 +672,7 @@
 </main>
 
 
-<!-- ═══ FIREBASE + SCRIPT ═══ -->
+<!-- Firebase + Script -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -441,8 +694,25 @@
     let isGoogleUser = false;
     let authRedirectTimer = null;
 
+    // Handle Google reauthentication redirect return (for account deletion)
+    auth.getRedirectResult().then(function(result) {
+        if (result && result.user && sessionStorage.getItem('pendingAccountDeletion')) {
+            sessionStorage.removeItem('pendingAccountDeletion');
+            setTimeout(function() {
+                const deleteSection = document.getElementById('sec-delete');
+                if (deleteSection) deleteSection.scrollIntoView({ behavior: 'smooth' });
+                const msg = document.getElementById('delete-msg');
+                if (msg) {
+                    msg.classList.remove('hidden');
+                    msg.className = 's-msg mb-3 s-notice-success';
+                    msg.textContent = 'Re-authenticated with Google. Click "Delete My Account" to proceed.';
+                }
+            }, 500);
+        }
+    }).catch(function() {});
+
     /* ════ AUTH ════ */
-    auth.onAuthStateChanged(async user => {
+    auth.onAuthStateChanged(user => {
         if (!user) {
             if (!authRedirectTimer) {
                 authRedirectTimer = setTimeout(() => {
@@ -456,16 +726,31 @@
 
         isGoogleUser = (user.providerData || []).some(p => p.providerId === 'google.com');
 
-        // Populate user info
         const firstName = (user.displayName || user.email || '').split(' ')[0].split('@')[0];
         document.getElementById('sidebar-name').textContent  = user.displayName || '';
         document.getElementById('sidebar-email').textContent = user.email || '';
         document.getElementById('avatar-circle').textContent = firstName.charAt(0).toUpperCase();
         document.getElementById('profile-name').value = user.displayName || '';
 
-        // Load user data from Firestore
-        try {
-            const userDoc = await db.collection('users').doc(user.uid).get();
+        if (isGoogleUser) {
+            document.getElementById('google-notice').classList.remove('hidden');
+            document.getElementById('email-form').classList.add('hidden');
+            document.getElementById('google-pw-notice').classList.remove('hidden');
+            document.getElementById('pw-form').classList.add('hidden');
+            const delNotice = document.getElementById('delete-google-notice');
+            const delPwRow = document.getElementById('delete-password-row');
+            if (delNotice) delNotice.classList.remove('hidden');
+            if (delPwRow) delPwRow.style.display = 'none';
+        }
+
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('main-content').classList.remove('hidden');
+
+        initShabbatToggle();
+        initHebrewStudyToggle();
+        initTeacherModeToggle();
+
+        db.collection('users').doc(user.uid).get().then(userDoc => {
             const uData = userDoc.exists ? (userDoc.data() || {}) : {};
             if (uData.displayNameChanged) {
                 document.getElementById('profile-form').classList.add('hidden');
@@ -482,26 +767,9 @@
                 const tzInput = document.getElementById('birthday-timezone');
                 if (tzInput) tzInput.value = uData.birthTimezone;
             }
-        } catch(e) { console.error('Error loading user data:', e); }
-
-        // Google notices
-        if (isGoogleUser) {
-            document.getElementById('google-notice').classList.remove('hidden');
-            document.getElementById('email-form').classList.add('hidden');
-            document.getElementById('google-pw-notice').classList.remove('hidden');
-            document.getElementById('pw-form').classList.add('hidden');
-            // Delete section — hide password, show notice
-            const delNotice = document.getElementById('delete-google-notice');
-            const delPw = document.getElementById('delete-password');
-            if (delNotice) delNotice.classList.remove('hidden');
-            if (delPw) delPw.parentElement.style.display = 'none';
-        }
-
-        document.getElementById('loading-state').classList.add('hidden');
-        document.getElementById('main-content').classList.remove('hidden');
+        }).catch(e => console.error('Error loading user data:', e));
 
         checkNewsletterStatus();
-        initShabbatToggle();
     });
 
     function signOutUser() { sessionStorage.removeItem('headerUserCache'); sessionStorage.setItem('justSignedOut', '1'); auth.signOut().then(() => window.location.href = '/'); }
@@ -525,18 +793,92 @@
         const isCurrentlyActive = toggle.classList.contains('active');
 
         if (isCurrentlyActive) {
-            // Turning OFF
             localStorage.setItem('alits_shabbat_disabled', 'true');
             toggle.classList.remove('active');
             toggle.setAttribute('aria-checked', 'false');
             msgEl.textContent = 'Shabbat mode is now off. The site will use its standard design during Shabbat.';
             msgEl.classList.remove('hidden');
         } else {
-            // Turning ON
             localStorage.removeItem('alits_shabbat_disabled');
             toggle.classList.add('active');
             toggle.setAttribute('aria-checked', 'true');
             msgEl.textContent = 'Shabbat mode is now on. The site will transform with a special design every Friday through Saturday evening.';
+            msgEl.classList.remove('hidden');
+        }
+    }
+
+    /* ════ HEBREW STUDY MODE TOGGLE ════ */
+    function initHebrewStudyToggle() {
+        const toggle = document.getElementById('hebrew-study-toggle');
+        if (!toggle) return;
+        const isEnabled = localStorage.getItem('alits_hebrew_study_mode') === 'true';
+        toggle.classList.toggle('active', isEnabled);
+        toggle.setAttribute('aria-checked', String(isEnabled));
+    }
+
+    function toggleHebrewStudyMode() {
+        const toggle = document.getElementById('hebrew-study-toggle');
+        const msgEl = document.getElementById('hebrew-study-toggle-msg');
+        const isCurrentlyActive = toggle.classList.contains('active');
+
+        if (isCurrentlyActive) {
+            localStorage.removeItem('alits_hebrew_study_mode');
+            toggle.classList.remove('active');
+            toggle.setAttribute('aria-checked', 'false');
+            msgEl.textContent = 'Hebrew Study Mode is now off. Word highlighting will show definitions only.';
+            msgEl.classList.remove('hidden');
+        } else {
+            localStorage.setItem('alits_hebrew_study_mode', 'true');
+            toggle.classList.add('active');
+            toggle.setAttribute('aria-checked', 'true');
+            msgEl.textContent = 'Hebrew Study Mode is now on! Highlight Hebrew words on Study or Psalms pages to create flashcards.';
+            msgEl.classList.remove('hidden');
+        }
+    }
+
+    /* ════ TEACHER MODE TOGGLE ════ */
+    function initTeacherModeToggle() {
+        const toggle = document.getElementById('teacher-mode-toggle');
+        if (!toggle || !currentUser) return;
+        // Load from Firestore user profile
+        db.collection('users').doc(currentUser.uid).get().then(userDoc => {
+            const data = userDoc.exists ? (userDoc.data() || {}) : {};
+            const isEnabled = data.teacherMode === true;
+            toggle.classList.toggle('active', isEnabled);
+            toggle.setAttribute('aria-checked', String(isEnabled));
+        }).catch(() => {});
+    }
+
+    async function toggleTeacherMode() {
+        const toggle = document.getElementById('teacher-mode-toggle');
+        const msgEl = document.getElementById('teacher-mode-toggle-msg');
+        const isCurrentlyActive = toggle.classList.contains('active');
+
+        try {
+            if (isCurrentlyActive) {
+                // Turning OFF — always allowed
+                await db.collection('users').doc(currentUser.uid).set({ teacherMode: false }, { merge: true });
+                toggle.classList.remove('active');
+                toggle.setAttribute('aria-checked', 'false');
+                msgEl.textContent = 'Teacher Mode is now off. New groups will be created as regular study groups.';
+                msgEl.classList.remove('hidden');
+            } else {
+                // Turning ON — check if user has a teacher application on file
+                const appSnap = await db.collection('teacherApplications').where('userId', '==', currentUser.uid).limit(1).get();
+                if (appSnap.empty) {
+                    // No application — redirect to teacher info page
+                    msgEl.innerHTML = 'To enable Teacher Mode, please <a href="/teachers" style="color:#4338ca;font-weight:600;text-decoration:underline">complete a short teacher application</a> first. This helps us keep classrooms safe and meaningful.';
+                    msgEl.classList.remove('hidden');
+                    return;
+                }
+                await db.collection('users').doc(currentUser.uid).set({ teacherMode: true }, { merge: true });
+                toggle.classList.add('active');
+                toggle.setAttribute('aria-checked', 'true');
+                msgEl.textContent = 'Teacher Mode is now on! When you create a group, you\'ll have the option to make it a Classroom with advanced moderation tools.';
+                msgEl.classList.remove('hidden');
+            }
+        } catch (err) {
+            msgEl.textContent = 'Failed to update Teacher Mode. Please try again.';
             msgEl.classList.remove('hidden');
         }
     }
@@ -590,16 +932,54 @@
         const bdayInput = document.getElementById('birthday-input');
         if (bdayInput) bdayInput.addEventListener('input', e => updateHebrewPreview(e.target.value));
 
-        // Deep-link scroll
+        // Deep-link scroll + highlight
         if (window.location.hash) {
             const target = document.querySelector(window.location.hash);
-            if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 300);
+            if (target) {
+                setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 300);
+                if (window.location.hash === '#sec-hebrew-study') {
+                    target.style.transition = 'box-shadow .3s, border-color .3s';
+                    setTimeout(() => {
+                        target.style.borderColor = '#7c3aed';
+                        target.style.boxShadow = '0 0 0 3px rgba(124,58,237,.18), 0 4px 20px rgba(124,58,237,.1)';
+                    }, 500);
+                    setTimeout(() => {
+                        target.style.borderColor = '';
+                        target.style.boxShadow = '';
+                    }, 4500);
+                }
+            }
         }
         const sectionParam = new URLSearchParams(window.location.search).get('section');
         if (sectionParam) {
             const target = document.getElementById('sec-' + sectionParam);
-            if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 300);
+            if (target) {
+                setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 300);
+                if (sectionParam === 'birthday') {
+                    target.classList.add('birthday-highlight');
+                    const bdayField = document.getElementById('birthday-input');
+                    if (bdayField) {
+                        bdayField.addEventListener('focus', () => {
+                            target.classList.remove('birthday-highlight');
+                        }, { once: true });
+                    }
+                }
+            }
         }
+
+        // Sidebar active link tracking
+        const navItems = document.querySelectorAll('.settings-nav .nav-item[href^="#"]');
+        const sections = Array.from(navItems).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navItems.forEach(a => a.classList.remove('active'));
+                    const activeLink = document.querySelector(`.settings-nav .nav-item[href="#${entry.target.id}"]`);
+                    if (activeLink) activeLink.classList.add('active');
+                }
+            });
+        }, { rootMargin: '-20% 0px -60% 0px' });
+        sections.forEach(sec => observer.observe(sec));
     });
 
     async function saveBirthday(e) {
@@ -611,14 +991,14 @@
         const heb = gregorianToHebrew(dateStr);
         if (!heb) { showMsg(msg, 'Could not calculate Hebrew date. Please try a different date.', 'error'); return; }
         const timezone = (document.getElementById('birthday-timezone')?.value || '').trim();
-        setLoading(btn, true, 'Saving…');
+        setLoading(btn, true, 'Saving...');
         hideMsg(msg);
         try {
             const payload = { birthDateGregorian: dateStr, ...heb };
             if (timezone) payload.birthTimezone = timezone;
             await db.collection('users').doc(currentUser.uid).set(payload, { merge: true });
             updateHebrewPreview(dateStr);
-            showMsg(msg, '✓ Birthday saved successfully.', 'success');
+            showMsg(msg, 'Birthday saved successfully.', 'success');
         } catch (err) {
             showMsg(msg, 'Failed to save birthday. Please try again.', 'error');
         } finally { setLoading(btn, false, 'Save Birthday'); }
@@ -631,14 +1011,14 @@
         const btn  = document.getElementById('profile-btn');
         const msg  = document.getElementById('profile-msg');
         if (!name || name.length < 2) { showMsg(msg, 'Name must be at least 2 characters.', 'error'); return; }
-        setLoading(btn, true, 'Saving…');
+        setLoading(btn, true, 'Saving...');
         hideMsg(msg);
         try {
             await currentUser.updateProfile({ displayName: name });
             await db.collection('users').doc(currentUser.uid).set({ displayName: name, displayNameChanged: true }, { merge: true });
             document.getElementById('sidebar-name').textContent = name;
             document.getElementById('avatar-circle').textContent = name.charAt(0).toUpperCase();
-            showMsg(msg, '✓ Display name updated successfully. This change is permanent.', 'success');
+            showMsg(msg, 'Display name updated successfully. This change is permanent.', 'success');
             setTimeout(() => {
                 document.getElementById('profile-form').classList.add('hidden');
                 document.getElementById('profile-locked').classList.remove('hidden');
@@ -657,7 +1037,7 @@
         const msg      = document.getElementById('email-msg');
         if (!newEmail) { showMsg(msg, 'Please enter a new email address.', 'error'); return; }
         if (!password) { showMsg(msg, 'Please enter your current password.', 'error'); return; }
-        setLoading(btn, true, 'Updating…');
+        setLoading(btn, true, 'Updating...');
         hideMsg(msg);
         try {
             const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, password);
@@ -667,7 +1047,7 @@
             document.getElementById('sidebar-email').textContent = newEmail;
             document.getElementById('new-email').value = '';
             document.getElementById('email-current-pw').value = '';
-            showMsg(msg, '✓ Email updated successfully.', 'success');
+            showMsg(msg, 'Email updated successfully.', 'success');
         } catch (err) {
             if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') showMsg(msg, 'Incorrect password. Please try again.', 'error');
             else if (err.code === 'auth/email-already-in-use') showMsg(msg, 'That email is already in use by another account.', 'error');
@@ -688,7 +1068,7 @@
         if (!current) { showMsg(msg, 'Please enter your current password.', 'error'); return; }
         if (newPw.length < 6) { showMsg(msg, 'New password must be at least 6 characters.', 'error'); return; }
         if (newPw !== confirm) { showMsg(msg, 'Passwords do not match.', 'error'); return; }
-        setLoading(btn, true, 'Updating…');
+        setLoading(btn, true, 'Updating...');
         hideMsg(msg);
         try {
             const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, current);
@@ -697,7 +1077,7 @@
             document.getElementById('pw-current').value = '';
             document.getElementById('pw-new').value = '';
             document.getElementById('pw-confirm').value = '';
-            showMsg(msg, '✓ Password updated successfully.', 'success');
+            showMsg(msg, 'Password updated successfully.', 'success');
         } catch (err) {
             if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') showMsg(msg, 'Current password is incorrect.', 'error');
             else if (err.code === 'auth/weak-password') showMsg(msg, 'Password is too weak. Use at least 6 characters.', 'error');
@@ -710,7 +1090,7 @@
         if (!currentUser?.email) { showMsg(msg, 'No email address on your account.', 'error'); return; }
         hideMsg(msg);
         auth.sendPasswordResetEmail(currentUser.email)
-            .then(() => showMsg(msg, '✓ Reset email sent to ' + currentUser.email + '. Check your inbox.', 'success'))
+            .then(() => showMsg(msg, 'Reset email sent to ' + currentUser.email + '. Check your inbox.', 'success'))
             .catch(() => showMsg(msg, 'Failed to send reset email. Please try again.', 'error'));
     }
 
@@ -743,7 +1123,7 @@
     async function subscribeNewsletter() {
         var btn = document.getElementById('nl-sub-btn');
         var msg = document.getElementById('nl-msg');
-        hideMsg(msg); setLoading(btn, true, 'Subscribing…');
+        hideMsg(msg); setLoading(btn, true, 'Subscribing...');
         try {
             var email = currentUser.email.toLowerCase();
             var docId = getNewsletterDocId(email);
@@ -752,7 +1132,7 @@
             document.getElementById('nl-not-subscribed').classList.add('hidden');
             document.getElementById('nl-sub-email').textContent = email;
             document.getElementById('nl-subscribed').classList.remove('hidden');
-            showMsg(msg, '✓ Subscribed! Look out for your first Dvar Torah this Friday.', 'success');
+            showMsg(msg, 'Subscribed! Look out for your first Dvar Torah this Friday.', 'success');
         } catch (err) { showMsg(msg, 'Failed to subscribe. Please try again.', 'error'); }
         finally { setLoading(btn, false, 'Subscribe with ' + currentUser.email); }
     }
@@ -760,7 +1140,7 @@
     async function unsubscribeNewsletter() {
         var btn = document.getElementById('nl-unsub-btn');
         var msg = document.getElementById('nl-msg');
-        hideMsg(msg); setLoading(btn, true, 'Unsubscribing…');
+        hideMsg(msg); setLoading(btn, true, 'Unsubscribing...');
         try {
             var email = currentUser.email.toLowerCase();
             var docId = getNewsletterDocId(email);
@@ -769,7 +1149,7 @@
             document.getElementById('nl-subscribed').classList.add('hidden');
             document.getElementById('nl-user-email').textContent = email;
             document.getElementById('nl-not-subscribed').classList.remove('hidden');
-            showMsg(msg, '✓ You have been unsubscribed.', 'success');
+            showMsg(msg, 'You have been unsubscribed.', 'success');
         } catch (err) { showMsg(msg, 'Failed to unsubscribe. Please try again.', 'error'); }
         finally { setLoading(btn, false, 'Unsubscribe'); }
     }
@@ -790,7 +1170,29 @@
         const passwordInput = document.getElementById('delete-password');
         hideMsg(msg);
 
-        if (!isGoogleUser) {
+        if (isGoogleUser) {
+            try {
+                const googleProvider = new firebase.auth.GoogleAuthProvider();
+                try {
+                    await currentUser.reauthenticateWithPopup(googleProvider);
+                } catch (popupErr) {
+                    if (popupErr.code === 'auth/popup-blocked') {
+                        showMsg(msg, 'Popup blocked — redirecting to Google sign-in...', 'info');
+                        try { sessionStorage.setItem('pendingAccountDeletion', '1'); } catch(_){}
+                        await currentUser.reauthenticateWithRedirect(googleProvider);
+                        return;
+                    }
+                    throw popupErr;
+                }
+            } catch (err) {
+                if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
+                    return;
+                }
+                console.error('Google reauthentication error:', err);
+                showMsg(msg, 'Google sign-in failed. Please try again to confirm deletion.', 'error');
+                return;
+            }
+        } else {
             const password = passwordInput.value;
             if (!password) { showMsg(msg, 'Please enter your password to confirm deletion.', 'error'); return; }
             try {
@@ -805,7 +1207,7 @@
 
         if (!confirm('Are you absolutely sure you want to delete your account? This cannot be undone. All your data will be permanently erased.')) return;
 
-        setLoading(btn, true, 'Deleting…');
+        setLoading(btn, true, 'Deleting...');
         const userId = currentUser.uid;
         const userEmail = (currentUser.email || '').toLowerCase();
 
@@ -851,8 +1253,25 @@
             window.location.href = '/';
         } catch (err) {
             console.error('Account deletion error:', err);
-            if (err.code === 'auth/requires-recent-login') showMsg(msg, 'Your session has expired. Please sign out, sign back in, and try again.', 'error');
-            else showMsg(msg, 'Failed to delete account: ' + (err.message || 'Please try again.'), 'error');
+            if (err.code === 'auth/requires-recent-login') {
+                if (isGoogleUser) {
+                    showMsg(msg, 'Session expired — please confirm with Google again.', 'error');
+                    setLoading(btn, false, 'Delete My Account');
+                    try {
+                        const googleProvider = new firebase.auth.GoogleAuthProvider();
+                        await currentUser.reauthenticateWithPopup(googleProvider);
+                        showMsg(msg, 'Re-authenticated. Please click Delete again.', 'info');
+                    } catch (reErr) {
+                        if (reErr.code !== 'auth/popup-closed-by-user' && reErr.code !== 'auth/cancelled-popup-request') {
+                            showMsg(msg, 'Google sign-in failed. Please sign out, sign back in, and try again.', 'error');
+                        }
+                    }
+                } else {
+                    showMsg(msg, 'Your session has expired. Please sign out, sign back in, and try again.', 'error');
+                }
+            } else {
+                showMsg(msg, 'Failed to delete account: ' + (err.message || 'Please try again.'), 'error');
+            }
             setLoading(btn, false, 'Delete My Account');
         }
     }
@@ -864,7 +1283,7 @@
     }
     function showMsg(el, msg, type) {
         el.textContent = msg;
-        el.className = 'mb-4 text-sm px-4 py-3 rounded-xl ' + (type === 'success' ? 'bg-green-50 border border-green-200 text-green-800' : 'bg-red-50 border border-red-200 text-red-700');
+        el.className = 's-msg mb-3 ' + (type === 'success' ? 's-notice-success' : 's-notice-error');
         el.classList.remove('hidden');
     }
     function hideMsg(el) { el.classList.add('hidden'); }

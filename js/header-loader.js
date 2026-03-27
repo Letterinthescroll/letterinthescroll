@@ -16,7 +16,7 @@
     'use strict';
 
     var HEADER_TEMPLATE_URL = '/includes/header.html';
-    var CACHE_KEY = 'cachedHeaderTemplate_v3';
+    var CACHE_KEY = 'cachedHeaderTemplate_v5';
     var NAV_TOKEN = '__NAV_ITEMS__';
 
     /* ── Nav items ──────────────────────────────────────────────────────── */
@@ -188,6 +188,34 @@
     }
 
     mountHeader();
+
+    /* ── Gate Flashcards nav link if study mode is off ───────────────── */
+    (function gateFlashcardsNav() {
+        var link = document.querySelector('a[href="/flashcards"].header-btn');
+        if (!link) return;
+        link.addEventListener('click', function (e) {
+            if (localStorage.getItem('alits_hebrew_study_mode') === 'true') return;
+            e.preventDefault();
+            // Show inline modal — reuse the same pattern from page-auth / main
+            if (document.getElementById('study-mode-gate-modal')) return;
+            var ov = document.createElement('div');
+            ov.id = 'study-mode-gate-modal';
+            ov.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);backdrop-filter:blur(4px)';
+            ov.innerHTML =
+                '<div style="background:#fff;border-radius:1.35rem;padding:2rem 2rem 1.6rem;max-width:380px;width:90%;box-shadow:0 24px 60px rgba(0,0,0,.18);text-align:center">' +
+                '<div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#f0f7ff,#ede9fe);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem"><svg width="22" height="22" fill="none" stroke="#6d28d9" viewBox="0 0 24 24"><rect x="3" y="6" width="15" height="11" rx="1.5" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4h13a1.5 1.5 0 011.5 1.5V15"/></svg></div>' +
+                '<div style="font-size:1.1rem;font-weight:700;color:#1a1a2e;margin-bottom:.45rem">Hebrew Study Mode is off</div>' +
+                '<div style="font-size:.82rem;color:#6b7280;line-height:1.6;margin-bottom:1.4rem">Flashcards are part of Hebrew Study Mode — a feature that lets you save words as you read and review them with spaced repetition.<br><br>Turn it on in Settings to get started.</div>' +
+                '<div style="display:flex;gap:.55rem;justify-content:center">' +
+                '<button id="smg-close2" style="padding:.52rem 1.2rem;border-radius:2rem;font-size:.78rem;font-weight:600;cursor:pointer;border:none;background:#f3f4f6;color:#374151">Maybe later</button>' +
+                '<button id="smg-settings2" style="padding:.52rem 1.2rem;border-radius:2rem;font-size:.78rem;font-weight:600;cursor:pointer;border:none;background:#1a1a2e;color:#fff">Go to Settings</button>' +
+                '</div></div>';
+            document.body.appendChild(ov);
+            ov.addEventListener('click', function (ev) { if (ev.target === ov) ov.remove(); });
+            ov.querySelector('#smg-close2').addEventListener('click', function () { ov.remove(); });
+            ov.querySelector('#smg-settings2').addEventListener('click', function () { window.location.href = '/settings#sec-hebrew-study'; });
+        });
+    })();
 
     /* ── Pre-render user pill from cache (prevents layout shift) ──────
        page-auth.js / main.js are ES modules (deferred), so they run

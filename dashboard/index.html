@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home — A Letter in the Scroll</title>
-    <link rel="icon" type="image/png" href="/media/images/Icon.png">
-    <link rel="apple-touch-icon" href="/media/images/Icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png" media="(prefers-color-scheme: light)"><link rel="icon" type="image/svg+xml" href="/media/images/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" sizes="180x180" href="/media/images/apple-touch-icon.png">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="A Letter in the Scroll">
     <meta property="og:title" content="Dashboard — A Letter in the Scroll">
@@ -1171,6 +1171,16 @@
             color: #0a5c6e;
         }
 
+        .tone-food .dash-explore-icon {
+            background: linear-gradient(145deg, #e0f5d8, #f0faea);
+            color: #3a7a1e;
+        }
+
+        .tone-flashcards .dash-explore-icon {
+            background: linear-gradient(145deg, #ede9fe, #f5f3ff);
+            color: #6d28d9;
+        }
+
         /* ── Daily Tehillim section card — redesigned ───────────────── */
         #daily-tehillim-card {
             position: relative;
@@ -1267,6 +1277,14 @@
             color: rgba(160, 225, 235, 0.7);
             text-transform: uppercase;
             margin-bottom: 0.9rem;
+        }
+
+        .dt-heb-date {
+            font-size: 0.68rem;
+            color: rgba(160, 225, 235, 0.5);
+            letter-spacing: 0.03em;
+            margin-top: -0.6rem;
+            margin-bottom: 0.75rem;
         }
 
         /* Portion info row */
@@ -2714,6 +2732,8 @@
 
                 <p class="dt-subtitle">Psalms &middot; Monthly Cycle</p>
 
+                <p id="dt-heb-date" class="dt-heb-date"></p>
+
                 <p id="dt-sig" class="dt-sig"></p>
 
                 <div id="dt-extras" class="dt-extras"></div>
@@ -2794,6 +2814,25 @@
                             <span class="text-xs text-slate-600">Require leader approval to join</span>
                             <span class="text-[10px] text-slate-400 italic">(members must be accepted before joining)</span>
                         </label>
+                        <!-- Classroom option — only visible for Teacher Mode users -->
+                        <div id="create-classroom-option" class="hidden mt-3 p-3 rounded-xl border-2 border-dashed border-indigo-200 bg-indigo-50/50">
+                            <label class="flex items-center gap-2.5 cursor-pointer select-none">
+                                <input type="checkbox" id="create-classroom" onchange="onClassroomToggle()" class="w-4 h-4 rounded border-indigo-300 text-indigo-600 focus:ring-indigo-500 accent-indigo-600">
+                                <div>
+                                    <span class="text-xs font-bold text-indigo-700">Create as Classroom</span>
+                                    <p class="text-[10px] text-indigo-500 mt-0.5">Up to 80 students. You get moderation tools, safety filters, and full control over members and comments.</p>
+                                </div>
+                            </label>
+                            <div id="classroom-safety-options" class="hidden mt-3 ml-6 space-y-2">
+                                <label class="flex items-center gap-2.5 cursor-pointer select-none">
+                                    <input type="checkbox" id="create-safety-filter" checked class="w-4 h-4 rounded border-indigo-300 text-indigo-600 focus:ring-indigo-500 accent-indigo-600">
+                                    <div>
+                                        <span class="text-xs font-semibold text-indigo-700">Safety Filter</span>
+                                        <p class="text-[10px] text-indigo-400 mt-0.5">Block comments and messages containing profanity, slurs, or inappropriate language.</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
                     </form>
                     <div id="create-success" class="hidden dash-feedback dash-feedback--info">
                         <p>Group created. Share this with your friends:</p>
@@ -2898,6 +2937,14 @@
                     <span class="dash-explore-label">Songs</span>
                     <span class="dash-explore-sub">Shabbat and zmirot</span>
                 </a>
+                <a href="/food" class="dash-explore-card tone-food">
+                    <div class="glow-border" aria-hidden="true"></div>
+                    <div class="dash-explore-icon">
+                        <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 2v7c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2V2M7 2v20M21 15V2a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3m0 0v7"/></svg>
+                    </div>
+                    <span class="dash-explore-label">Food</span>
+                    <span class="dash-explore-sub">Jewish recipes</span>
+                </a>
                 <a href="/bookmarks" class="dash-explore-card tone-bookmarks">
                     <div class="glow-border" aria-hidden="true"></div>
                     <div class="dash-explore-icon">
@@ -2905,6 +2952,14 @@
                     </div>
                     <span class="dash-explore-label">Bookmarks</span>
                     <span class="dash-explore-sub">Your saved items</span>
+                </a>
+                <a href="/flashcards" class="dash-explore-card tone-flashcards" onclick="if(localStorage.getItem('alits_hebrew_study_mode')!=='true'){event.preventDefault();showStudyModeGateModal();}">
+                    <div class="glow-border" aria-hidden="true"></div>
+                    <div class="dash-explore-icon">
+                        <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="6" width="15" height="11" rx="1.5" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4h13a1.5 1.5 0 011.5 1.5V15"/></svg>
+                    </div>
+                    <span class="dash-explore-label">Flashcards</span>
+                    <span class="dash-explore-sub">Hebrew vocabulary</span>
                 </a>
                 <a href="/psalms" class="dash-explore-card tone-psalms">
                     <div class="glow-border" aria-hidden="true"></div>
@@ -3146,6 +3201,25 @@
 <script src="/js/tutorial.js"></script>
 <script src="/js/mobile-tutorial.js"></script>
 <script>
+    function showStudyModeGateModal() {
+        if (document.getElementById('study-mode-gate-modal')) return;
+        var ov = document.createElement('div');
+        ov.id = 'study-mode-gate-modal';
+        ov.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);backdrop-filter:blur(4px)';
+        ov.innerHTML =
+            '<style>#study-mode-gate-modal .smg-card{background:#fff;border-radius:1.35rem;padding:2rem 2rem 1.6rem;max-width:380px;width:90%;box-shadow:0 24px 60px rgba(0,0,0,.18);text-align:center;animation:smgSlide .22s ease}@keyframes smgSlide{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}</style>' +
+            '<div class="smg-card">' +
+            '<div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#f0f7ff,#ede9fe);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem"><svg width="22" height="22" fill="none" stroke="#6d28d9" viewBox="0 0 24 24"><rect x="3" y="6" width="15" height="11" rx="1.5" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4h13a1.5 1.5 0 011.5 1.5V15"/></svg></div>' +
+            '<div style="font-size:1.1rem;font-weight:700;color:#1a1a2e;margin-bottom:.45rem">Hebrew Study Mode is off</div>' +
+            '<div style="font-size:.82rem;color:#6b7280;line-height:1.6;margin-bottom:1.4rem">Flashcards are part of Hebrew Study Mode &mdash; a feature that lets you save words as you read and review them with spaced repetition.<br><br>Turn it on in Settings to get started.</div>' +
+            '<div style="display:flex;gap:.55rem;justify-content:center">' +
+            '<button onclick="this.closest(\'#study-mode-gate-modal\').remove()" style="padding:.52rem 1.2rem;border-radius:2rem;font-size:.78rem;font-weight:600;cursor:pointer;border:none;background:#f3f4f6;color:#374151">Maybe later</button>' +
+            '<button onclick="window.location.href=\'/settings#sec-hebrew-study\'" style="padding:.52rem 1.2rem;border-radius:2rem;font-size:.78rem;font-weight:600;cursor:pointer;border:none;background:#1a1a2e;color:#fff">Go to Settings</button>' +
+            '</div></div>';
+        document.body.appendChild(ov);
+        ov.addEventListener('click', function(e) { if (e.target === ov) ov.remove(); });
+    }
+
     const loadingStateEl = document.getElementById('loading-state');
     const mainContentEl = document.getElementById('main-content');
 
@@ -3217,6 +3291,7 @@
     let bdayShownThisLoad = false; // in-memory flag — resets on every page load so celebration re-appears throughout the birthday
     let chavUnsubs  = [];
     let userChavrutas = [];
+    let isTeacherMode = false; // loaded from user profile
     let latestDailyQuote = null;
     let dailyQuoteToggleInFlight = false;
     let dashboardShellRevealed = false;
@@ -3364,7 +3439,20 @@
                     </svg>
                     Bookmarks
                 </a>
-                <a href="/settings" class="header-dropdown-item" role="menuitem">
+                <a href="/flashcards" class="header-dropdown-item" role="menuitem" onclick="if(localStorage.getItem('alits_hebrew_study_mode')!=='true'){event.preventDefault();showStudyModeGateModal();}">
+                    <svg class="header-dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <rect x="3" y="6" width="15" height="11" rx="1.5" stroke-width="2"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4h13a1.5 1.5 0 011.5 1.5V15"/>
+                    </svg>
+                    Flashcards
+                </a>
+                <a href="/journal" class="header-dropdown-item" role="menuitem">
+                    <svg class="header-dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                    Spiritual Journal
+                </a>
+                <a href="/settings" id="header-settings-link" class="header-dropdown-item" role="menuitem">
                     <svg class="header-dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -3607,6 +3695,9 @@
                     applyDashboardIdentity(firstName);
                     syncDashboardHeaderDropdown(firstName, user.email || '');
                 }
+                // Teacher Mode — show classroom creation option
+                isTeacherMode = data.teacherMode === true;
+                updateCreateFormForTeacherMode();
             }
         } catch (e) { /* ignore */ }
         try { sessionStorage.setItem('headerUserCache', JSON.stringify({ firstName: firstName, email: user.email || '', uid: user.uid })); } catch(_) {}
@@ -3641,10 +3732,12 @@
                     const freshData = (freshSnap.exists ? freshSnap.data() : {}) || {};
                     if (!freshData.birthDateGregorian) {
                         showMissingInfoToast();
+                        addSettingsNotifDot();
                     }
                 } catch (_) {
                     // Server unreachable — fall back to cached check
                     showMissingInfoToast();
+                    addSettingsNotifDot();
                 }
             }
         } catch(_) {}
@@ -3684,6 +3777,18 @@
         inner.className = cls + ' rounded-2xl px-5 py-3.5 flex items-center gap-3 shadow-sm';
         msgEl.textContent = msg;
         document.getElementById('auto-join-banner').classList.remove('hidden');
+    }
+
+    /* ════ SETTINGS NOTIFICATION DOT ════ */
+    function addSettingsNotifDot() {
+        const settingsLink = document.getElementById('header-settings-link');
+        if (settingsLink && !settingsLink.querySelector('.settings-notif-dot')) {
+            settingsLink.href = '/settings/?section=birthday';
+            const dot = document.createElement('span');
+            dot.className = 'settings-notif-dot';
+            dot.title = 'Complete your profile';
+            settingsLink.appendChild(dot);
+        }
     }
 
     /* ════ MISSING INFO TOAST ════ */
@@ -4072,7 +4177,7 @@
         try {
             // Serialize chavruta list + names + activity for instant restore
             const serializable = list.map(c => {
-                const obj = { id:c.id, name:c.name, leader:c.leader, members:c.members||[], pendingMembers:c.pendingMembers||[], maxMembers:c.maxMembers, inviteCode:c.inviteCode, requireApproval:!!c.requireApproval, coLeaders:c.coLeaders||[], createdBy:c.createdBy };
+                const obj = { id:c.id, name:c.name, leader:c.leader, members:c.members||[], pendingMembers:c.pendingMembers||[], maxMembers:c.maxMembers, inviteCode:c.inviteCode, requireApproval:!!c.requireApproval, coLeaders:c.coLeaders||[], createdBy:c.createdBy, isClassroom:!!c.isClassroom, safetyFilter:!!c.safetyFilter };
                 return obj;
             });
             // Serialize activity — convert Firestore timestamps to plain ms
@@ -4258,7 +4363,7 @@
             return;
         }
 
-        modalLinks.forEach(el => { el.href = 'study.html'; el.setAttribute('title', 'Open study room'); });
+        modalLinks.forEach(el => { el.href = '/study'; el.setAttribute('title', 'Open study room'); });
         if (exploreLink) { exploreLink.href = '/study'; exploreLink.setAttribute('title', 'Open study room'); }
     }
 
@@ -4325,6 +4430,7 @@
         const coLeaders  = Array.isArray(c.coLeaders) ? c.coLeaders : [];
         const isCoLeader = !isLeader && coLeaders.includes(currentUser.uid);
         const canManage  = isLeader || isCoLeader;
+        const isClassroomGroup = c.isClassroom === true;
         const count = (c.members||[]).length, max = c.maxMembers||8;
         const code  = c.inviteCode||'', link = inviteLink(code);
         const mems = c.members||[];
@@ -4361,7 +4467,7 @@
                     <div>
                         <span class="text-sm font-medium text-slate-700">${escHTML(n)}</span>
                         <div class="flex items-center gap-1 mt-0.5">
-                            ${isLdr?'<span class="text-[10px] bg-amber-100 text-amber-700 font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider">Leader</span>':''}
+                            ${isLdr?`<span class="text-[10px] ${isClassroomGroup?'bg-indigo-100 text-indigo-700':'bg-amber-100 text-amber-700'} font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider">${isClassroomGroup?'Teacher':'Leader'}</span>`:''}
                             ${isCoLdr?'<span class="text-[10px] bg-purple-100 text-purple-700 font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider">Co-Leader</span>':''}
                             ${me?'<span class="text-[10px] text-blue-500 font-medium">(you)</span>':''}
                         </div>
@@ -4378,9 +4484,9 @@
         const transferOpts = (c.members||[]).filter(u=>u!==currentUser.uid)
             .map(u=>`<option value="${u}">${escHTML(nameCache[u]||u.slice(0,8))}</option>`).join('');
 
-        const badgeLabel = isLeader ? 'Leader' : isCoLeader ? 'Co-Leader' : 'Member';
+        const badgeLabel = isLeader ? (isClassroomGroup ? 'Teacher' : 'Leader') : isCoLeader ? 'Co-Leader' : (isClassroomGroup ? 'Student' : 'Member');
         const badgeClass = isLeader
-            ? 'bg-amber-400/20 text-amber-200 border-amber-400/30'
+            ? (isClassroomGroup ? 'bg-indigo-400/20 text-indigo-200 border-indigo-400/30' : 'bg-amber-400/20 text-amber-200 border-amber-400/30')
             : isCoLeader
             ? 'bg-purple-400/20 text-purple-200 border-purple-400/30'
             : 'bg-white/15 text-blue-100 border-white/20';
@@ -4442,15 +4548,25 @@
                             </div>
                         </div>
                         <div>
-                            <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1.5">Group Size (${count}/${max} members)</label>
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1.5">Group Size (${count}/${max} ${isClassroomGroup?'students':'members'})</label>
                             <div class="flex gap-2">
                                 <select id="resize-${c.id}" class="flex-1 px-3 py-2 border-2 border-slate-200 rounded-xl text-sm bg-white text-slate-700 focus:border-blue-500 focus:outline-none">
-                                    ${[2,3,4,5,6,7,8,10,12,15,20,25,30].filter(n=>n>=count).map(n=>`<option value="${n}"${n===max?' selected':''}>${n} people${n===30?' (Party)':''}</option>`).join('')}
+                                    ${(isClassroomGroup ? [10,15,20,25,30,40,50,60,70,80] : [2,3,4,5,6,7,8,10,12,15,20,25,30]).filter(n=>n>=count).map(n=>`<option value="${n}"${n===max?' selected':''}>${n} ${isClassroomGroup?'students':'people'}${!isClassroomGroup&&n===30?' (Party)':isClassroomGroup&&n===80?' (Max)':''}</option>`).join('')}
                                 </select>
                                 <button onclick="resizeChavruta('${c.id}',this)" class="px-4 py-2 text-xs font-bold text-white rounded-xl transition-all" style="background:linear-gradient(135deg,#16285e,#2f56ab)">Resize</button>
                             </div>
-                            ${count>=max?'<p class="text-[10px] text-amber-500 mt-1.5 font-medium">Group is full! Increase the size to allow more members.</p>':''}
+                            ${count>=max?`<p class="text-[10px] text-amber-500 mt-1.5 font-medium">${isClassroomGroup?'Classroom':'Group'} is full! Increase the size to allow more ${isClassroomGroup?'students':'members'}.</p>`:''}
                         </div>
+                        ${isClassroomGroup?`<div>
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-indigo-400 block mb-1.5">Classroom Safety</label>
+                            <label class="flex items-center gap-2.5 cursor-pointer select-none bg-indigo-50 px-3 py-2.5 rounded-xl border border-indigo-200">
+                                <input type="checkbox" ${c.safetyFilter?'checked':''} onchange="toggleSafetyFilter('${c.id}',this.checked)" class="w-4 h-4 rounded border-indigo-300 text-indigo-600 focus:ring-indigo-500 accent-indigo-600">
+                                <div>
+                                    <span class="text-xs font-medium text-indigo-700">Safety Filter</span>
+                                    <p class="text-[10px] text-indigo-400 mt-0.5">Block comments and messages with profanity, slurs, or inappropriate language</p>
+                                </div>
+                            </label>
+                        </div>`:''}
                         ${transferOpts?`<div>
                             <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1.5">Transfer Leadership</label>
                             <select id="trf-${c.id}" class="w-full px-3 py-2 border-2 border-slate-200 rounded-xl text-sm bg-white text-slate-700 focus:border-blue-500 focus:outline-none mb-2">${transferOpts}</select>
@@ -4501,7 +4617,7 @@
             const color = isLdr ? 'linear-gradient(135deg,#c89a35,#9d7418)' : isCoLdr ? 'linear-gradient(135deg,#7c3aed,#a78bfa)' : getMemberColor(uid, mems);
 
             let badges = '';
-            if (isLdr) badges += '<span style="display:inline-block;padding:1px 6px;font-size:9px;font-weight:700;color:#92400e;background:#fef3c7;border:1px solid #fde68a;border-radius:999px;margin-left:4px;">Leader</span>';
+            if (isLdr) badges += `<span style="display:inline-block;padding:1px 6px;font-size:9px;font-weight:700;color:${isClassroomGroup?'#3730a3':'#92400e'};background:${isClassroomGroup?'#e0e7ff':'#fef3c7'};border:1px solid ${isClassroomGroup?'#a5b4fc':'#fde68a'};border-radius:999px;margin-left:4px;">${isClassroomGroup?'Teacher':'Leader'}</span>`;
             if (isCoLdr) badges += '<span style="display:inline-block;padding:1px 6px;font-size:9px;font-weight:700;color:#6d28d9;background:#ede9fe;border:1px solid #c4b5fd;border-radius:999px;margin-left:4px;">Co-Leader</span>';
             if (me) badges += '<span style="display:inline-block;padding:1px 6px;font-size:9px;font-weight:600;color:#1e40af;background:#dbeafe;border:1px solid #bfdbfe;border-radius:999px;margin-left:4px;">You</span>';
             if (isBday) badges += '<span style="display:inline-block;padding:1px 6px;font-size:9px;font-weight:700;color:#854d0e;background:#fef9c3;border:1px solid #fde047;border-radius:999px;margin-left:4px;">🎂 Birthday</span>';
@@ -4521,28 +4637,38 @@
             </div>`;
         }).join('');
 
+        const headerGradient = isClassroomGroup
+            ? 'background:linear-gradient(135deg,#312e81 0%,#4338ca 100%)'
+            : 'background:linear-gradient(135deg,#16285e 0%,#2f56ab 100%)';
+
         return `<div class="chavruta-glow-host fade-up">
             <div class="cg-border" aria-hidden="true"></div>
             <div class="cg-edge"   aria-hidden="true"></div>
             <div class="chavruta-card">
-            <div class="px-5 pt-5 pb-4" style="background:linear-gradient(135deg,#16285e 0%,#2f56ab 100%)">
+            <div class="px-5 pt-5 pb-4" style="${headerGradient}">
                 <div class="flex items-start justify-between mb-3">
-                    <h3 class="font-semibold text-white text-base leading-snug pr-2">${escHTML(c.name)}</h3>
+                    <div class="flex items-center gap-2 pr-2">
+                        ${isClassroomGroup ? '<span style="display:inline-flex;align-items:center;gap:3px;padding:2px 7px;font-size:9px;font-weight:800;color:#c7d2fe;background:rgba(99,102,241,0.3);border:1px solid rgba(129,140,248,0.4);border-radius:999px;text-transform:uppercase;letter-spacing:0.08em;white-space:nowrap;"><svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>Classroom</span>' : ''}
+                        <h3 class="font-semibold text-white text-base leading-snug">${escHTML(c.name)}</h3>
+                    </div>
                     <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border shrink-0 ${badgeClass}">${badgeLabel}</span>
                 </div>
-                <div class="flex items-center gap-1">
+                <div class="flex items-center gap-1 flex-wrap">
                     <div class="flex">${avatars}</div>
-                    <span class="ml-2 text-blue-200/80 text-xs">${count}/${max} members</span>
+                    <span class="ml-2 text-blue-200/80 text-xs">${count}/${max} ${isClassroomGroup ? 'students' : 'members'}</span>
                     ${canManage && pending.length ? `<span class="ml-1.5 bg-amber-400 text-amber-900 text-[10px] font-bold px-1.5 py-0.5 rounded-full">${pending.length} pending</span>` : ''}
+                    ${isClassroomGroup && c.safetyFilter ? '<span style="display:inline-flex;align-items:center;gap:2px;margin-left:6px;padding:2px 6px;font-size:9px;font-weight:700;color:#16a34a;background:rgba(22,163,74,0.15);border:1px solid rgba(22,163,74,0.3);border-radius:999px;"><svg width="8" height="8" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2A11.954 11.954 0 0110 1.944zM13.707 8.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Safe</span>' : ''}
                 </div>
             </div>
             ${birthdayBanner ? `<div class="px-4 pt-3 pb-0">${birthdayBanner}</div>` : ''}
             <div class="px-5 py-4 space-y-2.5 chavruta-actions">
-                <a href="/study?chavruta=${c.id}"
+                <a href="${isClassroomGroup ? '/classroom/?id=' + c.id : '/study?chavruta=' + c.id}"
                    class="flex items-center justify-center gap-2 w-full py-3 rounded-2xl font-bold text-white text-sm shadow-lg"
-                   style="background:linear-gradient(135deg,#b7871e,#c89a35)">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                    Enter Study Room
+                   style="background:${isClassroomGroup ? 'linear-gradient(135deg,#4338ca,#6366f1)' : 'linear-gradient(135deg,#b7871e,#c89a35)'}">
+                    ${isClassroomGroup
+                        ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>'
+                        : '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>'}
+                    ${isClassroomGroup ? 'Enter Classroom' : 'Enter Study Room'}
                 </a>
                 <button id="members-btn-${c.id}" onclick="toggleMembersView('${c.id}')"
                     class="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:text-blue-700 hover:bg-blue-50 border border-slate-200 transition-all">
@@ -4990,20 +5116,78 @@
     }
 
     /* ════ CREATE ════ */
+    /* ════ CLASSROOM / TEACHER MODE helpers ════ */
+    const CLASSROOM_SIZE_OPTIONS = [10,15,20,25,30,40,50,60,70,80];
+    const REGULAR_SIZE_OPTIONS   = [2,3,4,5,6,7,8,10,12,15,20,25,30];
+
+    function updateCreateFormForTeacherMode() {
+        const classroomOpt = document.getElementById('create-classroom-option');
+        if (!classroomOpt) return;
+        if (isTeacherMode) {
+            classroomOpt.classList.remove('hidden');
+        } else {
+            classroomOpt.classList.add('hidden');
+            const cb = document.getElementById('create-classroom');
+            if (cb) cb.checked = false;
+            onClassroomToggle(); // reset size options
+        }
+    }
+
+    function onClassroomToggle() {
+        const isClassroom = document.getElementById('create-classroom')?.checked;
+        const sel = document.getElementById('create-max-members');
+        const safetyOpts = document.getElementById('classroom-safety-options');
+        if (!sel) return;
+        const sizes = isClassroom ? CLASSROOM_SIZE_OPTIONS : REGULAR_SIZE_OPTIONS;
+        const defaultVal = isClassroom ? 30 : 8;
+        sel.innerHTML = sizes.map(n => {
+            const label = isClassroom && n === 80 ? n + ' students (Max)' : n === 30 && !isClassroom ? n + ' people (Party)' : n + (isClassroom ? ' students' : ' people');
+            return `<option value="${n}"${n===defaultVal?' selected':''}>${label}</option>`;
+        }).join('');
+        if (safetyOpts) {
+            safetyOpts.classList.toggle('hidden', !isClassroom);
+        }
+    }
+
+    // Profanity word list for safety filter
+    const PROFANITY_LIST = [
+        // Common English profanity / slurs (kept minimal & lowercase)
+        'fuck','shit','ass','asshole','bitch','bastard','damn','dick','crap','piss',
+        'slut','whore','cunt','cock','nigger','nigga','fag','faggot','retard','retarded',
+        'kike','spic','chink','wetback','gook','tranny','dyke'
+    ];
+    const PROFANITY_REGEX = new RegExp('\\b(' + PROFANITY_LIST.join('|') + ')\\b', 'i');
+
+    function containsProfanity(text) {
+        if (!text || typeof text !== 'string') return false;
+        return PROFANITY_REGEX.test(text);
+    }
+
     async function createChavruta(e) {
         e.preventDefault();
         const name=document.getElementById('create-name').value.trim(), max=+document.getElementById('create-max-members').value;
         const requireApproval = document.getElementById('create-require-approval').checked;
+        const isClassroom = isTeacherMode && (document.getElementById('create-classroom')?.checked || false);
+        const safetyFilter = isClassroom && (document.getElementById('create-safety-filter')?.checked || false);
         const btn=document.getElementById('create-btn'), sEl=document.getElementById('create-success'), eEl=document.getElementById('create-error');
         if(name.length<2){showEl(eEl,'Name is too short.');return;}
+        if(isClassroom && max > 80){showEl(eEl,'Classroom max is 80 students.');return;}
+        if(!isClassroom && max > 30){showEl(eEl,'Regular group max is 30 members.');return;}
         btn.disabled=true; btn.textContent='Creating…'; eEl.classList.add('hidden'); sEl.classList.add('hidden');
         try {
             const code=generateCode();
             const docData = {name,leader:currentUser.uid,createdBy:currentUser.uid,members:[currentUser.uid],maxMembers:max,inviteCode:code,requireApproval:requireApproval,pendingMembers:[],createdAt:FieldValue.serverTimestamp()};
+            if (isClassroom) {
+                docData.isClassroom = true;
+                docData.safetyFilter = safetyFilter;
+            }
             await db.collection('chavrutas').add(docData);
             document.getElementById('created-invite-code').textContent = code;
             document.getElementById('created-invite-link').value = inviteLink(code);
             sEl.classList.remove('hidden'); document.getElementById('create-name').value='';
+            // Reset classroom checkbox
+            const ccb = document.getElementById('create-classroom');
+            if (ccb) { ccb.checked = false; onClassroomToggle(); }
         } catch(err){ console.error(err); showEl(eEl,'Failed to create. Please try again.'); }
         finally { btn.disabled=false; btn.textContent='Create Group'; }
     }
@@ -5107,7 +5291,7 @@
         } catch { alert('Failed to leave.'); }
     }
     async function deleteChavrutaSubcollections(id) {
-        const subs = ['chatMessages', 'dailyQuoteBookmarks', 'chatReadReceipts'];
+        const subs = ['chatMessages', 'dailyQuoteBookmarks', 'chatReadReceipts', 'announcements', 'assignments', 'comments', 'reactions', 'bookmarks', 'presence', 'mitzvah-data'];
         for (const sub of subs) {
             const ref = db.collection('chavrutas').doc(id).collection(sub);
             let snap = await ref.get();
@@ -5124,7 +5308,8 @@
         try{
             await deleteChavrutaSubcollections(id);
             await db.collection('chavrutas').doc(id).delete();
-        } catch { alert('Failed to delete.'); }
+            loadChavrutas();
+        } catch(e) { console.error('Delete failed:', e); alert('Failed to delete: ' + (e.message || e)); }
     }
     async function removeMember(id,uid){
         const n=nameCache[uid]||'this member';
@@ -5186,6 +5371,15 @@
         } catch { alert('Failed to update setting.'); }
     }
 
+    async function toggleSafetyFilter(id, checked) {
+        try {
+            await db.collection('chavrutas').doc(id).update({ safetyFilter: checked });
+            // Update local cache
+            const group = userChavrutas.find(g => g.id === id);
+            if (group) group.safetyFilter = checked;
+        } catch { alert('Failed to update safety filter.'); }
+    }
+
     /* ════ RENAME / TRANSFER / REGEN ════ */
     function flashGreen(btn) {
         const orig = btn.style.background;
@@ -5202,7 +5396,9 @@
         const sel=document.getElementById('resize-'+id);
         if(!sel) return;
         const newMax=+sel.value;
-        if(newMax<1||newMax>30){alert('Invalid size.');return;}
+        const group = userChavrutas.find(g => g.id === id);
+        const maxAllowed = (group && group.isClassroom) ? 80 : 30;
+        if(newMax<1||newMax>maxAllowed){alert('Invalid size.');return;}
         try{ await db.collection('chavrutas').doc(id).update({maxMembers:newMax}); flashGreen(btn); } catch { alert('Failed to resize group.'); }
     }
     async function transferLeadership(id,name,btn){
@@ -5234,11 +5430,8 @@
         if (userChavrutas.length > 1) {
             event.preventDefault();
             openStudyRoomModal();
-        } else if (!userChavrutas.length) {
-            event.preventDefault();
-            showPanel('create');
-            showBanner('Create or join a study group first.', 'warning');
         }
+        // If no groups, let the link navigate to /study (read-only mode)
     }
 
     const heroStudyBtn = document.getElementById('hero-study-btn');
@@ -5643,6 +5836,7 @@
         let html = '';
         let lastDate = '';
         let lastUid = '';
+        const activeRoom = userChavrutas.find(r => r.id === activeChatRoomId);
 
         chatMsgList.forEach(msg => {
             const msgDate = fmtChatDate(msg.timestamp);
@@ -5661,16 +5855,18 @@
             const editedTag = msg.editedAt ? '<span class="chat-msg-edited">(edited)</span>' : '';
             const isLastByMe = msg.id === lastMyMsgId;
 
-            // Action buttons for own messages
-            const actionsHtml = isMine ? `<div class="chat-msg-actions" data-msgid="${msg.id}">
-                <button class="chat-msg-action-btn edit-btn" onclick="chatStartEdit('${msg.id}')" title="Edit">
+            // Action buttons: own messages get Edit+Delete; classroom teachers get Delete on any message
+            const isClassroomTeacher = activeRoom && activeRoom.isClassroom && activeRoom.leader === currentUser.uid;
+            const canDeleteThisMsg = isMine || isClassroomTeacher;
+            const actionsHtml = (isMine || canDeleteThisMsg) ? `<div class="chat-msg-actions" data-msgid="${msg.id}">
+                ${isMine ? `<button class="chat-msg-action-btn edit-btn" onclick="chatStartEdit('${msg.id}')" title="Edit">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                     Edit
-                </button>
-                <button class="chat-msg-action-btn delete-btn" onclick="chatStartDelete('${msg.id}')" title="Delete">
+                </button>` : ''}
+                ${canDeleteThisMsg ? `<button class="chat-msg-action-btn delete-btn" onclick="chatStartDelete('${msg.id}')" title="Delete">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
                     Delete
-                </button>
+                </button>` : ''}
             </div>` : '';
 
             const readHtml = buildReadReceiptHTML(msg, isLastByMe);
@@ -5709,6 +5905,13 @@
     async function sendChatMsg() {
         const text = chatInputEl.value.trim();
         if (!text || !activeChatRoomId || !currentUser) return;
+
+        // Safety filter check for classroom groups
+        const activeRoom = userChavrutas.find(r => r.id === activeChatRoomId);
+        if (activeRoom && activeRoom.isClassroom && activeRoom.safetyFilter && containsProfanity(text)) {
+            alert('Your message was blocked by the classroom safety filter. Please remove inappropriate language and try again.');
+            return;
+        }
 
         const name = nameCache[currentUser.uid] || currentUser.displayName || currentUser.email?.split('@')[0] || 'User';
         chatInputEl.value = '';
@@ -6247,6 +6450,11 @@
             if (dayEl) dayEl.textContent = 'Day ' + (result.day || '—');
             if (noteEl && result.combined) noteEl.classList.remove('hidden');
             if (sigEl)  sigEl.textContent = result.sig || '';
+
+            var hebDateEl = document.getElementById('dt-heb-date');
+            if (hebDateEl && result.day && result.monthName) {
+                hebDateEl.textContent = result.day + ' ' + result.monthName + ' ' + (result.year || '');
+            }
 
             if (extEl) {
                 extEl.innerHTML = '';

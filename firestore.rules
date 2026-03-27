@@ -23,6 +23,11 @@ service cloud.firestore {
         request.auth.uid == get(/databases/$(database)/documents/chavrutas/$(chavrutaId)).data.leader;
     }
 
+    // Check if a chavruta is a classroom
+    function isClassroom(chavrutaId) {
+      return get(/databases/$(database)/documents/chavrutas/$(chavrutaId)).data.isClassroom == true;
+    }
+
     // ═══════════════════════════════════════════════════════
     // USER PROFILES
     // ═══════════════════════════════════════════════════════
@@ -53,6 +58,7 @@ service cloud.firestore {
       // which ARE restricted to members only.
 
       // Any authenticated user can create a chavruta
+      // Classrooms (isClassroom == true) allow up to 80 members; regular groups up to 30.
       allow create: if isAuth() &&
         request.resource.data.createdBy == request.auth.uid &&
         request.resource.data.leader == request.auth.uid &&
@@ -60,7 +66,10 @@ service cloud.firestore {
         request.resource.data.members.size() == 1 &&
         request.resource.data.name.size() >= 2 &&
         request.resource.data.name.size() <= 50 &&
-        request.resource.data.maxMembers <= 30;
+        (
+          (request.resource.data.isClassroom == true && request.resource.data.maxMembers <= 80) ||
+          (request.resource.data.maxMembers <= 30)
+        );
 
       // Members can update (join/leave), leader has full update
       allow update: if isAuth() &&
@@ -83,9 +92,10 @@ service cloud.firestore {
           request.resource.data.text.size() >= 1 &&
           request.resource.data.text.size() <= 2000;
 
-        // Only comment author can delete
+        // Comment author can delete, OR leader can delete any comment
         allow delete: if isChavrutaMember(chavrutaId) &&
-          resource.data.userId == request.auth.uid;
+          (resource.data.userId == request.auth.uid ||
+           isChavrutaLeader(chavrutaId));
 
         allow update: if false; // Comments are immutable
       }
@@ -99,9 +109,10 @@ service cloud.firestore {
           request.resource.data.userId == request.auth.uid &&
           request.resource.data.reactionType in ['heart', 'emphasize'];
 
-        // Only reaction author can remove
+        // Reaction author can remove, OR leader can remove (for group cleanup)
         allow delete: if isChavrutaMember(chavrutaId) &&
-          resource.data.userId == request.auth.uid;
+          (resource.data.userId == request.auth.uid ||
+           isChavrutaLeader(chavrutaId));
 
         allow update: if false; // Reactions are immutable
       }
@@ -114,9 +125,10 @@ service cloud.firestore {
         allow create: if isChavrutaMember(chavrutaId) &&
           request.resource.data.userId == request.auth.uid;
 
-        // Only bookmark author can remove
+        // Bookmark author can remove, OR leader can remove (for group cleanup)
         allow delete: if isChavrutaMember(chavrutaId) &&
-          resource.data.userId == request.auth.uid;
+          (resource.data.userId == request.auth.uid ||
+           isChavrutaLeader(chavrutaId));
 
         allow update: if false; // Bookmarks are immutable
       }
@@ -125,9 +137,11 @@ service cloud.firestore {
       match /presence/{userId} {
         allow read: if isChavrutaMember(chavrutaId);
 
-        // Users can only write their own presence
-        allow write: if isChavrutaMember(chavrutaId) &&
+        // Users can only write their own presence; leader can delete any (for group cleanup)
+        allow create, update: if isChavrutaMember(chavrutaId) &&
           request.auth.uid == userId;
+        allow delete: if isChavrutaMember(chavrutaId) &&
+          (request.auth.uid == userId || isChavrutaLeader(chavrutaId));
       }
 
       // ─── DAILY QUOTE BOOKMARKS (scoped to chavruta) ───
@@ -138,13 +152,14 @@ service cloud.firestore {
         allow create: if isChavrutaMember(chavrutaId) &&
           request.resource.data.userId == request.auth.uid;
 
-        // Only bookmark author can update or remove
+        // Bookmark author can update or remove; leader can delete (for group cleanup)
         allow update: if isChavrutaMember(chavrutaId) &&
           resource.data.userId == request.auth.uid &&
           request.resource.data.userId == request.auth.uid;
 
         allow delete: if isChavrutaMember(chavrutaId) &&
-          resource.data.userId == request.auth.uid;
+          (resource.data.userId == request.auth.uid ||
+           isChavrutaLeader(chavrutaId));
       }
 
       // ─── CHAT MESSAGES (scoped to chavruta) ───
@@ -165,18 +180,64 @@ service cloud.firestore {
           request.resource.data.text.size() >= 1 &&
           request.resource.data.text.size() <= 2000;
 
-        // Only message author can delete
+        // Message author can delete, OR leader can delete any message
         allow delete: if isChavrutaMember(chavrutaId) &&
-          resource.data.userId == request.auth.uid;
+          (resource.data.userId == request.auth.uid ||
+           isChavrutaLeader(chavrutaId));
+      }
+
+      // ─── ANNOUNCEMENTS (classroom only) ───
+      match /announcements/{announcementId} {
+        allow read: if isChavrutaMember(chavrutaId);
+
+        // Only the classroom leader can create announcements
+        allow create: if isChavrutaMember(chavrutaId) &&
+          isClassroom(chavrutaId) &&
+          isChavrutaLeader(chavrutaId) &&
+          request.resource.data.userId == request.auth.uid &&
+          request.resource.data.text is string &&
+          request.resource.data.text.size() >= 1 &&
+          request.resource.data.text.size() <= 5000;
+
+        // Only the leader can delete announcements
+        allow delete: if isChavrutaMember(chavrutaId) &&
+          isClassroom(chavrutaId) &&
+          isChavrutaLeader(chavrutaId);
+
+        allow update: if false; // Announcements are immutable
+      }
+
+      // ─── ASSIGNMENTS (classroom only) ───
+      match /assignments/{assignmentId} {
+        allow read: if isChavrutaMember(chavrutaId);
+
+        // Only the classroom leader can create/update/delete assignments
+        allow create: if isChavrutaMember(chavrutaId) &&
+          isClassroom(chavrutaId) &&
+          isChavrutaLeader(chavrutaId) &&
+          request.resource.data.userId == request.auth.uid &&
+          request.resource.data.title is string &&
+          request.resource.data.title.size() >= 1 &&
+          request.resource.data.title.size() <= 200;
+
+        allow update: if isChavrutaMember(chavrutaId) &&
+          isClassroom(chavrutaId) &&
+          isChavrutaLeader(chavrutaId);
+
+        allow delete: if isChavrutaMember(chavrutaId) &&
+          isClassroom(chavrutaId) &&
+          isChavrutaLeader(chavrutaId);
       }
 
       // ─── CHAT READ RECEIPTS (scoped to chavruta) ───
       match /chatReadReceipts/{userId} {
         allow read: if isChavrutaMember(chavrutaId);
 
-        // Users can only write their own read receipt
-        allow write: if isChavrutaMember(chavrutaId) &&
+        // Users can only write their own read receipt; leader can delete any (for group cleanup)
+        allow create, update: if isChavrutaMember(chavrutaId) &&
           request.auth.uid == userId;
+        allow delete: if isChavrutaMember(chavrutaId) &&
+          (request.auth.uid == userId || isChavrutaLeader(chavrutaId));
       }
 
       // ─── MITZVAH DATA (scoped to chavruta) ───
@@ -189,10 +250,38 @@ service cloud.firestore {
         allow update: if isChavrutaMember(chavrutaId) &&
           resource.data.userId == request.auth.uid;
 
-        // Only the author of a reflection can delete it
+        // Author can delete, OR leader can delete (for group cleanup)
         allow delete: if isChavrutaMember(chavrutaId) &&
-          resource.data.userId == request.auth.uid;
+          (resource.data.userId == request.auth.uid ||
+           isChavrutaLeader(chavrutaId));
       }
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // TEACHER APPLICATIONS
+    // ═══════════════════════════════════════════════════════
+    match /teacherApplications/{appId} {
+      // Users can read their own application
+      allow read: if isAuth() &&
+        resource.data.userId == request.auth.uid;
+
+      // Authenticated users can submit an application
+      allow create: if isAuth() &&
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.email is string &&
+        request.resource.data.email.size() >= 5 &&
+        request.resource.data.email.size() <= 254 &&
+        request.resource.data.fullName is string &&
+        request.resource.data.fullName.size() >= 2 &&
+        request.resource.data.fullName.size() <= 100 &&
+        request.resource.data.institution is string &&
+        request.resource.data.institution.size() >= 2 &&
+        request.resource.data.institution.size() <= 200 &&
+        request.resource.data.subject is string &&
+        request.resource.data.subject.size() >= 2 &&
+        request.resource.data.subject.size() <= 200;
+
+      allow update, delete: if false;
     }
 
     // ═══════════════════════════════════════════════════════
@@ -247,6 +336,64 @@ service cloud.firestore {
         && resource.data.userId == request.auth.uid;
 
       allow update: if false;
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // HEBREW FLASHCARDS (per-user)
+    // ═══════════════════════════════════════════════════════
+    match /flashcards/{cardId} {
+      allow read: if isAuth()
+        && resource.data.userId == request.auth.uid;
+
+      allow create: if isAuth()
+        && request.resource.data.userId == request.auth.uid;
+
+      allow update: if isAuth()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == request.auth.uid;
+
+      allow delete: if isAuth()
+        && resource.data.userId == request.auth.uid;
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // SPIRITUAL JOURNAL (per-user, private)
+    // ═══════════════════════════════════════════════════════
+    match /journalEntries/{entryId} {
+      allow read: if isAuth()
+        && resource.data.userId == request.auth.uid;
+
+      allow create: if isAuth()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.text is string
+        && request.resource.data.text.size() >= 1
+        && request.resource.data.text.size() <= 5000
+        && request.resource.data.type in ['reflection', 'mitzvah', 'gratitude', 'prayer', 'kindness'];
+
+      allow update: if isAuth()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == request.auth.uid;
+
+      allow delete: if isAuth()
+        && resource.data.userId == request.auth.uid;
+    }
+
+    match /growthGoals/{goalId} {
+      allow read: if isAuth()
+        && resource.data.userId == request.auth.uid;
+
+      allow create: if isAuth()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.text is string
+        && request.resource.data.text.size() >= 1
+        && request.resource.data.text.size() <= 200;
+
+      allow update: if isAuth()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == request.auth.uid;
+
+      allow delete: if isAuth()
+        && resource.data.userId == request.auth.uid;
     }
 
     // ═══════════════════════════════════════════════════════

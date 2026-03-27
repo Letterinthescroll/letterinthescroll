@@ -179,17 +179,13 @@
                   margin: 0 auto 0.75rem;
                   width: 82px;
                   height: 82px;
-                  border-radius: 20px;
-                  background: linear-gradient(165deg, #fefefe 0%, #edf4ff 100%);
-                  border: 1px solid rgba(37, 99, 235, 0.2);
-                  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.2);
                   display: flex;
                   align-items: center;
                   justify-content: center;
                 }
                 #login-required-overlay .login-required-logo {
-                  width: 56px;
-                  height: 56px;
+                  width: 82px;
+                  height: 82px;
                   object-fit: contain;
                 }
                 #login-required-overlay .login-required-kicker {
@@ -280,7 +276,7 @@
             overlay.innerHTML =
                 '<div class="login-required-card">' +
                 '  <div class="login-required-logo-wrap">' +
-                '    <img class="login-required-logo" src="/media/images/Icon.png" alt="A Letter in the Scroll logo" />' +
+                '    <img class="login-required-logo" src="/media/images/logonew.png" alt="A Letter in the Scroll logo" />' +
                 '  </div>' +
                 '  <p class="login-required-kicker">Welcome Home</p>' +
                 '  <p class="login-required-title">Welcome to A Letter in the Scroll</p>' +
@@ -314,6 +310,19 @@
         if (!hasCachedSession) {
             try { hasCachedSession = !!localStorage.getItem('lastActiveChavrutaId'); } catch (_) {}
         }
+        // Also check Firebase's own localStorage auth keys (persist across tabs,
+        // unlike sessionStorage which is per-tab).
+        if (!hasCachedSession) {
+            try {
+                for (var i = 0; i < localStorage.length; i++) {
+                    var key = localStorage.key(i);
+                    if (key && key.indexOf('firebase:authUser:') === 0) {
+                        hasCachedSession = true;
+                        break;
+                    }
+                }
+            } catch (_) {}
+        }
 
         var userSeen = false;
         var resolved = false;
@@ -338,10 +347,18 @@
                 return;
             }
             if (resolved) return;
+            // Always wait before showing the overlay — Firebase may still be
+            // restoring auth from IndexedDB. This prevents false positives
+            // in new tabs where sessionStorage is empty but the user IS logged in.
             if (!hasCachedSession) {
-                // No cached session and Firebase says no user — show overlay
-                resolved = true;
-                showLoginRequiredOverlayAndRedirect();
+                setTimeout(function () {
+                    if (!resolved && !userSeen) {
+                        // Final check before showing overlay
+                        if (auth.currentUser) return;
+                        resolved = true;
+                        showLoginRequiredOverlayAndRedirect();
+                    }
+                }, 6000);
             }
             // If we have a cached session but Firebase says null, wait —
             // the real auth state will arrive shortly from IndexedDB.
@@ -352,10 +369,12 @@
         if (hasCachedSession) {
             setTimeout(function () {
                 if (!resolved && !userSeen) {
+                    // Final check before showing overlay
+                    if (auth.currentUser) return;
                     resolved = true;
                     showLoginRequiredOverlayAndRedirect();
                 }
-            }, 8000);
+            }, 12000);
         }
 
         // When tab regains focus, force token refresh to prevent stale session

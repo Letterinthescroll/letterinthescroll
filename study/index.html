@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Letter in the Scroll</title>
-    <link rel="icon" type="image/png" href="/media/images/Icon.png">
-    <link rel="apple-touch-icon" href="/media/images/Icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png" media="(prefers-color-scheme: light)"><link rel="icon" type="image/svg+xml" href="/media/images/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" sizes="180x180" href="/media/images/apple-touch-icon.png">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="A Letter in the Scroll">
     <meta property="og:title" content="A Letter in the Scroll">
@@ -63,58 +63,57 @@
         #study-progress-icon { flex-shrink: 0; color: #93c5fd; opacity: 0.8; }
         /* padding-bottom handled by footer; no extra gap needed */
 
-        /* ── Daily Tehillim banner card ──────────────────────────────── */
+        /* ── Daily Tehillim banner card — Apple glassmorphism ─────── */
         #daily-tehillim-mini {
             margin-bottom: 1.75rem;
-            border-radius: 1.3rem;
-            background: linear-gradient(118deg, #f5f9ff 0%, #edf3ff 30%, #e8f2ff 65%, #f0f6ff 100%);
-            border: 1px solid rgba(70, 135, 215, 0.2);
-            padding: 0.85rem 1.75rem 0.85rem 1.75rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.72);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            padding: 1.25rem 1.75rem;
             display: flex;
             align-items: center;
-            gap: 1.4rem;
+            gap: 1.25rem;
             overflow: hidden;
             position: relative;
             box-shadow:
-                0 1px 10px rgba(55, 110, 200, 0.08),
-                0 5px 24px rgba(0, 0, 0, 0.05),
-                inset 0 1px 0 rgba(255, 255, 255, 0.95);
+                0 2px 8px rgba(0, 0, 0, 0.04),
+                0 8px 32px rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
         }
-        /* Left blue stripe */
+        #daily-tehillim-mini:hover {
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.06),
+                0 12px 40px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+        /* Soft accent glow — top right */
         #daily-tehillim-mini::before {
             content: '';
             position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 4px;
-            background: linear-gradient(180deg, #4a90d8 0%, #6aaee0 48%, #3278c2 100%);
-            border-radius: 1.3rem 0 0 1.3rem;
-        }
-        /* Dual soft glow */
-        #daily-tehillim-mini::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(ellipse 220px 150px at 6% 50%, rgba(60, 130, 220, 0.09), transparent 70%),
-                radial-gradient(ellipse 280px 180px at 100% 0%, rgba(80, 150, 240, 0.07), transparent 65%);
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
             pointer-events: none;
         }
+        /* No ::after needed */
+        #daily-tehillim-mini::after { display: none; }
         .dt-mini-glow, .dt-mini-glow2 { display: none; }
 
-        /* Circular open-book icon badge */
+        /* Open-book icon — soft rounded square */
         .dt-mini-icon {
             position: relative;
             z-index: 1;
             flex-shrink: 0;
-            width: 52px; height: 52px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, rgba(70, 135, 220, 0.14), rgba(70, 135, 220, 0.05));
-            border: 1px solid rgba(60, 125, 210, 0.26);
+            width: 48px; height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(145deg, rgba(59, 130, 246, 0.12), rgba(59, 130, 246, 0.06));
+            border: 1px solid rgba(59, 130, 246, 0.15);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(32, 88, 175, 0.88);
-            box-shadow: 0 2px 12px rgba(55, 115, 200, 0.14);
+            color: #3b82f6;
         }
 
         .dt-mini-content {
@@ -126,77 +125,69 @@
             flex-direction: column;
             gap: 0;
         }
+        /* Tiny all-caps eyebrow label */
         .dt-mini-eyebrow {
             display: inline-flex;
             align-items: center;
-            gap: 0.32rem;
-            font-size: 0.58rem;
-            font-weight: 800;
-            letter-spacing: 0.17em;
+            gap: 0.3rem;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
             text-transform: uppercase;
-            color: rgba(40, 95, 180, 0.68);
-            margin-bottom: 0.18rem;
+            color: rgba(60, 60, 67, 0.4);
+            margin-bottom: 0.2rem;
         }
-        .dt-mini-eyebrow svg { opacity: 0.7; flex-shrink: 0; }
+        .dt-mini-eyebrow svg { opacity: 0.5; flex-shrink: 0; }
         .dt-mini-main {
             display: flex;
-            flex-direction: column;
-            gap: 0;
+            align-items: baseline;
+            gap: 0.5rem;
             min-width: 0;
         }
-        .dt-mini-hebrew {
-            font-family: 'Ezra SIL', 'SBL Hebrew', 'Frank Ruhl Libre', serif;
-            font-size: 2.1rem;
-            color: #0d1e3a;
-            line-height: 1.05;
-            letter-spacing: 0.02em;
-            text-shadow: 0 1px 8px rgba(55, 115, 200, 0.14);
-            margin-bottom: 0.08rem;
-        }
+        /* Psalms reference — the main readable line */
         .dt-mini-ref {
-            font-size: 0.82rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            color: rgba(25, 70, 155, 0.82);
-            letter-spacing: 0.015em;
+            color: #1d1d1f;
+            letter-spacing: 0.01em;
         }
         .dt-mini-action { display: none; }
+        /* Pill-shaped CTA button — single accent color */
         .dt-mini-btn {
             position: relative;
             z-index: 1;
             display: inline-flex;
             align-items: center;
-            gap: 0.42rem;
-            padding: 0.7rem 1.45rem;
-            background: linear-gradient(135deg, #3178c8 0%, #2562b0 100%);
-            color: #f0f6ff;
-            font-weight: 800;
+            gap: 0.4rem;
+            padding: 0.6rem 1.35rem;
+            background: #3b82f6;
+            color: #fff;
+            font-weight: 600;
             font-size: 0.78rem;
-            border-radius: 0.9rem;
+            border-radius: 999px;
             text-decoration: none;
             white-space: nowrap;
-            letter-spacing: 0.03em;
+            letter-spacing: 0.01em;
             flex-shrink: 0;
             border: none;
-            box-shadow:
-                0 3px 14px rgba(38, 90, 175, 0.28),
-                inset 0 1px 0 rgba(165, 210, 255, 0.2);
-            transition: background 0.18s, box-shadow 0.18s, transform 0.15s;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+            transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
         }
         .dt-mini-btn:hover {
-            background: linear-gradient(135deg, #3d88da 0%, #2d6ec0 100%);
-            box-shadow: 0 5px 20px rgba(38, 90, 175, 0.38);
-            transform: translateY(-1.5px);
+            background: #2563eb;
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+            transform: translateY(-1px);
         }
-        .dt-mini-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+        .dt-mini-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
         @media (max-width: 540px) {
             #daily-tehillim-mini {
-                padding: 1.1rem 1.1rem 1.1rem 1.35rem;
-                gap: 0.9rem;
-                border-radius: 1.1rem;
+                padding: 1rem 1rem 1rem 1.15rem;
+                gap: 0.85rem;
+                border-radius: 16px;
             }
-            .dt-mini-icon { width: 44px; height: 44px; }
-            .dt-mini-hebrew { font-size: 1.7rem; }
-            .dt-mini-btn { padding: 0.62rem 1.1rem; font-size: 0.74rem; }
+            .dt-mini-icon { width: 42px; height: 42px; border-radius: 12px; }
+            .dt-mini-ref { font-size: 0.82rem; }
+            .dt-mini-btn { padding: 0.55rem 1.1rem; font-size: 0.74rem; }
         }
     </style>
 </head>
@@ -432,25 +423,19 @@
             <div id="daily-tehillim-mini">
                 <div class="dt-mini-icon" aria-hidden="true">
                     <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                     </svg>
                 </div>
                 <div class="dt-mini-content">
-                    <div class="dt-mini-eyebrow">
-                        <svg width="9" height="9" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 3v1m0 16v1M4.22 4.22l.7.7m12.16 12.16l.7.7M3 12h1m16 0h1M4.22 19.78l.7-.7M18.36 5.64l.7-.7"/>
-                        </svg>
-                        Daily Tehillim
-                    </div>
+                    <div class="dt-mini-eyebrow">Daily Tehillim — <span dir="rtl">תְּהִלִּים</span></div>
                     <div class="dt-mini-main">
-                        <span class="dt-mini-hebrew" dir="rtl">תְּהִלִּים</span>
                         <span id="study-dt-ref" class="dt-mini-ref">Loading…</span>
                     </div>
                 </div>
                 <a href="/psalms" class="dt-mini-btn">
                     Read Today
-                    <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                    <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/>
                     </svg>
                 </a>
             </div>
@@ -543,37 +528,42 @@
     <!-- Comment Panel -->
     <div id="comment-panel" class="comment-panel">
         <div class="comment-panel-header">
-            <h3 id="comment-panel-title" class="comment-panel-title">Discussion</h3>
-            <button id="close-comment-panel" class="close-panel-btn">&times;</button>
+            <div style="display:flex;align-items:center;gap:0.55rem;min-width:0;">
+                <svg width="18" height="18" fill="none" stroke="rgba(255,255,255,0.7)" viewBox="0 0 24 24" style="flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                <h3 id="comment-panel-title" class="comment-panel-title">Discussion</h3>
+            </div>
+            <button id="close-comment-panel" class="close-panel-btn" aria-label="Close">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
         </div>
-        
+
         <div class="comment-panel-body">
             <!-- Display User Name -->
             <div id="name-display" class="username-display hidden">
-                <span class="username-label">Commenting as:</span>
+                <span class="username-label">Commenting as</span>
                 <span id="current-username" class="current-username"></span>
             </div>
-            
+
             <!-- Comments List -->
             <div id="comments-list" class="comments-list">
                 <div class="loading-comments">Loading comments...</div>
             </div>
-            
+
             <!-- Add Comment Section -->
             <div class="add-comment-section">
-                <textarea 
-                    id="comment-input" 
+                <textarea
+                    id="comment-input"
                     placeholder="Share your insights on this verse..."
-                    rows="3"
+                    rows="2"
                     disabled
                 ></textarea>
                 <button id="submit-comment-btn" class="submit-comment-btn" disabled>
-                    Submit Comment
+                    Post Comment
                 </button>
                 <div id="comment-status" class="comment-status"></div>
             </div>
         </div>
-        
+
         <!-- Hidden input to store current verse reference -->
         <input type="hidden" id="current-comment-verse-ref" value="">
     </div>
@@ -714,5 +704,6 @@
     </script>
     <div id="shared-footer-mount"></div>
     <script src="/js/footer-loader.js"></script>
+
 </body>
 </html>

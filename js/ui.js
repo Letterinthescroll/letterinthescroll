@@ -282,7 +282,11 @@ export function closeCommentsPanel(onClose) {
 /**
  * Display comments in the panel with username
  */
-export function displayComments(commentsArray) {
+/**
+ * @param {Array} commentsArray
+ * @param {Object} [opts] - optional. { canModerate: bool, currentUserId: string, onDelete: fn(commentId) }
+ */
+export function displayComments(commentsArray, opts) {
     const commentsList = document.getElementById('comments-list');
 
     if (!commentsList) {
@@ -293,23 +297,57 @@ export function displayComments(commentsArray) {
     if (!commentsArray || commentsArray.length === 0) {
         commentsList.innerHTML = `
             <div class="no-comments">
-                <p>No comments yet.</p>
+                <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin:0 auto 0.6rem;display:block;opacity:0.35;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                <p>No comments yet</p>
                 <p class="text-sm">Be the first to share your insights!</p>
             </div>
         `;
         return;
     }
 
+    function formatCommentName(raw) {
+        if (!raw || raw === 'Anonymous') return 'Anonymous';
+        const s = String(raw).trim();
+        // Strip email domain if present
+        const noEmail = s.includes('@') ? s.split('@')[0] : s;
+        const cleaned = noEmail.replace(/[._-]+/g, ' ').replace(/\s+/g, ' ').trim();
+        if (!cleaned) return 'Anonymous';
+        return cleaned.split(' ').map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ');
+    }
+
+    const AVATAR_COLORS = ['#6366f1','#8b5cf6','#0ea5e9','#14b8a6','#f59e0b','#ef4444','#ec4899','#10b981','#f97316','#06b6d4'];
+    function avatarColor(name) {
+        let h = 0;
+        for (let i = 0; i < (name || '').length; i++) h = ((h << 5) - h) + name.charCodeAt(i);
+        return AVATAR_COLORS[Math.abs(h) % AVATAR_COLORS.length];
+    }
+
+    const canModerate = opts && opts.canModerate;
+    const currentUserId = (opts && opts.currentUserId) || '';
+    const onDelete = opts && opts.onDelete;
+
+    const nameMap = (opts && opts.nameCache) || {};
+
     let html = '';
     commentsArray.forEach(comment => {
-        const displayName = comment.username || 'Anonymous';
+        // Prefer resolved display name from user profile over stored username
+        const rawName = (comment.userId && nameMap[comment.userId]) || comment.username || 'Anonymous';
+        const displayName = formatCommentName(rawName);
         const timestamp = formatTimestamp(comment.timestamp);
+        const isOwn = currentUserId && comment.userId === currentUserId;
+        const showDelete = canModerate && !isOwn;
+        const initial = displayName.charAt(0).toUpperCase();
+        const color = avatarColor(displayName);
 
         html += `
-            <div class="comment-item">
+            <div class="comment-item" data-comment-id="${escapeHtml(comment.id || '')}">
                 <div class="comment-meta">
-                    <span class="comment-user">${escapeHtml(displayName)}</span>
-                    <span class="comment-time">${escapeHtml(timestamp)}</span>
+                    <div style="display:flex;align-items:center;gap:0.5rem;min-width:0;">
+                        <div style="width:28px;height:28px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.7rem;font-weight:700;flex-shrink:0;">${initial}</div>
+                        <span class="comment-user">${escapeHtml(displayName)}</span>
+                        <span class="comment-time">${escapeHtml(timestamp)}</span>
+                    </div>
+                    ${showDelete ? `<button class="comment-delete-btn" data-comment-id="${escapeHtml(comment.id || '')}" title="Delete this comment" style="margin-left:auto;padding:3px 8px;font-size:0.68rem;font-weight:600;color:#dc2626;background:rgba(220,38,38,0.06);border:1px solid rgba(220,38,38,0.15);border-radius:6px;cursor:pointer;transition:all 0.15s;">Delete</button>` : ''}
                 </div>
                 <div class="comment-text">${escapeHtml(comment.text)}</div>
             </div>
@@ -317,6 +355,19 @@ export function displayComments(commentsArray) {
     });
 
     commentsList.innerHTML = html;
+
+    // Attach delete handlers if moderation is enabled
+    if (canModerate && onDelete) {
+        commentsList.querySelectorAll('.comment-delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const commentId = btn.getAttribute('data-comment-id');
+                if (commentId && confirm('Delete this comment? This cannot be undone.')) {
+                    onDelete(commentId);
+                }
+            });
+        });
+    }
 }
 
 /**

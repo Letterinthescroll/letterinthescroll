@@ -16,7 +16,7 @@
     var FOOTER_TEMPLATE_URL = '/includes/footer.html';
     var CACHE_KEY = 'cachedFooterTemplate';
     var CACHE_VER_KEY = 'cachedFooterVersion';
-    var CACHE_VERSION = '8';
+    var CACHE_VERSION = '10';
     var YEAR_TOKEN = '__YEAR__';
 
     /* ── Inspirational quotes ─────────────────────────────────────────── */

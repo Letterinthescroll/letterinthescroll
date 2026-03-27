@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hebrew Flashcards — A Letter in the Scroll</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png" media="(prefers-color-scheme: light)"><link rel="icon" type="image/svg+xml" href="/media/images/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" sizes="180x180" href="/media/images/apple-touch-icon.png">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/shabbat.css">
+    <link rel="stylesheet" href="/css/mobile-overrides.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'SF Pro Display', sans-serif;
+            background: #f5f5f7;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        .hidden { display: none !important; }
+
+        /* ─── Shell ─── */
+        .fc-shell { max-width: 980px; margin: 0 auto; padding: 1.75rem 1.25rem 4rem; }
+
+        /* ─── Hero ─── */
+        @keyframes heroShift {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .fc-hero {
+            background: linear-gradient(130deg, #ffffff 0%, #f0f7ff 25%, #faf5ff 50%, #fff7f0 75%, #f0fff8 100%);
+            background-size: 300% 300%;
+            animation: heroShift 12s ease infinite;
+            border-radius: 1.35rem;
+            padding: 1.25rem 1.5rem 1.15rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,.06);
+            box-shadow: 0 2px 16px rgba(0,0,0,.05), 0 1px 3px rgba(0,0,0,.04);
+        }
+        .fc-hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse 55% 80% at 85% 0%, rgba(167,139,250,.08), transparent),
+                        radial-gradient(ellipse 45% 60% at 5% 100%, rgba(52,211,153,.07), transparent);
+            pointer-events: none;
+        }
+        .fc-hero-top {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 1rem; position: relative; z-index: 1;
+        }
+        .fc-hero-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.45rem; font-weight: 700; line-height: 1.2;
+            color: #1a1a2e; letter-spacing: -0.01em;
+        }
+        .fc-hero-sub {
+            font-size: 0.75rem; color: #6b7280;
+            margin-top: 0.2rem; max-width: 360px; line-height: 1.55;
+        }
+        .fc-hero-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; flex-shrink: 0; }
+        .fc-hero-btn {
+            display: inline-flex; align-items: center; gap: 0.32rem;
+            padding: 0.42rem 0.95rem;
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(0,0,0,.1);
+            border-radius: 2rem;
+            color: #374151; font-size: 0.74rem; font-weight: 600;
+            cursor: pointer; transition: all 0.18s; white-space: nowrap;
+            backdrop-filter: blur(6px);
+            font-family: 'Poppins', sans-serif;
+        }
+        .fc-hero-btn:hover { background: rgba(255,255,255,.95); border-color: rgba(0,0,0,.18); color: #111; }
+        .fc-hero-btn.primary { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+        .fc-hero-btn.primary:hover { background: #2d2d4e; border-color: #2d2d4e; }
+        .fc-hero-stats {
+            display: flex; gap: 0; margin-top: .85rem;
+            padding-top: .8rem; border-top: 1px solid rgba(0,0,0,.07);
+            position: relative; z-index: 1;
+        }
+        .fc-stat { text-align: left; flex: 1; padding-right: 1rem; }
+        .fc-stat + .fc-stat { border-left: 1px solid rgba(0,0,0,.07); padding-left: 1rem; padding-right: 1rem; }
+        .fc-stat-num {
+            font-size: 1.45rem; font-weight: 700;
+            font-family: 'Poppins', sans-serif; line-height: 1.1; color: #1a1a2e;
+        }
+        .fc-stat-label {
+            font-size: 0.6rem; text-transform: uppercase;
+            letter-spacing: 0.1em; color: #9ca3af; margin-top: 0.12rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* ─── Toolbar ─── */
+        .fc-toolbar {
+            display: flex; align-items: center; gap: 0.6rem;
+            margin: 1.25rem 0 1rem; flex-wrap: wrap;
+        }
+        .fc-search-wrap { flex: 1; min-width: 180px; position: relative; }
+        .fc-search {
+            width: 100%; padding: 0.5rem 0.85rem 0.5rem 2.1rem;
+            border: 1px solid #d2d2d7; border-radius: 0.55rem;
+            font-size: 0.8rem; background: #fff; color: #1d1d1f;
+            outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .fc-search:focus { border-color: #0071e3; box-shadow: 0 0 0 3px rgba(0,113,227,0.1); }
+        .fc-search-icon {
+            position: absolute; left: 0.65rem; top: 50%; transform: translateY(-50%);
+            width: 14px; height: 14px; color: #86868b; pointer-events: none;
+        }
+
+        /* ─── Card Grid ─── */
+        .fc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 0.75rem;
+        }
+        .fc-card {
+            background: #fff; border-radius: 0.85rem;
+            border: 1px solid #e5e5ea;
+            transition: all 0.2s; position: relative; overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
+        .fc-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transform: translateY(-2px); border-color: #d2d2d7;
+        }
+        .fc-card-top {
+            padding: 1.15rem 1.15rem 0.85rem;
+            border-bottom: 1px solid #f0f0f2;
+        }
+        .fc-card-word {
+            font-size: 1.6rem; font-weight: 700; color: #1d1d1f;
+            font-family: 'Times New Roman', serif; direction: rtl;
+            line-height: 1.3; text-align: center;
+        }
+        .fc-card-translit {
+            font-size: 0.75rem; color: #86868b; font-style: italic;
+            margin-top: 0.15rem; text-align: center; letter-spacing: 0.02em;
+        }
+        .fc-card-body { padding: 0.85rem 1.15rem 0.7rem; }
+        .fc-card-def {
+            font-size: 0.82rem; color: #48484a; line-height: 1.6;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .fc-card-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.45rem 0.85rem;
+            border-top: 1px solid #f0f0f2;
+        }
+        .fc-card-meta {
+            display: flex; align-items: center; gap: 0.4rem;
+        }
+        .fc-card-conf {
+            width: 6px; height: 6px; border-radius: 50%;
+            display: inline-block;
+        }
+        .fc-card-conf.new { background: #c7c7cc; }
+        .fc-card-conf.learning { background: #f59e0b; }
+        .fc-card-conf.familiar { background: #34d399; }
+        .fc-card-conf.mastered { background: #60a5fa; }
+        .fc-card-source {
+            font-size: 0.62rem; color: #c7c7cc; font-weight: 500;
+        }
+        .fc-card-actions {
+            display: flex; gap: 0.1rem;
+            opacity: 0; transition: opacity 0.15s;
+        }
+        .fc-card:hover .fc-card-actions { opacity: 1; }
+        .fc-card-btn {
+            width: 22px; height: 22px; border-radius: 0.3rem;
+            border: none; background: transparent;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.15s; color: #c7c7cc;
+        }
+        .fc-card-btn:hover { background: #f0f0f2; color: #636366; }
+        .fc-card-btn.danger:hover { background: #fef2f2; color: #dc2626; }
+
+        /* ─── Empty State ─── */
+        .fc-empty { text-align: center; padding: 4rem 1.5rem; }
+        .fc-empty-icon {
+            width: 56px; height: 56px; margin: 0 auto 1rem;
+            background: #e5e5ea; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .fc-empty-title { font-size: 1.05rem; font-weight: 700; color: #1d1d1f; margin-bottom: 0.3rem; }
+        .fc-empty-text { font-size: 0.82rem; line-height: 1.6; color: #86868b; max-width: 360px; margin: 0 auto; }
+        .fc-empty-text a { color: #0071e3; font-weight: 600; text-decoration: none; }
+        .fc-empty-text a:hover { text-decoration: underline; }
+
+        /* ─── Edit Modal ─── */
+        .fc-edit-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9000; padding: 1rem; backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            animation: fadeIn 0.2s ease;
+        }
+        .fc-edit-dialog {
+            background: #fff; border-radius: 1rem; padding: 0;
+            width: min(100%, 400px); box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+            overflow: hidden; animation: slideUp 0.3s ease;
+        }
+        .fc-edit-header {
+            background: #1d1d1f; color: #f5f5f7;
+            padding: 1.25rem 1.25rem 1rem; text-align: center;
+        }
+        .fc-edit-body { padding: 1.25rem; }
+
+        /* ─── Loading ─── */
+        .fc-loading {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; padding: 5rem 1rem; gap: 0.75rem;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .fade-up { animation: slideUp 0.4s ease-out both; }
+        .fd1{animation-delay:.03s} .fd2{animation-delay:.08s} .fd3{animation-delay:.13s}
+
+        @media (max-width: 640px) {
+            .fc-shell { padding: 1rem .85rem 3rem; }
+            .fc-hero { padding: 1.1rem 1rem 1rem; border-radius: 1rem; }
+            .fc-hero-title { font-size: 1.1rem; }
+            .fc-hero-sub { font-size: .68rem; margin-top: .1rem; }
+            .fc-hero-top { flex-direction: column; align-items: flex-start; gap: .65rem; }
+            .fc-hero-actions { width: 100%; }
+            .fc-hero-btn { flex: 1; justify-content: center; padding: .38rem .6rem; font-size: .72rem; }
+            .fc-hero-stats { margin-top: .75rem; padding-top: .7rem; }
+            .fc-stat-num { font-size: 1.2rem; }
+            .fc-stat-label { font-size: .55rem; }
+            .fc-grid { grid-template-columns: 1fr; }
+            .fc-toolbar { flex-direction: column; align-items: stretch; gap: .5rem; }
+            .fc-toolbar-search { min-width: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div id="shared-header-mount" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%);min-height:64px"></div>
+<script src="/js/header-loader.js"></script>
+
+<div class="fc-shell">
+
+    <!-- Loading -->
+    <div id="fc-loading" class="fc-loading">
+        <div style="width:28px;height:28px;border:2.5px solid #e5e5ea;border-top-color:#1d1d1f;border-radius:50%;animation:spin 0.7s linear infinite"></div>
+        <p style="font-size:0.82rem;color:#86868b;">Loading your flashcards...</p>
+    </div>
+
+    <!-- Main content -->
+    <div id="fc-main" class="hidden">
+
+        <!-- Hero -->
+        <div class="fc-hero fade-up fd1">
+            <div class="fc-hero-top">
+                <div>
+                    <h1 class="fc-hero-title">Hebrew Flashcards</h1>
+                    <p class="fc-hero-sub">Study and memorize the Hebrew words you've collected with spaced repetition</p>
+                </div>
+                <div class="fc-hero-actions">
+                    <a href="/flashcards/study.html" class="fc-hero-btn primary" id="fc-start-study-btn" style="text-decoration:none;">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        Study Now
+                    </a>
+                    <button class="fc-hero-btn" id="fc-export-anki-btn" style="opacity:0.7;">
+                        <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Anki
+                    </button>
+                </div>
+            </div>
+            <div class="fc-hero-stats">
+                <div class="fc-stat">
+                    <div class="fc-stat-num" id="fc-total-count">0</div>
+                    <div class="fc-stat-label">Total</div>
+                </div>
+                <div class="fc-stat">
+                    <div class="fc-stat-num" id="fc-due-count">0</div>
+                    <div class="fc-stat-label">Due</div>
+                </div>
+                <div class="fc-stat">
+                    <div class="fc-stat-num" id="fc-learning-count">0</div>
+                    <div class="fc-stat-label">Learning</div>
+                </div>
+                <div class="fc-stat">
+                    <div class="fc-stat-num" id="fc-mastered-count">0</div>
+                    <div class="fc-stat-label">Mastered</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="fc-toolbar fade-up fd2">
+            <div class="fc-search-wrap">
+                <svg class="fc-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M21 21l-4.35-4.35"/></svg>
+                <input type="text" id="fc-search" class="fc-search" placeholder="Search words or definitions...">
+            </div>
+        </div>
+
+        <!-- Browse view -->
+        <div id="fc-browse-view" class="fade-up fd3">
+            <div id="fc-grid" class="fc-grid"></div>
+            <div id="fc-empty" class="fc-empty hidden">
+                <div class="fc-empty-icon">
+                    <svg width="24" height="24" fill="none" stroke="#86868b" viewBox="0 0 24 24" stroke-width="1.5"><rect x="3" y="6" width="15" height="11" rx="1.5"/><path d="M7 4h13a1.5 1.5 0 011.5 1.5V15"/></svg>
+                </div>
+                <p class="fc-empty-title">No flashcards yet</p>
+                <p class="fc-empty-text">
+                    Enable <a href="/settings#sec-hebrew-study">Hebrew Study Mode</a> in Settings, then highlight Hebrew words on the
+                    <a href="/psalms">Psalms</a> or <a href="/study">Study</a> page to create flashcards.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Scripts -->
+<script type="module">
+import { initAuth, getCurrentUserId, getUserFlashcards, updateFlashcard, deleteFlashcard } from '/js/firebase.js';
+import '/js/page-auth.js';
+
+// ── Study mode gate ──
+if (localStorage.getItem('alits_hebrew_study_mode') !== 'true') {
+    window.location.replace('/?fc_gate=1');
+}
+
+// ── Transliteration ──
+function transliterate(word) {
+    if (!word) return '';
+    const CONS = {'\u05D0':'','\u05D1':'v','\u05D2':'g','\u05D3':'d','\u05D4':'h','\u05D5':'v','\u05D6':'z','\u05D7':'ch','\u05D8':'t','\u05D9':'y','\u05DB':'kh','\u05DA':'kh','\u05DC':'l','\u05DE':'m','\u05DD':'m','\u05E0':'n','\u05DF':'n','\u05E1':'s','\u05E2':'','\u05E4':'f','\u05E3':'f','\u05E6':'ts','\u05E5':'ts','\u05E7':'k','\u05E8':'r','\u05E9':'sh','\u05EA':'t'};
+    const VOWELS = {'\u05B0':'e','\u05B1':'e','\u05B2':'a','\u05B3':'o','\u05B4':'i','\u05B5':'e','\u05B6':'e','\u05B7':'a','\u05B8':'a','\u05B9':'o','\u05BA':'o','\u05BB':'u','\u05BC':'','\u05BD':''};
+    const cleaned = word.replace(/[\u0591-\u05AF]/g, '');
+    let result = '';
+    const chars = [...cleaned];
+    for (let i = 0; i < chars.length; i++) {
+        const ch = chars[i];
+        const code = ch.charCodeAt(0);
+        if (code >= 0x05B0 && code <= 0x05BD) {
+            if (code === 0x05B0 && i === chars.length - 1) continue;
+            if (code === 0x05B7) {
+                const nextCh = chars[i + 1];
+                if (nextCh && (nextCh === '\u05D7' || nextCh === '\u05E2' || nextCh === '\u05D4')) {
+                    let isFinal = true;
+                    for (let k = i + 2; k < chars.length; k++) {
+                        const kc = chars[k].charCodeAt(0);
+                        if (kc >= 0x05D0 && kc <= 0x05EA) { isFinal = false; break; }
+                    }
+                    if (isFinal) { result += 'a' + (CONS[nextCh] || ''); i++; continue; }
+                }
+            }
+            const v = VOWELS[ch] || '';
+            if (v) result += v;
+        } else if (CONS[ch] !== undefined) {
+            if (ch === '\u05D5') {
+                const next = chars[i + 1];
+                if (next === '\u05B9' || next === '\u05BA') { result += 'o'; i++; continue; }
+                if (next === '\u05BC') { result += 'u'; i++; continue; }
+            }
+            result += CONS[ch];
+        } else if (ch === ' ' || ch === '\u05BE' || ch === '-') {
+            result += ' ';
+        }
+    }
+    return result || '';
+}
+
+// ── Spaced Repetition (SM-2 inspired) ──
+// Each card tracks: confidence (0-4), interval (days), easeFactor, lastReviewed, timesReviewed
+function getCardSRData(card) {
+    return {
+        interval: card.srInterval || 0,
+        ease: card.srEase || 2.5,
+        confidence: card.confidence || 0,
+        lastReviewed: card.lastReviewed ? (card.lastReviewed.toDate ? card.lastReviewed.toDate() : new Date(card.lastReviewed)) : null,
+        timesReviewed: card.timesReviewed || 0,
+    };
+}
+
+function isDue(card) {
+    const sr = getCardSRData(card);
+    if (!sr.lastReviewed || sr.interval === 0) return true; // new or never reviewed
+    const now = new Date();
+    const due = new Date(sr.lastReviewed.getTime() + sr.interval * 24 * 60 * 60 * 1000);
+    return now >= due;
+}
+
+function getCardStatus(card) {
+    const sr = getCardSRData(card);
+    if (sr.timesReviewed === 0) return 'new';
+    if (sr.interval < 7) return 'learning';
+    if (sr.interval < 21) return 'familiar';
+    return 'mastered';
+}
+
+// ── State ──
+let allCards = [];
+let filteredCards = [];
+
+initAuth(async (user) => {
+    if (!user) return;
+    await loadCards();
+});
+
+async function loadCards() {
+    const userId = getCurrentUserId();
+    if (!userId) return;
+    try {
+        allCards = await getUserFlashcards(userId);
+        filteredCards = [...allCards];
+        renderStats();
+        renderBrowse();
+    } catch (err) {
+        console.error('Failed to load flashcards:', err);
+    }
+    document.getElementById('fc-loading').classList.add('hidden');
+    document.getElementById('fc-main').classList.remove('hidden');
+}
+
+function renderStats() {
+    const due = allCards.filter(isDue);
+    const learning = allCards.filter(c => { const s = getCardStatus(c); return s === 'learning'; });
+    const mastered = allCards.filter(c => { const s = getCardStatus(c); return s === 'mastered' || s === 'familiar'; });
+    document.getElementById('fc-total-count').textContent = allCards.length;
+    document.getElementById('fc-due-count').textContent = due.length;
+    document.getElementById('fc-learning-count').textContent = learning.length;
+    document.getElementById('fc-mastered-count').textContent = mastered.length;
+}
+
+// ── Browse ──
+function renderBrowse() {
+    const grid = document.getElementById('fc-grid');
+    const empty = document.getElementById('fc-empty');
+    if (filteredCards.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+    }
+    empty.classList.add('hidden');
+
+    grid.innerHTML = filteredCards.map(card => {
+        const display = card.phrase || card.rootWord || card.word || '';
+        const def = card.phrase ? (card.phraseTranslation || card.definition) : card.definition;
+        const translit = card.transliteration || transliterate(display);
+        const source = card.source || '';
+        const status = getCardStatus(card);
+        const translitHtml = translit ? `<div class="fc-card-translit">${esc(translit)}</div>` : '';
+
+        return `
+        <div class="fc-card" data-id="${card.id}">
+            <div class="fc-card-top">
+                <div class="fc-card-word">${esc(display)}</div>
+                ${translitHtml}
+            </div>
+            <div class="fc-card-body">
+                <div class="fc-card-def">${esc(def)}</div>
+            </div>
+            <div class="fc-card-footer">
+                <div class="fc-card-meta">
+                    <span class="fc-card-conf ${status}" title="${status}"></span>
+                    ${source ? `<span class="fc-card-source">${esc(source)}</span>` : ''}
+                </div>
+                <div class="fc-card-actions">
+                    <button class="fc-card-btn" title="Edit" onclick="window._editCard('${card.id}')">
+                        <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    </button>
+                    <button class="fc-card-btn danger" title="Delete" onclick="window._deleteCard('${card.id}')">
+                        <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ── Global handlers ──
+window._editCard = function(cardId) {
+    const card = allCards.find(c => c.id === cardId);
+    if (!card) return;
+    const display = card.phrase || card.rootWord || card.word || '';
+    const def = card.phrase ? (card.phraseTranslation || card.definition) : card.definition;
+    const translit = card.transliteration || transliterate(display);
+
+    const overlay = document.createElement('div');
+    overlay.className = 'fc-edit-overlay';
+    overlay.innerHTML = `
+    <div class="fc-edit-dialog">
+        <div class="fc-edit-header">
+            <p style="font-size:1.5rem;font-weight:700;font-family:'Times New Roman',serif;direction:rtl;">${esc(display)}</p>
+            ${translit ? `<p style="font-size:0.78rem;color:rgba(245,245,247,0.4);font-style:italic;margin-top:0.15rem;">${esc(translit)}</p>` : ''}
+        </div>
+        <div class="fc-edit-body">
+            <label style="font-size:0.7rem;font-weight:600;color:#86868b;display:block;margin-bottom:0.35rem;">Definition</label>
+            <textarea id="fc-edit-def" rows="3" style="width:100%;border:1px solid #d2d2d7;border-radius:0.55rem;padding:0.55rem 0.7rem;font-size:0.84rem;color:#1d1d1f;resize:vertical;font-family:-apple-system,BlinkMacSystemFont,sans-serif;outline:none;transition:border-color 0.2s;line-height:1.5;background:#fafafa;" onfocus="this.style.borderColor='#0071e3';this.style.background='#fff'" onblur="this.style.borderColor='#d2d2d7';this.style.background='#fafafa'">${esc(def)}</textarea>
+            <div style="display:flex;gap:0.4rem;margin-top:0.85rem;">
+                <button id="fc-edit-save" style="flex:1;padding:0.6rem;background:#1d1d1f;color:#fff;border:none;border-radius:0.55rem;font-weight:600;font-size:0.82rem;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='#424245'" onmouseout="this.style.background='#1d1d1f'">Save</button>
+                <button id="fc-edit-cancel" style="flex:1;padding:0.6rem;background:#fff;color:#1d1d1f;border:1px solid #d2d2d7;border-radius:0.55rem;font-weight:600;font-size:0.82rem;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='#f5f5f7'" onmouseout="this.style.background='#fff'">Cancel</button>
+            </div>
+        </div>
+    </div>`;
+
+    document.body.appendChild(overlay);
+    overlay.querySelector('#fc-edit-cancel').addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+    document.addEventListener('keydown', function escHandler(e) { if (e.key === 'Escape') { overlay.remove(); document.removeEventListener('keydown', escHandler); } });
+
+    overlay.querySelector('#fc-edit-save').addEventListener('click', async () => {
+        const newDef = document.getElementById('fc-edit-def').value.trim();
+        if (!newDef) return;
+        const updates = card.phrase ? { phraseTranslation: newDef, definition: newDef } : { definition: newDef };
+        const btn = overlay.querySelector('#fc-edit-save');
+        btn.textContent = 'Saving...'; btn.disabled = true;
+        try {
+            await updateFlashcard(cardId, updates);
+            const idx = allCards.findIndex(c => c.id === cardId);
+            if (idx !== -1) Object.assign(allCards[idx], updates);
+            filteredCards = [...allCards];
+            renderBrowse();
+            overlay.remove();
+        } catch (err) {
+            console.error('Failed to update:', err);
+            btn.textContent = 'Save'; btn.disabled = false;
+        }
+    });
+};
+
+window._deleteCard = async function(cardId) {
+    if (!confirm('Delete this flashcard?')) return;
+    try {
+        await deleteFlashcard(cardId);
+        allCards = allCards.filter(c => c.id !== cardId);
+        filteredCards = filteredCards.filter(c => c.id !== cardId);
+        renderStats();
+        renderBrowse();
+    } catch (err) {
+        console.error('Failed to delete:', err);
+    }
+};
+
+// ── Search ──
+document.getElementById('fc-search').addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase().trim();
+    if (!q) {
+        filteredCards = [...allCards];
+    } else {
+        filteredCards = allCards.filter(c =>
+            (c.word || '').toLowerCase().includes(q) ||
+            (c.rootWord || '').toLowerCase().includes(q) ||
+            (c.definition || '').toLowerCase().includes(q) ||
+            (c.phrase || '').toLowerCase().includes(q) ||
+            (c.phraseTranslation || '').toLowerCase().includes(q) ||
+            (c.transliteration || '').toLowerCase().includes(q)
+        );
+    }
+    renderBrowse();
+});
+
+// ── Helpers ──
+function esc(text) {
+    if (!text) return '';
+    const d = document.createElement('div');
+    d.textContent = text;
+    return d.innerHTML;
+}
+
+// ── Anki Export ──
+function generateAnkiGuid() {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()[]{}|';
+    let guid = '';
+    for (let i = 0; i < 10; i++) guid += chars.charAt(Math.floor(Math.random() * chars.length));
+    return guid;
+}
+
+function exportAnkiDeck() {
+    if (allCards.length === 0) { alert('No flashcards to export.'); return; }
+    const deckName = 'Hebrew Flashcards';
+    const lines = [
+        '#separator:tab',
+        '#html:true',
+        '#guid column:1',
+        '#notetype column:2',
+        '#deck column:3',
+        '#tags column:6'
+    ];
+    for (const card of allCards) {
+        const guid = generateAnkiGuid();
+        const display = card.phrase || card.rootWord || card.word || '';
+        const def = card.phrase ? (card.phraseTranslation || card.definition) : card.definition;
+        const translit = card.transliteration || transliterate(display);
+        const source = card.source || '';
+        let front = `<div style="font-size:2.2rem;font-weight:bold;font-family:'Times New Roman',serif;direction:rtl;text-align:center;">${esc(display)}</div>`;
+        let back = '';
+        if (translit) back += `<div style="font-size:0.95rem;color:#888;font-style:italic;text-align:center;margin-bottom:8px;">${esc(translit)}</div>`;
+        back += `<div style="font-size:1.1rem;text-align:center;line-height:1.6;">${esc(def)}</div>`;
+        const tags = [source ? source.toLowerCase() : '', card.phrase ? 'phrase' : 'word'].filter(Boolean).join(' ');
+        lines.push([guid, 'Basic', deckName, front.replace(/\t/g, ' '), back.replace(/\t/g, ' '), tags].join('\t'));
+    }
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'hebrew_flashcards_anki.txt';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+document.getElementById('fc-export-anki-btn').addEventListener('click', exportAnkiDeck);
+</script>
+<script src="/js/sidebar-nav.js"></script>
+</body>
+</html>

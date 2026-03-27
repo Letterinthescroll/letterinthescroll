@@ -2102,7 +2102,7 @@
   /*   ⌘C (with verse selection) → rich HTML copy for emails        */
   /*   ⌘U                        → clean plain-text copy            */
   var SITE_URL = 'https://www.aletterinthescroll.com/';
-  var LOGO_URL = SITE_URL + 'media/images/Icon.png';
+  var LOGO_URL = SITE_URL + 'media/images/logonew.png'; // blue version for emails/sharing
 
   function showCopyToast(message, success) {
     var existing = document.getElementById('verse-copy-toast');
