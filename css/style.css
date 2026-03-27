@@ -2964,6 +2964,11 @@ select {
 }
 
 @media (max-width: 768px) {
+    .header-logo-default,
+    .header-logo-shabbat {
+        display: none;
+    }
+
     .header-container {
         flex-direction: column;
         gap: 0.8rem;
