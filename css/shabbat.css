@@ -246,17 +246,19 @@ body.shabbat-mode .header-container::after {
    Darker warm tones for high contrast on the
    lighter gradient.
    ============================================= */
-/* Swap to blue logo in Shabbat mode */
-body.shabbat-mode .header-logo-default {
-    display: none;
-}
+/* Swap to blue logo in Shabbat mode (desktop only) */
+@media (min-width: 961px) {
+    body.shabbat-mode .header-logo-default {
+        display: none;
+    }
 
-body.shabbat-mode .header-logo-shabbat {
-    display: block;
-}
+    body.shabbat-mode .header-logo-shabbat {
+        display: block;
+    }
 
-body.shabbat-mode .header-logo-shabbat .header-logo {
-    mix-blend-mode: multiply;
+    body.shabbat-mode .header-logo-shabbat .header-logo {
+        mix-blend-mode: multiply;
+    }
 }
 
 body.shabbat-mode .header-title {
