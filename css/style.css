@@ -2828,7 +2828,7 @@ select {
 
 .header-logo {
     display: block;
-    height: 2em;
+    height: 2.08em;
     width: auto;
     flex-shrink: 0;
     object-fit: contain;
