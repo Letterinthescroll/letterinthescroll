@@ -246,6 +246,15 @@ body.shabbat-mode .header-container::after {
    Darker warm tones for high contrast on the
    lighter gradient.
    ============================================= */
+/* Swap to blue logo in Shabbat mode */
+body.shabbat-mode .header-logo-default {
+    display: none;
+}
+
+body.shabbat-mode .header-logo-shabbat {
+    display: block;
+}
+
 body.shabbat-mode .header-title {
     color: #3d2815;
     text-shadow:

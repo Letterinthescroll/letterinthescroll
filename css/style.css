@@ -2791,9 +2791,9 @@ select {
 
 .header-branding-button {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.15rem;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.6rem;
     background: transparent;
     border: none;
     color: inherit;
@@ -2827,11 +2827,20 @@ select {
 }
 
 .header-logo {
+    display: block;
+    height: 2em;
+    width: auto;
+    flex-shrink: 0;
+    object-fit: contain;
+    transition: opacity 0.25s;
+}
+
+.header-logo-shabbat {
     display: none;
 }
 
 .header-branding-button:hover .header-logo {
-    display: none;
+    opacity: 0.85;
 }
 
 .header-text {
