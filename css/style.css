@@ -2828,7 +2828,7 @@ select {
 
 .header-logo {
     display: block;
-    height: 2.08em;
+    height: 2.29em;
     width: auto;
     flex-shrink: 0;
     object-fit: contain;
@@ -6840,6 +6840,12 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
     /* Hide user pill on mobile — sidebar has Account & Sign Out */
     body.sidebar-nav-enabled #header-user-dropdown-container {
         display: none !important;
+    }
+
+    /* Hide logo on mobile — hamburger menu already shows it */
+    body.sidebar-nav-enabled .header-logo-default,
+    body.sidebar-nav-enabled .header-logo-shabbat {
+        display: none;
     }
 
     /* Keep header title from overlapping where the hamburger pill floats */
