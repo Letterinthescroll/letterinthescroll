@@ -1,0 +1,33 @@
+# robots.txt for A Letter in the Scroll
+# https://www.aletterinthescroll.com
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://www.aletterinthescroll.com/sitemap.xml
+
+# Disallow internal/private pages
+Disallow: /dev/
+Disallow: /classroom/
+Disallow: /teachers/
+Disallow: /settings/
+Disallow: /shabbat-preview/
+
+# Allow all major content sections
+Allow: /study/
+Allow: /psalms/
+Allow: /prayers/
+Allow: /songs/
+Allow: /holidays/
+Allow: /food/
+Allow: /about/
+Allow: /join/
+Allow: /invite/
+Allow: /flashcards/
+Allow: /journal/
+Allow: /bookmarks/
+Allow: /dashboard/
+
+# Crawl-delay suggestion for polite crawling
+Crawl-delay: 1
