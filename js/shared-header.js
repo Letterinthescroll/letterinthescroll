@@ -90,7 +90,6 @@
             var aria = active ? ' aria-current="page"' : '';
             var id = item.href === '/study' ? ' id="go-to-weekly"' : '';
             return '<a' + id + ' href="' + item.href + '" class="' + cls + '" title="' + item.title + '"' + aria + '>' +
-                '<svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">' + item.icon + '</svg>' +
                 '<span class="header-btn-text">' + item.label + '</span>' +
                 '</a>';
         }).join('\n                ');
@@ -98,7 +97,7 @@
 
     function fallbackTemplate() {
         return '' +
-            '<header class="header-main relative z-30" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%)">' +
+            '<header class="header-main relative z-30">' +
             '  <div class="header-container">' +
             '    <div class="header-branding-section">' +
             '      <a id="home-branding" href="/dashboard" aria-label="Go to dashboard home" class="header-branding-button" style="text-decoration:none">' +

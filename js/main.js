@@ -703,7 +703,6 @@ async function init() {
             sk.id = 'header-user-dropdown-container';
             sk.innerHTML = `
                 <div class="header-user-pill" style="opacity:0;pointer-events:none;min-width:88px;" aria-hidden="true">
-                    <div class="header-user-avatar"></div>
                     <span class="header-btn-text" style="min-width:42px;">&nbsp;</span>
                 </div>`;
             ha.appendChild(sk);
@@ -3331,7 +3330,6 @@ function updateHeaderUserDropdown(user, userProfile) {
                         title="Account Menu"
                         aria-haspopup="true"
                         aria-expanded="false">
-                    <div class="header-user-avatar" aria-hidden="true">${initial}</div>
                     <span class="header-btn-text">${firstName}</span>
                     <svg class="header-user-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>

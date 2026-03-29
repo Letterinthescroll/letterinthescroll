@@ -1,7 +1,7 @@
 /**
  * header-loader.js — Modular header loader with sessionStorage caching.
  *
- * Usage: add <div id="shared-header-mount" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%);min-height:64px"></div>
+ * Usage: add <div id="shared-header-mount" style="background:rgba(22,54,148,0.92);min-height:64px;backdrop-filter:blur(16px) saturate(180%)"></div>
  * then include <script src="/js/header-loader.js"></script> (before page-auth.js / main.js).
  *
  * Features:
@@ -16,7 +16,7 @@
     'use strict';
 
     var HEADER_TEMPLATE_URL = '/includes/header.html';
-    var CACHE_KEY = 'cachedHeaderTemplate_v6';
+    var CACHE_KEY = 'cachedHeaderTemplate_v9';
     var NAV_TOKEN = '__NAV_ITEMS__';
 
     /* ── Nav items ──────────────────────────────────────────────────────── */
@@ -98,7 +98,6 @@
             var aria = active ? ' aria-current="page"' : '';
             var id = item.href === '/study' ? ' id="go-to-weekly"' : '';
             return '<a' + id + ' href="' + item.href + '" class="' + cls + '" title="' + item.title + '"' + aria + '>' +
-                '<svg class="header-btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">' + item.icon + '</svg>' +
                 '<span class="header-btn-text">' + item.label + '</span>' +
                 '</a>';
         }).join('\n                ');
@@ -107,7 +106,7 @@
     /* ── Inline fallback (used if fetch + cache both miss) ────────────── */
     function fallbackTemplate() {
         return '' +
-            '<header class="header-main relative z-30" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%)">' +
+            '<header class="header-main relative z-30">' +
             '  <div class="header-container">' +
             '    <div class="header-branding-section">' +
             '      <a id="home-branding" href="/dashboard" aria-label="Go to dashboard home" class="header-branding-button" style="text-decoration:none">' +
@@ -247,7 +246,6 @@
         container.style.cssText = 'position:relative;display:flex;align-items:center;';
         container.innerHTML =
             '<button id="header-user-menu-btn" class="header-user-pill" title="Account Menu" aria-haspopup="true" aria-expanded="false">' +
-            '<div class="header-user-avatar" aria-hidden="true">' + initial + '</div>' +
             '<span class="header-btn-text">' + cached.firstName + '</span>' +
             '<svg class="header-user-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">' +
             '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>' +

@@ -138,27 +138,9 @@
         }
 
         .dashboard-body .header-main {
-            background: linear-gradient(135deg, rgba(15, 29, 57, 0.95), rgba(27, 67, 108, 0.93));
-            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 16px 40px rgba(9, 25, 51, 0.34);
-            backdrop-filter: blur(14px);
             position: sticky;
             top: 0;
             z-index: 40;
-        }
-
-        .dashboard-body .header-subtitle {
-            color: rgba(222, 233, 252, 0.82);
-        }
-
-        .dashboard-body .header-btn {
-            border-radius: 0.8rem;
-            backdrop-filter: blur(4px);
-            transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-        }
-
-        .dashboard-body .header-btn:hover {
-            transform: translateY(-1px);
         }
 
         .dashboard-main {
@@ -2659,7 +2641,7 @@
 <body class="dashboard-body min-h-screen">
 
 <!-- ═══ HEADER ═══ -->
-<div id="shared-header-mount" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%);min-height:64px"></div>
+<div id="shared-header-mount" style="background:rgba(22,54,148,0.92);min-height:64px;backdrop-filter:blur(16px) saturate(180%)"></div>
     <script src="/js/header-loader.js"></script>
 
 <!-- ═══ MAIN ═══ -->
@@ -3389,7 +3371,6 @@
                     title="Account Menu"
                     aria-haspopup="true"
                     aria-expanded="false">
-                <div class="header-user-avatar" aria-hidden="true">${initial}</div>
                 <span class="header-btn-text">${firstName}</span>
                 <svg class="header-user-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
