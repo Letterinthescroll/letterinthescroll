@@ -2763,11 +2763,11 @@ select {
     position: relative;
     overflow-x: clip;
     overflow-y: visible;
-    background: rgba(22, 54, 148, 0.92);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    backdrop-filter: blur(16px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: none;
+    background: linear-gradient(135deg, #152046 0%, #1e3794 50%, #1e3794 100%);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 2px 20px rgba(10, 20, 50, 0.4);
     padding-bottom: 0;
 }
 
@@ -2844,27 +2844,28 @@ select {
 }
 
 .header-title {
-    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-    font-size: clamp(1.2rem, 1.8vw, 1.4rem);
-    font-weight: 600;
-    line-height: 1.15;
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif !important;
+    font-size: clamp(1.2rem, 1.8vw, 1.4rem) !important;
+    font-weight: 600 !important;
+    line-height: 1.15 !important;
     margin: 0;
     color: #ffffff;
     text-shadow: none;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.02em !important;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .header-subtitle {
-    font-size: 0.68rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-size: 0.68rem !important;
     color: rgba(255, 255, 255, 0.5);
     margin: 0;
-    line-height: 1.25;
+    line-height: 1.25 !important;
     max-width: 55ch;
-    font-weight: 400;
-    letter-spacing: 0.08em;
+    font-weight: 400 !important;
+    letter-spacing: 0.08em !important;
     text-shadow: none;
     text-transform: uppercase;
     white-space: nowrap;
@@ -7060,14 +7061,7 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
    (shared across all pages)
    ══════════════════════════════════════════ */
 
-/* Glassmorphism header — translucent navy-blue with frosted blur */
-.header-main {
-    background: rgba(16, 36, 82, 0.85) !important;
-    -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
-    backdrop-filter: blur(16px) saturate(180%) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: none !important;
-}
+/* Header overrides removed — all styles consolidated in base .header-main */
 
 /* Make active-page button use a gold-tinted style */
 /* primary/secondary button overrides removed — defined in base styles above */

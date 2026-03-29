@@ -1,7 +1,7 @@
 /**
  * header-loader.js — Modular header loader with sessionStorage caching.
  *
- * Usage: add <div id="shared-header-mount" style="background:rgba(22,54,148,0.92);min-height:64px;backdrop-filter:blur(16px) saturate(180%)"></div>
+ * Usage: add <div id="shared-header-mount" style="background:linear-gradient(135deg,#152046 0%,#1e3794 50%,#1e3794 100%);min-height:64px;backdrop-filter:blur(16px) saturate(180%)"></div>
  * then include <script src="/js/header-loader.js"></script> (before page-auth.js / main.js).
  *
  * Features:
@@ -16,7 +16,7 @@
     'use strict';
 
     var HEADER_TEMPLATE_URL = '/includes/header.html';
-    var CACHE_KEY = 'cachedHeaderTemplate_v9';
+    var CACHE_KEY = 'cachedHeaderTemplate_v10';
     var NAV_TOKEN = '__NAV_ITEMS__';
 
     /* ── Nav items ──────────────────────────────────────────────────────── */
