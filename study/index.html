@@ -346,6 +346,12 @@
                         </svg>
                         Significance
                     </button>
+                    <button id="go-to-weekly-desktop" style="display:none" class="px-2.5 py-1.5 bg-amber-500 text-white text-xs rounded-md hover:bg-amber-600 transition-all font-medium shadow-sm hover:shadow flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        This Week
+                    </button>
                     <button id="prev-parsha" class="group px-4 py-2.5 bg-white border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-blue-50 hover:border-blue-500 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-300 font-medium shadow-sm flex items-center gap-2">
                         <svg class="w-4 h-4 group-hover:translate-x-[-2px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -390,14 +396,20 @@
                 </button>
 
                 <!-- Navigation Buttons -->
+                <button id="go-to-weekly-mobile" style="display:none" class="w-full px-4 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg hover:from-amber-600 hover:to-orange-600 transition-all font-medium shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    This Week's Parsha
+                </button>
                 <div class="flex gap-2">
-                    <button id="prev-parsha" class="flex-1 px-4 py-2.5 bg-white border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-blue-50 hover:border-blue-500 transition-all disabled:opacity-40 disabled:cursor-not-allowed font-medium shadow-sm text-sm flex items-center justify-center gap-2">
+                    <button id="prev-parsha-mobile" class="flex-1 px-4 py-2.5 bg-white border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-blue-50 hover:border-blue-500 transition-all disabled:opacity-40 disabled:cursor-not-allowed font-medium shadow-sm text-sm flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
                         Previous
                     </button>
-                    <button id="next-parsha" class="flex-1 px-4 py-2.5 bg-white border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-blue-50 hover:border-blue-500 transition-all disabled:opacity-40 disabled:cursor-not-allowed font-medium shadow-sm text-sm flex items-center justify-center gap-2">
+                    <button id="next-parsha-mobile" class="flex-1 px-4 py-2.5 bg-white border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-blue-50 hover:border-blue-500 transition-all disabled:opacity-40 disabled:cursor-not-allowed font-medium shadow-sm text-sm flex items-center justify-center gap-2">
                         Next
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>

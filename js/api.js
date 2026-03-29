@@ -42,23 +42,52 @@ export function cacheCurrentParsha(name, ref) {
 // ──────────────────────────────────────────────────────────────────────────────
 
 /**
- * Fetch current week's parsha from Sefaria calendar
+ * Returns true if the parsha name looks like a holiday/special reading
+ * rather than a regular weekly Torah portion name.
+ */
+function _isHolidayReading(name) {
+    if (!name) return true;
+    const lower = name.toLowerCase();
+    const holidayKeywords = ['pesach', 'passover', 'sukkot', 'shavuot', 'rosh hashana', 'yom kippur',
+        'chol hamoed', 'chol ha-moed', 'shemini atzeret', 'simchat torah', 'purim', 'tisha bav',
+        'rosh hashanah', 'hoshana rabbah', 'yom tov', 'moadim'];
+    return holidayKeywords.some(k => lower.includes(k));
+}
+
+/**
+ * Fetch current week's parsha from Sefaria calendar.
+ * Prefers "Parashat Hashavua"; falls back to "Chok LeYisrael" during holiday
+ * weeks when Sefaria returns a special reading instead of a regular parsha name.
  */
 export async function fetchCurrentParsha() {
     try {
         const response = await fetch(`${API_CONFIG.SEFARIA_BASE}/calendars`);
         if (!response.ok) return null;
-        
+
         const data = await response.json();
-        if (data.calendar_items) {
-            const parashatHashavua = data.calendar_items.find(
-                item => item.title && item.title.en === 'Parashat Hashavua'
-            );
-            if (parashatHashavua && parashatHashavua.displayValue) {
-                return parashatHashavua.displayValue.en;
-            }
+        if (!data.calendar_items) return null;
+
+        const parashatHashavua = data.calendar_items.find(
+            item => item.title && item.title.en === 'Parashat Hashavua'
+        );
+        const primaryName = parashatHashavua?.displayValue?.en || null;
+
+        // If Parashat Hashavua returned a normal parsha name, use it directly.
+        if (primaryName && !_isHolidayReading(primaryName)) {
+            return primaryName;
         }
-        return null;
+
+        // During holiday weeks Sefaria returns the special maftir/holiday reading.
+        // Fall back to "Chok LeYisrael" which always tracks the regular weekly cycle.
+        const chokLeYisrael = data.calendar_items.find(
+            item => item.title && item.title.en === 'Chok LeYisrael'
+        );
+        if (chokLeYisrael?.displayValue?.en) {
+            return chokLeYisrael.displayValue.en;
+        }
+
+        // Last resort: return whatever Parashat Hashavua gave us (may be null).
+        return primaryName;
     } catch (error) {
         return null;
     }

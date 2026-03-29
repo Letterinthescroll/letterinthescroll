@@ -59,9 +59,25 @@ export function highlightCurrentParsha(parshaRef) {
 export function updateNavigationButtons() {
     const prevButton = document.getElementById('prev-parsha');
     const nextButton = document.getElementById('next-parsha');
-    
-    prevButton.disabled = state.currentParshaIndex <= 0;
-    nextButton.disabled = state.currentParshaIndex >= state.allParshas.length - 1;
+    const prevButtonMobile = document.getElementById('prev-parsha-mobile');
+    const nextButtonMobile = document.getElementById('next-parsha-mobile');
+
+    const atStart = state.currentParshaIndex <= 0;
+    const atEnd = state.currentParshaIndex >= state.allParshas.length - 1;
+
+    prevButton.disabled = atStart;
+    nextButton.disabled = atEnd;
+    if (prevButtonMobile) prevButtonMobile.disabled = atStart;
+    if (nextButtonMobile) nextButtonMobile.disabled = atEnd;
+
+    // "This Week's Parsha" button: hidden when already on the weekly parsha
+    const isOnWeekly = state.weeklyParshaRef
+        ? state.currentParshaRef === state.weeklyParshaRef
+        : true;
+    const weeklyBtnDesktop = document.getElementById('go-to-weekly-desktop');
+    const weeklyBtnMobile = document.getElementById('go-to-weekly-mobile');
+    if (weeklyBtnDesktop) weeklyBtnDesktop.style.display = isOnWeekly ? 'none' : 'flex';
+    if (weeklyBtnMobile) weeklyBtnMobile.style.display = isOnWeekly ? 'none' : 'flex';
 }
 
 /**

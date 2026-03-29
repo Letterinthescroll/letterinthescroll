@@ -922,7 +922,7 @@ function setupEventListeners() {
         });
     });
     
-    document.getElementById('prev-parsha').addEventListener('click', async () => {
+    async function handlePrevParsha() {
         if (state.currentParshaIndex > 0) {
             let newIndex = state.currentParshaIndex - 1;
             // If the parsha we'd land on is the second in a double pair for this year,
@@ -931,8 +931,6 @@ function setupEventListeners() {
             if (targetParsha) {
                 const pairInfo = getDoubleParshaPairInfo(targetParsha.name);
                 if (pairInfo && pairInfo.position === 'first' && !isHebrewLeapYear(getCurrentHebrewYear())) {
-                    // We're about to land on the first parsha of a double pair,
-                    // but we're coming FROM the double view — skip before it
                     const currentParsha = state.allParshas[state.currentParshaIndex];
                     const currentPairInfo = getDoubleParshaPairInfo(currentParsha?.name);
                     if (currentPairInfo && currentPairInfo.position === 'second'
@@ -942,63 +940,61 @@ function setupEventListeners() {
                 }
             }
             const prevParsha = state.allParshas[newIndex];
-            setState({
-                currentParshaIndex: newIndex,
-                currentParshaRef: prevParsha.reference
-            });
+            setState({ currentParshaIndex: newIndex, currentParshaRef: prevParsha.reference });
             document.querySelectorAll('select#parsha-selector').forEach((s) => {
                 s.value = prevParsha.reference;
             });
             await loadParsha(prevParsha.reference);
             updateNavigationButtons();
         }
-    });
+    }
 
-    document.getElementById('next-parsha').addEventListener('click', async () => {
+    async function handleNextParsha() {
         if (state.currentParshaIndex < state.allParshas.length - 1) {
             let newIndex = state.currentParshaIndex + 1;
-            // loadParsha handles combining — just go to the next index.
-            // If we're currently on the second parsha of a double,
-            // next naturally goes past both. No special handling needed.
             const nextParsha = state.allParshas[newIndex];
-            setState({
-                currentParshaIndex: newIndex,
-                currentParshaRef: nextParsha.reference
-            });
+            setState({ currentParshaIndex: newIndex, currentParshaRef: nextParsha.reference });
             document.querySelectorAll('select#parsha-selector').forEach((s) => {
                 s.value = nextParsha.reference;
             });
             await loadParsha(nextParsha.reference);
             updateNavigationButtons();
         }
-    });
+    }
+
+    document.getElementById('prev-parsha').addEventListener('click', handlePrevParsha);
+    document.getElementById('next-parsha').addEventListener('click', handleNextParsha);
+
+    const prevMobile = document.getElementById('prev-parsha-mobile');
+    const nextMobile = document.getElementById('next-parsha-mobile');
+    if (prevMobile) prevMobile.addEventListener('click', handlePrevParsha);
+    if (nextMobile) nextMobile.addEventListener('click', handleNextParsha);
     
-    const weeklyButton = document.getElementById('go-to-weekly');
-    if (weeklyButton) {
-        weeklyButton.addEventListener('click', async (event) => {
-            if (event && typeof event.preventDefault === 'function') {
-                event.preventDefault();
-            }
-            const weeklyRef = state.weeklyParshaRef || state.currentParshaRef;
-            if (!weeklyRef) {
-                return;
-            }
-            const index = state.allParshas.findIndex(p => p.reference === weeklyRef);
-            if (index < 0) {
-                return;
-            }
-            setState({
-                currentParshaIndex: index,
-                currentParshaRef: weeklyRef
-            });
-            // Update ALL select elements to keep them in sync
-            document.querySelectorAll('select#parsha-selector').forEach((s) => {
-                s.value = weeklyRef;
-            });
-            await loadParsha(weeklyRef);
-            updateNavigationButtons();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+    async function handleGoToWeekly(event) {
+        if (event && typeof event.preventDefault === 'function') {
+            event.preventDefault();
+        }
+        const weeklyRef = state.weeklyParshaRef || state.currentParshaRef;
+        if (!weeklyRef) return;
+        const index = state.allParshas.findIndex(p => p.reference === weeklyRef);
+        if (index < 0) return;
+        setState({ currentParshaIndex: index, currentParshaRef: weeklyRef });
+        document.querySelectorAll('select#parsha-selector').forEach((s) => {
+            s.value = weeklyRef;
         });
+        await loadParsha(weeklyRef);
+        updateNavigationButtons();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    const weeklyButtonDesktop = document.getElementById('go-to-weekly-desktop');
+    if (weeklyButtonDesktop) {
+        weeklyButtonDesktop.addEventListener('click', handleGoToWeekly);
+    }
+
+    const weeklyButtonMobile = document.getElementById('go-to-weekly-mobile');
+    if (weeklyButtonMobile) {
+        weeklyButtonMobile.addEventListener('click', handleGoToWeekly);
     }
 
     const significanceButton = document.getElementById('show-significance');
