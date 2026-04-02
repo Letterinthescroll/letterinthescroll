@@ -56,37 +56,31 @@
         sidebar.setAttribute('role', 'navigation');
         sidebar.setAttribute('aria-label', 'Mobile navigation');
 
-        // ── 2. Build the sidebar head (brand link + close btn)
+        // ── 2. Build the sidebar head (brand + close btn)
         var sidebarHead = document.createElement('div');
         sidebarHead.className = 'site-sidebar-head';
 
         var brandLink = document.createElement('a');
         brandLink.href = '/dashboard';
         brandLink.className = 'site-sidebar-brand-link';
-        brandLink.title = 'A Letter in the Scroll — Home';
+        brandLink.setAttribute('aria-label', 'Go to dashboard home');
+        brandLink.title = 'A Letter in the Scroll';
 
-        var brand = document.createElement('span');
-        brand.className = 'site-sidebar-brand';
-        brand.setAttribute('aria-hidden', 'true');
-        var brandImg = document.createElement('img');
-        brandImg.src = getAssetPath('logonew.png');
-        brandImg.alt = '';
-        brandImg.style.width = '28px';
-        brandImg.style.height = '28px';
-        brandImg.style.objectFit = 'contain';
-        brandImg.style.display = 'block';
-        brandImg.style.borderRadius = '50%';
-        brandImg.addEventListener('error', function () {
-            this.src = getAssetPath('logonew.png');
+        var logoMark = document.createElement('span');
+        logoMark.className = 'site-sidebar-logo-mark';
+        var logoImg = document.createElement('img');
+        logoImg.src = getAssetPath('logonew.png');
+        logoImg.alt = 'A Letter in the Scroll';
+        logoImg.className = 'site-sidebar-logo';
+        logoImg.width = 40;
+        logoImg.height = 40;
+        logoImg.decoding = 'async';
+        logoImg.addEventListener('error', function () {
+            this.src = getAssetPath('IconOnly.png');
         }, { once: true });
-        brand.appendChild(brandImg);
+        logoMark.appendChild(logoImg);
 
-        var sidebarTitle = document.createElement('span');
-        sidebarTitle.className = 'site-sidebar-title';
-        sidebarTitle.textContent = 'A Letter in the Scroll';
-
-        brandLink.appendChild(brand);
-        brandLink.appendChild(sidebarTitle);
+        brandLink.appendChild(logoMark);
 
         // Close button (X) inside the drawer
         var closeBtn = document.createElement('button');
@@ -99,11 +93,31 @@
         sidebarHead.appendChild(closeBtn);
         sidebar.appendChild(sidebarHead);
 
-        // ── 3. CLONE nav items into the drawer (original stays in header)
-        var clonedActions = hActions.cloneNode(true);
-        clonedActions.id = 'sidebar-nav-actions'; // unique ID to avoid conflicts
-        clonedActions.className = 'header-actions';
-        sidebar.appendChild(clonedActions);
+        // ── 3. Build nav items directly with icons (not cloned from header)
+        var sidebarNav = document.createElement('div');
+        sidebarNav.id = 'sidebar-nav-actions';
+        sidebarNav.className = 'header-actions';
+
+        var navItems = [
+            { href: '/dashboard', label: 'Home',     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10.5L12 3l9 7.5M5 9.5V21h14V9.5"/>' },
+            { href: '/study',     label: 'Study',    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>' },
+            { href: '/holidays',  label: 'Holidays', icon: '<rect x="3" y="5" width="18" height="16" rx="2" ry="2" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3v4M8 3v4M3 11h18"/>' },
+            { href: '/prayers',   label: 'Prayers',  icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3l2.4 4.9L20 9l-4 3.9.9 5.6L12 16l-4.9 2.5.9-5.6L4 9l5.6-1.1L12 3z"/>' },
+            { href: '/songs',     label: 'Songs',    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13"/><circle cx="6" cy="18" r="3" stroke-width="2"/><circle cx="18" cy="16" r="3" stroke-width="2"/>' },
+            { href: '/food',      label: 'Food',     icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 2v7c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2V2M7 2v20M21 15V2a5 5 0 00-5 5v6c0 1.1.9 2 2 2h3m0 0v7"/>' },
+            { href: '/about',     label: 'About',    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>' }
+        ];
+
+        navItems.forEach(function (item) {
+            var a = document.createElement('a');
+            a.href = item.href;
+            a.className = 'header-btn header-btn-secondary';
+            a.title = item.label;
+            a.innerHTML = '<span class="header-btn-text">' + item.label + '</span>';
+            sidebarNav.appendChild(a);
+        });
+
+        sidebar.appendChild(sidebarNav);
 
         // ── 3b. Add Account section (Bookmarks, Account Settings, Sign Out)
         var accountSection = document.createElement('div');
@@ -188,21 +202,19 @@
 
         document.body.appendChild(sidebar);
 
-        // ── Remove user pill from sidebar clone (not needed — account section has links) ──
-        var userDropdownContainer = clonedActions.querySelector('#header-user-dropdown-container');
-        if (userDropdownContainer) userDropdownContainer.remove();
-
-        // ── Highlight the active page in the sidebar clone ──
+        // ── Highlight the active page in the sidebar ──
         (function highlightActivePage() {
             var path = window.location.pathname.replace(/\/$/, '') || '/';
             var page = path.split('/').filter(Boolean).pop() || '';
 
             var pageMap = {
-                'study':      '#go-to-weekly',
-                '':           '#go-to-weekly',
+                'study':      'a[href$="/study"]',
+                '':           'a[href$="/study"]',
                 'dashboard':  'a[href$="/dashboard"]',
+                'holidays':   'a[href$="/holidays"]',
                 'prayers':    'a[href$="/prayers"]',
                 'songs':      'a[href$="/songs"]',
+                'food':       'a[href$="/food"]',
                 'about':      'a[href$="/about"]',
                 'bookmarks':  'a[href$="/bookmarks"]',
                 'settings':   'a[href$="/settings"]',
@@ -222,11 +234,15 @@
                 pageMap['__holidays__'] = 'a[href$="/holidays"]';
             }
 
+            // Food sub-pages (e.g. /food/recipes/...)
+            if (path.indexOf('/food') === 0 && page !== 'food') {
+                page = 'food';
+            }
+
             var selector = pageMap[page];
             if (!selector) return;
 
-            // Highlight in the sidebar clone (use clonedActions, not hActions)
-            var activeEl = clonedActions.querySelector(selector);
+            var activeEl = sidebarNav.querySelector(selector) || accountSection.querySelector(selector);
             if (activeEl) {
                 activeEl.classList.add('header-btn--active');
                 activeEl.setAttribute('aria-current', 'page');

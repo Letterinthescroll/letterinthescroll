@@ -6318,59 +6318,76 @@ body.sidebar-nav-enabled .header-container {
 /* ── Sidebar head ───────────────────────────────────────────────────────── */
 body.sidebar-nav-enabled .site-sidebar-head {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: space-between;
     gap: 0.5rem;
-    padding-bottom: 0.85rem;
-    margin-bottom: 0.65rem;
-    /* Glass divider — looks like light catching a glass edge */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.45);
-    box-shadow: 0 1px 0 rgba(59, 130, 246, 0.06);
-    min-height: 42px;
+    padding-bottom: 0.6rem;
+    margin-bottom: 0.5rem;
+    border-bottom: none;
+    box-shadow: none;
+    min-height: 0;
     flex-shrink: 0;
 }
 
-/* Brand link wraps the icon + site name and navigates home */
 body.sidebar-nav-enabled .site-sidebar-brand-link {
     display: flex;
     align-items: center;
-    gap: 0.45rem;
+    gap: 0.72rem;
     flex: 1;
     min-width: 0;
     text-decoration: none;
     color: inherit;
-    border-radius: 8px;
-    padding: 2px 4px 2px 0;
     transition: opacity 0.18s;
 }
+
 body.sidebar-nav-enabled .site-sidebar-brand-link:hover {
     opacity: 0.8;
 }
 
-body.sidebar-nav-enabled .site-sidebar-brand {
+body.sidebar-nav-enabled .site-sidebar-logo-mark {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     flex-shrink: 0;
-    color: rgba(59, 130, 246, 0.75);
-    transition: opacity var(--sidebar-transition);
+    line-height: 0;
 }
 
-body.sidebar-nav-enabled .site-sidebar-brand svg {
-    width: 20px;
-    height: 20px;
-    filter: drop-shadow(0 1px 2px rgba(59,130,246,0.18));
+body.sidebar-nav-enabled .site-sidebar-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    display: block;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    filter: none;
+}
+
+body.sidebar-nav-enabled .site-sidebar-brand-copy {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    justify-content: center;
+    align-self: center;
+    min-width: 0;
+    overflow: hidden;
+    padding-top: 0;
 }
 
 body.sidebar-nav-enabled .site-sidebar-title {
-    flex: 1;
-    color: rgba(30, 58, 138, 0.68);
-    font-size: 0.6rem;
-    font-weight: 700;
+    color: rgba(16, 42, 102, 0.75);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    font-style: normal;
     letter-spacing: 0.01em;
+    line-height: 1.15;
     text-transform: none;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+    text-shadow: none;
+    text-rendering: optimizeLegibility;
     transition: opacity var(--sidebar-transition), width var(--sidebar-transition);
 }
 
@@ -6433,6 +6450,7 @@ body.sidebar-nav-enabled .site-sidebar-close-btn {
     width: 34px;
     height: 34px;
     flex-shrink: 0;
+    margin-left: 0.5rem;
     border: 1px solid rgba(255, 255, 255, 0.50);
     background: rgba(255, 255, 255, 0.22);
     color: rgba(30, 58, 138, 0.75);
@@ -6476,6 +6494,13 @@ body.sidebar-nav-enabled .site-sidebar .header-btn::after {
     display: none;
 }
 
+body.sidebar-nav-enabled .site-sidebar .header-btn-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+    opacity: 0.72;
+}
+
 body.sidebar-nav-enabled .site-sidebar .header-btn-text {
     white-space: nowrap;
     overflow: hidden;
@@ -6502,6 +6527,7 @@ body.sidebar-nav-enabled .site-sidebar-divider {
     background: linear-gradient(90deg, transparent 5%, rgba(147, 197, 253, 0.4) 50%, transparent 95%);
     margin: 0.4rem 0.5rem 0.5rem;
 }
+
 
 body.sidebar-nav-enabled .site-sidebar-account-section .header-btn {
     width: 100%;
@@ -6573,9 +6599,21 @@ body.sidebar-nav-enabled .site-sidebar .header-btn-secondary:hover {
         inset 0 -1px 0 rgba(59, 130, 246, 0.06);
 }
 
-/* Prevent primary button from translating up (causes top-clip by sidebar head) */
+/* Primary button (Home) in sidebar — dark text on light background, same as secondary */
+body.sidebar-nav-enabled .site-sidebar .header-btn-primary {
+    color: #1e3a8a;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.52);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.82),
+        inset 0 -1px 0 rgba(59, 130, 246, 0.05);
+}
+
 body.sidebar-nav-enabled .site-sidebar .header-btn-primary:hover {
     transform: none;
+    background: rgba(255, 255, 255, 0.40);
+    border-color: rgba(255, 255, 255, 0.82);
+    color: #1d4ed8;
 }
 
 /* Tint party.png to match the blue icon style */
@@ -6899,36 +6937,30 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
         display: none;
     }
 
-    /* Sidebar title visible */
-    body.sidebar-nav-enabled .site-sidebar-title {
-        opacity: 1;
-        width: auto;
-        font-size: 0.82rem;
-        font-weight: 700;
-        color: rgba(30, 58, 138, 0.85);
-        letter-spacing: -0.005em;
-        text-shadow: 0 1px 0 rgba(255,255,255,0.5);
-    }
-
-    /* Sidebar brand icon — bigger on mobile */
-    body.sidebar-nav-enabled .site-sidebar-brand img {
-        width: 32px !important;
-        height: 32px !important;
-    }
-
-    /* Sidebar brand link — better spacing */
-    body.sidebar-nav-enabled .site-sidebar-brand-link {
-        gap: 0.55rem;
-        padding: 4px 6px 4px 2px;
-    }
-
-    /* Sidebar head — prominent divider */
+    /* Sidebar head — just logo + close, no container */
     body.sidebar-nav-enabled .site-sidebar-head {
-        padding-bottom: 1rem;
-        margin-bottom: 0.8rem;
-        border-bottom: 1px solid rgba(147, 197, 253, 0.35);
-        box-shadow: 0 1px 0 rgba(255,255,255,0.6);
-        min-height: 48px;
+        align-items: flex-start;
+        padding-bottom: 0.7rem;
+        margin-bottom: 0.55rem;
+        border-bottom: none;
+        box-shadow: none;
+        min-height: 0;
+    }
+
+    body.sidebar-nav-enabled .site-sidebar-brand-link {
+        gap: 0.8rem;
+        align-items: center;
+    }
+
+    body.sidebar-nav-enabled .site-sidebar-logo {
+        width: 42px;
+        height: 42px;
+    }
+
+    body.sidebar-nav-enabled .site-sidebar-title {
+        font-size: 0.82rem;
+        line-height: 1.15;
+        color: rgba(16, 42, 102, 0.75);
     }
 
     /* Nav buttons — compact touch targets */
@@ -7779,4 +7811,3 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
 .birthday-highlight .gold-line {
     background: linear-gradient(90deg, transparent, #ef4444, transparent) !important;
 }
-
