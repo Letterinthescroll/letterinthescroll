@@ -6716,17 +6716,16 @@ body.sidebar-nav-enabled .site-header-nav-toggle {
     /* Hidden on desktop; shown on mobile via media query below */
     display: none;
     position: fixed;
-    top: 0.9rem;
-    right: 0.9rem;
+    right: 0.85rem;
     z-index: 300; /* above sidebar (200) and backdrop (196) */
     border: 1px solid rgba(255, 255, 255, 0.38);
     background: rgba(59, 130, 246, 0.82);
     backdrop-filter: blur(12px) saturate(150%);
     -webkit-backdrop-filter: blur(12px) saturate(150%);
     color: #ffffff;
-    border-radius: 12px;
-    width: 46px;
-    height: 46px;
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
     padding: 0;
     align-items: center;
     justify-content: center;
@@ -6863,9 +6862,10 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
         padding-left: 0 !important;
     }
 
-    /* Show hamburger pill (it is position:fixed in body, so always visible) */
+    /* Show hamburger pill — vertically centered in sticky header */
     body.sidebar-nav-enabled .site-header-nav-toggle {
         display: inline-flex;
+        top: 0.65rem;
     }
 
     /* Hide user pill on mobile — sidebar has Account & Sign Out */
