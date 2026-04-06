@@ -4898,67 +4898,465 @@
     {
       "name": "Devarim",
       "reference": "Deuteronomy 1:1-3:22",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Deuteronomy 1:1",
+          "commentary": [
+            { "source": "Rashi", "explanation": "The book opens: 'These are the words (Eleh ha-devarim) that Moses spoke to all Israel...' followed by a list of geographic locations. Rashi explains that these places are not merely a map; they are a hidden map of Israel's sins. Moses wanted to rebuke the people for their rebellions (at the Red Sea, at Baal Peor, the Golden Calf), but out of profound respect and love for them, he only hinted at the sins by naming the locations where they occurred. This teaches the ethical principle of offering rebuke with absolute dignity, ensuring the listener is guided rather than shamed." }
+          ],
+          "keywords": [
+            { "word": "Devarim (Words)", "definition": "The title of the book. In Deuteronomy, Moses shifts from being a purely legal transmitter to a passionate orator, using 'words' to persuade, inspire, and shape the moral conscience of the next generation." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 1:12",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "Recounting the difficulty of leadership, Moses cries out: 'How (Eicha) can I bear alone the trouble of you, and the burden, and the bickering!' Rabbi Sacks notes the use of the word 'Eicha' (How). This same agonizing word is used by the prophet Jeremiah in Lamentations to mourn the destruction of Jerusalem. Moses is expressing the ultimate burden of a leader: the crushing, lonely weight of dealing with a factious, complaining people. He realized early on that without delegating authority to a system of judges, the nation would consume him." }
+          ],
+          "keywords": [
+            { "word": "Eicha (How / Alas)", "definition": "An expression of profound lament and overwhelming burden, marking the agonizing limits of solo leadership." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 2:24",
+          "commentary": [
+            { "source": "Nachmanides (Ramban)", "explanation": "God tells Moses regarding Sihon the Amorite: 'Begin to occupy [the land], and engage him in battle.' Yet, immediately after this, Moses sends 'messengers of peace' to Sihon. Ramban asks: Why offer peace when God commanded war? Because the overarching Torah principle (later codified in Deut. 20:10) is that one must always offer a peaceful resolution before resorting to bloodshed. Moses understood that God's command to conquer did not override the moral imperative to exhaust every diplomatic option first." }
+          ],
+          "keywords": [
+            { "word": "Divrei Shalom (Words of peace)", "definition": "The moral prerequisite to any warfare. It establishes that violence, even when divinely mandated, must always be the absolute last resort." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Devarim (דְּבָרִים) means \\\"Words.\\\"\n\nContext: This parsha opens the fifth and final Book of the Torah, Deuteronomy (Sefer Devarim), which is named for this opening word. The setting is the plains of Moab, on the 1st of Shevat, 40 years after the Exodus. Moses, now 120, has 37 days left to live. The *entire book* is a series of long, passionate farewell speeches from Moses to the new generation that is about to enter the land.\n\nParsha Summary: The parsha begins, 'These are the *words* that Moses spoke...' Moses begins his first speech, which is a long historical retrospective. He recounts the journey from Mount Sinai (which he calls 'Horeb'). He gently *rebukes* the people by *reminding* them of their greatest failures: the appointment of judges after Yitro's advice, the tragic sin of the Spies, their parents' rebellion, and the subsequent 40-year decree. He recounts their more recent battles against Sihon and Og, and the settlement of the 2.5 tribes on the east of the Jordan.\n\nSignificance: Devarim is the most personal and emotional book of the Torah. It is 'Mishneh Torah,' the 'Repetition of the Law,' but it is *not* a simple repetition. It is a retelling of the story *through Moses's eyes*. His tone is that of a loving, aging, and passionate father, teacher, and leader. The name 'Words' is key: this book is about the power of *words*, memory, and education to transmit a legacy. Moses's goal is to inspire this new, untested generation, to ensure they learn from their parents' mistakes. The key takeaway is that history, if not reviewed and learned from, is doomed to be repeated. We must 'remember' in order to *choose* a different future."
     },
     {
       "name": "Vaetchanan",
       "reference": "Deuteronomy 3:23-7:11",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Deuteronomy 3:23",
+          "commentary": [
+            { "source": "Rashi", "explanation": "'I pleaded (Vaetchanan) with the Lord at that time...' Rashi points out that the root of 'Vaetchanan' is 'Chen' (grace or free gift). Moses, the greatest of all prophets, had accumulated immense spiritual merit over his 120 years. Yet, when he begs God to let him enter the Promised Land, he does not demand it as a reward for his hard work. He asks for it as a 'free gift' of grace. This teaches the ultimate posture of prayer: no matter how righteous a person is, we stand before God asking for His mercy, not demanding a paycheck." }
+          ],
+          "keywords": [
+            { "word": "Vaetchanan (And I pleaded / beseeched)", "definition": "A specific type of prayer characterized by asking for unmerited grace. The Midrash says Moses prayed 515 times (the gematria of Vaetchanan) to enter the land before God told him to stop." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 4:9",
+          "commentary": [
+            { "source": "Nachmanides (Ramban)", "explanation": "'But take utmost care and watch yourselves scrupulously, so that you do not forget the things that you saw with your own eyes...' Ramban counts this as one of the negative 613 commandments. We are strictly forbidden from forgetting the revelation at Mount Sinai. If we forget the historical, eyewitness reality of Sinai, Judaism devolves from a historical truth into a mere philosophy or myth. Memory is the mechanism of Jewish survival." }
+          ],
+          "keywords": [
+            { "word": "Pen Tishkach (Lest you forget)", "definition": "The active, rigorous discipline of collective memory. Judaism is a religion not just of faith, but of historical memory transmitted directly from parent to child." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 6:4",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "'Hear, O Israel! The Lord is our God, the Lord is one.' (Shema Yisrael). Rabbi Sacks notes that 'Shema' does not just mean 'hear.' In Hebrew, there is no word for 'obey.' Shema means to listen, to internalize, to understand, and to respond with action. The declaration that God is 'One' was a radical revolution in the ancient world. It meant the universe is not a battleground of warring, chaotic gods, but a cosmos governed by a single, ultimate moral reality." }
+          ],
+          "keywords": [
+            { "word": "Shema (Hear / Listen / Obey)", "definition": "The central declaration of the Jewish faith. It is a daily meditation on the absolute unity of God and the ultimate requirement to internalize His truth." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 6:5",
+          "commentary": [
+            { "source": "Maimonides (Rambam)", "explanation": "'You shall love the Lord your God with all your heart and with all your soul and with all your might.' Rambam asks: How can you command an emotion like love? He answers that love of God is achieved through contemplation. When a person deeply studies the brilliant complexity of the universe and the wisdom of the Torah, a profound, passionate love and awe for the Creator naturally and inevitably wells up within them." }
+          ],
+          "keywords": [
+            { "word": "V'ahavta (And you shall love)", "definition": "The radical commandment that religion must be driven by passionate love, not just terrifying fear or rote obedience." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Vaetchanan (וָאֶתְחַנַּן) means \\\"And I pleaded.\\\"\n\nContext: This parsha continues Moses's first great speech on the plains of Moab. He moves from his historical review to a personal, passionate plea.\n\nParsha Summary: The parsha is named for Moses's opening, where he recounts how he *pleaded* with God to let him enter the Promised Land, and how God refused, telling him only to \"ascend the mountain and see it.\" Moses urges the people to \"not add or subtract\" from the Torah and to *remember* the Revelation at Sinai. He then *repeats* the Ten Commandments, with small but significant variations from the version in Exodus. This is followed by the *Shema* ('Hear, O Israel, the Lord is our God, the Lord is One'), the central declaration of Jewish faith. He gives the command of *V'ahavta* ('And you shall love...') and the command to 'teach your children diligently,' (the mitzvah of 'Talmud Torah').\n\nSignificance: Vaetchanan contains the \"credo\" of Judaism. It's named for Moses's personal, painful prayer, 'And I pleaded,' which becomes a model for all prayer—passionate, personal, even when the answer is 'no.' The repetition of the Ten Commandments shows that each generation must 're-receive' the Torah for itself. The *Shema* is the ultimate statement of monotheism. And the *V'ahavta* is a revolutionary religious idea: God doesn't just demand obedience or fear, but *love*, a love that must be expressed through constant *education*. The takeaway is that a Jewish life is built on a foundation of absolute monotheism (Shema) and that the covenant is perpetuated not by force, but by love and teaching."
     },
     {
       "name": "Eikev",
       "reference": "Deuteronomy 7:12-11:25",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Deuteronomy 7:12",
+          "commentary": [
+            { "source": "Rashi", "explanation": "'And if (Vehaya Eikev) you do obey these rules...' The word 'Eikev' literally translates to 'heel'. Rashi beautifully interprets this: God is promising immense blessings if we pay attention to the 'minor' commandments—the ones people typically treat lightly and trample under their 'heels.' It is easy to observe the big, famous laws; true spiritual greatness is found in how we observe the small, seemingly insignificant details of ethical behavior." }
+          ],
+          "keywords": [
+            { "word": "Eikev (Because / Heel)", "definition": "A conditional phrase that doubles as a moral metaphor, urging mindfulness over the minor, easily ignored aspects of spiritual and ethical life." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 8:3",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "'...that man does not live by bread alone, but by everything that proceeds out of the mouth of the Lord.' Moses is explaining the purpose of the Manna in the desert. Physical sustenance (bread) keeps the body alive, but it does not give life meaning, purpose, or hope. The 40 years of Manna was a training ground to teach the Israelites that ultimate survival depends on spiritual nourishment and connection to the Divine word. Without a 'why' to live for, the 'what' we eat is meaningless." }
+          ],
+          "keywords": [
+            { "word": "Lo al halechem levado (Not by bread alone)", "definition": "The profound theological statement that physical prosperity and materialism are insufficient for a complete, meaningful human existence." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 8:17",
+          "commentary": [
+            { "source": "Sforno", "explanation": "'And you say in your heart, My power and the might of my hand have gotten me this wealth.' Sforno warns that this is the ultimate danger of entering the Promised Land. The greatest threat to faith is not suffering in the desert, but the arrogance of success. When a person builds a house, plants a vineyard, and becomes wealthy, they succumb to the illusion of the self-made man. They forget that the intellect, health, and opportunity to create that wealth were all gifts from God." }
+          ],
+          "keywords": [
+            { "word": "Kochi ve'otzem yadi (My power and the might of my hand)", "definition": "The toxic illusion of self-sufficiency. It is the arrogance that arises from prosperity, leading a society to forget God and ignore the vulnerable." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 10:12",
+          "commentary": [
+            { "source": "Talmud (Berachot 33b)", "explanation": "'And now, O Israel, what does the Lord your God demand of you? Only to fear the Lord your God...' The Talmud asks: Is fearing God such a 'small' thing that Moses says 'Only to fear'? For Moses, who spoke to God face-to-face, it was a small thing. But for the rest of us, it is a lifetime's work. The paradox here is that God commands us to have awe (fear), walk in His ways, love Him, and serve Him. It encompasses the entirety of human emotion and action, demanding our complete spiritual integration." }
+          ],
+          "keywords": [
+            { "word": "Mah Hashem sho'el me'imach (What does God demand of you?)", "definition": "The ultimate existential question, summarizing the entire purpose of the Torah into a unified pursuit of awe, love, and service." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Eikev (עֵקֶב) means \\\"Because\\\" or \\\"As a consequence of\\\" (from the root 'heel,' implying 'if you follow in the footsteps').\n\nContext: Moses's great speech continues. He is now focused on the *future*—what will happen when the people enter the land and become prosperous. He is worried they will forget.\n\nParsha Summary: Moses tells the people that *if* ('eikev') they follow the commandments, they will be blessed with prosperity. He then gives them a stern warning. He reminds them *not* to think their success is due to their own righteousness, recounting their 'stubborn' nature and their 'greatest hits' of sin: the Golden Calf, the complaints, the rebellions. He reviews the story of the second tablets. He reminds them that the 40 years in the desert, and the manna, were designed to teach them humility, to 'know what was in their hearts,' and to teach them that 'man does not live by bread alone.' He describes the 'good land' they are entering and warns them against the arrogance that comes with wealth.\n\nSignificance: Eikev is a parsha about the *psychology of prosperity*. Moses's greatest fear is not failure, but *success*. He knows that in the \"land flowing with milk and honey,\" it will be easy for them to become arrogant and forget God. The name 'Eikev' (Because) frames the parsha as a lesson in cause-and-effect. The manna was the ultimate lesson: they were kept in a state of total, daily dependence to teach them humility and gratitude. The parsha contains the command for *Birkat HaMazon* (Grace After Meals), a mechanism to 'remind' us, at the moment we are 'full and satisfied,' from where our blessings come. The takeaway is that the greatest spiritual challenge is not poverty, but wealth, and the only antidote to arrogance is humility and gratitude."
     },
     {
       "name": "Re'eh",
       "reference": "Deuteronomy 11:26-16:17",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Deuteronomy 11:26",
+          "commentary": [
+            { "source": "Sforno", "explanation": "'See (Re'eh), I set before you this day a blessing and a curse.' Moses begins this section in the singular ('See') but addresses the plural ('before you'). Sforno explains that while the covenant is collective, the choice is entirely individual. God places the paths of life and death before us clearly, but He does not force our hand. We possess absolute free will. The visual command to 'See!' is a demand to live with eyes wide open to the moral consequences of our daily choices." }
+          ],
+          "keywords": [
+            { "word": "Re'eh (See!)", "definition": "A demand for moral clarity and vision. It is the ultimate assertion of human free will: we are the authors of our own destiny." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 13:2",
+          "commentary": [
+            { "source": "Maimonides (Rambam)", "explanation": "If a prophet arises and produces miraculous signs, but tells you to worship other gods, 'do not heed the words of that prophet.' Maimonides uses this to establish a core tenet of Judaism: our faith is not based on miracles. Miracles can be faked, or they can be tests from God. Our faith is based solely on the national revelation at Mount Sinai. If someone performs magic but contradicts the Torah's morality, they are a false prophet. Morality and law supersede supernatural phenomena." }
+          ],
+          "keywords": [
+            { "word": "Navi Sheker (False prophet)", "definition": "A charismatic leader or miracle-worker who attempts to lead the people away from the covenant. They serve as a divine test of the people's intellectual and moral loyalty." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 15:8",
+          "commentary": [
+            { "source": "Rashi", "explanation": "Regarding the poor, the Torah commands: 'Patoach tiftach et yadcha' (You shall surely open your hand to him). The Hebrew repeats the verb twice. Rashi explains this means you must give even a hundred times. If they need it, keep opening your hand. Furthermore, it says to provide 'sufficient for his need.' The Talmud says if a man was formerly wealthy and used to riding a horse, you provide him a horse. Charity (Tzedakah) in Judaism is not just keeping someone from starving; it is restoring their unique, personal dignity." }
+          ],
+          "keywords": [
+            { "word": "Patoach Tiftach (You shall surely open)", "definition": "The active, generous, and repeated obligation of Tzedakah (charity). It demands an open hand and an open heart, conquering human greed and stinginess." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 16:15",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "'You shall hold a festival for the Lord your God seven days... and you shall have nothing but joy (V'hayita ach sameach).' Rabbi Sacks distinguishes between happiness and joy (Simcha). Happiness is an individual emotion, often fleeting. Joy is a communal state. The Torah explicitly commands us to be joyful on Sukkot by sharing our harvest with the widow, the orphan, and the stranger. You cannot fulfill the commandment of joy alone; it only exists when it is shared with the vulnerable." }
+          ],
+          "keywords": [
+            { "word": "Simcha (Joy)", "definition": "Not mere personal happiness, but a profound, shared, communal celebration that inherently includes the marginalized and the poor." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Re'eh (רְאֵה) means \\\"See.\\\"\n\nContext: Moses's second major address begins here. He is no longer just talking *about* the laws; he is *giving* the laws, framing them for the new generation that will live in the land.\n\nParsha Summary: The parsha opens with a dramatic, singular command: '*See*, I am placing before you today a blessing and a curse.' Moses frames all of a\n\nSignificance: The name 'Re'eh' ('See') is a command for moral clarity. Moses is telling the people to *open their eyes* and recognize the profound choice that is before them. The parsha's greatest theme is the tension between *centralization* (one God, one Temple) and *individual responsibility* (tzedakah). The command to centralize worship was a radical break, designed to unify the nation and prevent the splintering of the cult. At the same time, the parsha commands profound *decentralized* compassion: *tzedakah* (charity) is not a 'government program' but a personal, moral obligation. The takeaway is that a holy society is built on *seeing* the world as a series of clear moral choices, and that true worship of 'the One God' is expressed by 'opening your hand' to those in need."
     },
     {
       "name": "Shoftim",
       "reference": "Deuteronomy 16:18-21:9",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Deuteronomy 16:20",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "'Justice, justice you shall pursue' (Tzedek tzedek tirdof). Why is the word justice repeated? Rabbi Sacks explains that it means justice must be pursued justly. You cannot use unjust, corrupt, or violent means to achieve a just end. The ends do not justify the means in Jewish law. Furthermore, the repetition implies that justice applies equally to everyone—justice for the rich and justice for the poor, justice for the citizen and justice for the stranger." }
+          ],
+          "keywords": [
+            { "word": "Tzedek tzedek tirdof (Justice, justice you shall pursue)", "definition": "The supreme operational command of the Israelite judicial system. It mandates absolute equity, fairness, and the rejection of bribery or bias in all courts." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 17:15",
+          "commentary": [
+            { "source": "Abarbanel / Rambam", "explanation": "'You shall be free to set a king over yourself...' When the Israelites eventually appoint a king, he is radically restricted. He cannot amass too many horses (cavalry), too many wives, or too much gold. Crucially, he must write his own Torah scroll and keep it with him always. Abarbanel notes that the Torah's ideal government is not a monarchy, but if there must be a king, he is completely de-powered. The king is subservient to the law, not above it. He rules by constitutional mandate, entirely subject to the Torah." }
+          ],
+          "keywords": [
+            { "word": "Melech (King)", "definition": "The executive branch of the biblical government. The Torah severely limits his wealth and military power to ensure he remains a servant of God and the people, rather than a tyrant." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 19:15",
+          "commentary": [
+            { "source": "Talmud (Sanhedrin)", "explanation": "'A single witness may not validate against a person any guilt or blame... A case can be valid only on the testimony of two witnesses...' This is a bedrock of Jewish jurisprudence. A person cannot be convicted based on hearsay, circumstantial evidence, or the accusation of a single person. It protects the innocent from malicious vendettas and ensures that the power of the state cannot be wielded casually against an individual." }
+          ],
+          "keywords": [
+            { "word": "Al pi shnei edim (By the mouth of two witnesses)", "definition": "The absolute minimum evidentiary requirement for conviction in Jewish law, designed to heavily favor the presumption of innocence." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 20:19",
+          "commentary": [
+            { "source": "Sefer HaChinuch", "explanation": "When besieging a city during war, 'you must not destroy its trees, wielding the ax against them... Are trees of the field human to withdraw before you into the besieged city?' This is the principle of 'Bal Tashchit' (Do not destroy). Even in the heat and chaos of war, the Torah forbids wanton ecological destruction. If we must protect trees during a bloody war, how much more so must we protect the environment during times of peace. It is the foundation of Jewish environmental ethics." }
+          ],
+          "keywords": [
+            { "word": "Bal Tashchit (Do not destroy)", "definition": "The prohibition against senseless waste or environmental destruction. It teaches that the resources of the world belong to God and must be conserved." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 21:1",
+          "commentary": [
+            { "source": "Talmud (Sotah 45b)", "explanation": "The 'Egla Arufah' (broken-necked heifer) ritual: If a murdered body is found between cities and the killer is unknown, the elders of the nearest city must wash their hands over a sacrificed heifer and declare, 'Our hands did not shed this blood, nor did our eyes see it.' The Talmud asks: Would anyone actually suspect the venerable elders of murder? No. They are declaring: 'This person did not come to our city and leave without food or an escort.' The leaders take collective responsibility for the social failure that allowed a vulnerable person to be murdered on their watch." }
+          ],
+          "keywords": [
+            { "word": "Egla Arufah (The broken-necked heifer)", "definition": "A dramatic communal atonement ritual that forces the leadership to take absolute responsibility for unsolved crimes and the breakdown of public safety." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Shoftim (שֹׁפְטִים) means \\\"Judges.\\\"\n\nContext: Moses continues his 'constitution' for the new nation, moving from sacred worship (Re'eh) to the structures of civil society. He outlines the government of the future Israelite state.\n\nParsha Summary: The parsha opens with the command to 'appoint *judges* and officers' in all their gates, and the famous command: '*Tzedek, Tzedek Tirdof*' ('Justice, justice you shall pursue'). Moses then outlines the 'Separation of Powers' for the new society. He details the powers and limits of: (1) the *Judges* (the judiciary); (2_ the *King* (the executive), who must not acquire too much wealth/wives and must write his own copy of the Torah; (3) the *Priests* (the spiritual); and (4D) the *Prophet* (the 'loyal opposition,' God's voice). The parsha also includes the laws of the *Cities of Refuge* (from Masei) and the rules of warfare (e.g., exempting a newly married man, offering peace first, not destroying fruit trees).\n\nSignificance: Shoftim is the Torah's blueprint for a just and ethical government. Its name, 'Judges,' places justice as the *first* and most important pillar of society. The command 'Justice, justice you shall pursue' is one of the most important in Judaism, implying that the *means* (justice) must be as pure as the *end* (justice). The parsha is remarkable for its *limits* on power. The king, in particular, is radically de-powered: he is subservient to the law ('he shall write a copy of the Torah... and read it all his days'), not above it. This is a revolutionary political idea. The takeaway is that a holy society is one that is governed not by a powerful ruler, but by a system of *just laws*, with checks and balances that hold every leader accountable."
     },
     {
       "name": "Ki Teitzei",
       "reference": "Deuteronomy 21:10-25:19",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Deuteronomy 21:11",
+          "commentary": [
+            { "source": "Talmud (Kiddushin 21b)", "explanation": "If a soldier sees a 'beautiful captive woman' (Eshet Yefat Toar) during war and desires her, he cannot just take her. The Torah mandates a month-long waiting period where she shaves her head, pares her nails, and mourns her family. The Talmud explains this law is a concession to the 'evil inclination' in the chaos of war. By forcing the soldier to wait 30 days and stripping away her artificial glamour, the Torah drastically cools his initial lust, forcing him to view her as a grieving human being rather than an object of conquest." }
+          ],
+          "keywords": [
+            { "word": "Eshet Yefat Toar (A woman of beautiful form)", "definition": "A law regulating the treatment of female captives of war, designed to curb the violent passions of soldiers and introduce humanity into the brutality of combat." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 22:1",
+          "commentary": [
+            { "source": "Rashi", "explanation": "If you see your neighbor's ox or sheep wandering, 'you must not remain indifferent' (lo tuchal lehitalem); you must return them. Rashi points out the psychological insight of the Hebrew phrasing: it literally means 'you are not able to hide yourself.' The Torah is demanding that we conquer our instinct to 'look the other way' when someone else is in trouble. We are forbidden from feigning ignorance; empathy requires action." }
+          ],
+          "keywords": [
+            { "word": "Hashavat Aveidah (Returning lost property)", "definition": "The active obligation to protect the property of others and return what is lost. It outlaws the attitude of 'finders keepers' and builds social trust." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 22:8",
+          "commentary": [
+            { "source": "Sefer HaChinuch", "explanation": "When you build a new house, 'you shall make a parapet (ma'akeh) for your roof, so that you do not bring bloodguilt on your house if anyone should fall from it.' The Chinuch uses this to establish the principle that while God protects us, we are forbidden from relying on miracles. We must take proactive, physical steps to remove hazards from our property. This verse is the biblical foundation for all modern safety regulations and building codes." }
+          ],
+          "keywords": [
+            { "word": "Ma'akeh (Parapet / Fence)", "definition": "A safety barrier required on flat roofs. It represents the legal obligation to proactively prevent harm and prioritize the physical safety of guests and workers." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 25:17",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "'Remember what Amalek did to you on your journey...' Amalek attacked the stragglers, the weak, and the tired from behind. Rabbi Sacks contrasts this with the command to remember Egypt. We remember Egypt to learn compassion for the stranger. We remember Amalek to recognize that true, unprovoked, irrational evil exists in the world. A society that is overly naive and refuses to acknowledge or fight against pure evil will ultimately be destroyed by it." }
+          ],
+          "keywords": [
+            { "word": "Zachor et asher asah lecha Amalek (Remember what Amalek did to you)", "definition": "The absolute obligation to remember the archetype of unprovoked, genocidal anti-Semitism, and the necessity of confronting pure evil." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Ki Teitzei (כִּי־תֵצֵא) means \\\"When you go out.\\\"\n\nContext: This parsha continues Moses's final address, but it shifts from 'big' societal structures (like kings and judges) to a collection of 'everyday' laws. The setting is 'when you go out' into the world—into war, into the field, into domestic life.\n\nParsha Summary: This parsha is a dense 'catch-all' of 74 different mitzvot, covering a vast range of human life. It includes laws of warfare (the 'beautiful captive'), family law (the rebellious son, inheritance rights), sexual ethics, and civil law. But its most memorable laws are those of individual compassion: the mitzvah to *return a lost object*, the command to *build a fence (ma'akeh) around your roof* to prevent accidents, the prohibition against 'muzzling an ox' or 'taking a mother bird with her young,' and the command to pay a worker's wages on time. It also commands to 'remember what Amalek did to you.'\n\nSignificance: Ki Teitzei teaches that holiness is not found in grand gestures, but in the *details* of everyday life. The name 'When you go out' sets the theme: these are the laws for 'real life,' outside the sanctuary. This parsha shows the Torah's profound compassion for *all* of creation—animals, the poor, the captive, the worker. The law of the 'mother bird' is a classic example of *tza'ar ba'alei chayim* (compassion for animals). The 'fence on the roof' is the origin of all safety laws (like OSHA). The parsha's brilliance is its mix: it puts 'returning your neighbor's lost ox' on the same level of importance as laws of marriage. The takeaway is that there is no part of life (work, home, family) that is 'secular'—it is *all* an opportunity for holiness."
     },
     {
       "name": "Ki Tavo",
       "reference": "Deuteronomy 26:1-29:8",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Deuteronomy 26:5",
+          "commentary": [
+            { "source": "Passover Haggadah / Rashi", "explanation": "When bringing the First Fruits (Bikkurim) to the priest, the farmer must recite a brief history: 'A wandering Aramean was my father (Arami oved avi)...' This text is the core narrative of the Passover Haggadah. Rashi explains the 'Aramean' is Laban, who tried to destroy Jacob, showing that the threat of exile has always been with us. By reciting this, the successful, land-owning farmer publicly remembers his roots as a landless refugee. It turns a moment of personal agricultural pride into a moment of humble, national historical gratitude." }
+          ],
+          "keywords": [
+            { "word": "Arami oved avi (A wandering Aramean was my father)", "definition": "The required historical declaration of gratitude. It grounds the individual's material success in the miraculous, historical survival of the Jewish people." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 26:11",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "'And you shall rejoice in all the good things that the Lord your God has given you... you and the Levite and the stranger in your midst.' Rabbi Sacks constantly emphasizes that in the Torah, joy is a communal obligation. You cannot truly rejoice in your harvest while your neighbor starves. The inclusion of the Levite (who owns no land) and the stranger (who has no family safety net) turns personal prosperity into a vehicle for social inclusion." }
+          ],
+          "keywords": [
+            { "word": "V'samachta (And you shall rejoice)", "definition": "The biblical mandate of shared joy. Happiness is a state of mind, but 'Simcha' (Joy) is an action that must be shared with the vulnerable." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 28:47",
+          "commentary": [
+            { "source": "Arizal / Rambam", "explanation": "In the midst of the terrifying curses of the Tochacha, the Torah provides the devastating reason for the upcoming exile: 'Because you would not serve the Lord your God with joy and gladness of heart, when you had an abundance of everything.' The Arizal teaches that performing a mitzvah mechanically, without joy, misses the soul of the action. God did not punish them for abandoning the law, but for turning the magnificent privilege of serving the Creator into a miserable, uninspired burden." }
+          ],
+          "keywords": [
+            { "word": "B'simcha uv'tuv levav (With joy and gladness of heart)", "definition": "The essential emotional prerequisite for spiritual life. Worshiping God with bitterness or resentment ultimately leads to the collapse of the society." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Ki Tavo (כִּי־תָבוֹא) means \\\"When you come.\\\"\n\nContext: Moses's speech reaches a new emotional height. He is no longer just talking *about* the laws; he is describing the *experience* of 'when you come' into the Promised Land and finally reap its benefits. The parsha is a grand, formal covenant-renewal ceremony.\n\nParsha Summary: The parsha opens with the beautiful ceremony of *Bikurim* (the First Fruits). When the people settle the land, they are to bring their first fruits to the 'place God will choose,' and make a declaration, recounting their history: 'A wandering Aramean was my father...' (the basis for the Passover Haggadah). The parsha then details the *Tochacha* ('The Rebuke') for a *second* time (the first was in Bechukotai). Moses describes the dramatic ceremony of blessings and curses to be performed on Mount Gerizim and Mount Ebal. This is followed by another long, terrifying list of the curses for disobedience, and the blessings for obedience.\n\nSignificance: Ki Tavo is a parsha of gratitude and warning. The *Bikurim* ceremony is the 'antidote' to the arrogance Moses warned about in Eikev. By bringing the first fruits and *retelling the story* of their oppression and redemption, the people 'remember' their origins and attribute their success to God, not themselves. The *Tochacha* (Rebuke) is a 'doubling down' on the message from Leviticus. It's harsher and more intense *because* the people are now standing on the threshold. The stakes have never been higher. The takeaway is that entering the 'Promised Land' (of success, prosperity, or power) requires two things: a deep, ritualized gratitude (Bikurim) and a terrifyingly clear understanding of the moral consequences of failure (Tochacha)."
     },
     {
       "name": "Nitzavim",
       "reference": "Deuteronomy 29:9-30:20",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Deuteronomy 29:9",
+          "commentary": [
+            { "source": "Rashi", "explanation": "'You stand this day, all of you, before the Lord your God—your tribal heads... to the woodchopper and the water drawer.' Rashi notes that Moses gathered everyone, from the highest elite to the lowest laborer, to enter the covenant together as absolute equals. Following the terrifying curses of the previous parsha, the people were in despair, thinking they would be destroyed. Moses reassures them: 'You are standing today'—meaning, despite all your past sins and punishments, you have survived and are standing strong before God." }
+          ],
+          "keywords": [
+            { "word": "Atem Nitzavim (You are standing)", "definition": "A declaration of profound Jewish resilience and equality. Every single person, regardless of class, is equally necessary to forge the covenant with God." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 30:11",
+          "commentary": [
+            { "source": "Nachmanides (Ramban)", "explanation": "'Surely, this Instruction (mitzvah) which I enjoin upon you this day is not too baffling for you, nor is it beyond reach.' Ramban interprets 'this mitzvah' not as the entire Torah, but specifically as the Mitzvah of Teshuvah (Repentance). Even if the Jewish people are scattered to the ends of the earth, the ability to repent, to change one's heart, and to return to God is always immediately accessible. It doesn't require a priest, a temple, or a sacrifice—just a sincere turn of the heart." }
+          ],
+          "keywords": [
+            { "word": "Teshuvah (Return / Repentance)", "definition": "The revolutionary concept that humans are not doomed by their past mistakes. Spiritual renewal is always possible, accessible, and immediately at hand." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 30:12",
+          "commentary": [
+            { "source": "Talmud (Bava Metzia 59b)", "explanation": "'It is not in the heavens, that you should say, Who among us can go up to the heavens and get it for us?' The Talmud uses this verse to establish the ultimate authority of human interpretation in Jewish law (the famous story of the Oven of Akhnai). God gave the Torah to humanity; therefore, the law is decided by the consensus of the sages on earth, not by heavenly voices or miracles. The Torah empowers humanity to take ownership of its destiny." }
+          ],
+          "keywords": [
+            { "word": "Lo BaShamayim Hi (It is not in heaven)", "definition": "The declaration of human empowerment. God's will is no longer a mystery hidden in the clouds; it has been given to humanity to study, interpret, and apply to daily life." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 30:19",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "'I call heaven and earth to witness against you this day: I have put before you life and death, blessing and curse. Choose life...' Rabbi Sacks points out the sheer drama of this moment. Moses is not commanding them; he is pleading with them. He establishes that Judaism is fundamentally a religion of free will. Fate is not written in the stars. Every generation, every individual, faces the ultimate binary choice between building a society of life and blessing, or a society of death and curse. God begs us to choose life." }
+          ],
+          "keywords": [
+            { "word": "U'vacharta bachayim (Choose life)", "definition": "The ultimate summary of the Torah. It is a fierce rejection of fatalism and a demand to take active, moral responsibility for creating a world of goodness." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Nitzavim (נִצָּבִים) means \\\"You are standing.\\\"\n\nContext: This is the final parsha before Moses's death, and it is traditionally read on the Shabbat before Rosh Hashanah. This is Moses's *final* speech, a last-ditch effort to inspire the people. The setting is 'today,' on the plains of Moab.\n\nParsha Summary: The parsha opens with a powerful, inclusive statement: 'You are *standing* today, all of you, before the Lord your God...' Moses says he is making this covenant not only with those 'standing here today,' but also with 'those who are *not* here with us today' (all future generations). He warns them against 'hidden' sins and idolatry. He repeats the promise of exile and curse, but follows it with an even more powerful promise of *Teshuvah* (Repentance). He says that even in exile, they can 'return to God.' He then concludes with one of the most famous passages in the Torah: the 'mitzvah is not in heaven,' but 'it is very close to you, in your mouth and in your heart, to do it.' He ends by setting the final choice: 'I have set before you life and death... therefore, *choose life*.'\n\nSignificance: Nitzavim is the spiritual climax of Moses's speeches. The name 'You are standing' implies that *this* moment, 'today,' is the moment of choice. The parsha's greatest gift is its vision of *teshuvah* (repentance). After the terrifying curses of Ki Tavo, Nitzavim promises that no failure is final, and the path of return is *always* open. The line 'it is not in heaven' is a powerful statement of human empowerment. It means the Torah is not an abstract, unknowable mystery; it is accessible to every human being. The parsha's final, desperate plea—'choose life'—is the summary of the entire Torah. The takeaway is that the covenant is personal, eternal, and accessible. God has given us the choice, and our job is simply to 'choose life.'"
     },
     {
       "name": "Vayeilech",
       "reference": "Deuteronomy 31:1-31:30",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Deuteronomy 31:2",
+          "commentary": [
+            { "source": "Rashi", "explanation": "Moses tells the people: 'I am now one hundred and twenty years old, I can no longer go out and come in...' Rashi clarifies this does not mean Moses was physically weak or senile (the Torah later says 'his eye was not dim, nor his natural force abated'). Rather, 'go out and come in' means leading the people in Torah. The wellsprings of wisdom and prophecy were being closed off to him, signaling that his time was over and the mantle of leadership had definitively passed to Joshua." }
+          ],
+          "keywords": [
+            { "word": "Lo uchal od latzet velavo (I can no longer go out and come in)", "definition": "The painful realization by a great leader that their specific era of influence has concluded, and it is time to step aside." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 31:6",
+          "commentary": [
+            { "source": "Ibn Ezra", "explanation": "'Be strong and resolute (Chazak v'Ematz), be not in fear or in dread of them; for the Lord your God Himself marches with you...' Moses gives this exact blessing to both the people and to Joshua. Ibn Ezra notes that true leadership requires immense psychological courage. Moses knew the people were terrified of the giants in Canaan and terrified of losing him. He reassures them that while human leaders change, God's presence is the constant source of their strength." }
+          ],
+          "keywords": [
+            { "word": "Chazak v'Ematz (Be strong and courageous)", "definition": "The ultimate blessing for leadership and transition. It acknowledges the natural human fear of the unknown while demanding resilience rooted in faith." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 31:12",
+          "commentary": [
+            { "source": "Sefer HaChinuch", "explanation": "Moses commands the mitzvah of Hakhel: 'Gather the people—men, women, children, and the strangers in your communities—that they may hear and so learn to revere the Lord...' Every seven years, the King would read the Torah to the entire assembled nation. The Chinuch explains that the Torah is the lifeblood of the nation. This mass assembly recreated the atmosphere of Mount Sinai, ensuring that the Torah remained the property of the masses, not just the elite scholars, inspiring awe and a unified national identity." }
+          ],
+          "keywords": [
+            { "word": "Hakhel (Assemble)", "definition": "The once-in-seven-years national assembly designed to recreate the revelation at Sinai and democratize the knowledge and awe of the Torah." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 31:18",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "God prophesies to Moses that the people will eventually sin, saying: 'Yet I will keep My face hidden (Haster Astir Panai) on that day...' Rabbi Sacks points out this is one of the most chilling concepts in theology: Hester Panim (the Hiding of the Face). God does not abandon Israel, but He 'hides,' allowing history to take its natural, brutal course without divine intervention. It is the biblical explanation for periods of profound darkness and tragedy in Jewish history, like the Holocaust, where God's presence feels excruciatingly absent." }
+          ],
+          "keywords": [
+            { "word": "Hester Panim (The Hiding of the Face)", "definition": "A theological concept describing periods where God withdraws His miraculous protection, leaving humanity subject to the harsh, seemingly random forces of history." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Vayeilech (וַיֵּלֶךְ) means \\\"And he went.\\\"\n\nContext: This parsha is very short. It describes the literal, final actions of Moses on the last day of his life. The 'choice' has been presented (in Nitzavim); now, the *transition* begins.\n\nParsha Summary: The parsha opens, 'And Moses *went* and spoke...' He 'goes' to the people, one last time, to tell them he is 120 and can no longer 'go out and come in.' He encourages them not to be afraid. He then publicly summons Joshua, and in front of all the people, transfers leadership, telling him to 'Be strong and courageous.' Moses then writes down the entire Torah ('Mishneh Torah,' the Book of Deuteronomy) and gives it to the Priests to be kept and read. He gives the *mitzvah* of *Hakhel*—that every seven years, the entire nation (men, women, and children) must 'assemble' to hear the Torah read aloud by the king. God then tells Moses and Joshua that the people *will* inevitably sin, and as a 'witness' against them, Moses is to write a *song*.\n\nSignificance: Vayeilech is a parsha about practical legacy. It's Moses's 'succession plan.' He understands that a vision (Nitzavim) is not enough; you need a *plan* to perpetuate it. His legacy is threefold: (1) An *empowered successor* (Joshua). (2) A *written text* (the Torah scroll), ensuring the law is permanent and not dependent on one person's memory. (3) A *communal experience* (Hakhel), a system for the *entire* nation to re-engage with the text and re-commit to the covenant. The takeaway is that a true leader's final job is to make themselves obsolete. Moses's greatness is that he *planned* for a future that did not include him."
     },
     {
       "name": "Ha'Azinu",
       "reference": "Deuteronomy 32:1-32:52",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Deuteronomy 32:1",
+          "commentary": [
+            { "source": "Rashi", "explanation": "'Give ear (Ha'Azinu), O heavens, let me speak; Let the earth hear the words I utter!' Why does Moses call upon heaven and earth as witnesses? Rashi explains that human witnesses eventually die, but heaven and earth endure forever. Furthermore, they serve as the instruments of reward and punishment. If Israel is worthy, the heavens yield rain and the earth yields produce. If they sin, the heavens are shut tight and the earth is barren. They are perfect witnesses because they execute the verdict." }
+          ],
+          "keywords": [
+            { "word": "Ha'Azinu (Give ear / Listen)", "definition": "An intense, poetic command calling for deep, penetrating attention to a message of cosmic and historical importance." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 32:4",
+          "commentary": [
+            { "source": "Talmud (Avodah Zarah 18a)", "explanation": "'The Rock (HaTzur)! His deeds are perfect, Yea, all His ways are just; A faithful God, never false, True and upright is He.' This verse is the ultimate declaration of 'Tzidduk HaDin' (Justifying the Divine Judgment). It is traditionally recited at Jewish funerals. It is the profound assertion that even when tragedy strikes and we cannot understand God's ways, we affirm that God's justice is perfect, acknowledging the limits of our own human comprehension." }
+          ],
+          "keywords": [
+            { "word": "Tzur (The Rock)", "definition": "A metaphor for God emphasizing absolute stability, unyielding strength, and perfect, unchangeable justice." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 32:7",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "'Remember the days of old, Consider the years of ages past; Ask your father, he will inform you, Your elders, they will tell you.' Rabbi Sacks points out that Judaism is a religion of memory (Zakhor). History is not just a study of the past; it is the map of our identity. To understand who you are and what your moral responsibilities are, you must consult the previous generations. We are not disconnected individuals; we are a letter in a scroll, part of a generational chain." }
+          ],
+          "keywords": [
+            { "word": "Zechor yemot olam (Remember the days of old)", "definition": "The imperative to study history not as an academic exercise, but to discover the moral meaning and destiny of the Jewish people." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 32:15",
+          "commentary": [
+            { "source": "Ibn Ezra", "explanation": "'So Jeshurun grew fat and kicked... He forsook the God who made him...' Moses uses the affectionate nickname 'Jeshurun' (from 'Yashar' meaning upright) right before predicting their betrayal. Ibn Ezra explains this tragic human dynamic: affluence breeds apathy. When people have everything they need, they become 'fat'—complacent, arrogant, and prone to kicking off the yoke of morality and gratitude. The hardest test of faith is not poverty, but luxury." }
+          ],
+          "keywords": [
+            { "word": "Vayishman Yeshurun vayivat (Jeshurun grew fat and kicked)", "definition": "A vivid metaphor for the spiritual decay and rebellion that frequently accompany immense material success and comfort." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Ha'Azinu (הַאֲזִינוּ) means \\\"Listen\\\" or \\\"Give ear.\\\"\n\nContext: This entire parsha *is* the 'song' that God commanded Moses to write in Vayeilech. It is a dense, poetic, and complex poem, Moses's final 'witness' to the people. He calls on 'Heaven and Earth' to 'give ear' to his words.\n\nParsha Summary: The 'song' is a sweeping, epic poem that recounts the *entire* history of Israel (past, present, and future) from God's perspective. It describes God's kindness in finding Israel ('like an eagle stirring its nest'). It then describes Israel's success, its predictable 'fattening' and abandonment of God ('Jeshurun grew fat and kicked'). It describes the terrible 'hiddenness' of God that will follow, and the suffering (the 'curses') the nation will endure at the hands of its enemies. It concludes with a promise of eventual divine *teshuvah* (return) and *vengeance*—God will ultimately judge Israel's enemies and 'avenge the blood of His servants,' atoning for His people and His land.\n\nSignificance: Ha'Azinu is Moses's \"swan song.\" It is one of the most difficult and beautiful poems in the Torah. It is named 'Listen' because it is meant to be *heard* and *memorized*, to be 'engraved on the heart.' Its purpose is to be an 'eternal witness.' When the future generations suffer in exile, they are supposed to *remember* this song and understand their suffering not as a random accident or as proof of God's non-existence, but as a predictable *consequence* of their own choices, and as part of a divine plan that will *ultimately* lead to redemption. The takeaway is that art and song have a unique power to teach, to warn, and to preserve a nation's story, ensuring that even in the darkest times, the memory of the relationship (and the hope of its restoration) is never lost."
     },
     {
       "name": "V'Zot HaBerachah",
       "reference": "Deuteronomy 33:1-34:12",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Deuteronomy 33:4",
+          "commentary": [
+            { "source": "Talmud (Sukkah 42a)", "explanation": "'Moses commanded us the Torah, an inheritance of the congregation of Jacob.' The Talmud notes the word is 'Morashah' (inheritance), not 'Yerushah' (legacy/heritage). A legacy is something you receive passively. An inheritance (Morashah) requires active engagement to claim it. The Torah does not belong only to the priests, the elite, or the wealthy. It is the absolute inheritance of the entire 'congregation of Jacob'—every single Jew has an equal share and right to study it." }
+          ],
+          "keywords": [
+            { "word": "Morashah Kehillat Yaakov (Inheritance of the congregation of Jacob)", "definition": "The foundational democratic principle of Judaism: the Torah is the equal, collective property of every single member of the Jewish people." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 34:5",
+          "commentary": [
+            { "source": "Rashi / Talmud (Bava Batra 17a)", "explanation": "'So Moses the servant of the Lord died there, in the land of Moab, at the command of the Lord.' The Hebrew literally reads 'Al pi Hashem' (By the mouth of the Lord). The Talmud teaches that Moses did not die a painful, natural death. God drew his soul away with a 'Divine Kiss' (Mitat Neshikah). It is the most intimate, peaceful passing imaginable, reserved for the most righteous, signifying total reunion with the Divine." }
+          ],
+          "keywords": [
+            { "word": "Al pi Hashem (By the mouth of the Lord / The Divine Kiss)", "definition": "A metaphor for a gentle, perfectly peaceful death where the soul joyously reunites with its Creator without the trauma of physical deterioration." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 34:6",
+          "commentary": [
+            { "source": "Rashi", "explanation": "'He buried him in the valley in the land of Moab... and no one knows his burial place to this day.' Why is the burial place of the greatest prophet hidden? Rashi explains that God buried him personally. Other commentators add that if Moses's tomb were known, people would turn it into a shrine and worship him. Judaism strictly rejects the worship of human beings. By hiding his grave, the Torah ensures that the focus remains entirely on Moses's message (the Torah), not on his physical remains." }
+          ],
+          "keywords": [
+            { "word": "Velo yada ish et kevurato (No man knows his burial place)", "definition": "The intentional obscuring of Moses's grave, serving as the ultimate safeguard against idolatry, personality cults, and the worship of the dead." }
+          ]
+        },
+        {
+          "ref": "Deuteronomy 34:10",
+          "commentary": [
+            { "source": "Maimonides (Rambam)", "explanation": "'Never again did there arise in Israel a prophet like Moses—whom the Lord singled out, face to face.' Maimonides makes this verse the 7th of his 13 Principles of Faith. Moses's prophecy was categorically different from all other prophets. Others prophesied in riddles, dreams, or trances. Moses spoke to God consciously, clearly, and directly ('face to face'). Because his prophecy was absolute truth, the Torah he delivered is eternal, perfect, and can never be replaced or superseded by a future prophet." }
+          ],
+          "keywords": [
+            { "word": "Panim el panim (Face to face)", "definition": "The unique, unmediated level of clear prophetic communication granted exclusively to Moses, cementing the eternal authority of the Torah." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: V'Zot HaBerachah (וְזֹאת הַבְּרָכָה) means \\\"And this is the blessing.\\\"\n\nContext: This is the final parsha in the entire Torah. It is the only parsha *never* read on a regular Shabbat (it's read on Simchat Torah). The scene is the plains of Moab, on the very last day of Moses's life, immediately after he finished his 'song.'\n\nParsha Summary: The parsha opens, 'And this is the *blessing* with which Moses, the man of God, blessed the children of Israel before his death.' Moses's final act is not one of rebuke, but of love. He gives a final, poetic blessing to each of the tribes of Israel (except Simeon), highlighting their unique character and destiny. He praises Israel as a whole. After the blessings, God instructs Moses to ascend Mount Nebo. From the summit, God shows him the entirety of the Promised Land, which he will not enter. Moses dies there in the land of Moab, and God himself buries him in an unknown grave. The parsha (and the Torah) concludes with the final verses eulogizing Moses as the greatest prophet who ever lived, who knew God 'face to face' and whose successor, Joshua, is 'filled with the spirit of wisdom.'\n\nSignificance: This parsha is the Torah's grand finale, a moment of profound and bittersweet transition. Moses's final act, after a book full of 'rebuke,' is *berachah* (blessing). He transfers his hope and vision to the next generation. His death is intimate ('by the mouth of God') and his burial is anonymous, preventing him from becoming an object of worship—the focus must remain on his *message*, not the man. The final verses are a national eulogy, defining Moses's unparalleled legacy *and* simultaneously 'passing the torch' to Joshua. The Torah ends with the death of its hero, a final, \"un-Hollywood\" ending. The takeaway is that while human leaders are mortal, the 'blessing'—the Torah, the covenant, and the mission—is eternal. The Torah scroll is finished, but the story is not. It now passes to us."
     }
   ]
