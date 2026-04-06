@@ -7811,3 +7811,154 @@ body.sidebar-nav-enabled.sidebar-nav-collapsed .site-sidebar .text-size-menu::be
 .birthday-highlight .gold-line {
     background: linear-gradient(90deg, transparent, #ef4444, transparent) !important;
 }
+
+/* ── Holiday reading mode ─────────────────────────────────────────────────
+   Applied to <body> by js/main.js when Sefaria's Parashat Hashavua is a
+   holiday reading (e.g. "Pesach Day 1") rather than a regular weekly parsha.
+   Color #b7791f matches --holiday-gold used elsewhere in css/holiday-pages.css
+   so holiday weeks feel visually consistent with the dedicated holiday pages.
+*/
+body.is-holiday-reading {
+    /* Warm sand tint over the default #f9fafb so holiday readings feel
+       visibly distinct from regular weeks without being loud. Matches the
+       --holiday-sand palette used in css/holiday-pages.css. */
+    background: #fff8eb;
+}
+body.is-holiday-reading #parsha-title {
+    color: #b7791f;
+}
+
+/* ── Special Reading section header ───────────────────────────────────────
+   One header per section (Torah / Maftir / Haftarah). The label line
+   includes the book name so no separate book banner is needed. Clean,
+   quiet, no background fill — the header sits as a typographic divider
+   between verse blocks, not a box on the page. */
+.special-reading-section-header {
+    margin: 3rem 0 1.5rem;
+    padding: 0 0 0.75rem;
+    border-bottom: 1px solid rgba(183, 121, 31, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+.special-reading-section-header:first-child {
+    margin-top: 0.5rem;
+}
+.special-reading-section-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #b7791f;
+}
+.special-reading-section-ref {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1e3a8a;
+    letter-spacing: -0.01em;
+}
+.special-reading-section-error {
+    margin: 0.5rem 0 1.5rem;
+    padding: 0.75rem 1rem;
+    color: #991b1b;
+    background: #fef2f2;
+    border-left: 3px solid #991b1b;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+/* ── Haftarah / Prophets styling ───────────────────────────────────────────
+   Sections from the Prophets (Nach) get a green accent on the section
+   header and — crucially — paint the individual .verse-container cards
+   themselves green, not the wrapper. This mirrors the default Torah verse
+   card treatment (white card, subtle border, hover state) but in mint. */
+.special-reading-section-header.is-haftarah {
+    border-bottom-color: rgba(4, 120, 87, 0.3);
+}
+.special-reading-section-header.is-haftarah .special-reading-section-label {
+    color: #047857;
+}
+.special-reading-section-header.is-haftarah .special-reading-section-ref {
+    color: #064e3b;
+}
+
+/* Verse cards inside a Haftarah section — the Torah cards stay white. */
+.special-reading-section-body.is-haftarah .verse-container {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+}
+.special-reading-section-body.is-haftarah .verse-container:hover {
+    background: #d1fae5;
+    border-color: #047857;
+    box-shadow: 0 2px 8px rgba(4, 120, 87, 0.12);
+}
+.special-reading-section-body.is-haftarah .verse-container .verse-number {
+    background: #047857;
+    color: #ffffff;
+    box-shadow: 0 1px 2px rgba(4, 120, 87, 0.25);
+}
+.special-reading-section-body.is-haftarah .chapter-header {
+    background: linear-gradient(135deg, #047857 0%, #10b981 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(4, 120, 87, 0.2);
+}
+
+/* Holiday significance blurb shown above each section's verses. Hidden
+   while empty so users don't see a flash before the JSON loads. */
+.special-reading-significance {
+    margin: 0.75rem 0 1.25rem;
+    padding: 1rem 1.25rem;
+    background: #fffbeb;
+    border-left: 4px solid #d4a017;
+    border-radius: 0 8px 8px 0;
+    color: #5c4a1f;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    font-style: italic;
+}
+.special-reading-significance.is-empty {
+    display: none;
+}
+.special-reading-significance.is-haftarah {
+    background: #ecfdf5;
+    border-left-color: #047857;
+    color: #064e3b;
+}
+
+/* Structured holiday significance modal (Name Meaning / Context /
+   Readings / Significance). Rendered inside #info-content. */
+.holiday-significance {
+    max-width: 100%;
+}
+.holiday-significance__title {
+    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #b7791f;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #fde68a;
+    letter-spacing: 0.01em;
+}
+.holiday-significance__section {
+    margin-bottom: 1.5rem;
+}
+.holiday-significance__section:last-child {
+    margin-bottom: 0;
+}
+.holiday-significance__label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #b7791f;
+    margin: 0 0 0.5rem;
+}
+.holiday-significance__body {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #1f2937;
+}

@@ -1,5 +1,5 @@
 // Main Application Entry Point - QUERY FIX FOR COMMENT BADGES + GENERAL PARSHA CHAT
-import { TORAH_PARSHAS, DOUBLE_PARSHA_PAIRS } from './config.js';
+import { TORAH_PARSHAS, DOUBLE_PARSHA_PAIRS, SPECIAL_READINGS, findSpecialReadingById, isSpecialReadingId, splitCompoundRef } from './config.js';
 import { fetchCurrentParsha, fetchParshaText, loadCommentaryData, loadMitzvahChallenges, getCachedCurrentParsha, cacheCurrentParsha } from './api.js';
 import { state, setState } from './state.js';
 import { isImportantVerse, getImportantVerseData } from './important-verses.js';
@@ -709,7 +709,7 @@ async function init() {
         })();
 
         // ── Phase 1: Instant UI — render cached parsha text before auth ──
-        setState({ allParshas: TORAH_PARSHAS });
+        setState({ allParshas: TORAH_PARSHAS, specialReadings: SPECIAL_READINGS });
 
         const cachedWeeklyParsha = getCachedCurrentParsha();
         if (cachedWeeklyParsha) {
@@ -778,27 +778,47 @@ async function init() {
             // ── No cache: get parsha from API ASAP, don't wait for auth ──
             showLoading();
             console.log('⚡ No cached parsha — fetching from API...');
-            const currentParshaName = await parshaNamePromise;
+            const currentParshaInfo = await parshaNamePromise;
+            const currentParshaName = currentParshaInfo?.name || null;
             if (currentParshaName) {
                 const match = findMatchingParshaByName(currentParshaName);
                 const matchingParsha = match?.parsha || null;
                 const matchingIndex = match?.index ?? -1;
                 if (matchingParsha && matchingIndex >= 0) {
                     const initialWeekStart = getWeekStartForDate();
-                    cacheCurrentParsha(currentParshaName, matchingParsha.reference);
+                    cacheCurrentParsha({ ...currentParshaInfo, ref: matchingParsha.reference });
                     setState({
                         currentParshaRef: matchingParsha.reference,
                         currentParshaIndex: matchingIndex,
                         weeklyParshaRef: matchingParsha.reference,
                         weeklyParshaIndex: matchingIndex,
-                        weeklyParshaWeekStart: initialWeekStart.toISOString()
+                        weeklyParshaWeekStart: initialWeekStart.toISOString(),
+                        currentHolidayName: null
                     });
+                    document.body.classList.remove('is-holiday-reading');
                     document.querySelectorAll('select#parsha-selector').forEach(s => {
                         s.value = matchingParsha.reference;
                     });
                     updateNavigationButtons();
                     await loadParsha(matchingParsha.reference);
                     console.log('✅ Loaded weekly parsha from API:', match.displayName || matchingParsha.name);
+                } else if (currentParshaInfo.isHoliday && currentParshaInfo.ref) {
+                    // Sefaria returned a holiday reading (e.g., "Pesach Day 1") that
+                    // isn't in our TORAH_PARSHAS list. Mirror Sefaria: use its ref directly.
+                    const holidayRef = Array.isArray(currentParshaInfo.ref)
+                        ? currentParshaInfo.ref[0]
+                        : currentParshaInfo.ref;
+                    const initialWeekStart = getWeekStartForDate();
+                    cacheCurrentParsha(currentParshaInfo);
+                    setState({
+                        currentParshaRef: holidayRef,
+                        weeklyParshaRef: holidayRef,
+                        weeklyParshaWeekStart: initialWeekStart.toISOString(),
+                        currentHolidayName: currentParshaName
+                    });
+                    document.body.classList.add('is-holiday-reading');
+                    await loadParsha(holidayRef);
+                    console.log('✅ Loaded holiday reading from Sefaria:', currentParshaName, holidayRef);
                 } else {
                     setState({ currentParshaRef: TORAH_PARSHAS[0].reference, currentParshaIndex: 0 });
                     await loadParsha(TORAH_PARSHAS[0].reference);
@@ -838,7 +858,8 @@ async function init() {
 
         // If we had a cache hit, confirm/update the weekly parsha from the API
         if (earlyRef) {
-            const currentParshaName = await parshaNamePromise;
+            const currentParshaInfo = await parshaNamePromise;
+            const currentParshaName = currentParshaInfo?.name || null;
             console.log('✅ Current parsha fetched:', currentParshaName);
 
             if (currentParshaName) {
@@ -849,7 +870,7 @@ async function init() {
                 if (matchingParsha && matchingIndex >= 0) {
                     const initialWeekStart = getWeekStartForDate();
 
-                    cacheCurrentParsha(currentParshaName, matchingParsha.reference);
+                    cacheCurrentParsha({ ...currentParshaInfo, ref: matchingParsha.reference });
 
                     setState({
                         currentParshaRef: matchingParsha.reference,
@@ -858,6 +879,9 @@ async function init() {
                         weeklyParshaIndex: matchingIndex,
                         weeklyParshaWeekStart: initialWeekStart.toISOString()
                     });
+
+                    document.body.classList.remove('is-holiday-reading');
+                    setState({ currentHolidayName: null });
 
                     if (cachedWeeklyParsha?.ref !== matchingParsha.reference) {
                         // Cache was stale — switch to the correct weekly parsha
@@ -868,6 +892,26 @@ async function init() {
                         await loadParsha(matchingParsha.reference);
                     } else {
                         updateMitzvahChallengeForParsha(match.displayName || matchingParsha.name);
+                    }
+                } else if (currentParshaInfo.isHoliday && currentParshaInfo.ref) {
+                    // Holiday week: Sefaria returned a reading not in our local list.
+                    // Swap over to it if the cached ref disagrees.
+                    const holidayRef = Array.isArray(currentParshaInfo.ref)
+                        ? currentParshaInfo.ref[0]
+                        : currentParshaInfo.ref;
+                    const initialWeekStart = getWeekStartForDate();
+                    cacheCurrentParsha(currentParshaInfo);
+                    setState({
+                        currentParshaRef: holidayRef,
+                        weeklyParshaRef: holidayRef,
+                        weeklyParshaWeekStart: initialWeekStart.toISOString(),
+                        currentHolidayName: currentParshaName
+                    });
+                    document.body.classList.add('is-holiday-reading');
+                    if (cachedWeeklyParsha?.ref !== holidayRef) {
+                        updateNavigationButtons();
+                        await loadParsha(holidayRef);
+                        console.log('✅ Switched to holiday reading:', currentParshaName, holidayRef);
                     }
                 }
             }
@@ -1364,7 +1408,8 @@ async function checkAndApplyWeeklyParsha({ forceAdvance = false } = {}) {
 
     let latestParshaName = null;
     try {
-        latestParshaName = await fetchCurrentParsha();
+        const info = await fetchCurrentParsha();
+        latestParshaName = info?.name || null;
     } catch (error) {
         latestParshaName = null;
     }
@@ -4183,6 +4228,15 @@ async function loadParsha(parshaRef) {
             secondParshaRef = secondParshaObj.reference;
         }
 
+        // Special Reading (id-keyed, e.g. "special:rosh-hashanah-day-1").
+        // Always routed through the multi-section renderer even when there's
+        // only one section, so the labeled divider ("Torah Reading") appears
+        // consistently and the rest of the single-section path stays untouched.
+        const specialReading = isSpecialReadingId(parshaRef)
+            ? findSpecialReadingById(parshaRef)
+            : null;
+        const isMultiSection = !doublePairInfo && !!specialReading;
+
         if (isDoubleView) {
             // Ensure currentParshaIndex points to the second parsha for consistent nav
             const secondIndex = doublePairInfo.secondIndex;
@@ -4210,6 +4264,42 @@ async function loadParsha(parshaRef) {
                     loadBookmarkCounts(secondParshaRef)
                 ]);
                 console.log('✅ Counts loaded for both parshiyot');
+            } catch (countError) {
+                console.warn('Social counts unavailable (read-only mode):', countError.message);
+            }
+        } else if (isMultiSection) {
+            // Pre-split `sections` are the source of truth. Fall back to
+            // splitting any inline compound ref only if an older-shape entry
+            // ever sneaks through.
+            const sections = Array.isArray(specialReading.sections) && specialReading.sections.length > 0
+                ? specialReading.sections
+                : splitCompoundRef(specialReading.reference || '').map((r, i) => ({ label: `Section ${i + 1}`, ref: r }));
+            const sectionRefs   = sections.map(s => s.ref);
+            const sectionLabels = sections.map(s => s.label);
+            const displayName   = specialReading.name;
+
+            console.log('Fetching special reading:', specialReading.id, sectionRefs);
+            const sectionResults = await Promise.all(
+                sectionRefs.map(r =>
+                    fetchParshaText(r).catch(err => {
+                        console.warn('Section failed to load:', r, err?.message);
+                        return null;
+                    })
+                )
+            );
+            console.log('Special reading texts received');
+
+            renderMultiSectionParsha(sectionResults, sectionRefs, sectionLabels, parshaRef, displayName);
+
+            highlightCurrentParsha(parshaRef);
+
+            try {
+                await Promise.all([
+                    loadCommentCounts(parshaRef),
+                    loadReactionCounts(parshaRef),
+                    loadBookmarkCounts(parshaRef)
+                ]);
+                console.log('✅ Counts loaded for multi-section reading');
             } catch (countError) {
                 console.warn('Social counts unavailable (read-only mode):', countError.message);
             }
@@ -4250,29 +4340,27 @@ async function loadParsha(parshaRef) {
 }
 
 function parseParshaReference(parshaRef) {
-    const match = parshaRef.match(/^(\w+)\s+(\d+):(\d+)(?:-(\d+):(\d+))?$/);
-
-    if (!match) {
-        const simpleMatch = parshaRef.match(/^(\w+)\s+(\d+):(\d+)$/);
-        if (simpleMatch) {
-            return {
-                bookName: simpleMatch[1],
-                startChapter: parseInt(simpleMatch[2]),
-                startVerse: parseInt(simpleMatch[3]),
-                endChapter: null,
-                endVerse: null
-            };
-        }
-        return { bookName: 'Torah', startChapter: 1, startVerse: 1, endChapter: null, endVerse: null };
+    // Accept multi-word book names ("Song of Songs", "1 Kings") and all three
+    // range shapes Sefaria uses:
+    //   1. "Exodus 12:21"            (single verse)
+    //   2. "Exodus 12:21-51"         (same-chapter range — end is just a verse)
+    //   3. "Exodus 19:1-20:23"       (cross-chapter range)
+    const full = parshaRef.match(/^(.+?)\s+(\d+):(\d+)(?:-(?:(\d+):)?(\d+))?$/);
+    if (full) {
+        const bookName     = full[1];
+        const startChapter = parseInt(full[2], 10);
+        const startVerse   = parseInt(full[3], 10);
+        const hasRangeEnd  = full[5] !== undefined;
+        // If the "-X:Y" form was used, full[4] is the end chapter.
+        // If the "-Y" form was used, the range stays on startChapter.
+        const endChapter   = hasRangeEnd
+            ? (full[4] ? parseInt(full[4], 10) : startChapter)
+            : null;
+        const endVerse     = hasRangeEnd ? parseInt(full[5], 10) : null;
+        return { bookName, startChapter, startVerse, endChapter, endVerse };
     }
-    
-    return {
-        bookName: match[1],
-        startChapter: parseInt(match[2]),
-        startVerse: parseInt(match[3]),
-        endChapter: match[4] ? parseInt(match[4]) : null,
-        endVerse: match[5] ? parseInt(match[5]) : null
-    };
+
+    return { bookName: 'Torah', startChapter: 1, startVerse: 1, endChapter: null, endVerse: null };
 }
 
 function refreshSignificanceButtons() {
@@ -4299,6 +4387,32 @@ function openParshaSignificanceModal() {
 
     const parshaName = state.currentParshaSignificanceName || state.allParshas[state.currentParshaIndex]?.name || 'Torah Portion';
     const infoContent = document.getElementById('info-content');
+
+    // Holiday Special Readings carry a structured object with four fields:
+    // nameMeaning, context, summary, significance. Render them as labeled
+    // sections instead of the flat text used for weekly parshas.
+    if (significance && typeof significance === 'object' && significance.__holiday) {
+        const sections = [
+            { label: 'Name Meaning', body: significance.nameMeaning },
+            { label: 'Context',      body: significance.context },
+            { label: 'The Readings', body: significance.summary },
+            { label: 'Significance', body: significance.significance },
+        ].filter(s => s.body);
+        infoContent.innerHTML = `
+            <div class="holiday-significance">
+                <div class="holiday-significance__title">${escapeHtml(parshaName)}</div>
+                ${sections.map(s => `
+                    <section class="holiday-significance__section">
+                        <h3 class="holiday-significance__label">${escapeHtml(s.label)}</h3>
+                        <p class="holiday-significance__body">${formatText(s.body)}</p>
+                    </section>
+                `).join('')}
+            </div>
+        `;
+        showInfoPanel();
+        return;
+    }
+
     infoContent.innerHTML = `
         <div class="text-xl font-bold mb-3 text-blue-900">${escapeHtml(parshaName)} — Significance</div>
         <div class="text-gray-800 leading-relaxed">${formatText(significance)}</div>
@@ -4359,6 +4473,170 @@ function renderParsha(data, parshaRef) {
     updateMitzvahChallengeForParsha(activeParsha?.name || null);
 
     appendParshaVersesToContainer(data, parshaRef, textContainer);
+
+    applyBookmarkStateToVisibleVerses();
+}
+
+/**
+ * Render a multi-section Special Reading (e.g., Rosh Hashanah Day 1 + Day 2).
+ * `sectionDataArr` / `sectionRefs` / `sectionLabels` are parallel arrays.
+ * Section data entries may be null if a fetch failed (e.g., an unsupported
+ * Nach ref) — those render as a placeholder note instead of crashing.
+ * `identityRef` is the Special Reading id used for dropdown sync and as the
+ * identity key for comments/reactions/bookmarks.
+ * `displayName` is the human-readable name (e.g., "Rosh Hashanah Day 1")
+ * shown in the header in place of the book name.
+ */
+// Lazily-loaded holiday significance data. The JSON is keyed by human
+// display names (not the Special Reading id), wrapped in a "significance"
+// root object. Each entry has: nameMeaning, context, summary, significance.
+let _holidaySignificanceData = null;
+let _holidaySignificancePromise = null;
+function loadHolidaySignificance() {
+    if (_holidaySignificanceData) return Promise.resolve(_holidaySignificanceData);
+    if (_holidaySignificancePromise) return _holidaySignificancePromise;
+    _holidaySignificancePromise = fetch('/data/holiday_significance.json')
+        .then(r => r.ok ? r.json() : {})
+        .catch(() => ({}))
+        .then(data => {
+            // Unwrap the top-level "significance" root if present.
+            _holidaySignificanceData = (data && data.significance) ? data.significance : (data || {});
+            return _holidaySignificanceData;
+        });
+    return _holidaySignificancePromise;
+}
+
+// Map Special Reading id → JSON display-name key. The JSON uses friendly
+// names that don't match our slug ids, so this bridges the two.
+const HOLIDAY_SIGNIFICANCE_KEY_BY_ID = {
+    'special:rosh-hashanah-day-1':     'Rosh Hashanah 1',
+    'special:rosh-hashanah-day-2':     'Rosh Hashanah 2',
+    'special:yom-kippur':              'Yom Kippur',
+    'special:sukkot-day-1':            'Sukkot 1 - Shabbat',
+    'special:sukkot-day-2':            'Sukkot 1 [and 2]',
+    'special:sukkot-chol-hamoed-1':    'Sukkot Chol Hamoed 1',
+    'special:sukkot-chol-hamoed-2':    'Sukkot Chol Hamoed 2',
+    'special:sukkot-chol-hamoed-3':    'Sukkot Chol Hamoed 3',
+    'special:sukkot-chol-hamoed-4':    'Sukkot Chol Hamoed 4',
+    'special:hoshana-rabbah':          "Hosha'ana Rabba",
+    'special:shemini-atzeret':         'Shemini Atzeret - Shabbat',
+    'special:simchat-torah':           'Simchat Torah',
+    'special:chanukah-day-1':          'Chanukah 1',
+    'special:chanukah-day-2':          'Chanukah 2',
+    'special:chanukah-day-3':          'Chanukah 3',
+    'special:chanukah-day-4':          'Chanukah 4',
+    'special:chanukah-day-5':          'Chanukah 5',
+    'special:chanukah-day-6':          'Chanukah 6 - Rosh Chodesh',
+    'special:chanukah-day-7':          'Chanukah 7 - Rosh Chodesh',
+    'special:chanukah-day-8':          'Chanukah 8',
+    'special:purim':                   'Purim',
+    'special:pesach-day-1':            'Pesach Day 1',
+    'special:pesach-day-2':            'Pesach Day 2',
+    'special:pesach-shabbat-chol-hamoed': 'Shabbat, Chol Hamoed, Pesach',
+    'special:pesach-chol-hamoed-1':    'Chol Hamoed Day 1 (E"Y 2)',
+    'special:pesach-chol-hamoed-2':    'Chol Hamoed Day 2 (E"Y 3)',
+    'special:pesach-chol-hamoed-4':    'Chol Hamoed Day 4 (E"Y 5)',
+    'special:pesach-day-7':            'Shviee Shel Pesach',
+    'special:pesach-day-8':            'Achron Shel Pesach',
+    'special:shavuot-day-1':           'Shavuot Day 1',
+    'special:shavuot-day-2':           'Shavuot Day 2, Shabbat',
+};
+
+function renderMultiSectionParsha(sectionDataArr, sectionRefs, sectionLabels, identityRef, displayName) {
+    const textContainer = document.getElementById('parsha-text');
+
+    // Sync the dropdown. The <option> value is the Special Reading id.
+    document.querySelectorAll('select#parsha-selector').forEach(s => { s.value = identityRef; });
+
+    // Show the friendly name in the title, the concatenated section refs as
+    // the subtitle so the user sees the actual passages that compose the page.
+    const subtitle = sectionRefs.join(' · ');
+    updateParshaHeader(displayName || 'Special Reading', subtitle, displayName);
+    textContainer.innerHTML = '';
+
+    // Significance for Special Readings is loaded from holiday_significance.json
+    // and shown via the existing "Significance" button/modal. Start disabled;
+    // the loader below enables it once the JSON resolves.
+    setState({
+        currentParshaSignificance: null,
+        currentParshaSignificanceName: null
+    });
+    ['show-significance', 'show-significance-mobile'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        btn.disabled = true;
+        btn.classList.add('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
+    });
+
+    updateMitzvahChallengeForParsha(null);
+
+    // Haftarah / Prophets sections are detected by label (covers "Haftarah",
+    // "Haftarah (cont.)", etc.) — these render green so the shift from Torah
+    // to Prophets is visually unmistakable.
+    const isHaftarahLabel = (label) => /haftarah|prophets/i.test(label || '');
+
+    // Kick off the significance fetch in parallel with rendering. When it
+    // resolves, stash the structured entry in state so the "Significance"
+    // button/modal can render it. We store the whole object (not a flat
+    // string) and let openParshaSignificanceModal branch on shape.
+    loadHolidaySignificance().then(allSig => {
+        const jsonKey = HOLIDAY_SIGNIFICANCE_KEY_BY_ID[identityRef];
+        const entry = jsonKey && allSig ? allSig[jsonKey] : null;
+        if (!entry) return;
+        setState({
+            currentParshaSignificance: { __holiday: true, ...entry },
+            currentParshaSignificanceName: displayName || 'Special Reading'
+        });
+        ['show-significance', 'show-significance-mobile'].forEach(id => {
+            const btn = document.getElementById(id);
+            if (!btn) return;
+            btn.disabled = false;
+            btn.classList.remove('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
+        });
+    });
+
+    sectionDataArr.forEach((data, i) => {
+        const label = sectionLabels[i];
+        const ref = sectionRefs[i];
+        const { bookName: sectionBook } = parseParshaReference(ref);
+        const isHaftarah = isHaftarahLabel(label);
+
+        // One section header per section. The book name rides alongside
+        // the label ("Maftir · Numbers") so users see the book transition
+        // without a separate noisy banner.
+        const header = document.createElement('div');
+        header.className = 'special-reading-section-header' + (isHaftarah ? ' is-haftarah' : '');
+        const labelEl = document.createElement('div');
+        labelEl.className = 'special-reading-section-label';
+        labelEl.textContent = sectionBook ? `${label} · ${sectionBook}` : label;
+        const refEl = document.createElement('div');
+        refEl.className = 'special-reading-section-ref';
+        refEl.textContent = ref;
+        header.appendChild(labelEl);
+        header.appendChild(refEl);
+        textContainer.appendChild(header);
+
+        if (!data) {
+            const warn = document.createElement('p');
+            warn.className = 'special-reading-section-error';
+            warn.textContent = `Unable to load ${ref}. You can view it on Sefaria directly.`;
+            textContainer.appendChild(warn);
+            return;
+        }
+
+        // Wrap each section's verses. The wrapper carries `.is-haftarah`
+        // when applicable; CSS uses it to tint the .verse-container cards
+        // themselves green (not the wrapper background).
+        const body = document.createElement('div');
+        body.className = 'special-reading-section-body' + (isHaftarah ? ' is-haftarah' : '');
+        textContainer.appendChild(body);
+
+        // skipFirstChapterHeader=true: the section header already names the
+        // book, so the helper's "{Book} Chapter N" header for the first
+        // chapter would be redundant. Mid-section chapter transitions
+        // (e.g. 19→20 within "Exodus 19:1-20:23") still render.
+        appendParshaVersesToContainer(data, ref, body, true);
+    });
 
     applyBookmarkStateToVisibleVerses();
 }

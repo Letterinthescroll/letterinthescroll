@@ -34,10 +34,25 @@ export function hideError() {
 }
 
 /**
- * Update parsha header
+ * Update parsha header.
+ * On holiday weeks (when state.currentHolidayName is set), the holiday name
+ * is shown in place of the book title — e.g., "Pesach Day 1" instead of
+ * "Exodus". Regular weeks fall through to the passed-in title unchanged.
  */
-export function updateParshaHeader(title, reference) {
-    document.getElementById('parsha-title').textContent = title;
+export function updateParshaHeader(title, reference, overrideTitle) {
+    // Explicit override (e.g., Special Readings from the dropdown) wins.
+    // Otherwise, only use the stored holiday name when we're actually
+    // rendering the holiday reading itself — not when the user has navigated
+    // away to a different parsha during a holiday week.
+    let displayTitle;
+    if (overrideTitle) {
+        displayTitle = overrideTitle;
+    } else if (state.currentHolidayName && reference === state.weeklyParshaRef) {
+        displayTitle = state.currentHolidayName;
+    } else {
+        displayTitle = title;
+    }
+    document.getElementById('parsha-title').textContent = displayTitle;
     document.getElementById('parsha-reference').textContent = reference;
 }
 
@@ -81,25 +96,78 @@ export function updateNavigationButtons() {
 }
 
 /**
- * Populate parsha selector dropdown
+ * Populate parsha selector dropdown.
+ * Weekly parshas are grouped by book (Genesis → Deuteronomy). Special
+ * Readings are grouped by their `group` field (Pesach, Rosh Hashanah, etc.)
+ * and appended after the weekly parshas. Each `<option>`'s value is the
+ * entry's identity ref (Torah `reference` for parshas, `id` for specials).
  */
 export function populateParshaSelector() {
-    // Get ALL select elements with id 'parsha-selector' (desktop and mobile)
     const selectors = document.querySelectorAll('select#parsha-selector');
 
-    // Populate each select element with all parshas
+    // Preserve source order so groups appear in the order their first entry
+    // was encountered — weekly: Genesis → Deuteronomy; specials: Pesach first.
+    const groupInOrder = (entries, keyFn) => {
+        const order = [];
+        const map = new Map();
+        for (const entry of entries) {
+            const key = keyFn(entry);
+            if (!map.has(key)) {
+                order.push(key);
+                map.set(key, []);
+            }
+            map.get(key).push(entry);
+        }
+        return { order, map };
+    };
+
+    const makeParshaOption = (parsha) => {
+        const option = document.createElement('option');
+        option.value = parsha.reference;
+        option.textContent = `${parsha.name} (${parsha.reference})`;
+        if (parsha.reference === state.currentParshaRef) {
+            option.selected = true;
+        }
+        return option;
+    };
+
+    const makeSpecialOption = (reading) => {
+        const option = document.createElement('option');
+        option.value = reading.id;
+        option.textContent = reading.name;
+        if (reading.id === state.currentParshaRef) {
+            option.selected = true;
+        }
+        return option;
+    };
+
     selectors.forEach((selector) => {
         selector.innerHTML = '';
 
-        state.allParshas.forEach((parsha, index) => {
-            const option = document.createElement('option');
-            option.value = parsha.reference;
-            option.textContent = `${parsha.name} (${parsha.reference})`;
-            if (parsha.reference === state.currentParshaRef) {
-                option.selected = true;
+        // Weekly parshas by book
+        const weekly = groupInOrder(state.allParshas || [], p => p.book);
+        for (const book of weekly.order) {
+            const group = document.createElement('optgroup');
+            group.label = book;
+            for (const parsha of weekly.map.get(book)) {
+                group.appendChild(makeParshaOption(parsha));
             }
-            selector.appendChild(option);
-        });
+            selector.appendChild(group);
+        }
+
+        // Special Readings by their `group` field
+        const specials = state.specialReadings || [];
+        if (specials.length > 0) {
+            const grouped = groupInOrder(specials, r => r.group || 'Special Readings');
+            for (const label of grouped.order) {
+                const group = document.createElement('optgroup');
+                group.label = label;
+                for (const reading of grouped.map.get(label)) {
+                    group.appendChild(makeSpecialOption(reading));
+                }
+                selector.appendChild(group);
+            }
+        }
     });
 }
 

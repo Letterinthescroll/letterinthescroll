@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tisha B'Av — The Complete Guide | A Letter in the Scroll</title>
+    <meta name="description" content="A complete guide to Tisha B'Av — the saddest day of the Jewish year. The destruction of the Temples, history, the five prohibitions, the reading of Eicha, Kinot, and the hope of redemption.">
+    <link rel="canonical" href="https://www.aletterinthescroll.com/tisha-bav/">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="A Letter in the Scroll">
+    <meta property="og:title" content="Tisha B'Av — The Complete Guide | A Letter in the Scroll">
+    <meta property="og:description" content="A complete guide to Tisha B'Av — history, tragedies, customs, the reading of Eicha, and the hope of redemption.">
+    <meta property="og:image" content="https://www.aletterinthescroll.com/media/images/welcome.jpg">
+    <meta property="og:image:alt" content="Tisha B'Av — the saddest day on the Jewish calendar">
+    <meta property="og:url" content="https://www.aletterinthescroll.com/tisha-bav/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tisha B'Av — The Complete Guide | A Letter in the Scroll">
+    <meta name="twitter:description" content="A complete guide to Tisha B'Av — history, tragedies, customs, Eicha, Kinot, and the hope of redemption.">
+    <meta name="twitter:image" content="https://www.aletterinthescroll.com/media/images/welcome.jpg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png" media="(prefers-color-scheme: light)"><link rel="icon" type="image/svg+xml" href="/media/images/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" sizes="180x180" href="/media/images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/mobile-overrides.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Tisha B'Av — mournful variant of the Yom Kippur template.
+           Shared class names (hag-*, seder-section, prohibition-*, etc.)
+           mirror /yom-kippur so the visual system stays consistent. */
+        :root {
+            --p-navy:    #111827;
+            --p-blue:    #1f2a44;
+            --p-blue2:   #29344f;
+            --p-blue3:   #475569;
+            --p-gold:    #7a5a1b;
+            --p-amber:   #9b7d2d;
+            --p-border:  rgba(17, 24, 39, 0.14);
+            --p-muted:   #4a5568;
+            --p-radius:  16px;
+        }
+        html { scroll-behavior: smooth; }
+        body.haggadah-body {
+            background: linear-gradient(170deg, #eef1f7 0%, #e4e7ef 45%, #eaecf3 100%);
+            min-height: 100vh; color: #1a2033; overflow-x: hidden;
+        }
+        .hag-page { position: relative; z-index: 2; }
+
+        /* ── Hero ─────────────────────────────────────────────────── */
+        .hag-hero {
+            background: linear-gradient(135deg, #05070e 0%, #12172a 50%, #1f2a44 100%);
+            color: #fff; text-align: center;
+            padding: 3.8rem 1.5rem 3.6rem;
+            position: relative; overflow: hidden;
+        }
+        .hag-hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 72% 35%, rgba(255,255,255,0.06) 0%, transparent 62%);
+            pointer-events: none;
+        }
+        .hag-hero::after {
+            content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+            height: 46px;
+            background: linear-gradient(to bottom right, transparent 49%, #eef1f7 50%);
+        }
+        .hag-hero__eyebrow { font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(255,255,255,0.55); font-weight: 600; margin-bottom: 0.5rem; position: relative; }
+        .hag-hero__hebrew { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 700; direction: rtl; color: #cbd5e1; margin-bottom: 0.35rem; position: relative; letter-spacing: 0.03em; }
+        .hag-hero__title { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 5.5vw, 3.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 1rem; position: relative; }
+        .hag-hero__title span { color: #94a3b8; }
+        .hag-hero__subtitle { font-size: 0.96rem; color: rgba(255,255,255,0.7); line-height: 1.68; max-width: 620px; margin: 0 auto 1.6rem; position: relative; }
+        .hag-hero__actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.65rem; position: relative; }
+        .hag-hero__btn { display: inline-flex; align-items: center; text-decoration: none; border-radius: 999px; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.88rem; transition: opacity 0.18s, transform 0.15s; }
+        .hag-hero__btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .hag-hero__btn--primary { background: rgba(255,255,255,0.14); color: #fff; border: 1.5px solid rgba(255,255,255,0.38); backdrop-filter: blur(6px); }
+        .hag-hero__btn--secondary { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.78); border: 1px solid rgba(255,255,255,0.18); }
+
+        /* ── Thin candle row under hero ──────────────────────────── */
+        .hag-hero__candle-row {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            display: flex; justify-content: center; gap: 2.2rem;
+            padding-bottom: 0.9rem; z-index: 2;
+            opacity: 0.6;
+        }
+        .hag-hero__candle-row span {
+            display: inline-block; width: 3px; height: 14px;
+            background: linear-gradient(to bottom, #fbbf24, #78350f);
+            border-radius: 1px;
+            box-shadow: 0 -4px 8px rgba(251,191,36,0.45);
+            position: relative;
+        }
+        .hag-hero__candle-row span::before {
+            content: ''; position: absolute; left: 50%; top: -6px;
+            transform: translateX(-50%);
+            width: 4px; height: 6px;
+            background: radial-gradient(circle, #fde68a 0%, #f59e0b 55%, transparent 75%);
+            border-radius: 50%;
+        }
+
+        .haggadah-shell { max-width: 1040px; margin: 0 auto; padding: 0 1.25rem 4.4rem; }
+
+        /* ── Section labels & cards ──────────────────────────────── */
+        .hag-section-label { margin: 2rem 0 0.75rem; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--p-blue3); display: flex; align-items: center; gap: 0.7rem; }
+        .hag-section-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(71,85,105,0.3), transparent); }
+
+        .seder-section { margin-top: 1.55rem; background: #fff; border: 1px solid rgba(31, 42, 68, 0.11); border-radius: 18px; padding: 1.6rem 1.65rem 1.5rem; box-shadow: 0 2px 20px rgba(17, 24, 39, 0.07); scroll-margin-top: 82px; }
+        .section-kicker-wrap { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+        .section-kicker { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--p-blue3); margin: 0; }
+        .section-title { margin: 0; font-family: 'Playfair Display', serif; font-size: clamp(1.35rem, 2.8vw, 2.05rem); color: var(--p-blue); line-height: 1.15; }
+        .section-hebrew { margin: 0.25rem 0 0.8rem; direction: rtl; color: var(--p-blue2); font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2.2vw, 1.3rem); opacity: 0.72; }
+        .section-subtitle { margin: 0.12rem 0 0; color: var(--p-muted); line-height: 1.74; font-size: 0.94rem; }
+
+        .step-callout { margin-top: 1.08rem; background: #f3f4f8; border: 1px solid rgba(31, 42, 68, 0.18); border-radius: 10px; padding: 0.86rem 1.05rem; color: var(--p-blue); font-size: 0.9rem; line-height: 1.74; }
+        .step-callout strong { color: #0f172a; }
+
+        .mini-heading { margin: 1.35rem 0 0.56rem; color: var(--p-blue); font-size: 0.78rem; letter-spacing: 0.11em; text-transform: uppercase; font-weight: 800; }
+
+        .note-panel { background: #f6f7fb; border: 1px solid rgba(31, 42, 68, 0.12); border-radius: 12px; padding: 0.9rem 1rem; margin-top: 1rem; }
+        .note-panel h4 { margin: 0; color: var(--p-blue); font-size: 0.92rem; font-weight: 800; }
+        .note-panel p, .note-panel li { margin: 0.4rem 0 0; color: #39445c; font-size: 0.88rem; line-height: 1.72; }
+        .note-panel ul { margin: 0.34rem 0 0; padding-left: 1rem; }
+
+        /* ── Prohibition cards (darker variant) ──────────────────── */
+        .prohibition-grid { margin-top: 1.2rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 0.85rem; }
+        .prohibition-card { background: linear-gradient(145deg, #f6f7fb, #eceff6); border: 1px solid rgba(31, 42, 68, 0.15); border-radius: 12px; padding: 0.9rem 1rem; }
+        .prohibition-card__num { width: 1.8rem; height: 1.8rem; background: linear-gradient(135deg, #1f2a44, #475569); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .prohibition-card__title { font-weight: 700; font-size: 0.9rem; color: var(--p-blue); margin: 0 0 0.35rem; }
+        .prohibition-card__desc { font-size: 0.84rem; color: var(--p-muted); line-height: 1.62; margin: 0; }
+
+        /* ── Timeline of tragedies ───────────────────────────────── */
+        .tisha-timeline { margin-top: 1.1rem; position: relative; padding-left: 2.1rem; }
+        .tisha-timeline::before {
+            content: ''; position: absolute;
+            left: 0.82rem; top: 0.4rem; bottom: 0.4rem;
+            width: 2px;
+            background: linear-gradient(to bottom, rgba(31,42,68,0.35), rgba(31,42,68,0.08));
+        }
+        .tisha-timeline__item {
+            position: relative;
+            padding: 0.9rem 1rem 0.95rem 1rem;
+            background: #f8f9fc;
+            border: 1px solid rgba(31, 42, 68, 0.11);
+            border-radius: 12px;
+            margin-bottom: 0.78rem;
+        }
+        .tisha-timeline__item::before {
+            content: ''; position: absolute;
+            left: -1.72rem; top: 1.1rem;
+            width: 13px; height: 13px;
+            border-radius: 50%;
+            background: #1f2a44;
+            box-shadow: 0 0 0 4px #eef1f7, 0 0 0 5px rgba(31,42,68,0.22);
+        }
+        .tisha-timeline__year {
+            font-size: 0.7rem; font-weight: 800;
+            letter-spacing: 0.11em; text-transform: uppercase;
+            color: #7a1f1f;
+            margin: 0 0 0.25rem;
+        }
+        .tisha-timeline__headline {
+            margin: 0 0 0.35rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.04rem; line-height: 1.3;
+            color: var(--p-blue);
+            font-weight: 700;
+        }
+        .tisha-timeline__desc {
+            margin: 0;
+            font-size: 0.89rem;
+            color: var(--p-muted);
+            line-height: 1.7;
+        }
+
+        /* ── Ending banner ───────────────────────────────────────── */
+        .ending-banner { margin-top: 1.3rem; text-align: center; background: linear-gradient(135deg, #05070e 0%, #12172a 50%, #1f2a44 100%); border-radius: 20px; padding: 2.2rem 1.5rem; position: relative; overflow: hidden; }
+        .ending-banner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 60% 40%, rgba(255,255,255,0.07) 0%, transparent 65%); pointer-events: none; }
+        .ending-banner h3 { margin: 0; direction: rtl; color: #e2e8f0; font-family: 'Playfair Display', serif; font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.3; position: relative; }
+        .ending-banner p { margin: 0.55rem 0 0; color: rgba(255,255,255,0.72); font-size: 1rem; position: relative; }
+        .page-footer { margin: 1.8rem 0 0; color: rgba(31,42,68,0.4); text-align: center; font-size: 0.79rem; }
+
+        /* ── Quote block ─────────────────────────────────────────── */
+        .quote-block { margin-top: 1rem; background: #fbf7ef; border-left: 4px solid var(--p-gold); border-radius: 0 12px 12px 0; padding: 0.95rem 1.1rem; }
+        .quote-block__text { font-family: 'Playfair Display', serif; font-size: 1.02rem; color: #6b4e15; line-height: 1.72; margin: 0 0 0.4rem; font-style: italic; }
+        .quote-block__cite { font-size: 0.82rem; color: #886331; margin: 0; }
+
+        /* ── Upcoming dates ──────────────────────────────────────── */
+        .dates-table {
+            margin-top: 0.9rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.45rem;
+        }
+        .dates-table__row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.62rem 0.85rem;
+            background: #f6f7fb;
+            border: 1px solid rgba(31,42,68,0.1);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--p-muted);
+        }
+        .dates-table__row strong { color: var(--p-blue); }
+
+        /* ── Anchor side menu (matches yom-kippur) ───────────────── */
+        .anchor-menu { position: fixed; right: 0; top: 116px; z-index: 60; width: 92px; max-height: 72vh; overflow-y: auto; overflow-x: hidden; background: rgba(255,255,255,0.78); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); border: 1px solid rgba(31,42,68,0.14); border-right: none; border-radius: 10px 0 0 10px; box-shadow: -4px 6px 28px rgba(17,24,39,0.12), inset 0 1px 0 rgba(255,255,255,0.6); padding: 0.42rem 0.32rem; }
+        .anchor-menu__title { margin: 0 0 0.32rem; padding: 0 0.28rem 0.3rem; font-size: 0.58rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--p-blue3); border-bottom: 1px solid rgba(31,42,68,0.15); }
+        .anchor-link { display: block; text-decoration: none; color: #3b4660; font-size: 0.65rem; font-weight: 600; line-height: 1.3; padding: 0.24rem 0.3rem; border-radius: 7px; transition: background 0.14s, color 0.14s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .anchor-link:hover { background: rgba(31,42,68,0.08); color: var(--p-blue); }
+        .anchor-link.active { background: rgba(31,42,68,0.13); color: var(--p-blue); font-weight: 700; }
+
+        @media (max-width: 1120px) { .anchor-menu { display: none; } }
+        @media (max-width: 760px) { .prohibition-grid { grid-template-columns: 1fr 1fr; } .hag-hero { padding: 2.8rem 1rem 3rem; } }
+        @media (max-width: 480px) { .prohibition-grid { grid-template-columns: 1fr; } .tisha-timeline { padding-left: 1.7rem; } .tisha-timeline::before { left: 0.58rem; } .tisha-timeline__item::before { left: -1.48rem; } }
+    </style>
+</head>
+<body class="haggadah-body" data-header-fallback="true">
+
+<div id="shared-header-mount" style="background:linear-gradient(135deg,#152046 0%,#1e3794 50%,#1e3794 100%);min-height:64px"></div>
+    <script src="/js/header-loader.js"></script>
+    <script src="/js/auth-gate.js"></script>
+
+    <nav class="anchor-menu" aria-label="Tisha B'Av section links">
+        <p class="anchor-menu__title">Tisha B'Av</p>
+        <a class="anchor-link" href="#hero">Top</a>
+        <a class="anchor-link" href="#overview">Overview</a>
+        <a class="anchor-link" href="#origins">The Spies</a>
+        <a class="anchor-link" href="#tragedies">Tragedies</a>
+        <a class="anchor-link" href="#prohibitions">Prohibitions</a>
+        <a class="anchor-link" href="#synagogue">Synagogue</a>
+        <a class="anchor-link" href="#eicha">Eicha &amp; Kinot</a>
+        <a class="anchor-link" href="#hope">Hope</a>
+        <a class="anchor-link" href="#dates">Dates</a>
+    </nav>
+
+    <div class="hag-page">
+    <section id="hero" class="hag-hero" aria-labelledby="tb-title">
+        <p class="hag-hero__eyebrow">The Saddest Day on the Jewish Calendar</p>
+        <p class="hag-hero__hebrew">תִּשְׁעָה בְּאָב</p>
+        <h1 id="tb-title" class="hag-hero__title">Tisha <span>B'Av</span></h1>
+        <p class="hag-hero__subtitle">
+            A 25-hour fast and day of collective mourning commemorating the destruction of both Holy Temples in
+            Jerusalem — and the unbroken, multi-millennial yearning of the Jewish people to return home.
+        </p>
+        <div class="hag-hero__actions">
+            <a class="hag-hero__btn hag-hero__btn--primary" href="/holidays">All Holidays</a>
+            <a class="hag-hero__btn hag-hero__btn--secondary" href="/yom-kippur">Yom Kippur</a>
+            <a class="hag-hero__btn hag-hero__btn--secondary" href="/study">Home</a>
+        </div>
+        <div class="hag-hero__candle-row" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+    </section>
+
+    <main class="haggadah-shell">
+
+        <!-- ═══ Overview ═══════════════════════════════════════════ -->
+        <div class="hag-section-label">About the Day</div>
+        <section id="overview" class="seder-section" aria-labelledby="tb-overview">
+            <div class="section-kicker-wrap"><p class="section-kicker">Introduction</p></div>
+            <h2 id="tb-overview" class="section-title">What is Tisha B'Av?</h2>
+            <p class="section-hebrew">מהו תשעה באב</p>
+
+            <div style="display:grid;gap:0.85rem;grid-template-columns:1fr 1fr;margin-top:0.5rem;">
+                <div>
+                    <p style="margin:0;color:var(--p-muted);font-size:0.93rem;line-height:1.72;"><strong style="color:var(--p-blue);">Hebrew Date:</strong> 9th of Av</p>
+                    <p style="margin:0.4rem 0 0;color:var(--p-muted);font-size:0.93rem;line-height:1.72;"><strong style="color:var(--p-blue);">Upcoming Date (2026):</strong> Begins evening of Wednesday, July 22, 2026</p>
+                </div>
+                <div>
+                    <p style="margin:0;color:var(--p-muted);font-size:0.93rem;line-height:1.72;"><strong style="color:var(--p-blue);">Meaning:</strong> "The Ninth of Av"</p>
+                    <p style="margin:0.4rem 0 0;color:var(--p-muted);font-size:0.93rem;line-height:1.72;"><strong style="color:var(--p-blue);">Duration:</strong> 25 hours — from sundown to nightfall the next day</p>
+                </div>
+            </div>
+
+            <div class="step-callout" style="margin-top:1rem;">
+                Tisha B'Av, which translates to the 9th day of the Hebrew month of Av (typically falling in July or August), is the
+                darkest and most mournful day in the Jewish year. It is a 25-hour period of intense fasting and collective mourning
+                that commemorates a series of catastrophic tragedies that have befallen the Jewish people throughout history, most
+                notably the destruction of both the First and Second Holy Temples in Jerusalem.
+            </div>
+
+            <div class="note-panel">
+                <h4>The Unbroken Yearning for Home</h4>
+                <p>To understand Tisha B'Av is to understand the Jewish historical experience of exile, loss, and the unbroken, multi-millennial yearning to return home. Unlike the joyous festivals of the Jewish calendar, Tisha B'Av strips away every comfort so that the nation can sit — quite literally — with its grief.</p>
+            </div>
+        </section>
+
+        <!-- ═══ Origins — The Spies ════════════════════════════════ -->
+        <div class="hag-section-label">Origins</div>
+        <section id="origins" class="seder-section" aria-labelledby="origins-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Biblical Roots</p></div>
+            <h2 id="origins-title" class="section-title">The Night of Unwarranted Weeping</h2>
+            <p class="section-hebrew">לֵיל בְּכִיָּה לְדוֹרוֹת</p>
+
+            <p class="mini-heading">The Twelve Spies</p>
+            <p style="color:var(--p-muted);font-size:0.93rem;line-height:1.74;">
+                The curse of the 9th of Av did not actually begin with the destruction of the Temples; it began in the desert. As
+                recorded in the Book of Numbers (<em>Parshat Sh'lach</em>), Moses sent twelve spies to scout the Promised Land.
+                Ten of them returned with a terrifying, exaggerated report about giants and unbreachable cities, causing the
+                Israelites to panic.
+            </p>
+
+            <div class="quote-block">
+                <p class="quote-block__text">"The people broke into loud cries, and the people wept that night."</p>
+                <p class="quote-block__cite">— Numbers 14:1</p>
+            </div>
+
+            <p style="margin-top:0.9rem;color:var(--p-muted);font-size:0.93rem;line-height:1.74;">
+                According to the Talmud, that night was the 9th of Av. Seeing the people's absolute lack of faith, God declared:
+                <em>"You wept without cause; therefore, I will set aside this day as a day of weeping for all generations."</em>
+                That night sealed the fate of the Exodus generation to die in the wilderness — and it etched a tragic pattern
+                into the very fabric of Jewish time.
+            </p>
+        </section>
+
+        <!-- ═══ Timeline of Tragedies ══════════════════════════════ -->
+        <div class="hag-section-label">A Timeline of Tears</div>
+        <section id="tragedies" class="seder-section" aria-labelledby="tragedies-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">History</p></div>
+            <h2 id="tragedies-title" class="section-title">The Tragedies of Tisha B'Av</h2>
+            <p class="section-hebrew">הַצָּרוֹת שֶׁל תִּשְׁעָה בְּאָב</p>
+            <p class="section-subtitle">Astonishingly, across thousands of years of Jewish history, an uncanny number of national catastrophes have occurred on — or exactly around — this one specific date.</p>
+
+            <div class="tisha-timeline">
+
+                <div class="tisha-timeline__item">
+                    <p class="tisha-timeline__year">586 BCE</p>
+                    <h3 class="tisha-timeline__headline">The Destruction of the First Temple</h3>
+                    <p class="tisha-timeline__desc">
+                        The armies of the Babylonian Empire, led by King Nebuchadnezzar, breached the walls of Jerusalem,
+                        slaughtered its inhabitants, and burned the magnificent First Temple (built by King Solomon) to the ground.
+                        The Jewish people were exiled to Babylon.
+                    </p>
+                </div>
+
+                <div class="tisha-timeline__item">
+                    <p class="tisha-timeline__year">70 CE</p>
+                    <h3 class="tisha-timeline__headline">The Destruction of the Second Temple</h3>
+                    <p class="tisha-timeline__desc">
+                        Following a long and brutal siege, the Roman Empire, led by General Titus, destroyed the Second Temple.
+                        Hundreds of thousands of Jews were murdered, and countless others were sold into slavery — sparking the
+                        longest exile in Jewish history.
+                    </p>
+                </div>
+
+                <div class="tisha-timeline__item">
+                    <p class="tisha-timeline__year">135 CE</p>
+                    <h3 class="tisha-timeline__headline">The Fall of Betar</h3>
+                    <p class="tisha-timeline__desc">
+                        The Romans crushed the Bar Kokhba revolt — the final Jewish rebellion for independence. The fortress city
+                        of Betar fell on Tisha B'Av, resulting in the massacre of over 500,000 Jewish men, women, and children.
+                    </p>
+                </div>
+
+                <div class="tisha-timeline__item">
+                    <p class="tisha-timeline__year">136 CE</p>
+                    <h3 class="tisha-timeline__headline">The Plowing of the Temple Mount</h3>
+                    <p class="tisha-timeline__desc">
+                        The Roman commander Turnus Rufus plowed the site of the Temple Mount and the surrounding area of Jerusalem,
+                        turning the holy city into a pagan Roman colony called Aelia Capitolina and forbidding Jews from entering.
+                    </p>
+                </div>
+
+                <div class="tisha-timeline__item">
+                    <p class="tisha-timeline__year">1096 CE</p>
+                    <h3 class="tisha-timeline__headline">The First Crusade</h3>
+                    <p class="tisha-timeline__desc">
+                        The First Crusade was declared by Pope Urban II in the season of Av. Crusaders swept through the Rhineland
+                        (France and Germany), wiping out entire Jewish communities and murdering tens of thousands of Jews.
+                    </p>
+                </div>
+
+                <div class="tisha-timeline__item">
+                    <p class="tisha-timeline__year">1290 CE</p>
+                    <h3 class="tisha-timeline__headline">The Expulsion from England</h3>
+                    <p class="tisha-timeline__desc">
+                        King Edward I signed the Edict of Expulsion, officially forcing all Jews to leave England. The deadline for
+                        their departure fell on Tisha B'Av.
+                    </p>
+                </div>
+
+                <div class="tisha-timeline__item">
+                    <p class="tisha-timeline__year">1492 CE</p>
+                    <h3 class="tisha-timeline__headline">The Spanish Inquisition and Expulsion</h3>
+                    <p class="tisha-timeline__desc">
+                        King Ferdinand and Queen Isabella of Spain issued the Alhambra Decree, ordering the expulsion of the entire
+                        Jewish population from Spain. The final deadline for every Jew to leave the country or convert was the 9th
+                        of Av, ending a glorious centuries-old era of Jewish life in the Iberian Peninsula.
+                    </p>
+                </div>
+
+                <div class="tisha-timeline__item">
+                    <p class="tisha-timeline__year">1914 CE</p>
+                    <h3 class="tisha-timeline__headline">World War I Begins</h3>
+                    <p class="tisha-timeline__desc">
+                        Germany declared war on Russia on Tisha B'Av, igniting the First World War. The devastation of WWI
+                        directly set the geopolitical stage for the rise of Nazi Germany and the Holocaust.
+                    </p>
+                </div>
+
+                <div class="tisha-timeline__item">
+                    <p class="tisha-timeline__year">1942 CE</p>
+                    <h3 class="tisha-timeline__headline">Deportations to Treblinka</h3>
+                    <p class="tisha-timeline__desc">
+                        The mass deportations of Jews from the Warsaw Ghetto to the Treblinka extermination camp began on the eve
+                        of Tisha B'Av.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ═══ The Five Prohibitions ══════════════════════════════ -->
+        <div class="hag-section-label">How It Is Observed</div>
+        <section id="prohibitions" class="seder-section" aria-labelledby="prohibitions-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Halachah</p></div>
+            <h2 id="prohibitions-title" class="section-title">The Five Prohibitions</h2>
+            <p class="section-hebrew">חֲמִשָּׁה עִינּוּיִים</p>
+            <p class="section-subtitle">
+                Because the day represents such profound grief, it is observed with restrictions that mirror the strict mourning
+                practices of <em>Shiva</em> — the first week of mourning after the death of a close relative. Tisha B'Av is a full
+                25-hour fast, and five specific activities are strictly forbidden.
+            </p>
+
+            <div class="prohibition-grid">
+                <div class="prohibition-card">
+                    <div class="prohibition-card__num">1</div>
+                    <p class="prohibition-card__title">No Eating or Drinking</p>
+                    <p class="prohibition-card__desc">A complete 25-hour fast — not even water. (Those whose health would be endangered are strictly forbidden from fasting.)</p>
+                </div>
+                <div class="prohibition-card">
+                    <div class="prohibition-card__num">2</div>
+                    <p class="prohibition-card__title">No Bathing or Washing</p>
+                    <p class="prohibition-card__desc">Washing for pleasure is prohibited, so that no physical comfort interrupts the experience of mourning.</p>
+                </div>
+                <div class="prohibition-card">
+                    <div class="prohibition-card__num">3</div>
+                    <p class="prohibition-card__title">No Creams or Cosmetics</p>
+                    <p class="prohibition-card__desc">Applying lotions, perfumes, oils, or cosmetics is forbidden for the duration of the fast.</p>
+                </div>
+                <div class="prohibition-card">
+                    <div class="prohibition-card__num">4</div>
+                    <p class="prohibition-card__title">No Leather Shoes</p>
+                    <p class="prohibition-card__desc">Historically a sign of luxury and comfort. Canvas or rubber shoes are worn instead as a sign of humility.</p>
+                </div>
+                <div class="prohibition-card">
+                    <div class="prohibition-card__num">5</div>
+                    <p class="prohibition-card__title">No Marital Relations</p>
+                    <p class="prohibition-card__desc">Abstaining from physical intimacy to maintain focus on collective grief and spiritual reflection.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ The Atmosphere in the Synagogue ════════════════════ -->
+        <section id="synagogue" class="seder-section" aria-labelledby="synagogue-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">In the Synagogue</p></div>
+            <h2 id="synagogue-title" class="section-title">A Stark and Somber Atmosphere</h2>
+            <p class="section-hebrew">בְּבֵית הַכְּנֶסֶת</p>
+            <p class="section-subtitle">The visual and emotional atmosphere on Tisha B'Av is unlike any other day of the Jewish year.</p>
+
+            <div class="note-panel">
+                <h4>Sitting Low</h4>
+                <p>Just like mourners, people sit on the floor or on low stools rather than on regular chairs — a physical expression of being brought low by grief.</p>
+            </div>
+
+            <div class="note-panel">
+                <h4>Dimmed Lights</h4>
+                <p>Synagogues are dimly lit, sometimes illuminated only by candlelight, reflecting the darkness of the day itself.</p>
+            </div>
+
+            <div class="note-panel">
+                <h4>The Curtain is Removed</h4>
+                <p>The <em>Parochet</em> — the decorative curtain covering the Holy Ark where the Torah scrolls are kept — is removed or drawn aside, symbolizing the vulnerability and desecration of the Temple.</p>
+            </div>
+
+            <div class="step-callout" style="margin-top:1rem;">
+                <strong>No Torah Study:</strong> Because the study of Torah is considered the greatest joy in a Jew's life
+                (<em>"The precepts of the Lord are right, rejoicing the heart"</em>), regular Torah study is forbidden on
+                Tisha B'Av. One is only allowed to study sad texts — such as Lamentations, the Book of Job, or the Talmudic
+                accounts of the Temple's destruction.
+            </div>
+        </section>
+
+        <!-- ═══ Eicha & Kinot ══════════════════════════════════════ -->
+        <div class="hag-section-label">The Liturgy</div>
+        <section id="eicha" class="seder-section" aria-labelledby="eicha-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Sacred Readings</p></div>
+            <h2 id="eicha-title" class="section-title">Eicha and the Kinot</h2>
+            <p class="section-hebrew">אֵיכָה וְקִינוֹת</p>
+
+            <p class="mini-heading">Reading Eicha — The Book of Lamentations</p>
+            <p style="color:var(--p-muted);font-size:0.93rem;line-height:1.74;">
+                On the night of Tisha B'Av, the congregation sits on the floor and mournfully chants <em>Megillat Eicha</em>
+                (The Book of Lamentations). Written by the prophet Jeremiah, it is a heartbreaking, haunting eyewitness account
+                of the destruction of Jerusalem and the suffering of its people.
+            </p>
+
+            <div class="quote-block">
+                <p class="quote-block__text">"How does the city sit solitary, that was full of people! She has become as a widow…"</p>
+                <p class="quote-block__cite">— Lamentations 1:1</p>
+            </div>
+
+            <p class="mini-heading">Kinot — The Elegies</p>
+            <p style="color:var(--p-muted);font-size:0.93rem;line-height:1.74;">
+                Throughout the day, the congregation recites <em>Kinot</em> — long, poetic dirges and laments written over
+                centuries by great rabbis to mourn the Temples, the martyrs of the Crusades, the victims of the Inquisition,
+                and, in modern times, the six million Jews murdered in the Holocaust.
+            </p>
+
+            <div class="note-panel">
+                <h4>Layers of Grief</h4>
+                <p>Each Kinah was composed in a different era, for a different wound — and yet they are chanted together, one after another, as if all the catastrophes of Jewish history are a single, continuous mourning.</p>
+            </div>
+        </section>
+
+        <!-- ═══ The Hope of Redemption ═════════════════════════════ -->
+        <div class="hag-section-label">Hope After the Darkness</div>
+        <section id="hope" class="seder-section" aria-labelledby="hope-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Meaning</p></div>
+            <h2 id="hope-title" class="section-title">The Hope of Redemption</h2>
+            <p class="section-hebrew">תִּקְוַת הַגְּאֻלָּה</p>
+
+            <p style="color:var(--p-muted);font-size:0.94rem;line-height:1.74;">
+                Despite the overwhelming darkness of Tisha B'Av, it is not a day of total despair. In Jewish tradition, mourning
+                the past is the prerequisite for building the future. The Talmud states:
+            </p>
+
+            <div class="quote-block">
+                <p class="quote-block__text">"Whoever mourns for Jerusalem will merit to share in her joy."</p>
+                <p class="quote-block__cite">— Talmud, Ta'anit 30b</p>
+            </div>
+
+            <p style="margin-top:0.9rem;color:var(--p-muted);font-size:0.94rem;line-height:1.74;">
+                There is a profound, ancient Midrash which states that <strong>the Messiah will be born on Tisha B'Av</strong>.
+                This teaches a powerful psychological and spiritual truth: redemption is born out of the very depths of tragedy.
+                By remembering the brokenness of the world, the Jewish people actively long for its repair — <em>Tikkun</em>.
+            </p>
+
+            <div class="step-callout" style="margin-top:1rem;">
+                The fast concludes with the setting of the sun, and the mood subtly shifts from bitter weeping to quiet, resilient
+                hope — a belief that one day, the tears of the 9th of Av will be transformed into the greatest joy, and Jerusalem
+                will be rebuilt in peace.
+            </div>
+        </section>
+
+        <!-- ═══ Upcoming Dates ═════════════════════════════════════ -->
+        <div class="hag-section-label">When Is Tisha B'Av?</div>
+        <section id="dates" class="seder-section" aria-labelledby="dates-title">
+            <div class="section-kicker-wrap"><p class="section-kicker">Calendar</p></div>
+            <h2 id="dates-title" class="section-title">Upcoming Dates</h2>
+            <p class="section-hebrew">תַּאֲרִיכִים קְרוֹבִים</p>
+            <p class="section-subtitle">Tisha B'Av falls on the 9th day of the Hebrew month of Av and shifts each year on the civil calendar.</p>
+
+            <div class="dates-table">
+                <div class="dates-table__row"><span><strong>2026</strong> &nbsp;·&nbsp; 5786</span><span>Begins evening of Wednesday, July 22</span></div>
+                <div class="dates-table__row"><span><strong>2027</strong> &nbsp;·&nbsp; 5787</span><span>Begins evening of Saturday night, August 14</span></div>
+                <div class="dates-table__row"><span><strong>2028</strong> &nbsp;·&nbsp; 5788</span><span>Begins evening of Tuesday, August 1</span></div>
+                <div class="dates-table__row"><span><strong>2029</strong> &nbsp;·&nbsp; 5789</span><span>Begins evening of Saturday night, July 21</span></div>
+            </div>
+        </section>
+
+        <div id="closing" class="ending-banner">
+            <h3>!לְשָׁנָה הַבָּאָה בִּירוּשָׁלַיִם הַבְּנוּיָה</h3>
+            <p>Next year in a rebuilt Jerusalem. May you have a meaningful and easy fast.</p>
+        </div>
+        <p class="page-footer">תִּשְׁעָה בְּאָב &nbsp;·&nbsp; A Letter in the Scroll</p>
+    </main>
+    </div>
+
+    <script>
+        (function() {
+            const links = document.querySelectorAll('.anchor-menu .anchor-link[href^="#"]');
+            const sectionIds = [...links].map(l => l.getAttribute('href').slice(1)).filter(Boolean);
+            const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+            function setActive(id) { links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id)); }
+            if ('IntersectionObserver' in window && sections.length) {
+                const observer = new IntersectionObserver((entries) => {
+                    const visible = entries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+                    if (visible.length) setActive(visible[0].target.id);
+                }, { rootMargin: '-18% 0px -70% 0px', threshold: [0.01, 0.1, 0.3] });
+                sections.forEach(s => observer.observe(s));
+            }
+            links.forEach(l => l.addEventListener('click', () => { const id = l.getAttribute('href').replace('#',''); if (id) setActive(id); }));
+        })();
+    </script>
+    <script src="/js/header-fallback.js"></script>
+    <script src="/js/sidebar-nav.js"></script>
+    <script type="module" src="/js/page-auth.js"></script>
+    <div id="shared-footer-mount"></div>
+    <script src="/js/footer-loader.js"></script>
+</body>
+</html>

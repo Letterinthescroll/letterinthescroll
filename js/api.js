@@ -30,38 +30,156 @@ function cacheParshaText(parshaRef, data) {
     _cacheSet(`sefaria_text_${CACHE_V}_${parshaRef}`, data, TEXT_TTL);
 }
 
-/** Return { name, ref } for this week's parsha from cache, or null. */
+/**
+ * Return this week's parsha from cache, or null.
+ * Shape: { name, ref, heRef, isHoliday, raw } — matches fetchCurrentParsha().
+ * Old-format entries (just { name, ref }) are still returned as-is; the
+ * missing fields (heRef/isHoliday/raw) will simply be undefined until the
+ * next live fetch overwrites the cache.
+ */
 export function getCachedCurrentParsha() {
-    return _cacheGet(`sefaria_weekly_${CACHE_V}`);
+    const cached = _cacheGet(`sefaria_weekly_${CACHE_V}`);
+    // Guard: if a simulated-holiday entry was cached during a dev session,
+    // don't let it bleed into a normal (non-simulated) page load.
+    if (cached?.raw?._simulated && !_getSimulatedHoliday()) {
+        return null;
+    }
+    return cached;
 }
 
-/** Persist this week's parsha { name, ref } so next visit starts instantly. */
-export function cacheCurrentParsha(name, ref) {
-    _cacheSet(`sefaria_weekly_${CACHE_V}`, { name, ref }, REF_TTL);
+/**
+ * Persist this week's parsha so next visit starts instantly.
+ * Accepts either the full object returned by fetchCurrentParsha(), or the
+ * legacy (name, ref) pair — in which case the remaining fields are left
+ * undefined.
+ */
+export function cacheCurrentParsha(parshaOrName, ref) {
+    let payload;
+    if (parshaOrName && typeof parshaOrName === 'object') {
+        const { name, ref: r, heRef, isHoliday, raw } = parshaOrName;
+        payload = { name, ref: r, heRef, isHoliday, raw };
+    } else {
+        payload = { name: parshaOrName, ref };
+    }
+    _cacheSet(`sefaria_weekly_${CACHE_V}`, payload, REF_TTL);
 }
 // ──────────────────────────────────────────────────────────────────────────────
 
 /**
- * Returns true if the parsha name looks like a holiday/special reading
- * rather than a regular weekly Torah portion name.
+ * Read the user's diaspora/Israel preference.
+ * Returns '1' (diaspora), '0' (Israel), or null (unknown — let Sefaria default).
+ *
+ * Checks, in order:
+ *   1. localStorage 'isDiaspora'  — '1' | '0' | 'true' | 'false'
+ *   2. localStorage 'userLocation' — 'diaspora' | 'israel' | ISO country code
+ * When no signal is found, returns null so the caller omits the query param
+ * entirely and Sefaria falls back to its IP-based default.
  */
-function _isHolidayReading(name) {
-    if (!name) return true;
-    const lower = name.toLowerCase();
-    const holidayKeywords = ['pesach', 'passover', 'sukkot', 'shavuot', 'rosh hashana', 'yom kippur',
-        'chol hamoed', 'chol ha-moed', 'shemini atzeret', 'simchat torah', 'purim', 'tisha bav',
-        'rosh hashanah', 'hoshana rabbah', 'yom tov', 'moadim'];
-    return holidayKeywords.some(k => lower.includes(k));
+function _getDiasporaParam() {
+    try {
+        const raw = localStorage.getItem('isDiaspora');
+        if (raw === '1' || raw === 'true')  return '1';
+        if (raw === '0' || raw === 'false') return '0';
+
+        const loc = (localStorage.getItem('userLocation') || '').trim().toLowerCase();
+        if (!loc) return null;
+        if (loc === 'israel' || loc === 'il') return '0';
+        if (loc === 'diaspora') return '1';
+        // Any other country code → diaspora
+        return '1';
+    } catch {
+        return null;
+    }
 }
 
 /**
- * Fetch current week's parsha from Sefaria calendar.
- * Prefers "Parashat Hashavua"; falls back to "Chok LeYisrael" during holiday
- * weeks when Sefaria returns a special reading instead of a regular parsha name.
+ * Dev-only holiday simulator.
+ * Returns a mocked holiday reading when:
+ *   - the page URL has ?simulateHoliday=pesach|shavuot|sukkot, AND
+ *   - we're on localhost/127.0.0.1/file:// OR localStorage.devMode === '1'
+ *
+ * Returns null when not active. The presets mimic the shape Sefaria's
+ * /calendars API returns for a holiday Parashat Hashavua item, so the rest
+ * of the pipeline can't tell the difference.
+ */
+function _getSimulatedHoliday() {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const preset = params.get('simulateHoliday');
+        if (!preset) return null;
+
+        const host = window.location.hostname;
+        const isLocal = host === 'localhost' || host === '127.0.0.1' || host === '';
+        const devMode = localStorage.getItem('devMode') === '1';
+        if (!isLocal && !devMode) {
+            console.warn('[holiday-sim] ignored: not on localhost and devMode !== "1"');
+            return null;
+        }
+
+        const PRESETS = {
+            pesach: {
+                name: 'Pesach Day 1',
+                ref: 'Exodus 12:21-51',
+                heRef: 'שמות י״ב:כ״א-נ״א',
+            },
+            shavuot: {
+                name: 'Shavuot Day 1',
+                ref: 'Exodus 19:1-20:23',
+                heRef: 'שמות י״ט:א׳-כ׳:כ״ג',
+            },
+            sukkot: {
+                name: 'Sukkot Day 1',
+                ref: 'Leviticus 22:26-23:44',
+                heRef: 'ויקרא כ״ב:כ״ו-כ״ג:מ״ד',
+            },
+        };
+
+        const p = PRESETS[preset.toLowerCase()];
+        if (!p) {
+            console.warn(`[holiday-sim] unknown preset "${preset}". Valid: ${Object.keys(PRESETS).join(', ')}`);
+            return null;
+        }
+
+        console.log(`[holiday-sim] 🎭 simulating ${p.name} (${p.ref})`);
+        return {
+            name: p.name,
+            ref: p.ref,
+            heRef: p.heRef,
+            isHoliday: true,
+            raw: {
+                title: { en: 'Parashat Hashavua', he: 'פרשת השבוע' },
+                displayValue: { en: p.name, he: p.name },
+                category: 'Holidays',
+                ref: p.ref,
+                heRef: p.heRef,
+                _simulated: true,
+            },
+        };
+    } catch {
+        return null;
+    }
+}
+
+/**
+ * Fetch current week's Torah reading from Sefaria's calendar.
+ * Trusts Sefaria's "Parashat Hashavua" entry directly — including holiday
+ * weeks, where the displayValue will be a special reading (e.g. "Pesach Day 1").
+ *
+ * Returns an object with the full context the renderer needs:
+ *   { name, ref, heRef, isHoliday, raw }
+ * or null on failure.
  */
 export async function fetchCurrentParsha() {
+    const simulated = _getSimulatedHoliday();
+    if (simulated) return simulated;
+
     try {
-        const response = await fetch(`${API_CONFIG.SEFARIA_BASE}/calendars`);
+        const diaspora = _getDiasporaParam();
+        const url = diaspora === null
+            ? `${API_CONFIG.SEFARIA_BASE}/calendars`
+            : `${API_CONFIG.SEFARIA_BASE}/calendars?diaspora=${diaspora}`;
+
+        const response = await fetch(url);
         if (!response.ok) return null;
 
         const data = await response.json();
@@ -70,24 +188,19 @@ export async function fetchCurrentParsha() {
         const parashatHashavua = data.calendar_items.find(
             item => item.title && item.title.en === 'Parashat Hashavua'
         );
-        const primaryName = parashatHashavua?.displayValue?.en || null;
+        if (!parashatHashavua) return null;
 
-        // If Parashat Hashavua returned a normal parsha name, use it directly.
-        if (primaryName && !_isHolidayReading(primaryName)) {
-            return primaryName;
-        }
+        const name  = parashatHashavua.displayValue?.en || null;
+        const ref   = parashatHashavua.ref || null;
+        const heRef = parashatHashavua.heRef || null;
 
-        // During holiday weeks Sefaria returns the special maftir/holiday reading.
-        // Fall back to "Chok LeYisrael" which always tracks the regular weekly cycle.
-        const chokLeYisrael = data.calendar_items.find(
-            item => item.title && item.title.en === 'Chok LeYisrael'
-        );
-        if (chokLeYisrael?.displayValue?.en) {
-            return chokLeYisrael.displayValue.en;
-        }
+        // Sefaria marks holiday readings with category === 'Holidays'
+        // (regular weekly portions use category === 'Torah Portion').
+        const isHoliday = parashatHashavua.category === 'Holidays';
 
-        // Last resort: return whatever Parashat Hashavua gave us (may be null).
-        return primaryName;
+        if (!name) return null;
+
+        return { name, ref, heRef, isHoliday, raw: parashatHashavua };
     } catch (error) {
         return null;
     }
@@ -240,7 +353,9 @@ function transformV3Response(v3Data) {
  */
 export async function loadCommentaryData() {
     try {
-        const response = await fetch('/data/data.json');
+        // Cache-bust so users always pick up commentary updates without
+        // needing a hard refresh.
+        const response = await fetch(`/data/data.json?v=${Date.now()}`);
         if (!response.ok) {
             throw new Error('Failed to load commentary data');
         }

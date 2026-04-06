@@ -81,3 +81,374 @@ export const TORAH_PARSHAS = [
     { name: 'Ha\'Azinu', reference: 'Deuteronomy 32:1-32:52', book: 'Deuteronomy' },
     { name: 'V\'Zot HaBerachah', reference: 'Deuteronomy 33:1-34:12', book: 'Deuteronomy' }
 ];
+
+// ─── Special Readings ─────────────────────────────────────────────────────────
+// Holiday, festival, and special-Shabbat readings users can study manually at
+// any time of year. These are *not* part of TORAH_PARSHAS — weekly-parsha
+// navigation, rollover logic, and double-parsha resolution deliberately ignore
+// this list. They are surfaced only in the manual dropdown selector.
+//
+// Data model (per entry):
+//   {
+//     id:        stable unique identifier, used as the study-page ref key
+//                (and therefore as the identity key for comments/reactions/
+//                bookmarks). Format: "special:<slug>".
+//     name:      display name in the dropdown and page header.
+//     group:     dropdown subgroup header (e.g. "Pesach", "Rosh Hashanah").
+//                All entries with the same group sort together.
+//     sections:  ordered array of { label, ref } the study page renders
+//                sequentially with labeled dividers between them.
+//   }
+//
+// Diaspora schedule. Israel ("E"Y") variants intentionally omitted per
+// product decision. Haftarah readings are included at the bottom of each
+// entry; Sefaria's text API treats Nach refs identically to Torah.
+//
+// Some source readings (Haftarah for Pesach Day 1, Chanukah Day 6 overlaps,
+// Simchat Torah end-then-restart) contain semicolon- or &-joined inline
+// compound refs. Those are pre-split here into discrete labeled sections so
+// the renderer never has to interpret delimiters.
+
+const P = (label, ref) => ({ label, ref });
+
+// Dropdown order follows the Jewish liturgical year, which begins in Tishrei
+// (Rosh Hashanah) and runs Yom Kippur → Sukkot → Shemini Atzeret / Simchat
+// Torah → Chanukah → the Special Shabbatot (Shekalim/Zachor/Parah/Hachodesh
+// interleaved around Purim in Adar and early Nissan) → Pesach → Shavuot.
+export const SPECIAL_READINGS = [
+    // ── Rosh Hashanah (Tishrei 1-2) ──────────────────────────────────────────
+    {
+        id: 'special:rosh-hashanah-day-1',
+        name: 'Rosh Hashanah Day 1',
+        group: 'Rosh Hashanah',
+        sections: [
+            P('Torah Reading',  'Genesis 21:1-34'),
+            P('Maftir',         'Numbers 29:1-6'),
+            P('Haftarah',       'I Samuel 1:1-2:10'),
+        ],
+    },
+    {
+        id: 'special:rosh-hashanah-day-2',
+        name: 'Rosh Hashanah Day 2',
+        group: 'Rosh Hashanah',
+        sections: [
+            P('Torah Reading',  'Genesis 22:1-24'),
+            P('Maftir',         'Numbers 29:1-6'),
+            P('Haftarah',       'Jeremiah 31:1-19'),
+        ],
+    },
+
+    // ── Yom Kippur ───────────────────────────────────────────────────────────
+    {
+        id: 'special:yom-kippur',
+        name: 'Yom Kippur',
+        group: 'Yom Kippur',
+        sections: [
+            P('Torah Reading',  'Leviticus 16:1-34'),
+            P('Maftir',         'Numbers 29:7-11'),
+            P('Haftarah',       'Isaiah 57:14-58:14'),
+        ],
+    },
+
+    // ── Sukkot ───────────────────────────────────────────────────────────────
+    {
+        id: 'special:sukkot-day-1',
+        name: 'Sukkot Day 1',
+        group: 'Sukkot',
+        sections: [
+            P('Torah Reading',  'Leviticus 22:26-23:44'),
+            P('Maftir',         'Numbers 29:12-16'),
+            P('Haftarah',       'Zechariah 14:1-21'),
+        ],
+    },
+    {
+        id: 'special:sukkot-day-2',
+        name: 'Sukkot Day 2',
+        group: 'Sukkot',
+        sections: [
+            P('Torah Reading',  'Leviticus 22:26-23:44'),
+            P('Maftir',         'Numbers 29:12-16'),
+            P('Haftarah',       'I Kings 8:2-21'),
+        ],
+    },
+    {
+        id: 'special:sukkot-chol-hamoed-1',
+        name: 'Sukkot Chol HaMoed Day 1',
+        group: 'Sukkot',
+        sections: [
+            P('Torah Reading',  'Numbers 29:17-25'),
+        ],
+    },
+    {
+        id: 'special:sukkot-chol-hamoed-2',
+        name: 'Sukkot Chol HaMoed Day 2',
+        group: 'Sukkot',
+        sections: [
+            P('Torah Reading',  'Numbers 29:20-28'),
+        ],
+    },
+    {
+        id: 'special:sukkot-chol-hamoed-3',
+        name: 'Sukkot Chol HaMoed Day 3',
+        group: 'Sukkot',
+        sections: [
+            P('Torah Reading',  'Numbers 29:23-31'),
+        ],
+    },
+    {
+        id: 'special:sukkot-chol-hamoed-4',
+        name: 'Sukkot Chol HaMoed Day 4',
+        group: 'Sukkot',
+        sections: [
+            P('Torah Reading',  'Numbers 29:26-34'),
+        ],
+    },
+    {
+        id: 'special:hoshana-rabbah',
+        name: 'Hoshana Rabbah',
+        group: 'Sukkot',
+        sections: [
+            P('Torah Reading',  'Numbers 29:26-34'),
+        ],
+    },
+
+    // ── Shemini Atzeret / Simchat Torah ──────────────────────────────────────
+    {
+        id: 'special:shemini-atzeret',
+        name: 'Shemini Atzeret',
+        group: 'Shemini Atzeret / Simchat Torah',
+        sections: [
+            P('Torah Reading',  'Deuteronomy 14:22-16:17'),
+            P('Maftir',         'Numbers 29:35-30:1'),
+            P('Haftarah',       'I Kings 8:54-66'),
+        ],
+    },
+    {
+        id: 'special:simchat-torah',
+        name: 'Simchat Torah',
+        group: 'Shemini Atzeret / Simchat Torah',
+        sections: [
+            P('Torah Reading (End of Deuteronomy)', 'Deuteronomy 33:1-34:12'),
+            P('Torah Reading (Beginning of Genesis)', 'Genesis 1:1-2:3'),
+            P('Maftir',  'Numbers 29:35-30:1'),
+            P('Haftarah', 'Joshua 1:1-18'),
+        ],
+    },
+
+    // ── Chanukah ─────────────────────────────────────────────────────────────
+    {
+        id: 'special:chanukah-day-1',
+        name: 'Chanukah Day 1',
+        group: 'Chanukah',
+        sections: [ P('Torah Reading', 'Numbers 7:1-17') ],
+    },
+    {
+        id: 'special:chanukah-day-2',
+        name: 'Chanukah Day 2',
+        group: 'Chanukah',
+        sections: [ P('Torah Reading', 'Numbers 7:18-29') ],
+    },
+    {
+        id: 'special:chanukah-day-3',
+        name: 'Chanukah Day 3',
+        group: 'Chanukah',
+        sections: [ P('Torah Reading', 'Numbers 7:24-35') ],
+    },
+    {
+        id: 'special:chanukah-day-4',
+        name: 'Chanukah Day 4',
+        group: 'Chanukah',
+        sections: [ P('Torah Reading', 'Numbers 7:30-41') ],
+    },
+    {
+        id: 'special:chanukah-day-5',
+        name: 'Chanukah Day 5',
+        group: 'Chanukah',
+        sections: [ P('Torah Reading', 'Numbers 7:36-47') ],
+    },
+    {
+        id: 'special:chanukah-day-6',
+        name: 'Chanukah Day 6',
+        group: 'Chanukah',
+        sections: [ P('Torah Reading', 'Numbers 7:42-47') ],
+    },
+    {
+        id: 'special:chanukah-day-7',
+        name: 'Chanukah Day 7',
+        group: 'Chanukah',
+        sections: [ P('Torah Reading', 'Numbers 7:48-53') ],
+    },
+    {
+        id: 'special:chanukah-day-8',
+        name: 'Chanukah Day 8',
+        group: 'Chanukah',
+        sections: [ P('Torah Reading', 'Numbers 7:54-8:4') ],
+    },
+
+    // ── Special Shabbatot (Adar) & Purim ─────────────────────────────────────
+    {
+        id: 'special:shekalim',
+        name: 'Shekalim',
+        group: 'Special Shabbatot',
+        sections: [ P('Torah Reading', 'Exodus 30:11-16') ],
+    },
+    {
+        id: 'special:zachor',
+        name: 'Zachor',
+        group: 'Special Shabbatot',
+        sections: [ P('Torah Reading', 'Deuteronomy 25:17-19') ],
+    },
+    {
+        id: 'special:purim',
+        name: 'Purim',
+        group: 'Purim',
+        sections: [ P('Torah Reading', 'Exodus 17:8-16') ],
+    },
+    {
+        id: 'special:parah',
+        name: 'Parah',
+        group: 'Special Shabbatot',
+        sections: [ P('Torah Reading', 'Numbers 19:1-22') ],
+    },
+    {
+        id: 'special:hachodesh',
+        name: 'Hachodesh',
+        group: 'Special Shabbatot',
+        sections: [ P('Torah Reading', 'Exodus 12:1-20') ],
+    },
+
+    // ── Pesach ───────────────────────────────────────────────────────────────
+    {
+        id: 'special:pesach-day-1',
+        name: 'Pesach Day 1',
+        group: 'Pesach',
+        sections: [
+            P('Torah Reading',  'Exodus 12:21-51'),
+            P('Maftir',         'Numbers 28:16-25'),
+            P('Haftarah',       'Joshua 3:5-7'),
+            P('Haftarah (cont.)', 'Joshua 5:2-6:1'),
+            P('Haftarah (cont.)', 'Joshua 6:27'),
+        ],
+    },
+    {
+        id: 'special:pesach-day-2',
+        name: 'Pesach Day 2',
+        group: 'Pesach',
+        sections: [
+            P('Torah Reading',  'Leviticus 22:26-23:44'),
+            P('Maftir',         'Numbers 28:16-25'),
+            P('Haftarah',       'II Kings 23:1-9'),
+            P('Haftarah (cont.)', 'II Kings 23:21-25'),
+        ],
+    },
+    {
+        id: 'special:pesach-shabbat-chol-hamoed',
+        name: 'Shabbat Chol HaMoed Pesach',
+        group: 'Pesach',
+        sections: [
+            P('Torah Reading',  'Exodus 33:12-34:26'),
+            P('Maftir',         'Numbers 28:19-25'),
+            P('Haftarah',       'Ezekiel 37:1-14'),
+        ],
+    },
+    {
+        id: 'special:pesach-chol-hamoed-1',
+        name: 'Pesach Chol HaMoed Day 1',
+        group: 'Pesach',
+        sections: [
+            P('Torah Reading',  'Exodus 13:1-16'),
+            P('Maftir',         'Numbers 28:19-25'),
+        ],
+    },
+    {
+        id: 'special:pesach-chol-hamoed-2',
+        name: 'Pesach Chol HaMoed Day 2',
+        group: 'Pesach',
+        sections: [
+            P('Torah Reading',  'Exodus 22:24-23:19'),
+            P('Maftir',         'Numbers 28:19-25'),
+        ],
+    },
+    {
+        id: 'special:pesach-chol-hamoed-4',
+        name: 'Pesach Chol HaMoed Day 4',
+        group: 'Pesach',
+        sections: [
+            P('Torah Reading',  'Numbers 9:1-14'),
+            P('Maftir',         'Numbers 28:19-25'),
+        ],
+    },
+    {
+        id: 'special:pesach-day-7',
+        name: 'Pesach Day 7 (Shvi\'i shel Pesach)',
+        group: 'Pesach',
+        sections: [
+            P('Torah Reading',  'Exodus 13:17-15:26'),
+            P('Maftir',         'Numbers 28:19-25'),
+            P('Haftarah',       'II Samuel 22:1-51'),
+        ],
+    },
+    {
+        id: 'special:pesach-day-8',
+        name: 'Pesach Day 8 (Acharon shel Pesach)',
+        group: 'Pesach',
+        sections: [
+            P('Torah Reading',  'Deuteronomy 15:19-16:17'),
+            P('Maftir',         'Numbers 28:19-25'),
+            P('Haftarah',       'Isaiah 10:32-12:6'),
+        ],
+    },
+
+    // ── Shavuot ──────────────────────────────────────────────────────────────
+    {
+        id: 'special:shavuot-day-1',
+        name: 'Shavuot Day 1',
+        group: 'Shavuot',
+        sections: [
+            P('Torah Reading',  'Exodus 19:1-20:23'),
+            P('Maftir',         'Numbers 28:26-31'),
+            P('Haftarah',       'Ezekiel 1:1-28'),
+            P('Haftarah (cont.)', 'Ezekiel 3:12'),
+        ],
+    },
+    {
+        id: 'special:shavuot-day-2',
+        name: 'Shavuot Day 2',
+        group: 'Shavuot',
+        sections: [
+            P('Torah Reading',  'Deuteronomy 14:22-16:17'),
+            P('Maftir',         'Numbers 28:26-31'),
+            P('Haftarah',       'Habakkuk 2:20-3:19'),
+        ],
+    },
+];
+
+/**
+ * Look up a special reading by its id.
+ * The id (e.g. "special:rosh-hashanah-day-1") is what the dropdown `<option>`
+ * value stores and what every downstream component uses as the identity key.
+ */
+export function findSpecialReadingById(id) {
+    return SPECIAL_READINGS.find(r => r.id === id) || null;
+}
+
+/** True if a ref string is a Special Reading identity key. */
+export function isSpecialReadingId(ref) {
+    return typeof ref === 'string' && ref.startsWith('special:');
+}
+
+/**
+ * Splits an inline compound ref on " & " or ";" into discrete refs.
+ * The SPECIAL_READINGS data model already pre-splits into `sections`, so this
+ * helper is only used as a fallback for any legacy compound ref that might
+ * still flow through the pipeline.
+ */
+export function splitCompoundRef(ref) {
+    if (typeof ref !== 'string') return [ref];
+    if (!/[;&]/.test(ref)) return [ref];
+    return ref.split(/\s*[;&]\s*/).map(s => s.trim()).filter(Boolean);
+}
+
+export function isCompoundRef(ref) {
+    return typeof ref === 'string' && /\s[&;]\s|;/.test(ref);
+}

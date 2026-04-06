@@ -391,7 +391,12 @@ async function loadAndRender() {
     let parshaName = null;
     try {
         const cached = getCachedCurrentParsha();
-        parshaName = (cached && cached.name) ? cached.name : await fetchCurrentParsha();
+        if (cached && cached.name) {
+            parshaName = cached.name;
+        } else {
+            const info = await fetchCurrentParsha();
+            parshaName = info?.name || null;
+        }
     } catch { /* no-op */ }
 
     let challenges = [];

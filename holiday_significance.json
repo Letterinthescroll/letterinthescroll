@@ -1,0 +1,127 @@
+{
+  "Pesach Day 1": {
+    "Torah": "Exodus 12:21-51 describes the original Passover in Egypt, the smearing of blood on the doorposts, the Plague of the Firstborn, and the Exodus itself. This is the core historical event the holiday commemorates.",
+    "Maftir": "Numbers 28:16-25 details the specific holiday sacrifices brought in the Tabernacle and Temple on the first day of Passover.",
+    "Haftarah": "Joshua 3:5-7; 5:2-6:1; 6:27 recounts how Joshua circumcised the Israelites and celebrated the very first Passover in the Land of Israel after crossing the Jordan River."
+  },
+  "Pesach Day 2": {
+    "Torah": "Leviticus 22:26-23:44 provides an overview of the Jewish festival cycle, specifically detailing the laws of Passover and the bringing of the Omer offering, which begins on the second day of Pesach.",
+    "Maftir": "Numbers 28:16-25 details the specific holiday sacrifices brought in the Tabernacle and Temple.",
+    "Haftarah": "2 Kings 23:1-9, 21-25 describes King Josiah's massive national restoration of the Passover sacrifice after years of spiritual neglect in ancient Judah."
+  },
+  "Shabbat, Chol Hamoed, Pesach": {
+    "Torah": "Exodus 33:12-34:26 describes Moses pleading with God after the Golden Calf, the revelation of the 13 Attributes of Mercy, and the command to observe the three Pilgrimage Festivals (including Passover).",
+    "Maftir": "Numbers 28:19-25 details the daily Passover sacrifices.",
+    "Haftarah": "Ezekiel 37:1-14 is the famous Vision of the Valley of Dry Bones. In Jewish tradition, this prophecy of national resurrection and redemption is deeply tied to Passover, the festival of the ultimate redemption."
+  },
+  "Chol Hamoed Day 1 (E\"Y 2)": {
+    "Torah": "Exodus 13:1-16 focuses on the sanctification of the firstborn and the commandment to wear Tefillin, both of which serve as physical reminders of the miraculous Exodus from Egypt.",
+    "Maftir": "Numbers 28:19-25 details the daily Passover sacrifices."
+  },
+  "Chol Hamoed Day 2 (E\"Y 3)": {
+    "Torah": "Exodus 22:24-23:19 discusses social justice, laws regarding lending, and concludes with the commandment to observe the three Pilgrimage Festivals, reminding the people to never appear before God empty-handed.",
+    "Maftir": "Numbers 28:19-25 details the daily Passover sacrifices."
+  },
+  "Chol Hamoed Day 4 (E\"Y 5)": {
+    "Torah": "Numbers 9:1-14 introduces 'Pesach Sheni' (the Second Passover). It tells the story of individuals who were ritually impure and missed the original Passover, prompting God to grant a makeup date one month later.",
+    "Maftir": "Numbers 28:19-25 details the daily Passover sacrifices."
+  },
+  "Shviee Shel Pesach": {
+    "Torah": "Exodus 13:17-15:26 recounts the dramatic Splitting of the Red Sea and the triumphant Song of the Sea (Az Yashir). According to tradition, the crossing of the sea occurred exactly on the seventh day of Passover.",
+    "Maftir": "Numbers 28:19-25 details the daily Passover sacrifices.",
+    "Haftarah": "2 Samuel 22:1-51 is King David's magnificent song of deliverance, mirroring the Song of the Sea read in the Torah portion."
+  },
+  "Achron Shel Pesach": {
+    "Torah": "Deuteronomy 15:19-16:17 summarizes the laws of tithing, charity, and the three Pilgrimage Festivals, placing a heavy emphasis on community care and rejoicing in the holidays.",
+    "Maftir": "Numbers 28:19-25 details the daily Passover sacrifices.",
+    "Haftarah": "Isaiah 10:32-12:6 describes the future Messianic redemption, predicting a time when 'the wolf will dwell with the lamb' and the exiles will be gathered. The final day of Passover is deeply associated with the ultimate future redemption."
+  },
+  "Rosh Hashanah 1": {
+    "Torah": "Genesis 21:1-34 describes the miraculous birth of Isaac. According to the Talmud, God 'remembered' Sarah and answered her prayers for a child on Rosh Hashanah, tying into the holiday's theme of divine remembrance.",
+    "Maftir": "Numbers 29:1-6 details the specific sacrifices and the commandment to blow the Shofar on Rosh Hashanah.",
+    "Haftarah": "1 Samuel 1:1-2:10 tells the story of Hannah's fervent prayer for a child and the birth of the prophet Samuel. Like Sarah, Hannah's prayers were answered on Rosh Hashanah."
+  },
+  "Rosh Hashanah 2": {
+    "Torah": "Genesis 22:1-24 recounts the Akedah (the Binding of Isaac). This foundational test of Abraham's faith ends with a ram sacrificed in Isaac's place, establishing the basis for blowing a ram's horn (Shofar) on Rosh Hashanah to invoke Abraham's merit.",
+    "Maftir": "Numbers 29:1-6 details the specific sacrifices and the commandment to blow the Shofar.",
+    "Haftarah": "Jeremiah 31:1-19 contains the poignant imagery of the matriarch Rachel weeping for her exiled children, and God's promise that they will return. It perfectly encapsulates the themes of repentance, memory, and return."
+  },
+  "Yom Kippur": {
+    "Torah": "Leviticus 16:1-34 describes the intense, highly specific service performed by the High Priest in the Holy of Holies on Yom Kippur, the only day of the year anyone was permitted to enter that sacred space.",
+    "Maftir": "Numbers 29:7-11 details the Yom Kippur sacrifices and reiterates the commandment to fast ('afflict your souls').",
+    "Haftarah": "Isaiah 57:14-58:14 serves as a powerful moral warning. The prophet declares that fasting is meaningless without acts of charity, feeding the hungry, and fighting oppression—defining the true purpose of Yom Kippur."
+  },
+  "Sukkot 1 - Shabbat": {
+    "Torah": "Leviticus 22:26-23:44 outlines the biblical festival cycle, focusing on the specific commandments of Sukkot: dwelling in booths (Sukkot) and taking the Four Species (Lulav and Etrog).",
+    "Maftir": "Numbers 29:12-16 details the massive amount of sacrifices brought on the first day of Sukkot, including 13 bulls.",
+    "Haftarah": "Zechariah 14:1-21 describes an apocalyptic vision of the Messianic era, culminating in a time when all the surviving nations of the world will journey to Jerusalem annually to celebrate the festival of Sukkot."
+  },
+  "Sukkot 1 [and 2]": {
+    "Torah": "Leviticus 22:26-23:44 outlines the biblical festival cycle, focusing on the specific commandments of Sukkot: dwelling in booths and taking the Four Species.",
+    "Maftir": "Numbers 29:12-16 details the first day's sacrifices.",
+    "Haftarah": "1 Kings 8:2-21 recounts how King Solomon chose the festival of Sukkot to officially dedicate the First Temple in Jerusalem, bringing the Ark of the Covenant into the Holy of Holies amid massive national celebration."
+  },
+  "Sukkot Chol Hamoed 1": {
+    "Torah": "Numbers 29:17-25 outlines the daily sacrifices. Uniquely on Sukkot, the number of bulls offered decreases each day (from 13 down to 7). Tradition states these 70 total bulls were offered on behalf of the 70 nations of the world."
+  },
+  "Sukkot Chol Hamoed 2": {
+    "Torah": "Numbers 29:20-28 continues the count of the daily sacrifices for the intermediate days of the festival."
+  },
+  "Sukkot Chol Hamoed 3": {
+    "Torah": "Numbers 29:23-31 continues the count of the daily sacrifices for the intermediate days of the festival."
+  },
+  "Sukkot Chol Hamoed 4": {
+    "Torah": "Numbers 29:26-34 continues the count of the daily sacrifices for the intermediate days of the festival."
+  },
+  "Hosha'ana Rabba": {
+    "Torah": "Numbers 29:26-34 outlines the sacrifices for the final days of Sukkot. Hosha'ana Rabba is viewed mystically as the final seal of the judgment that began on Rosh Hashanah."
+  },
+  "Shemini Atzeret - Shabbat": {
+    "Torah": "Deuteronomy 14:22-16:17 reviews the laws of tithing, the Sabbatical year, and the Pilgrimage Festivals, commanding the people to be 'only joyful' during these times.",
+    "Maftir": "Numbers 29:35-30:1 describes Shemini Atzeret as an independent, intimate holiday following the massive global focus of Sukkot, featuring a single bull sacrifice representing the unique bond between God and Israel.",
+    "Haftarah": "1 Kings 8:54-66 describes King Solomon blessing the entire nation at the conclusion of the Sukkot/Temple dedication before sending them home joyful and glad of heart."
+  },
+  "Simchat Torah": {
+    "Torah": "Deuteronomy 33:1-34:12 (V'Zot HaBerachah) contains Moses' final blessings to the tribes of Israel and the poignant account of his death. It is the very last portion of the Torah. We immediately follow it with Genesis 1:1-2:3, restarting the creation story to show that Torah study never ends.",
+    "Maftir": "Numbers 29:35-30:1 details the Shemini Atzeret/Simchat Torah sacrifices.",
+    "Haftarah": "Joshua 1:1-18 bridges the gap between the Torah and Prophets. Following Moses' death, God commands Joshua to be strong, courageous, and to lead the people into the Promised Land."
+  },
+  "Chanukah 1": {
+    "Torah": "Numbers 7:1-17 details the offerings brought by the tribal princes during the dedication of the Tabernacle in the desert. 'Chanukah' means dedication, linking the ancient Tabernacle's dedication to the Maccabees' re-dedication of the Temple."
+  },
+  "Chanukah 2": {
+    "Torah": "Numbers 7:18-29 continues the enumeration of the identical dedication offerings brought by each respective tribe's leader."
+  },
+  "Chanukah 3": {
+    "Torah": "Numbers 7:24-35 continues the enumeration of the identical dedication offerings brought by each respective tribe's leader."
+  },
+  "Chanukah 4": {
+    "Torah": "Numbers 7:30-41 continues the enumeration of the identical dedication offerings brought by each respective tribe's leader."
+  },
+  "Chanukah 5": {
+    "Torah": "Numbers 7:36-47 continues the enumeration of the identical dedication offerings brought by each respective tribe's leader."
+  },
+  "Chanukah 6 - Rosh Chodesh": {
+    "Torah": "Genesis 41:1-44:17 (Mikeitz) is the regular weekly portion (Joseph interpreting Pharaoh's dreams). Numbers 28:9-15 is the Maftir for Rosh Chodesh (the New Moon). Numbers 7:42-47 is the special Chanukah dedication reading. It is a rare occasion where three separate Torah scrolls are taken out.",
+    "Haftarah": "Zechariah 2:14-4:7 features the prophet's famous vision of a solid gold Menorah flanked by olive trees, containing the ultimate Chanukah message: 'Not by might, nor by power, but by My spirit, says the Lord.'"
+  },
+  "Chanukah 7 - Rosh Chodesh": {
+    "Torah": "Numbers 28:1-15 describes the Rosh Chodesh (New Moon) sacrifices, followed by Numbers 7:48-53 detailing the ongoing Chanukah dedication offerings."
+  },
+  "Chanukah 8": {
+    "Torah": "Numbers 7:54-8:4 concludes the dedication offerings of the princes and flows seamlessly into Aaron the High Priest being commanded to light the Menorah—a direct thematic link to the Chanukah lights."
+  },
+  "Purim": {
+    "Torah": "Exodus 17:8-16 recounts the unprovoked attack by the nation of Amalek against the Israelites in the desert. Haman, the villain of the Purim story, is a direct descendant of Agag, the King of Amalek, making this reading the historical foundation of the Purim conflict."
+  },
+  "Shavuot Day 1": {
+    "Torah": "Exodus 19:1-20:23 is the dramatic narrative of the Israelites arriving at Mount Sinai and hearing the Ten Commandments directly from God. Shavuot commemorates this exact event—the Giving of the Torah.",
+    "Maftir": "Numbers 28:26-31 details the Shavuot sacrifices and the offering of the First Fruits (Bikkurim).",
+    "Haftarah": "Ezekiel 1:1-28 is the prophet's complex, mystical vision of the Divine Chariot. It is read to parallel the overwhelming, world-shattering divine revelation the Israelites experienced at Sinai."
+  },
+  "Shavuot Day 2, Shabbat": {
+    "Torah": "Deuteronomy 14:22-16:17 outlines laws of tithes, charity, and the Pilgrimage Festivals, tying the spiritual high of receiving the Torah on Day 1 to the practical, agricultural realities and social justice laws of the Land of Israel.",
+    "Maftir": "Numbers 28:26-31 details the Shavuot sacrifices and the First Fruits offering.",
+    "Haftarah": "Habakkuk 2:20-3:19 describes a terrifying and awe-inspiring vision of God's power and revelation, serving as a prophetic echo of the thunders and lightning of Mount Sinai."
+  }
+}
