@@ -4150,49 +4150,372 @@
     {
       "name": "Vayikra",
       "reference": "Leviticus 1:1-5:26",
-      "verses": [],
-      "significance": "Name Meaning: Vayikra (וַיִּקְRאָ) means \\\"And He called.\\\" It is named for the opening word of the parsha and the entire Book of Leviticus. The final 'Aleph' (א) of the word is written small, a detail of great significance.\n\nContext: This parsha opens the Book of Leviticus (Sefer Vayikra), also known as *Torat Kohanim* (The Priests' Manual). The Mishkan has just been completed, and the Divine Presence has come to rest there. Now, the book will explain *how* to use this new space to commune with God.\n\nParsha Summary: The parsha is a detailed, technical manual on the *korbanot* (sacrifices or offerings). It describes the five main types of offerings: the *Olah* (burnt offering), an offering of total dedication; the *Mincha* (grain offering), for gratitude; the *Shelamim* (peace offering), to celebrate fellowship; the *Chatat* (sin offering), for unintentional transgressions; and the *Asham* (guilt offering), for specific sins of deception or misappropriation. The text specifies *what* to bring (bulls, goats, birds, flour) and *how* to offer it.\n\nSignificance: Vayikra is often seen as the most difficult book, but it's the spiritual center of the Torah. Its name, 'And He called,' with a small 'aleph,' symbolizes humility—the call of God is an intimate, quiet call that one must be humble to hear. The parsha is about *korbanot*, a word that comes from the root 'karov' (to draw near). These rituals are not 'sacrifices' in the sense of appeasing an angry god; they are a highly structured, physical, and sensory 'language' for 'drawing near' to the Divine. They provide a concrete way to express abstract emotions: gratitude, guilt, dedication, and communion. The takeaway is that a relationship with God requires a structured framework (a 'mitzvah') and that we must engage our whole selves—body, mind, and property—in the act of 'drawing near.'"
+      "verses": [
+        {
+          "ref": "Leviticus 1:1",
+          "commentary": [
+            { "source": "Rashi", "explanation": "The word 'Vayikra' (And He called) is written with a miniature letter Aleph (א) in the Torah scroll. Rashi contrasts this with God's revelation to non-Jewish prophets like Balaam, which uses 'Vayikar' (happened to meet), denoting a casual or impure encounter. 'Vayikra' implies an intimate, affectionate calling. The small Aleph symbolizes Moses' supreme humility; despite being the greatest prophet, he diminished himself, waiting to be invited rather than presumptuously entering God's presence." }
+          ],
+          "keywords": [
+            { "word": "Vayikra (And He called)", "definition": "A term of endearment and specific designation used by God to address Moses, signifying a close, intentional relationship rather than a random encounter." }
+          ]
+        },
+        {
+          "ref": "Leviticus 2:1",
+          "commentary": [
+            { "source": "Rashi", "explanation": "When describing the meal offering (Mincha), the Torah uses the word 'nefesh' (soul): 'When a soul presents a meal offering...' Rashi explains that usually, it is the poorest people who bring a simple flour offering because they cannot afford an animal. God says, 'I account it to him as if he offered his very soul.' This teaches that God values the sincere intention and the sacrifice of the giver far more than the monetary value of the gift." }
+          ],
+          "keywords": [
+            { "word": "Mincha (Meal offering)", "definition": "An offering consisting of fine flour, oil, and frankincense. Often brought by those of lesser means, yet highly valued by God as an expression of pure devotion." }
+          ]
+        },
+        {
+          "ref": "Leviticus 2:13",
+          "commentary": [
+            { "source": "Nachmanides (Ramban)", "explanation": "God commands that every meal offering must be seasoned with salt. Ramban explains the profound symbolism: salt preserves things from decay and destruction. Therefore, a 'covenant of salt' represents an enduring, indestructible promise. Salt is also composed of water and fire (sunlight acting on seawater), representing the unification of opposing elements to create peace—exactly what a sacrifice is meant to accomplish between humans and the Divine." }
+          ],
+          "keywords": [
+            { "word": "Melach HaBrit (Salt of the Covenant)", "definition": "The requirement to salt all sacrifices. Salt signifies preservation, eternity, and the unbreakable nature of the covenant between God and Israel, as it never spoils or loses its essence." }
+          ]
+        },
+        {
+          "ref": "Leviticus 4:2",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "The Torah mandates a Chatat (sin offering) specifically for someone who sins 'unintentionally' (bishgagah). Rabbi Sacks notes this is a revolutionary legal and moral concept. In many ancient cultures, you were only judged for what you meant to do. The Torah insists we are also responsible for our negligence and our mistakes. Atonement requires us to take responsibility not just for our malicious acts, but for the careless errors that cause harm to others or to our spiritual standing." }
+          ],
+          "keywords": [
+            { "word": "Bishgagah (Unintentionally / By mistake)", "definition": "A sin committed through negligence, forgetfulness, or ignorance of the law. The Torah requires an offering for this to teach that we must cultivate mindfulness and take responsibility for our carelessness." }
+          ]
+        },
+        {
+          "ref": "Leviticus 5:1",
+          "commentary": [
+            { "source": "Sefer HaChinuch", "explanation": "If a person witnesses a matter but refuses to testify, 'he shall bear his guilt.' The Chinuch explains that the foundation of a just society is truth in the judicial system. By withholding testimony, a person actively allows injustice to occur and enables theft or false accusation. Silence in the face of injustice is treated not as a passive choice, but as an active sin requiring a guilt offering." }
+          ],
+          "keywords": [
+            { "word": "V'hu ed (And he is a witness)", "definition": "The legal and moral obligation to step forward and provide testimony in court. Refusing to do so is considered a sin against society and God, undermining the pursuit of justice." }
+          ]
+        }
+      ],
+      "significance": "Name Meaning: Vayikra (וַיִּקְרָא) means \\\"And He called.\\\" It is named for the opening word of the parsha and the entire Book of Leviticus. The final 'Aleph' (א) of the word is written small, a detail of great significance.\n\nContext: This parsha opens the Book of Leviticus (Sefer Vayikra), also known as *Torat Kohanim* (The Priests' Manual). The Mishkan has just been completed, and the Divine Presence has come to rest there. Now, the book will explain *how* to use this new space to commune with God.\n\nParsha Summary: The parsha is a detailed, technical manual on the *korbanot* (sacrifices or offerings). It describes the five main types of offerings: the *Olah* (burnt offering), an offering of total dedication; the *Mincha* (grain offering), for gratitude; the *Shelamim* (peace offering), to celebrate fellowship; the *Chatat* (sin offering), for unintentional transgressions; and the *Asham* (guilt offering), for specific sins of deception or misappropriation. The text specifies *what* to bring (bulls, goats, birds, flour) and *how* to offer it.\n\nSignificance: Vayikra is often seen as the most difficult book, but it's the spiritual center of the Torah. Its name, 'And He called,' with a small 'aleph,' symbolizes humility—the call of God is an intimate, quiet call that one must be humble to hear. The parsha is about *korbanot*, a word that comes from the root 'karov' (to draw near). These rituals are not 'sacrifices' in the sense of appeasing an angry god; they are a highly structured, physical, and sensory 'language' for 'drawing near' to the Divine. They provide a concrete way to express abstract emotions: gratitude, guilt, dedication, and communion. The takeaway is that a relationship with God requires a structured framework (a 'mitzvah') and that we must engage our whole selves—body, mind, and property—in the act of 'drawing near.'"
     },
     {
       "name": "Tzav",
       "reference": "Leviticus 6:1-8:36",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Leviticus 6:2",
+          "commentary": [
+            { "source": "Rashi", "explanation": "The word 'Tzav' (Command) implies an urging for both the immediate moment and for all future generations. Rashi notes, citing Rabbi Simeon, that Scripture especially uses this term of strong urging when there is a monetary loss involved (since the Olah offering is entirely burnt, yielding no meat for the priests to eat). It requires extra encouragement to perform a duty diligently when there is no personal material benefit." }
+          ],
+          "keywords": [
+            { "word": "Tzav (Command)", "definition": "An expression denoting urgency, alacrity, and a timeless directive, often used when a commandment requires going against one's natural inclination or self-interest." }
+          ]
+        },
+        {
+          "ref": "Leviticus 6:6",
+          "commentary": [
+            { "source": "Sefer HaChinuch", "explanation": "The command for a 'perpetual fire' (Esh Tamid) to burn on the altar symbolizes the constant, unwavering devotion the Jewish people must have towards God. The fire was initiated by God, but it was the priests' daily responsibility to maintain it with wood. This teaches that while divine inspiration (the initial fire) is a gift, sustaining a spiritual life requires human effort and daily discipline." }
+          ],
+          "keywords": [
+            { "word": "Esh Tamid (Perpetual fire)", "definition": "The continuous fire kept burning on the outer altar of the Mishkan. It represents eternal vigilance, the unbroken covenant, and the human responsibility to nurture the divine spark within." }
+          ]
+        },
+        {
+          "ref": "Leviticus 7:12",
+          "commentary": [
+            { "source": "Abarbanel", "explanation": "The Korban Todah (Thanksgiving offering) is unique because it requires the offerer to bring both unleavened breads (matzah) and leavened bread (chametz). In sacrifices, chametz usually represents human ego and the evil inclination (because yeast 'puffs up' the dough). Abarbanel suggests that bringing chametz in the Thanksgiving offering acknowledges that humans are flawed. We give thanks to God not as perfect angels, but as complex, struggling humans with egos and appetites, expressing gratitude precisely from our imperfect human condition." }
+          ],
+          "keywords": [
+            { "word": "Zevach Todah (Thanksgiving Sacrifice)", "definition": "An offering brought by someone who has survived a life-threatening situation (illness, prison, a desert crossing, or a sea voyage). It must be eaten in a single day, forcing the person to invite friends and family to help eat it, thereby publicly sharing their story of God's salvation." }
+          ]
+        },
+        {
+          "ref": "Leviticus 8:23",
+          "commentary": [
+            { "source": "Rabbi Hirsch", "explanation": "During the consecration of the priests, Moses takes blood and places it on Aaron's right earlobe, right thumb, and big toe of his right foot. Rabbi Samson Raphael Hirsch explains this profound symbolism: the ear represents what the priest hears and listens to (receptivity to God's word); the thumb represents what he does and creates (his actions); and the toe represents where he walks and leads others (his life's direction). All three faculties must be completely dedicated to holiness before he can serve the people." }
+          ],
+          "keywords": [
+            { "word": "T'nuch Haozen, Bohen Yado, Bohen Raglo (Earlobe, Thumb, Big Toe)", "definition": "The three extremities anointed with blood during the priestly ordination. They symbolize the dedication of a person's intellect/receptivity, physical actions, and life path entirely to God's service." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Tzav (צַו) means \\\"Command.\\\"\n\nContext: This parsha continues the instructions for the *korbanot* from Vayikra, but this time, the instructions are directed at the *Kohanim* (Priests) rather than the general populace. The setting is still at the Mishkan.\n\nParsha Summary: The parsha repeats some of the offerings from Vayikra but focuses on the specific *duties* of the priests. This includes the *terumat ha-deshen* (the daily removal of the ashes from the altar) and the command to keep the fire on the altar burning *perpetually* (*ner tamid*). It details which parts of the offerings are eaten by the priests and their families, and the specific rituals for the grain and sin offerings. The second half of the parsha describes the 7-day-long ordination ceremony for Aaron and his sons, consecrating them for their sacred service.\n\nSignificance: The name 'Tzav' (Command) implies a sense of urgency and importance. While Vayikra focuses on the *meaning* of the offerings for the individual, Tzav focuses on the *responsibility* of the leadership to maintain the system. The central image is the *ner tamid*, the perpetual flame: it symbolizes that the community's connection to God is not sporadic, but constant, and it requires steady, unglamorous, daily work from its spiritual leaders. The ordination ceremony, with its elements of purification and anointing, shows that leadership is not a job but a consecration, requiring one to be 'set apart' for a higher purpose. The takeaway is that spirituality is not just about moments of inspiration; it is about the daily, disciplined, and commanded *work* of keeping the flame alive."
     },
     {
       "name": "Shmini",
       "reference": "Leviticus 9:1-11:47",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Leviticus 9:1",
+          "commentary": [
+            { "source": "Rashi", "explanation": "The 'eighth day' refers to the day following the seven-day ordination period of the priests. Rashi notes this day took ten 'crowns' (special distinctions) because it was the first of Nissan, the day the Tabernacle was officially erected, and the first time the Divine Presence (Shechinah) rested within it. The number eight in Judaism often signifies transcending the natural order (which is based on seven, like the days of creation), marking this day as a leap into the supernatural, holy realm." }
+          ],
+          "keywords": [
+            { "word": "Shmini (Eighth)", "definition": "A number representing the supernatural, the miraculous, and the covenantal (e.g., circumcision on the eighth day), moving beyond the seven-day physical cycle of nature." }
+          ]
+        },
+        {
+          "ref": "Leviticus 10:2",
+          "commentary": [
+            { "source": "Nachmanides (Ramban)", "explanation": "The death of Nadav and Avihu occurred when they offered a 'strange fire' (esh zara). Ramban suggests their sin was rooted in approaching the Holy of Holies improperly out of an excess of ecstatic, unregulated spiritual passion. They acted independently, without consulting Moses or God's exact command. It serves as a stark warning that encountering the Divine requires boundaries, obedience, and reverence, not just passionate enthusiasm." }
+          ],
+          "keywords": [
+            { "word": "Esh Zara (Strange fire)", "definition": "An unauthorized offering of incense brought by Aaron's sons. It symbolizes religious fervor that ignores divine instruction and boundaries, leading to destructive consequences." }
+          ]
+        },
+        {
+          "ref": "Leviticus 10:3",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "After the sudden, terrifying death of his two sons, the Torah records: 'Vayidom Aharon' (And Aaron was silent). Rabbi Sacks calls this one of the most profound and painful silences in all of literature. Aaron does not curse God, nor does he offer platitudes. His silence is the ultimate expression of grief that transcends words. It teaches us that in the face of unspeakable tragedy, the most authentic religious response is sometimes not to offer explanations or seek meaning, but simply to sit in silent, awestruck grief before the mysteries of life and death." }
+          ],
+          "keywords": [
+            { "word": "Vayidom (And he was silent)", "definition": "A profound, stunned silence. It represents the highest level of faith and acceptance when confronted with a tragedy that defies human understanding." }
+          ]
+        },
+        {
+          "ref": "Leviticus 11:3",
+          "commentary": [
+            { "source": "Sefer HaChinuch", "explanation": "The Torah permits eating land animals that both 'chew the cud' (ruminants) and have 'completely split hooves.' The Chinuch explains that the physical diet affects the soul. Animals that chew the cud are generally passive, non-predatory herbivores. By restricting the Jewish diet to these gentle creatures, the Torah aims to instill traits of peace and non-violence into the human character, distancing us from the aggressive, predatory nature of carnivores." }
+          ],
+          "keywords": [
+            { "word": "Mafreset Parsa / Ma'alat Gerah (Split hooves / Chews the cud)", "definition": "The two required physical signs for a land animal to be considered kosher. Allegorically, split hooves represent knowing where to draw boundaries in the world, and chewing the cud represents the intellectual trait of 'chewing over' thoughts and not making impulsive judgments." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Shmini (שְׁמִינִי) means \\\"Eighth.\\\"\n\nContext: The 7-day ordination of Aaron and his sons (from Tzav) is complete. This parsha describes the 'eighth day,' the day the Mishkan is finally, officially inaugurated and regular service begins. There is a sense of great anticipation and celebration.\n\nParsha Summary: On the 'eighth day,' Aaron and his sons offer their first sacrifices. Moses and Aaron bless the people, and a fire comes forth from God, consuming the offerings on the altar, a sign of divine acceptance. The people shout in joy. In the midst of this celebration, tragedy strikes: Aaron's two sons, Nadav and Avihu, 'offer a strange fire' (an unauthorized offering) and are instantly consumed by divine fire. Aaron is famously silent in his grief. God then gives Moses and Aaron the laws of *Kashrut* (dietary laws), detailing which animals, birds, and fish are permitted ('kosher') and forbidden.\n\nSignificance: Shmini is a parsha of shocking contrast: from the height of spiritual ecstasy to the depth of tragic loss. The inauguration of the Mishkan is a success, but the story of Nadav and Avihu is a terrifying warning about the danger of spiritual arrogance. Their 'strange fire' represents *unauthorized* religious passion, a reminder that the path to God must be disciplined, not just enthusiastic. Aaron's silence is one of the most powerful moments in the Torah—a symbol of profound, stunned grief and faith. The sudden shift to the laws of Kashrut is not random: after a story about the danger of *what we offer*, the Torah teaches us about the importance of *what we consume*. Kashrut is a discipline of mindfulness, a way of making holiness a daily, conscious choice at the most mundane level: the dinner table. The takeaway is that holiness is powerful, dangerous, and requires both reverence and self-control."
     },
     {
       "name": "Tazria",
       "reference": "Leviticus 12:1-13:59",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Leviticus 12:3",
+          "commentary": [
+            { "source": "Midrash Tanchuma", "explanation": "The Torah commands that a baby boy be circumcised precisely on the eighth day. The Midrash explains a beautiful rationale: the wait ensures that the child lives through at least one Shabbat before entering the covenant. Shabbat brings spiritual completeness and perfection to the world. Therefore, the child is first spiritually nourished by the holiness of the Sabbath, gathering the necessary strength and sanctity before receiving the permanent, physical mark of the covenant of Abraham." }
+          ],
+          "keywords": [
+            { "word": "Bayom HaShmini (On the eighth day)", "definition": "The mandated day for a Brit Milah (circumcision). Eight represents transcending the natural physical world (which was created in seven days) and stepping into a miraculous, covenantal relationship with God." }
+          ]
+        },
+        {
+          "ref": "Leviticus 13:2",
+          "commentary": [
+            { "source": "Rashi", "explanation": "Tzara'at is often translated as leprosy, but Rashi, drawing on the Talmud (Arachin 16a), clarifies it is a spiritual affliction manifesting physically, primarily as a punishment for 'Lashon Hara' (evil speech/slander). The physical blemishes (Se'et, Sappachat, Baheret) on the skin reflect an internal moral decay caused by using words to harm or divide others." }
+          ],
+          "keywords": [
+            { "word": "Tzara'at", "definition": "A supernatural skin condition reflecting spiritual impurity, most commonly associated with the sin of slander, arrogance, and anti-social behavior." }
+          ]
+        },
+        {
+          "ref": "Leviticus 13:45",
+          "commentary": [
+            { "source": "Rashi", "explanation": "The person afflicted with Tzara'at must tear their clothes, let their hair grow wild, and call out 'Tamei, Tamei!' (Impure, Impure!). Rashi explains this serves a dual purpose. On a practical level, it warns passersby to stay away to avoid ritual impurity. But on a profound spiritual level, the person calls out their suffering so that the community will hear them, feel pity, and pray for their healing. Even in their punishment and isolation, they are still tethered to the community's compassion." }
+          ],
+          "keywords": [
+            { "word": "Tamei, Tamei Yikra (Impure, impure he shall call out)", "definition": "The required public declaration by the afflicted individual. It is an act of extreme humility, forcing the person who previously spoke arrogantly against others to now publicly announce their own brokenness and beg for mercy." }
+          ]
+        },
+        {
+          "ref": "Leviticus 13:46",
+          "commentary": [
+            { "source": "Rashi", "explanation": "The Metzora (person with Tzara'at) must dwell isolated outside the camp ('badad yeshev'). Rashi asks why this specific punishment? Because through his slanderous speech, he caused separation between husbands and wives or between friends. Therefore, the punishment fits the crime (measure for measure): he must sit alone, separated from the community he sought to fracture." }
+          ],
+          "keywords": [
+            { "word": "Badad Yeshev (He shall dwell alone)", "definition": "The mandated quarantine for the afflicted individual. It serves not as a medical quarantine, but as a period of profound social isolation meant to induce introspection and repentance for the social damage caused by their speech." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Tazria (תַזְRרִיעַ) means \\\"She bears seed\\\" or \\\"When a woman conceives.\\\"\n\nContext: Following the laws of dietary purity (Kashrut), the Torah now moves to laws of ritual purity for *people*. The setting is communal, as these laws dictate when a person must separate from and re-enter the community.\n\nParsha Summary: The parsha begins with the laws of ritual impurity related to childbirth. A woman who gives birth is considered *tameh* (ritually impure) for a period and must bring offerings. The parsha then pivots to the laws of *tzara'at*, a spiritual/physical ailment often translated as 'leprosy' but more accurately understood as a supernatural skin condition. The text gives a detailed diagnostic guide for the Kohen (Priest) to identify *tzara'at* on a person's skin or in their clothing. A person diagnosed as a *metzora* (one with *tzara'at*) must go into isolation outside the camp.\n\nSignificance: Tazria explores the theme of *tumah* and *taharah* (ritual impurity and purity), which is not about hygiene or sin, but about a person's relationship to *life* and *death*. Childbirth, a moment of profound life-creation, paradoxically creates a state of *tumah*, as it touches the boundary between the divine and the human. The laws of *tzara'at* are even more profound. Rabbinic tradition connects *tzara'at* to the sin of *lashon hara* (slander or gossip). The 'metzora' (slanderer) is punished 'measure for measure': a person who uses speech to divide the community is now *physically* divided from the community. The takeaway is that words have power, they can create or destroy, and our speech is a primary area of holiness and moral responsibility."
     },
     {
       "name": "Metzora",
       "reference": "Leviticus 14:1-15:33",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Leviticus 14:4",
+          "commentary": [
+            { "source": "Rashi", "explanation": "The purification ritual for the Metzora requires two live birds, cedar wood, crimson yarn, and hyssop. Rashi explains the brilliant symbolism: Since the sin was 'Lashon Hara' (chattering evil words), the offering requires birds, which constantly chatter. The cedar wood (the tallest tree) represents the arrogance that leads to slander, while the hyssop (a lowly bush) and crimson yarn (dyed from a lowly worm) represent the humility required for repentance. To be cured, the arrogant person must humble themselves." }
+          ],
+          "keywords": [
+            { "word": "Eitz Erez v'Eizov (Cedar wood and hyssop)", "definition": "Botanical extremes representing the spectrum of human ego. The cedar stands for haughtiness (the root of slander), while the hyssop stands for the lowliness and contrition necessary for spiritual healing." }
+          ]
+        },
+        {
+          "ref": "Leviticus 14:9",
+          "commentary": [
+            { "source": "Ibn Ezra", "explanation": "As part of the purification, the Metzora must shave off absolutely all of their hair—head, beard, and eyebrows. Ibn Ezra and others note that this radical act of shaving mimics a newborn baby. The process of curing Tzara'at is essentially a process of spiritual rebirth. The afflicted person strips away all vestiges of their old, arrogant, gossiping self and emerges from the ritual bath (Mikveh) entirely renewed, ready to re-enter society with a clean slate." }
+          ],
+          "keywords": [
+            { "word": "V'gilech et kol se'aro (He shall shave off all his hair)", "definition": "A radical act of physical stripping away. It symbolizes the complete removal of the person's former, corrupted identity, paving the way for a fresh, untainted start." }
+          ]
+        },
+        {
+          "ref": "Leviticus 14:34",
+          "commentary": [
+            { "source": "Rashi", "explanation": "The Torah discusses 'Tzara'at of the house.' Rashi explains that this seemingly strange affliction actually served as a hidden blessing for the Israelites entering Canaan. The Amorites had hidden treasures in the walls of their houses. When an Israelite's house was afflicted with Tzara'at, the law required the stones to be dismantled, thereby miraculously revealing the hidden gold and silver to the new owner." }
+          ],
+          "keywords": [
+            { "word": "Tzara'at HaBayit (Affliction of the house)", "definition": "A manifestation of spiritual impurity on the physical walls of a dwelling, forcing the inhabitants to examine not just their personal conduct, but the atmosphere of their home." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Metzora (מְּצֹRרָע) means \\\"One afflicted with tzara'at.\\\"\n\nContext: This parsha is a direct continuation of Tazria, focusing on the *metzora* who was diagnosed and isolated. Now, the Torah explains what happens when (and if) the person is healed.\n\nParsha Summary: The parsha details the complex, multi-step ritual for *purifying* a healed *metzora* and allowing them to re-enter the community. This ceremony is highly symbolic, involving two birds (one is set free), cedar wood, hyssop, and crimson wool. The person must shave, bathe, and bring a series of offerings. The parsha also extends the laws of *tzara'at* to *houses*—a 'leprous house' must be examined and, if incurable, torn down. The parsha concludes with the laws of ritual impurity related to bodily emissions, for both men and women.\n\nSignificance: If Tazria is about diagnosis and isolation, Metzora is about healing and restoration. The complex ritual is not medicine; it's a symbolic 're-birthing' of the individual back into the community. The ceremony, particularly the release of the 'scape-bird,' symbolizes the person's 'slanderous' words being sent away, allowing them to start fresh. The parsha is named for the afflicted person, showing that the community's focus must be on their ultimate *reintegration*. The laws of the 'leprous house' suggest that this 'sickness' of slander can infect an entire social structure. The takeaway is that true holiness is not about casting people out forever; it is about creating a path for repentance, purification, and the restoration of broken relationships."
     },
     {
       "name": "Achrei Mot",
       "reference": "Leviticus 16:1-18:30",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Leviticus 16:8",
+          "commentary": [
+            { "source": "Nachmanides (Ramban)", "explanation": "The Yom Kippur service features two identical goats: one designated 'for the Lord' and offered as a sacrifice, and the other 'for Azazel' (the scapegoat). Ramban explains that the goat for Azazel is sent to the desolate wilderness carrying the sins of Israel. It symbolically removes the impurity of sin from the community's midst, representing the total banishment of their past wrongdoings into an uninhabitable void." }
+          ],
+          "keywords": [
+            { "word": "Azazel (The Scapegoat)", "definition": "A steep, desolate cliff in the wilderness to which the goat bearing the sins of Israel was dispatched on Yom Kippur, representing the absolute removal and casting away of communal sin." }
+          ]
+        },
+        {
+          "ref": "Leviticus 16:21",
+          "commentary": [
+            { "source": "Sforno", "explanation": "Aaron is commanded to lay both his hands on the head of the live goat and confess all the iniquities of the Israelites. Sforno explains that this physical act of leaning and confessing transfers the burden of guilt. The confession must be verbalized aloud; thinking about one's sins is not enough. True repentance requires confronting our failures directly and speaking them into reality, acknowledging that we alone are responsible for them before we can cast them away." }
+          ],
+          "keywords": [
+            { "word": "V'hitvada alav (And he shall confess over it)", "definition": "The formal act of verbal confession of sins (Vidui). This establishes the theological principle that forgiveness requires active, honest articulation of wrongdoing." }
+          ]
+        },
+        {
+          "ref": "Leviticus 16:30",
+          "commentary": [
+            { "source": "Rabbi Akiva (Mishnah Yoma)", "explanation": "The verse states: 'For on this day atonement shall be made for you to cleanse you of all your sins; you shall be clean before the LORD.' Rabbi Akiva famously comments on this: 'Happy are you, O Israel! Before whom are you made clean, and who cleanses you? Your Father in heaven.' He compares God to a Mikveh (ritual bath). Just as a Mikveh purifies the impure, so too does God completely purify Israel on Yom Kippur, highlighting the direct, unmediated forgiveness God offers His people." }
+          ],
+          "keywords": [
+            { "word": "Lifnei Hashem tit'haru (Before the Lord you shall be clean)", "definition": "The ultimate promise of Yom Kippur: total spiritual renewal and purification granted directly by God, entirely wiping the slate clean for the new year." }
+          ]
+        },
+        {
+          "ref": "Leviticus 18:3",
+          "commentary": [
+            { "source": "Rashi", "explanation": "God commands, 'You shall not copy the practices of the land of Egypt... or Canaan.' Rashi emphasizes that Egypt and Canaan were the most morally corrupt nations of that era. By explicitly forbidding their practices, the Torah sets the Jewish people apart, demanding they reject the surrounding cultures' idolatry and sexual immorality to forge a distinct, holy society based on divine ethics." }
+          ],
+          "keywords": [
+            { "word": "Chukoteihem (Their practices/statutes)", "definition": "The ingrained, institutionalized, and often immoral cultural norms of the surrounding pagan nations, which the Israelites are commanded to actively resist and replace with God's law." }
+          ]
+        },
+        {
+          "ref": "Leviticus 18:5",
+          "commentary": [
+            { "source": "Talmud (Yoma 85b)", "explanation": "God says to keep His laws, 'which if a man do, he shall live by them' (Vachai bahem). The Talmud derives a profound, life-saving principle from this phrase: Pikuach Nefesh. We are commanded to *live* by the Torah's laws, not to die by them. Therefore, the preservation of human life overrides almost every single commandment in the Torah (like keeping Shabbat or fasting on Yom Kippur). If a life is in danger, the holiest act a person can do is break the rules to save it." }
+          ],
+          "keywords": [
+            { "word": "Vachai bahem (And he shall live by them)", "definition": "The foundational principle that the Torah's ultimate goal is the promotion and preservation of human life, establishing that saving a life (Pikuach Nefesh) supersedes almost all other religious obligations." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Achrei Mot (אַחֲרֵי מוֹת) means \\\"After the death.\\\"\n\nContext: This parsha is named for its opening, 'After the death of Aaron's two sons...' (Nadav and Avihu). It returns to the scene of that tragedy (from Parshat Shmini) to provide the laws that will *prevent* such a disaster from happening again.\n\nParsha Summary: The parsha details the sacred rituals for the *one day* of the year that the Kohen Gadol (High Priest) is permitted to enter the *Kodesh HaKodashim* (the Holy of Holies): Yom Kippur, the Day of Atonement. This includes the famous 'scapegoat' ritual, where one goat is offered to God and the other (the 'azazel') is sent into the wilderness bearing the sins of the people. The second half of the parsha is a sharp pivot, outlining the 'Holiness Code'—a list of forbidden sexual relationships (incest, adultery, etc.), and the prohibition against pagan practices like child sacrifice. God warns that the land itself will 'vomit out' a nation that engages in these immoralities.\n\nSignificance: Achrei Mot is a parsha of boundaries. It creates boundaries in *space* and *time* (only the High Priest can enter the Holy of Holies, and only on Yom Kippur), teaching that access to the divine must be treated with ultimate reverence. It also creates boundaries in *behavior* (the Holiness Code). The parsha draws a direct line between the spiritual purity of the Yom Kippur service and the sexual morality of the nation. It teaches that *both* are essential for maintaining God's presence. The key takeaway is that a holy nation requires both a system for atonement (Yom Kippur) and a strong moral-ethical framework to guide its daily life."
     },
     {
       "name": "Kedoshim",
       "reference": "Leviticus 19:1-20:27",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Leviticus 19:2",
+          "commentary": [
+            { "source": "Nachmanides (Ramban)", "explanation": "The command 'You shall be holy' (Kedoshim Tihyu) is foundational. Ramban famously interprets this not merely as obeying the specific laws, but as a general overarching principle to 'not be a scoundrel with the Torah's permission.' One could theoretically follow all dietary and marital laws exactly, yet still be a glutton or a repulsive person. This verse commands self-restraint and elevated behavior even within the realm of what is technically permitted, urging true spiritual refinement of character." }
+          ],
+          "keywords": [
+            { "word": "Kedoshim Tihyu (You shall be holy)", "definition": "A call to elevated living that goes beyond strict legal compliance, demanding self-mastery, ethical excellence, and the sanctification of everyday, mundane activities." }
+          ]
+        },
+        {
+          "ref": "Leviticus 19:3",
+          "commentary": [
+            { "source": "Rashi", "explanation": "The verse commands in the same breath: 'Every person shall revere his mother and his father, and keep My Sabbaths.' Rashi points out the brilliant juxtaposition. Honoring parents is paramount, but what if a parent commands a child to break the Sabbath? The Torah places the Sabbath immediately after the command to revere parents to say: 'Even though I commanded you to honor them, if they tell you to break my laws, do not listen to them, for both you and your parents are obligated to honor Me.' God's moral law supersedes human authority." }
+          ],
+          "keywords": [
+            { "word": "Tira'u (You shall revere / fear)", "definition": "Unlike the command to 'honor' parents (which means providing food and care), 'revere' means maintaining boundaries: not sitting in their seat, not contradicting them in public, and treating them with profound respect." }
+          ]
+        },
+        {
+          "ref": "Leviticus 19:14",
+          "commentary": [
+            { "source": "Rashi", "explanation": "'You shall not insult the deaf, or place a stumbling block before the blind.' Rashi explains that 'the blind' here is not just literal; it is a metaphor for someone 'blind in a matter.' This verse strictly prohibits giving bad advice to someone who doesn't know any better for your own personal gain (e.g., telling someone to sell their field when you secretly plan to buy it cheaply). Because the victim doesn't know they are being played, the verse ends with 'You shall fear your God,' reminding the exploiter that God sees their hidden, malicious intent." }
+          ],
+          "keywords": [
+            { "word": "Lifnei Iver (Before the blind)", "definition": "The moral prohibition against exploiting someone's ignorance or vulnerability. It forms the basis of all Jewish business ethics regarding transparency and fair dealing." }
+          ]
+        },
+        {
+          "ref": "Leviticus 19:16",
+          "commentary": [
+            { "source": "Talmud (Sanhedrin 73a)", "explanation": "'Do not stand idly by the blood of your neighbor.' The Talmud derives from this verse a positive, legal duty to rescue. If you see someone drowning, being attacked, or in mortal danger, you cannot look the other way; you are obligated to intervene and save them, even if it requires spending your own money to do so. This establishes a society where everyone is mutually responsible for each other's survival." }
+          ],
+          "keywords": [
+            { "word": "Lo Ta'amod (Do not stand idly by)", "definition": "The absolute moral and legal obligation to protect human life from immediate danger. A rejection of the 'bystander effect' and a demand for active intervention." }
+          ]
+        },
+        {
+          "ref": "Leviticus 19:18",
+          "commentary": [
+            { "source": "Rabbi Akiva / Rashi", "explanation": "The verse 'Love your neighbor as yourself' is called by Rabbi Akiva 'the great principle of the Torah.' Rashi explains this practically: it means one should not do to another what is hateful to oneself. It requires cultivating profound empathy, ensuring one's actions toward others reflect the exact care, respect, and dignity they would desire for themselves in any given situation." }
+          ],
+          "keywords": [
+            { "word": "V'ahavta L'rei'acha Kamocha (Love your neighbor as yourself)", "definition": "The ethical cornerstone of interpersonal relationships in Judaism, demanding radical empathy and active concern for the well-being and property of others." }
+          ]
+        },
+        {
+          "ref": "Leviticus 19:34",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "'The stranger who resides with you shall be to you as one of your citizens; you shall love him as yourself, for you were strangers in the land of Egypt.' Rabbi Sacks points out that the Torah commands us to love our neighbor only once, but it commands us to love the stranger thirty-six times. Loving people who are like us is natural; loving the 'outsider' goes against human nature. God invokes the trauma of the Exodus to teach that having suffered oppression, the Jewish people must become the ultimate protectors of the marginalized and the alien." }
+          ],
+          "keywords": [
+            { "word": "HaGer (The Stranger / The Alien)", "definition": "Someone who is not from your tribe, ethnicity, or background. The Torah demands we extend the exact same radical love to the outsider as we do to our own community." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Kedoshim (קְדֹשִׁים) means \\\"Holy ones.\\\"\n\nContext: This parsha continues the 'Holiness Code' from Achrei Mot. It is addressed to the *entire* community of Israel, not just the priests. The setting is Mount Sinai, as God gives the central command of the book.\n\nParsha Summary: The parsha opens with one of the most famous lines in the Torah: 'You shall be holy (Kedoshim), for I, the Lord your God, am holy.' The rest of the parsha is a dense list of *mitzvot* that define *what* this holiness looks like in practice. It is a mix of ritual and ethical commands, including: honoring parents, observing Shabbat, avoiding idolatry, leaving corners of the field for the poor (Peah), not stealing, not lying, paying workers on time, not cursing the deaf or placing a stumbling block before the blind, judging fairly, not gossiping, and the 'golden rule' of the Torah: 'You shall love your neighbor as yourself' (V'ahavta L'rei'acha Kamocha).\n\nSignificance: Kedoshim is the ethical peak of the Torah. It democratizes holiness, taking it out of the exclusive realm of the Mishkan and the priesthood and placing it in the hands of every single person. The parsha's name, 'Holy ones,' is a command: *You* must be holy. And how? Not by being ascetics or separating from the world, but by engaging with the world *ethically*. Holiness is defined as social justice. 'Loving your neighbor' is placed alongside laws of ritual, teaching that they are inseparable. The key takeaway is that holiness is not an abstract feeling; it is the concrete, daily, and difficult work of treating every person with dignity, honesty, and compassion."
     },
     {
       "name": "Emor",
       "reference": "Leviticus 21:1-24:23",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Leviticus 22:32",
+          "commentary": [
+            { "source": "Rashi", "explanation": "'You shall not profane My holy name, that I may be sanctified in the midst of the Israelite people.' This verse establishes the core Jewish concepts of Kiddush Hashem (Sanctifying God's Name) and Chilul Hashem (Profaning God's Name). Rashi explains this means Israelites must be willing to sacrifice their lives rather than commit cardinal sins (like idolatry), thereby publicly demonstrating God's supreme value. In daily life, it means acting with such integrity and morality that observers praise the God of Israel." }
+          ],
+          "keywords": [
+            { "word": "Kiddush Hashem (Sanctification of the Name)", "definition": "Any action that brings honor, respect, and glory to God's reputation in the world, ranging from ultimate martyrdom to everyday acts of honesty and outstanding moral character." }
+          ]
+        },
+        {
+          "ref": "Leviticus 23:2",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "When the Torah introduces the festivals, it calls them 'Mo'adim' (Appointed Times). Rabbi Sacks notes that the power to declare the new moon, and thus determine exactly *when* these festivals fall, was given to the human court (the Sanhedrin). This means that while Shabbat is fixed by God since creation, the Festivals are a partnership: God provided the occasion, but humanity determines the calendar. It is a beautiful synthesis of divine initiative and human agency in creating sacred time." }
+          ],
+          "keywords": [
+            { "word": "Mo'adim (Appointed times / Festivals)", "definition": "The sacred cycle of the Jewish year (Passover, Shavuot, Sukkot, Rosh Hashanah, Yom Kippur) serving as designated meeting points in time between God and the Jewish people." }
+          ]
+        },
+        {
+          "ref": "Leviticus 23:15",
+          "commentary": [
+            { "source": "Sefer HaChinuch", "explanation": "The Torah commands the counting of 49 days (the Omer) from Passover until the festival of Shavuot. The Chinuch explains that the ultimate purpose of the Exodus from Egypt was not just physical freedom, but receiving the Torah at Sinai. By actively counting each day, the Jewish people demonstrate their eager anticipation and burning desire to reach Shavuot and receive God's law. Physical freedom without a moral framework is incomplete; the counting bridges the gap between liberation and responsibility." }
+          ],
+          "keywords": [
+            { "word": "Sefirat HaOmer (Counting of the Omer)", "definition": "The verbal counting of 49 days linking Passover (the festival of physical freedom) to Shavuot (the festival of spiritual revelation and law)." }
+          ]
+        },
+        {
+          "ref": "Leviticus 23:40",
+          "commentary": [
+            { "source": "Vayikra Rabbah", "explanation": "For the festival of Sukkot, the Torah commands taking the 'fruit of a goodly tree, branches of palm trees, boughs of leafy trees, and willows.' The famous Midrash compares these 'Four Species' to four types of Jewish people. The Etrog (citron) has taste and smell, representing those with both Torah learning and good deeds. The Lulav (palm) has taste (dates) but no smell (Torah, but no deeds). The Hadas (myrtle) has smell but no taste (deeds, but no Torah). The Aravah (willow) has neither. God commands that all four be bound tightly together, teaching that a community is only complete when all types of people, regardless of their spiritual status, are united." }
+          ],
+          "keywords": [
+            { "word": "Arba Minim (The Four Species)", "definition": "The four plants held and waved together during the festival of Sukkot. They symbolize the absolute necessity of unity, diversity, and mutual dependence within the community." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Emor (אֱמֹר) means \\\"Speak.\\\"\n\nContext: The parsha continues the Holiness Code, with God commanding Moses to 'speak' to specific groups within Israel. It clarifies the special responsibilities of the Kohanim (Priests) and the laws for all of Israel.\n\nParsha Summary: God instructs Moses to 'speak' to the Kohanim about their unique purity laws (e.g., they cannot have contact with the dead, except for close relatives). It also lists the physical blemishes that disqualify a Kohen from serving or an animal from being an offering. The parsha then pivots and 'speaks' to all of Israel, laying out the sacred calendar of the *Mo'adim* (the 'Appointed Times' or Festivals): Shabbat, Passover, Shavuot, Rosh Hashanah, Yom Kippur, and Sukkot. The parsha ends with the story of a 'blasphemer' and the law of 'an eye for an eye' as a principle of judicial equality.\n\nSignificance: Emor focuses on the holiness of *leaders* and the holiness of *time*. The priests have extra rules because spiritual leaders must be held to a higher standard. The 'blemish-free' requirement is not about ableism; it's a symbolic language for 'wholeness' and perfection in a sacred space. The festival calendar is the parsha's great gift: it takes the abstract story of Israel (Creation, Exodus, Revelation) and embeds it into the rhythm of the agricultural year. Time itself becomes a sanctuary. The takeaway is that holiness is created by elevating our leaders to be models of integrity and by elevating our time to be moments of sacred memory and communal celebration."
     },
     {
@@ -4210,49 +4533,354 @@
     {
       "name": "Bamidbar",
       "reference": "Numbers 1:1-4:20",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Numbers 1:2",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "God commands Moses to take a census of the Israelites using the phrase 'Se'u et rosh', which literally means 'Lift the head.' Rabbi Sacks observes that in most ancient empires, a census was a way to reduce people to mere numbers for taxation or conscription—erasing their individuality. The Torah's phrase 'lift the head' implies the exact opposite. God is telling Moses to count them in a way that elevates them, making every single person feel seen, valued, and essential to the community. In God's census, everyone counts, and everyone matters." }
+          ],
+          "keywords": [
+            { "word": "Se'u et rosh (Take a census / Lift the head)", "definition": "The biblical method of counting the population. It emphasizes bestowing dignity upon every individual rather than reducing them to an anonymous statistic." }
+          ]
+        },
+        {
+          "ref": "Numbers 2:2",
+          "commentary": [
+            { "source": "Rashi", "explanation": "The Israelites are commanded to camp 'each man by his standard (degel), with the ensigns of their fathers' house.' Rashi explains that every tribe had its own uniquely colored flag, corresponding to the color of their specific gemstone on the High Priest's breastplate. This teaches that true unity does not require uniformity. The Israelites were deeply united around the central Tabernacle, yet they maintained their distinct tribal identities, colors, and strengths." }
+          ],
+          "keywords": [
+            { "word": "Degel (Standard / Flag)", "definition": "The tribal banners that organized the Israelite camp. They symbolize the importance of maintaining individual family and community heritage within a larger, unified national structure." }
+          ]
+        },
+        {
+          "ref": "Numbers 3:12",
+          "commentary": [
+            { "source": "Rashi", "explanation": "God formally selects the Levites to serve in the Tabernacle in place of the firstborn Israelites. Originally, the firstborn of every family were supposed to be the priests, as they were saved during the plague in Egypt. However, because the firstborn participated in the sin of the Golden Calf, they forfeited this right. The tribe of Levi, who did not participate in the idolatry, was chosen to replace them, showing that spiritual leadership is not just a birthright, but must be earned through moral fidelity." }
+          ],
+          "keywords": [
+            { "word": "Levi'im (Levites)", "definition": "The tribe chosen for sacred service and assisting the Priests (Kohanim), selected as a reward for their unwavering loyalty to God during the crisis of the Golden Calf." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Bamidbar (בַּמִּדְבָּR) means \\\"In the wilderness.\\\"\n\nContext: This parsha opens the Book of Numbers (Sefer Bamidbar), which gets its Hebrew name from this first word. The setting is the wilderness of Sinai, one year after the Exodus. The Mishkan is built, the laws have been given, and the people are now preparing to *move* as an organized nation toward the Promised Land.\n\nParsha Summary: The parsha is almost entirely about organization and structure. God commands Moses to take a *census* of the men of military age, counting each tribe. The parsha then describes the *formation* of the camp: the 12 tribes are to be arranged in a specific, 'flag-based' formation around the Mishkan, which is at the center. The parsha also details the special, elevated role of the tribe of Levi, who are *not* counted in the main census but are counted separately. They are given the sacred duty of carrying, assembling, and guarding the Mishkan, replacing the 'firstborn' who were disqualified after the Golden Calf.\n\nSignificance: The name 'In the wilderness' is the theme of the entire book: this is a story of a nation in transition, in the 'in-between' space. The parsha's focus on the census teaches that in God's eyes, *every individual counts* (they are counted 'by name') but also that they are part of a larger, organized whole. The camp's structure, with the Mishkan at the *center*, is a physical map of their values: God's presence must be the central, organizing principle of the nation, in all its aspects (east, west, north, south). The takeaway is that to move forward on a long journey, a community needs both individual dignity (the census) and a shared structure, purpose, and center (the camp formation)."
     },
     {
       "name": "Nasso",
       "reference": "Numbers 4:21-7:89",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Numbers 5:14",
+          "commentary": [
+            { "source": "Talmud (Sotah)", "explanation": "The law of the Sotah (a woman suspected of adultery by a jealous husband) is one of the most difficult in the Torah. A miraculous, bitter water ritual is used to determine her guilt or innocence. The Talmud emphasizes the incredible lengths God goes to in order to restore peace between a husband and wife. The ritual requires erasing God's holy name into the water. God allows His own sacred name to be obliterated just to clear the woman's name and restore marital harmony (Shalom Bayit), teaching us the supreme value of peace in the home." }
+          ],
+          "keywords": [
+            { "word": "Sotah (Suspected adulteress)", "definition": "A complex ritual designed to resolve extreme marital jealousy and suspicion. If innocent, the woman is publicly cleared and blessed; if guilty, she suffers a miraculous punishment." }
+          ]
+        },
+        {
+          "ref": "Numbers 6:2",
+          "commentary": [
+            { "source": "Maimonides (Rambam)", "explanation": "A person can take a 'Nazirite vow' to abstain from wine, haircuts, and contact with the dead to achieve a higher state of holiness. Rambam views this with ambivalence. While acknowledging the holy intent, he argues that Judaism generally opposes asceticism (extreme self-denial). God created a good world with wine and physical pleasures to be enjoyed in moderation. The fact that a Nazirite must bring a *sin offering* when their vow ends suggests that completely withdrawing from the normal pleasures of the world is, on some level, a spiritual flaw." }
+          ],
+          "keywords": [
+            { "word": "Nazir (Nazirite)", "definition": "An individual who takes a voluntary vow of extreme ascetic separation for a period of time to focus entirely on God, refraining from grape products and haircuts." }
+          ]
+        },
+        {
+          "ref": "Numbers 6:24",
+          "commentary": [
+            { "source": "Rashi", "explanation": "The Birkat Kohanim (Priestly Blessing) reads: 'May the Lord bless you and protect you!' Rashi breaks down this deceptively simple line. 'Bless you' means granting your possessions increase and prosperity. But wealth can attract thieves or cause anxiety, so it is immediately followed by 'and protect you.' True blessing is not just gaining abundance, but having the divine protection and peace of mind to actually enjoy it." }
+          ],
+          "keywords": [
+            { "word": "Birkat Kohanim (Priestly Blessing)", "definition": "The ancient, three-line blessing that God commanded Aaron and the priests to recite over the Israelites. It is the oldest known biblical text found in archaeological excavations." }
+          ]
+        },
+        {
+          "ref": "Numbers 7:2",
+          "commentary": [
+            { "source": "Nachmanides (Ramban)", "explanation": "The parsha concludes with a grueling, repetitive list of the offerings brought by the 12 tribal princes (Nesi'im) to dedicate the altar. Every single prince brought the exact same items, yet the Torah repeats the list 12 times, word for word. Ramban explains that God values the intention of the giver. By giving each prince his own dedicated paragraph, the Torah teaches that communal worship is not about anonymous uniformity; God cherishes the individual contribution of every leader as if it were entirely unique." }
+          ],
+          "keywords": [
+            { "word": "Nesi'im (Princes / Tribal Leaders)", "definition": "The heads of the twelve tribes. Their identical gifts highlight the equality of the tribes in their dedication to the sanctuary." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Nasso (נָשֹׂא) means \\\"Lift up\\\" or \\\"Take\\\" (as in a census).\n\nContext: This parsha is a direct continuation of Bamidbar, still in the Sinai wilderness. It focuses on completing the census and organization of the camp, particularly the roles of the Levites.\n\nParsha Summary: The parsha opens with the census of the remaining Levite clans, assigning them specific duties for carrying the Mishkan's components. It then outlines several laws: the process for a *Sotah* (a woman suspected of adultery), the laws of the *Nazir* (a person who takes a vow of holiness, abstaining from wine and haircuts), and the *Birkat Kohanim* (the Priestly Blessing) that Aaron and his sons are to use to bless the people. The parsha concludes with a long, repetitive account of the *Nesi'im* (the 12 tribal princes) each bringing an identical dedication offering for the Mishkan, with each one detailed separately.\n\nSignificance: Nasso is the longest parsha in the Torah, and its theme is the \"sanctification of the community.\" The Sotah and Nazir laws show paths for dealing with *breaks* in holiness (jealousy) and for *aspirations* to extra holiness (the Nazir). The Priestly Blessing is a beautiful, poetic formula that channels God's grace to the people. The repetitive story of the princes is deeply significant: by giving each prince his own 'day,' the Torah teaches that God values each tribe's offering as if it were unique. It shows that communal effort is not about anonymous uniformity, but about the unique contribution of each part. The takeaway is that a holy community is built by addressing internal strife, providing paths for individual spiritual expression, and honoring the unique gifts of all its members."
     },
     {
       "name": "Beha'alotcha",
       "reference": "Numbers 8:1-12:16",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Numbers 8:2",
+          "commentary": [
+            { "source": "Rashi", "explanation": "Aaron is commanded to light the Menorah so that the lamps shine 'toward the center.' Rashi notes that Aaron is praised because 'he did exactly so, he did not deviate.' While this seems like faint praise for a High Priest, it teaches a profound lesson. Over the years, routine breeds complacency. Aaron's greatness was that he performed this daily, repetitive task with the exact same passion, awe, and precision on the thousandth day as he did on the very first day." }
+          ],
+          "keywords": [
+            { "word": "Beha'alotcha (When you raise / kindle)", "definition": "The instruction to Aaron to light the Menorah. The word 'raise' implies he must hold the flame to the wick until the flame rises on its own, symbolizing a teacher's duty to empower a student to shine independently." }
+          ]
+        },
+        {
+          "ref": "Numbers 9:10",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "A group of men who were ritually impure approach Moses, heartbroken that they cannot participate in the Passover offering. They demand: 'Lama Nigara?' (Why should we be excluded?). God responds by creating 'Pesach Sheni'—a makeup date exactly one month later. Rabbi Sacks points out this is a rare instance of legislation originating from the masses, not from God down to Moses. It teaches that God responds to genuine spiritual desire, and that in Judaism, there is always a second chance." }
+          ],
+          "keywords": [
+            { "word": "Pesach Sheni (The Second Passover)", "definition": "A unique 'makeup' holiday granted to those who were unavoidably detained or impure during the first Passover, symbolizing the power of human yearning to create spiritual opportunities." }
+          ]
+        },
+        {
+          "ref": "Numbers 11:1",
+          "commentary": [
+            { "source": "Ramban (Nachmanides)", "explanation": "The people begin to 'complain bitterly' (mit'onenim). Ramban notes they didn't have a specific grievance yet; they were just complaining for the sake of complaining. The long encampment at Sinai was over, and the difficult reality of the desert journey was setting in. This marks a sharp turning point in the Torah: the 'honeymoon' period is over, and a devastating cycle of rebellion, complaining, and punishment begins that will ultimately doom this entire generation." }
+          ],
+          "keywords": [
+            { "word": "Mit'onenim (Complainers / Murmurers)", "definition": "People who seek out reasons to be dissatisfied. This generalized, toxic complaining brought down a destructive divine fire upon the edge of the camp." }
+          ]
+        },
+        {
+          "ref": "Numbers 11:29",
+          "commentary": [
+            { "source": "Rashi", "explanation": "Two elders, Eldad and Medad, begin prophesying in the camp. Joshua, Moses' loyal disciple, is threatened by this and tells Moses to imprison them. Moses famously replies: 'Are you jealous for my sake? Would that all the Lord's people were prophets!' This is the ultimate proof of Moses' unparalleled humility. A weak leader feels threatened when others show talent; a great leader like Moses wants to elevate everyone to his own level." }
+          ],
+          "keywords": [
+            { "word": "Ha'mekaneh atah li (Are you jealous for my sake?)", "definition": "Moses' sharp rebuke of Joshua's protectiveness, establishing that true spiritual leadership is not a zero-sum game." }
+          ]
+        },
+        {
+          "ref": "Numbers 12:1",
+          "commentary": [
+            { "source": "Rashi", "explanation": "Miriam and Aaron speak against Moses regarding his 'Cushite wife' and question his unique prophetic status. Rashi explains that Miriam did not intend to be malicious; she was criticizing Moses for separating from his wife due to his constant prophetic readiness. However, God strikes Miriam with Tzara'at (leprosy). Even when spoken privately between siblings with good intentions, 'Lashon Hara' (slander/gossip) against a leader is highly destructive. Moses responds by instantly praying for her healing, showing his complete lack of vindictiveness." }
+          ],
+          "keywords": [
+            { "word": "Lashon Hara (Evil speech / Gossip)", "definition": "Derogatory speech about someone else, even if true. Miriam's punishment serves as the Torah's primary cautionary tale against the destructive power of gossip." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Beha'alotcha (בְּהַעֲלֹתְךָ) means \\\"When you raise\\\" or \\\"When you set up\\\" (the lamps).\n\nContext: This parsha marks the *end* of the Israelites' long, 1-year encampment at Mount Sinai. The preparations are complete. The parsha describes the final setup and the beginning of the journey. The mood shifts from static preparation to dynamic, and difficult, motion.\n\nParsha Summary: The parsha opens with the command to Aaron to light the Menorah. It details the purification of the Levites and the celebration of the *Pesach Sheni* ('Second Passover') for those who were unable to bring the offering at the proper time. The cloud finally lifts from the Mishkan, and the people begin their journey. Almost immediately, the *complaining* begins. The people 'kibitz' (complain) about their lot, then cry for meat. Moses, overwhelmed, complains to God that he 'cannot carry this people alone.' God instructs him to appoint 70 elders to share the burden, and the spirit of prophecy rests on them. God provides quail, but a plague follows. The parsha ends with Miriam and Aaron speaking against Moses, for which Miriam is struck with *tzara'at* and is exiled from the camp for 7 days.\n\nSignificance: Beha'alotcha is the story of the 'post-Sinai' letdown. It's the moment the 'honeymoon' ends and the reality of the long journey begins. The parsha is a painful lesson in leadership and 'people-hood.' Moses's \"burnout\" is a deeply human moment, and the solution—delegation—is a crucial lesson in governance. The complaints about food and the rebellion of Miriam and Aaron show that the 'slave mentality' (a mindset of complaint and jealousy) is still strong. The takeaway is that liberation is a process, and the journey from a slave mentality to a free, responsible one is fraught with setbacks and spiritual crises."
     },
     {
       "name": "Sh'lach",
       "reference": "Numbers 13:1-15:41",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Numbers 13:2",
+          "commentary": [
+            { "source": "Rashi", "explanation": "God says to Moses, 'Send men to scout the land of Canaan...' Rashi translates the Hebrew 'Sh'lach lecha' as 'Send for yourself.' God is saying: 'I am not commanding you to send spies. I already told you the land is good. But if you feel you must send them to appease the people, send them on your own volition.' Sending the spies was a concession to the people's lack of faith, not a divine requirement, which is why it ended in disaster." }
+          ],
+          "keywords": [
+            { "word": "Sh'lach lecha (Send for yourself)", "definition": "A phrase indicating divine permission but not divine command. It represents a moment where God steps back and allows human leaders to make a choice, taking full responsibility for the consequences." }
+          ]
+        },
+        {
+          "ref": "Numbers 13:33",
+          "commentary": [
+            { "source": "Rabbi Sacks", "explanation": "The ten fearful spies report seeing giants, saying: 'We looked like grasshoppers to ourselves, and so we must have looked to them.' Rabbi Sacks calls this the absolute definition of a slave mentality. They didn't know what the giants were thinking; they projected their own massive insecurity onto their enemies. If you view yourself as a helpless grasshopper, the world will treat you like one. They were physically free from Egypt, but psychologically, they were still terrified slaves." }
+          ],
+          "keywords": [
+            { "word": "K'chagavim (Like grasshoppers)", "definition": "A powerful metaphor for an inferiority complex and internalized oppression. The failure of the spies was fundamentally a failure of self-image and courage." }
+          ]
+        },
+        {
+          "ref": "Numbers 14:1",
+          "commentary": [
+            { "source": "Talmud (Ta'anit 29a)", "explanation": "Upon hearing the spies' terrifying report, 'the whole community broke into loud cries, and the people wept that night.' The Talmud notes that according to tradition, that night was the 9th of Av (Tisha B'Av). God said to them: 'You wept without cause; therefore, I will set aside this day as a day of weeping for all generations.' This night became the blueprint for future national tragedies, including the destruction of both Temples, teaching the catastrophic consequences of collective despair and lack of faith." }
+          ],
+          "keywords": [
+            { "word": "Vativkeh ha'am (And the people wept)", "definition": "An unwarranted, hysterical breakdown of national morale. It marks the precise moment the Exodus generation lost their chance to enter the Promised Land." }
+          ]
+        },
+        {
+          "ref": "Numbers 14:24",
+          "commentary": [
+            { "source": "Ibn Ezra", "explanation": "God exempts Caleb from the punishment because 'he was imbued with a different spirit (ruach acheret) and remained loyal to Me.' Ibn Ezra points out that it took immense courage for Caleb (along with Joshua) to stand up against a panicked, violent mob of his own peers. The 'different spirit' was the capacity for independent, principled thought in the face of overwhelming peer pressure." }
+          ],
+          "keywords": [
+            { "word": "Ruach acheret (A different spirit)", "definition": "The hallmark of true leadership: the moral courage to speak the truth and remain loyal to one's convictions even when the entire society is moving in the opposite direction." }
+          ]
+        },
+        {
+          "ref": "Numbers 15:39",
+          "commentary": [
+            { "source": "Rashi", "explanation": "The parsha ends with the command to wear Tzitzit (fringes) on the corners of garments. Rashi points out that the numerical value (gematria) of the word Tzitzit is 600. Add the 8 strings and 5 knots on each fringe, and you get 613—the total number of commandments in the Torah. Looking at the Tzitzit is a physical, visual mnemonic device designed to snap a person out of their base instincts ('do not follow your heart and eyes') and remind them of their higher spiritual purpose." }
+          ],
+          "keywords": [
+            { "word": "Tzitzit (Fringes)", "definition": "Specially knotted ritual fringes worn on four-cornered garments. They serve as a constant, tangible reminder of God's commandments and the obligation to live a holy life." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Sh'lach (שְׁלַח) means \\\"Send\\\" (or \\\"Sh'lach Lecha,\\\" \\\"Send for yourself\\\").\n\nContext: The Israelites are at Kadesh Barnea, on the very border of the Promised Land (Canaan). The journey seems almost over. God commands Moses to send 12 spies (one from each tribe) to scout the land.\n\nParsha Summary: The 12 spies enter Canaan, explore it for 40 days, and return with a cluster of grapes so large it requires two men to carry. They all agree the land is 'flowing with milk and honey.' However, ten of the spies give a terrifying report: the inhabitants are giants, the cities are fortified, and 'we were like grasshoppers in our own eyes.' Only two spies, Caleb and Joshua (Yehoshua), dissent, saying, 'We can surely do it!' The people, hearing the majority report, panic. They weep, rebel, and demand to return to Egypt. God, enraged, sentences the entire generation to die in the wilderness. They will wander for 40 years, one for each day the spies were in the land, until their children, who 'did not know Egypt,' are ready to enter. The parsha ends with the mitzvah of *tzitzit* (fringes), a reminder to 'look and remember' God's commandments.\n\nSignificance: Sh'lach is the most tragic turning point in the Torah. It is the moment the 'generation of the Exodus' forfeits its destiny. The parsha is a profound psychological study of a 'slave mentality.' The spies' report—'we were like grasshoppers in our *own* eyes'—is the key. They projected their own sense of inferiority and fear onto the world. They saw giants because they *felt* like grasshoppers. Caleb and Joshua, in contrast, had a 'different spirit.' The sin of the spies was not just a failure of faith in God; it was a failure of faith in *themselves*. The 40-year decree is not just a punishment; it is a necessary 're-education' period. The mitzvah of *tzitzit* is the 'cure'—a tangible, visible reminder to trust God's vision over our own fears."
     },
     {
       "name": "Korach",
       "reference": "Numbers 16:1-18:32",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Numbers 16:1",
+          "commentary": [
+            { "source": "Rashi", "explanation": "'Now Korach... took.' The verse doesn't say *what* he took. Rashi explains that he 'took himself to one side'—he separated himself from the community to create division. Alternatively, he 'took' people with smooth, demagogic words. Korach, a wealthy and prominent Levite, was motivated by jealousy because his cousin was appointed as a prince over him. His rebellion was rooted in personal ego disguised as populist ideology." }
+          ],
+          "keywords": [
+            { "word": "Vayikach Korach (And Korach took)", "definition": "An action of taking rather than giving. It signifies Korach's self-serving ambition and his initiation of a catastrophic schism within the community." }
+          ]
+        },
+        {
+          "ref": "Numbers 16:3",
+          "commentary": [
+            { "source": "Pirkei Avot (Ethics of the Fathers)", "explanation": "Korach challenges Moses and Aaron, claiming, 'The entire community are all holy... why then do you exalt yourselves?' The Mishnah famously categorizes this as a 'dispute that is not for the sake of Heaven.' Korach used beautiful democratic rhetoric ('everyone is holy') to mask a selfish power grab. He didn't want a classless society; he wanted to be the High Priest himself. It is the archetypal warning against populist leaders who exploit the genuine frustrations of the masses for their own political gain." }
+          ],
+          "keywords": [
+            { "word": "Machloket (Dispute / Rebellion)", "definition": "A divisive conflict. Jewish tradition distinguishes between arguments aimed at discovering truth (like Hillel and Shammai) and destructive arguments aimed at acquiring power (like Korach)." }
+          ]
+        },
+        {
+          "ref": "Numbers 16:15",
+          "commentary": [
+            { "source": "Rashi", "explanation": "Moses tries to summon Datan and Aviram (Korach's co-conspirators) for peace talks, but they arrogantly reply, 'We will not come up!' Rashi notes that their very insult ('come up') was a subconscious prophecy of their impending doom. Because they stubbornly refused to 'go up' to seek peace, their punishment was to 'go down' alive into the depths of the earth." }
+          ],
+          "keywords": [
+            { "word": "Lo na'aleh (We will not go up)", "definition": "The stubborn refusal to engage in dialogue or reconciliation, sealing the fate of the rebels." }
+          ]
+        },
+        {
+          "ref": "Numbers 16:32",
+          "commentary": [
+            { "source": "Nachmanides (Ramban)", "explanation": "Moses proposes an unprecedented test: if these men die a natural death, Moses is fake; but if the earth swallows them alive, it proves they have provoked God. Ramban points out that Moses took a massive risk here. He was staking the entire legitimacy of his prophecy and the Torah on a highly specific, supernatural miracle happening at that exact moment. When the earth opened its 'mouth' and swallowed them, it was the ultimate, terrifying vindication of Moses' divinely appointed authority." }
+          ],
+          "keywords": [
+            { "word": "Vatifotach ha'aretz et piha (And the earth opened its mouth)", "definition": "A uniquely terrifying, unnatural punishment designed to definitively crush the rebellion and prove that God, not Moses, was the architect of the social order." }
+          ]
+        },
+        {
+          "ref": "Numbers 17:23",
+          "commentary": [
+            { "source": "Rabbi Hirsch", "explanation": "To settle the priesthood dispute forever, each tribe places a wooden staff in the Tabernacle. Overnight, Aaron's staff miraculously blossoms, producing flowers and ripe almonds. Rabbi Hirsch explains the symbolism: a dead piece of wood producing fruit shows that true spiritual leadership does not rely on human pedigree or political power. It relies entirely on God breathing life into it. Almonds are the first tree to blossom in spring, symbolizing that the priest must be eager and quick to perform God's will." }
+          ],
+          "keywords": [
+            { "word": "Mateh Aharon (Aaron's staff)", "definition": "The dead wooden rod that miraculously produced almond blossoms, serving as the final, gentle, and irrefutable proof of Aaron's chosenness over Korach's violent claims." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Korach (קֹרַח) is the proper name Korah.\n\nContext: This parsha is named for its central antagonist, Korach, a Levite. The setting is the wilderness, sometime after the disastrous spies incident. The people are demoralized, and the leadership of Moses and Aaron is vulnerable.\n\nParsha Summary: Korach, along with two other rebels, Datan and Aviram, leads a major rebellion against Moses and Aaron. Korach's grievance is 'spiritual'—he, a Levite, is jealous of Aaron's priesthood ('Why do you raise yourselves above God's congregation?'). Datan and Aviram's grievance is 'political'—they accuse Moses of failing as a leader ('You brought us out of Egypt... to kill us in the wilderness'). Moses proposes a test: let Korach and his 250 followers offer incense to God, and see who God chooses. The earth opens up and swallows Korach, Datan, and Aviram, and a fire consumes the 250 incense-offerers. The people then complain *again*, and a plague breaks out. The parsha ends with a final test: Aaron's staff miraculously blossoms and produces almonds, a definitive sign of his chosenness.\n\nSignificance: Korach is a timeless parable about the difference between"
     },
     {
       "name": "Chukat",
       "reference": "Numbers 19:1-22:1",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Numbers 19:2",
+          "commentary": [
+            { "source": "Rashi", "explanation": "The law of the Parah Adumah (Red Heifer) is introduced as 'Zot Chukat HaTorah' (This is the statute of the Torah). A 'Chok' is a law with no rational explanation. Rashi explains that Satan and the nations of the world mock the Jewish people for this bizarre ritual (using the ashes of a burned red cow to purify someone who touched a corpse, while simultaneously making the priest who performs the ritual impure). God declares: 'It is a statute I have decreed, and you have no right to question it.' It is the ultimate test of obedience beyond human logic." }
+          ],
+          "keywords": [
+            { "word": "Parah Adumah (Red Heifer)", "definition": "The most paradoxical and mysterious ritual in the Torah, used to purify the impurity of death. It symbolizes the limits of human intellect in understanding the Divine mind." }
+          ]
+        },
+        {
+          "ref": "Numbers 20:1",
+          "commentary": [
+            { "source": "Talmud (Ta'anit 9a)", "explanation": "The text states: 'Miriam died there and was buried there. The community was without water...' The Talmud connects these two events inextricably. For forty years, a miraculous well of water (the 'Well of Miriam') traveled with the Israelites in the desert entirely in the merit of Miriam's righteousness. When she died, the water ceased. This highlights her immense, quiet spiritual stature and her vital role in sustaining the entire nation." }
+          ],
+          "keywords": [
+            { "word": "Vatamot sham Miriam (Miriam died there)", "definition": "The passing of the great prophetess and sister of Moses, marking the beginning of the end for the original generation of leaders and the loss of the miraculous well." }
+          ]
+        },
+        {
+          "ref": "Numbers 20:10",
+          "commentary": [
+            { "source": "Maimonides / Rashi", "explanation": "Moses is commanded to 'speak to the rock' to bring forth water. Instead, frustrated by the people's rebellion, he says, 'Listen, you rebels!' and strikes the rock twice with his staff. God punishes Moses and Aaron by forbidding them to enter the Promised Land. Why such a harsh punishment? Rashi says Moses failed to 'sanctify God' by performing the exact miracle commanded (speaking). Maimonides argues Moses' sin was his sudden outburst of extreme anger ('you rebels'). A prophet represents God; by losing his temper, Moses misrepresented God's patience to the people, a failure of leadership that meant he could no longer guide them into the new era." }
+          ],
+          "keywords": [
+            { "word": "Vayach et hasela (And he struck the rock)", "definition": "Moses' tragic, fatal error. It demonstrates that leaders are held to impossibly high standards, and that a single moment of lost composure can alter destiny." }
+          ]
+        },
+        {
+          "ref": "Numbers 21:8",
+          "commentary": [
+            { "source": "Mishnah (Rosh Hashanah)", "explanation": "After another complaint, God sends venomous snakes. The people repent, and God tells Moses to make a copper snake and put it on a pole; anyone bitten who looks at it will live. The Mishnah asks: 'Does a copper snake kill or give life?!' No. The physical snake had no magic power. Looking up at the snake forced the Israelites to direct their eyes and their hearts upward toward their Father in Heaven. When they submitted their hearts to God, they were healed." }
+          ],
+          "keywords": [
+            { "word": "Nachash nechoshet (Copper serpent)", "definition": "A visual focal point designed to cure snakebites. It operated not through magic, but by forcing the afflicted to look upward and re-establish their faith in God's healing power." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Chukat (חֻקַּת) means \\\"The statute.\\\"\n\nContext: This parsha is set near the *end* of the 40 years of wandering. The generation that left Egypt has died out, and the new generation is preparing to enter the land. This parsha is a transition, marked by the deaths of the remaining original leaders.\n\nParsha Summary: The parsha opens with the *Chok* (statute) of the *Parah Adumah* (the Red Heifer). This is a 'super-rational' law: a ritual using the ashes of a red cow to purify those who have come in contact with a corpse. The parsha then fast-forwards to the end of the 40 years. Miriam dies, and the people's well (which, according to tradition, followed her) disappears. The people complain for water. God tells Moses to *speak* to a rock, but Moses, in anger, *strikes* it twice. Water comes out, but God punishes Moses and Aaron for this failure: they will not be allowed to enter the Promised Land. Aaron dies on Mount Hor. The people win their first battles against the Canaanites, but complain again, and are punished with a plague of fiery serpents. The parsha ends with battles against the Amorite kings, Sihon and Og.\n\nSignificance: Chukat is a parsha about mystery, mortality, and leadership failure. It opens with the 'ultimate *chok*' (a law beyond human logic), reminding us that we cannot understand everything. The central, tragic event is the 'sin' of Moses. His striking the rock is a complex failure—a failure of anger, a failure of trust, a failure to 'sanctify' God by *speaking* as commanded. It is a heartbreaking moment, teaching that even the greatest leaders are human and fallible, and that leadership has a crushing weight. The deaths of Miriam and Aaron mark the 'passing of the torch.' The new generation, unlike their parents, *fights* and *wins* battles, showing they are finally ready to inherit the land."
     },
     {
       "name": "Balak",
       "reference": "Numbers 22:2-25:9",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Numbers 22:6",
+          "commentary": [
+            { "source": "Rashi", "explanation": "Balak, king of Moab, realizes he cannot defeat Israel militarily, so he hires the sorcerer/prophet Balaam to curse them. He says, 'For I know that he whom you bless is blessed indeed, and he whom you curse is cursed.' Rashi notes Balak's shrewdness. He recognized that the Israelites' power was not in physical weapons, but in their spiritual connection and the power of their speech (prayer). To combat them, Balak tried to fight fire with fire, hiring a master of dark spiritual speech to wield words as weapons of mass destruction." }
+          ],
+          "keywords": [
+            { "word": "Ara-li et ha'am hazeh (Curse this people for me)", "definition": "Balak's desperate strategy to defeat Israel using supernatural warfare and spiritual sabotage rather than conventional military tactics." }
+          ]
+        },
+        {
+          "ref": "Numbers 22:28",
+          "commentary": [
+            { "source": "Rabbi Sacks / Midrash", "explanation": "God opens the mouth of Balaam's donkey to rebuke him after Balaam beats the animal for refusing to move past an invisible angel. Rabbi Sacks points out the delicious irony and satire of this scene. Balaam is supposedly the greatest 'seer' and prophet in the pagan world, a man who claims to know the mind of the gods. Yet, he is utterly blind to the angel standing right in front of him, while his lowly, dumb beast of burden can see it perfectly. It is God's way of mocking Balaam's arrogance, showing that true vision requires humility, not just occult power." }
+          ],
+          "keywords": [
+            { "word": "Vatiftach Hashem et pi ha'aton (And the Lord opened the donkey's mouth)", "definition": "A comedic and miraculous reversal of roles, where the 'great prophet' is blind and foolish, and the silent animal becomes the speaker of divine truth." }
+          ]
+        },
+        {
+          "ref": "Numbers 24:5",
+          "commentary": [
+            { "source": "Talmud (Baba Batra 60a)", "explanation": "Balaam looks out over the Israelite camp intending to curse them, but instead declares: 'How fair are your tents, O Jacob, your dwellings, O Israel!' (Ma tovu ohalecha Yaakov). What did he see that forced a blessing from his lips? The Talmud explains that Balaam saw the brilliant social design of the camp: the entrances of their tents did not face one another. They possessed a profound respect for privacy and modesty. Seeing a society built on mutual respect and healthy boundaries, Balaam realized they were immune to his curses." }
+          ],
+          "keywords": [
+            { "word": "Ma Tovu (How goodly / fair)", "definition": "Balaam's famous, involuntary exclamation of praise, which later became the opening line of the morning prayer service in synagogues worldwide." }
+          ]
+        },
+        {
+          "ref": "Numbers 25:1",
+          "commentary": [
+            { "source": "Rashi", "explanation": "After Balaam completely fails to curse Israel, the parsha ends with a devastating twist. The Israelite men are seduced by Moabite and Midianite women, who invite them to partake in idolatrous orgies to the god Baal-Peor. Rashi explains that this was actually Balaam's parting advice to Balak. He told the king: 'Their God hates promiscuity. If you want to destroy them, don't use curses or swords; send your daughters to seduce them.' What the greatest sorcerer could not achieve with magic, a few moments of moral weakness accomplished, leading to a deadly plague." }
+          ],
+          "keywords": [
+            { "word": "Vayachel ha'am liznot (The people began to commit harlotry)", "definition": "The tragic moral collapse of the Israelites at Shittim. It demonstrates that the nation's greatest vulnerability was not external enemies, but internal temptation." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Balak (בָּלָק) is the proper name Balak.\n\nContext: This parsha is named for its antagonist, Balak, the king of Moab. The Israelites have just won major battles and are encamped on the plains of Moab, on the eastern border of the Promised Land. The Moabites are terrified.\n\nParsha Summary: Balak, king of Moab, summons a famous non-Jewish prophet, Balaam, to come and curse the Israelites. Balaam is a complex, greedy figure who agrees to go. On the way, his donkey sees an angel of God blocking the path and refuses to move. Balaam beats the donkey, who is then miraculously given the power of speech to rebuke him. Balaam is allowed to proceed, but warned to \"speak only the word I give you.\" Three times, Balak takes Balaam to a mountaintop overlooking the Israelite camp to curse them. And three times, Balaam opens his mouth, and God \"puts in\" a blessing instead. His blessings are some of the most beautiful in the Torah ('How goodly are your tents, O Jacob...'). Frustrated, Balak dismisses him. The parsha ends with the Israelites falling into sin, enticed by Moabite women into idol worship, leading to a plague.\n\nSignificance: Balak is a unique, \"inside-out\" parsha. The entire narrative is told from the *outside*, from the perspective of Israel's *enemies*. We learn about Israel's destiny not from Moses, but from a foreign prophet who is *trying* to curse them. The parsha teaches that the nation's spiritual destiny is protected by God, even from the most powerful spiritual \"weapons.\" Balaam's unwilling blessings ('A star shall rise from Jacob...') become a key part of Jewish prophecy. The parsha's twist is at the end: what cannot be destroyed by curses *can* be undermined by seduction. The takeaway is that the greatest threat to the Jewish people is not external enmity, but internal moral corruption."
     },
     {
       "name": "Pinchas",
       "reference": "Numbers 25:10-30:1",
-      "verses": [],
+      "verses": [
+        {
+          "ref": "Numbers 25:12",
+          "commentary": [
+            { "source": "Rashi", "explanation": "In response to Pinchas's act of violent zealotry (spearing the Israelite leader and Midianite princess who were sinning publicly), God rewards him with 'My covenant of peace' (Briti Shalom). Rashi explains that the people were mocking Pinchas, calling him a murderer descended from idolaters. God gave him this covenant to legitimize his action. Interestingly, in the Torah scroll, the letter 'Vav' in the word 'Shalom' is written with a crack or break in it. The broken letter suggests that while Pinchas's violence stopped the plague and was necessary in that exact moment, violence inherently fractures the world. True, whole peace cannot be permanently built on bloodshed." }
+          ],
+          "keywords": [
+            { "word": "Briti Shalom (My covenant of peace)", "definition": "The paradoxical reward given to Pinchas for his act of violence. It secured his priesthood, but the broken lettering in the scroll warns against celebrating zealotry as an ideal." }
+          ]
+        },
+        {
+          "ref": "Numbers 27:4",
+          "commentary": [
+            { "source": "Rabbi Sacks / Midrash", "explanation": "The five daughters of Zelophehad approach Moses. Their father died with no sons, meaning their family would lose its portion in the Promised Land. They boldly argue: 'Why should our father's name be lost... give us a holding!' Rabbi Sacks highlights this as a revolutionary moment in ancient law. Moses doesn't know the answer and brings their case directly to God. God says, 'The daughters of Zelophehad speak right!' and changes the inheritance laws. The Midrash praises the women of that generation for their deep love of the Land of Israel, contrasting their faith with the male spies who had refused to enter it." }
+          ],
+          "keywords": [
+            { "word": "Ken B'not Tzlofchad dovrot (The daughters of Zelophehad speak right)", "definition": "God's explicit validation of the women's legal argument, demonstrating that the Torah's legal system is responsive to valid, justice-oriented human appeals." }
+          ]
+        },
+        {
+          "ref": "Numbers 27:16",
+          "commentary": [
+            { "source": "Rashi", "explanation": "Moses asks God to appoint a new leader. God chooses Joshua, describing him as 'an inspired man' (ish asher ruach bo - literally 'a man in whom there is spirit'). Rashi explains this beautifully: a true leader must have 'ruach,' meaning they must be able to understand and accommodate the distinct spirit, mindset, and temperament of every single individual in the community. Joshua is chosen not just for his military prowess, but for his emotional intelligence and capacity for deep empathy." }
+          ],
+          "keywords": [
+            { "word": "Ish asher ruach bo (A man in whom is spirit)", "definition": "The defining prerequisite for biblical leadership: possessing the 'spirit' to relate to, tolerate, and guide people of vastly different dispositions." }
+          ]
+        }
+      ],
       "significance": "Name Meaning: Pinchas (פִּינְחָס) is the proper name Phinehas.\n\nContext: This parsha, named for the priestly hero, opens in the immediate, chaotic aftermath of the sin with the Moabite women at the end of Balak. A plague is raging, and the community's moral fabric is unraveling.\n\nParsha Summary: The parsha opens by praising Pinchas, Aaron's grandson, who in an act of zealousness, stopped the plague by publicly executing an Israelite prince and a Midianite princess who were sinning. God rewards Pinchas with a 'covenant of peace' and the priesthood. God then commands a new *census* of the new generation. Based on this census, the land is to be divided by lottery. A new legal case arises: the *Daughters of Zelophehad*, whose father died without sons, petition Moses for an inheritance. God agrees, establishing a new law of inheritance for women. Moses is told he will die, and he asks God to appoint a successor. God chooses *Yehoshua* (Joshua), and Moses publicly transfers leadership to him. The parsha concludes with a detailed list of the public offerings for Shabbat, festivals, and new moons.\n\nSignificance: Pinchas is a parsha of transition and 'passing the torch.' It begins with the controversial act of Pinchas, a model of zealous passion, but the parsha immediately transitions to the *structured* future. The census and land-division laws are the 'boring' but essential work of building a state. The story of the Daughters of Zelophehad is a revolutionary moment, showing that the law can be amended through human initiative (especially women's) to create a more just society. The appointment of Joshua is a model of leadership transition—public, orderly, and blessed by Moses. The key takeaway is that while zeal (Pinchas) can save a community in a crisis, a community *endures* through just laws, orderly structure, and a thoughtful passing of leadership to the next generation."
     },
     {
