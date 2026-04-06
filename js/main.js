@@ -4929,21 +4929,22 @@ function createVerseElement(englishText, hebrewText, verseRef, verseNumber) {
     reactionsSection.appendChild(bookmarkBtn);
     container.appendChild(reactionsSection);
 
-    // Add purple asterisk for extremely important verses (bottom right of container)
+    // Add purple button for extremely important verses (bottom right of container)
     if (isImportantVerse(verseRef)) {
-        const asterisk = document.createElement('div');
-        asterisk.className = 'important-verse-asterisk';
-        asterisk.innerHTML = '*';
-        asterisk.setAttribute('title', 'Click to see why this verse is extremely important');
-        asterisk.setAttribute('data-verse-ref', verseRef);
-        asterisk.addEventListener('click', (e) => {
+        const impBtn = document.createElement('button');
+        impBtn.type = 'button';
+        impBtn.className = 'important-verse-btn';
+        impBtn.textContent = 'Read About Importance';
+        impBtn.setAttribute('aria-label', 'Read about why this verse is extremely important');
+        impBtn.setAttribute('data-verse-ref', verseRef);
+        impBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             const verseData = getImportantVerseData(verseRef);
             if (verseData) {
                 showVerseSignificance(verseRef, verseData.explanation);
             }
         });
-        container.appendChild(asterisk);
+        container.appendChild(impBtn);
     }
 
     // Store bookmark button reference for later updates
