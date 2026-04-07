@@ -18,6 +18,8 @@
     <meta name="twitter:title" content="Weekly Torah Study — A Letter in the Scroll">
     <meta name="twitter:description" content="Interactive weekly Torah portion study and discussion. Explore the parsha with commentary and insights.">
     <meta name="twitter:image" content="https://www.aletterinthescroll.com/media/images/welcome.jpg">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="A Letter in the Scroll">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/shabbat.css">
     <!-- Mobile-only overrides for subtle online friends bar -->
@@ -196,6 +198,27 @@
             .dt-mini-btn { padding: 0.55rem 1.1rem; font-size: 0.74rem; }
         }
     </style>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Weekly Torah Study — A Letter in the Scroll",
+        "description": "Interactive weekly Torah portion study and discussion. Explore the parsha with commentary, insights, and learn with your chavruta community.",
+        "url": "https://www.aletterinthescroll.com/study/",
+        "image": "https://www.aletterinthescroll.com/media/images/welcome.jpg",
+        "publisher": {
+                "@type": "Organization",
+                "name": "A Letter in the Scroll",
+                "url": "https://www.aletterinthescroll.com",
+                "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://www.aletterinthescroll.com/media/images/logonew.png"
+                }
+        },
+        "inLanguage": "en"
+}
+    </script>
 </head>
 <body class="bg-gray-50 min-h-screen">
 
@@ -424,7 +447,7 @@
     <main class="container mx-auto px-4 py-8">
         <div id="content-area" class="bg-white rounded-lg shadow-lg p-6 md:p-8 border border-gray-200">
             <!-- Parsha Title and Reference -->
-            <h2 id="parsha-title" class="text-2xl md:text-3xl font-bold mb-2 text-blue-900"></h2>
+            <h1 id="parsha-title" class="text-2xl md:text-3xl font-bold mb-2 text-blue-900"></h1>
             <h3 id="parsha-reference" class="text-lg italic mb-6 text-blue-700"></h3>
             
             <!-- Loading/Error Messages -->
