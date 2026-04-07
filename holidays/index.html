@@ -16,6 +16,8 @@
     <meta name="twitter:title" content="Jewish Holidays — A Letter in the Scroll">
     <meta name="twitter:description" content="Explore Jewish holidays — stories, songs, prayers, and traditions for the whole year.">
     <meta name="twitter:image" content="https://www.aletterinthescroll.com/media/images/welcome.jpg">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="A Letter in the Scroll">
     <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png" media="(prefers-color-scheme: light)"><link rel="icon" type="image/svg+xml" href="/media/images/favicon-dark.svg" media="(prefers-color-scheme: dark)">
     <link rel="apple-touch-icon" sizes="180x180" href="/media/images/apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -451,6 +453,36 @@
             }
         }
     </style>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Jewish Holidays — A Letter in the Scroll",
+        "description": "Explore Jewish holidays throughout the year — stories, songs, prayers, and traditions for Purim, Passover, Shavuot, Rosh Hashana, Yom Kippur, Sukkot, Hanukkah, and more.",
+        "url": "https://www.aletterinthescroll.com/holidays/",
+        "image": "https://www.aletterinthescroll.com/media/images/welcome.jpg",
+        "author": {
+                "@type": "Organization",
+                "name": "A Letter in the Scroll",
+                "url": "https://www.aletterinthescroll.com"
+        },
+        "publisher": {
+                "@type": "Organization",
+                "name": "A Letter in the Scroll",
+                "url": "https://www.aletterinthescroll.com",
+                "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://www.aletterinthescroll.com/media/images/logonew.png"
+                }
+        },
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://www.aletterinthescroll.com/holidays/"
+        }
+}
+    </script>
 </head>
 <body class="holidays-body min-h-screen" data-header-fallback="true">
 
@@ -526,7 +558,7 @@
         <section class="hol-hero">
             <p class="hol-hero__eyebrow">ב״ה &nbsp;·&nbsp; Jewish Calendar</p>
             <div class="hol-hero__hebrew">מועדי ישראל</div>
-            <h2 class="hol-hero__title">Jewish <span>Holidays</span></h2>
+            <h1 class="hol-hero__title">Jewish <span>Holidays</span></h1>
             <p class="hol-hero__subtitle">
                 Explore the stories, songs, and traditions of the Jewish year. Dates update automatically every year based on the Hebrew calendar.
             </p>
@@ -730,8 +762,8 @@
                         <div class="hol-card__hebrew">תִּשְׁעָה בְּאָב</div>
                     </div>
                     <h2 class="hol-card__name">Tisha B'Av</h2>
-                    <p class="hol-card__date"><span class="hol-card__date-row"><span class="hol-card__date-label">Begins evening:</span> Wednesday, July 22, 2026</span></p>
-                    <p class="hol-card__countdown">9 Av, 5786</p>
+                    <p class="hol-card__date" data-holiday="Tisha B'Av"><span class="hol-card__date-loading"></span></p>
+                    <p class="hol-card__countdown" data-holiday-countdown="Tisha B'Av"></p>
                     <p class="hol-card__desc">The saddest day on the Jewish calendar — a 25-hour fast commemorating the destruction of both Holy Temples in Jerusalem and a long chain of tragedies that have befallen the Jewish people throughout history.</p>
                 </div>
                 <div class="hol-card__actions">
@@ -919,7 +951,7 @@
         const HOLIDAY_KEYS = [
             'Purim', 'Passover', 'Shavuot', 'Rosh Hashana',
             'Yom Kippur', 'Sukkot', 'Chanukah', 'Tu BiShvat', "Lag B'Omer",
-            'Yom HaZikaron', 'Yom HaAtzmaut'
+            'Yom HaZikaron', 'Yom HaAtzmaut', "Tisha B'Av"
         ];
 
         try {
