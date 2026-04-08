@@ -30,6 +30,10 @@
     <style>
         .esther-reader-body .header-main {
             padding-bottom: 0;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.22);
+            background:
+                radial-gradient(circle at 10% 15%, rgba(244, 193, 90, 0.22), transparent 38%),
+                linear-gradient(140deg, #153a78 0%, #1d4ed8 48%, #153a78 100%);
         }
 
         /* ── Festive hero banner merged into site header ─────────── */
@@ -318,7 +322,7 @@
 </head>
 <body class="esther-reader-body" data-header-fallback="true">
 
-<div id="shared-header-mount" style="background:linear-gradient(135deg,#152046 0%,#1e3794 50%,#1e3794 100%);min-height:64px"></div>
+<div id="shared-header-mount" style="background:linear-gradient(135deg,#0c1a3e 0%,#16285e 45%,#1e3a8a 100%);min-height:64px"></div>
     <script src="/js/header-loader.js"></script>
     <script src="/js/auth-gate.js"></script>
 
@@ -336,10 +340,10 @@
             <h1 id="megillah-heading" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0">Book of Esther — Megillat Esther</h1>
 
             <!-- Corner decorative images -->
-            <img src="../../media/images/noiser1.jpg"       alt="" class="megillah-deco megillah-deco--tl" aria-hidden="true">
-            <img src="../../media/images/noiser2.png"       alt="" class="megillah-deco megillah-deco--tr" aria-hidden="true">
-            <img src="../../media/images/hamantashen1.png"  alt="" class="megillah-deco megillah-deco--bl" aria-hidden="true">
-            <img src="../../media/images/hamantaschen2.png" alt="" class="megillah-deco megillah-deco--br" aria-hidden="true">
+            <img src="/media/images/noiser1.jpg"       alt="" class="megillah-deco megillah-deco--tl" aria-hidden="true">
+            <img src="/media/images/noiser2.png"       alt="" class="megillah-deco megillah-deco--tr" aria-hidden="true">
+            <img src="/media/images/hamantashen1.png"  alt="" class="megillah-deco megillah-deco--bl" aria-hidden="true">
+            <img src="/media/images/hamantaschen2.png" alt="" class="megillah-deco megillah-deco--br" aria-hidden="true">
 
             <!-- Chapter navigation -->
             <p class="megillah-intro-note">Choose a chapter or read straight through.</p>
@@ -391,7 +395,7 @@
 
 
     <audio id="esther-noiser-audio" preload="auto" playsinline>
-        <source src="../../media/audio/Noisersound.mp3" type="audio/mpeg">
+        <source src="/media/audio/Noisersound.mp3" type="audio/mpeg">
     </audio>
 
     <script type="module">
@@ -404,7 +408,7 @@
         getUserBookmarksForVerses,
         addBookmark,
         removeBookmark
-    } from '../../js/firebase.js';
+    } from '/js/firebase.js';
 
     import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
@@ -415,13 +419,13 @@
         'פֶּרֶק ט', 'פֶּרֶק י'
     ];
     const NOISER_AUDIO_FALLBACKS = [
-        '../../media/audio/Noisersound1.mp3',
-        '../../media/audio/Noisersound.mp3'
+        '/media/audio/Noisersound1.mp3',
+        '/media/audio/Noisersound.mp3'
     ];
     const HAMAN_REGEX = /\bHaman\b/gi;
     const icons = [
-        '../../media/images/noiser1.jpg', '../../media/images/hamantashen1.png', '../../media/images/mask.png',
-        '../../media/images/noiser2.png', '../../media/images/hamantaschen2.png', '../../media/images/mask2.png'
+        '/media/images/noiser1.jpg', '/media/images/hamantashen1.png', '/media/images/mask.png',
+        '/media/images/noiser2.png', '/media/images/hamantaschen2.png', '/media/images/mask2.png'
     ];
 
     /* ── State ──────────────────────────────────────────────────── */
@@ -469,7 +473,7 @@
         return safeEnglish.replace(
             HAMAN_REGEX,
             (match) =>
-                `${match}<button type="button" class="mgv-haman-noiser" data-ref="${verseRef}" aria-label="Play noiser sound for Haman" title="Play noiser sound"><img src="../../media/images/noiser2.png" alt="" aria-hidden="true"></button>`
+                `${match}<button type="button" class="mgv-haman-noiser" data-ref="${verseRef}" aria-label="Play noiser sound for Haman" title="Play noiser sound"><img src="/media/images/noiser2.png" alt="" aria-hidden="true"></button>`
         );
     }
 
@@ -867,7 +871,7 @@
     initNoiserAudio();
 
     // 1. Fetch and render the Megillah text
-    fetch('../../data/bookofesther.json')
+    fetch('/data/bookofesther.json')
         .then(r => r.json())
         .then(data => {
             bookData = data;
