@@ -301,6 +301,33 @@ window.HOLIDAY_DATES_2026_2045 = {
         "2044": { "begins_evening": "May 3", "full_day": "May 4" },
         "2045": { "begins_evening": "April 24", "full_day": "April 25" }
       }
+    },
+    {
+      "name_en": "Tisha B'Av",
+      "name_he": "תִּשְׁעָה בְּאָב",
+      "description": "The saddest day on the Jewish calendar — a 25-hour fast commemorating the destruction of both Holy Temples and other national tragedies.",
+      "dates": {
+        "2026": { "begins_evening": "July 22", "full_day": "July 23" },
+        "2027": { "begins_evening": "August 11", "full_day": "August 12" },
+        "2028": { "begins_evening": "July 31", "full_day": "August 1" },
+        "2029": { "begins_evening": "July 21", "full_day": "July 22" },
+        "2030": { "begins_evening": "August 7", "full_day": "August 8" },
+        "2031": { "begins_evening": "July 28", "full_day": "July 29" },
+        "2032": { "begins_evening": "July 17", "full_day": "July 18" },
+        "2033": { "begins_evening": "August 3", "full_day": "August 4" },
+        "2034": { "begins_evening": "July 24", "full_day": "July 25" },
+        "2035": { "begins_evening": "August 13", "full_day": "August 14" },
+        "2036": { "begins_evening": "August 2", "full_day": "August 3" },
+        "2037": { "begins_evening": "July 22", "full_day": "July 23" },
+        "2038": { "begins_evening": "August 9", "full_day": "August 10" },
+        "2039": { "begins_evening": "July 30", "full_day": "July 31" },
+        "2040": { "begins_evening": "July 18", "full_day": "July 19" },
+        "2041": { "begins_evening": "August 5", "full_day": "August 6" },
+        "2042": { "begins_evening": "July 26", "full_day": "July 27" },
+        "2043": { "begins_evening": "August 12", "full_day": "August 13" },
+        "2044": { "begins_evening": "August 1", "full_day": "August 2" },
+        "2045": { "begins_evening": "July 19", "full_day": "July 20" }
+      }
     }
   ]
 };
