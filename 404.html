@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | A Letter in the Scroll</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/svg+xml" href="/media/images/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" sizes="180x180" href="/media/images/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Manrope', 'Segoe UI', system-ui, sans-serif;
+            color: #1f2a44;
+            background: #f5f3ee;
+            overflow-x: hidden;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Warm parchment background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse at 15% 8%, rgba(200, 154, 53, 0.08), transparent 50%),
+                radial-gradient(ellipse at 85% 15%, rgba(35, 64, 143, 0.06), transparent 45%),
+                radial-gradient(ellipse at 50% 90%, rgba(200, 154, 53, 0.05), transparent 50%),
+                linear-gradient(175deg, #faf8f4 0%, #f0ece4 40%, #eae6dc 100%);
+        }
+
+        /* Subtle animated stars */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background-image:
+                radial-gradient(1.5px 1.5px at 10% 20%, rgba(184, 139, 38, 0.25), transparent),
+                radial-gradient(1px 1px at 30% 65%, rgba(184, 139, 38, 0.18), transparent),
+                radial-gradient(1.5px 1.5px at 55% 12%, rgba(35, 64, 143, 0.15), transparent),
+                radial-gradient(1px 1px at 70% 80%, rgba(184, 139, 38, 0.2), transparent),
+                radial-gradient(1.5px 1.5px at 85% 35%, rgba(35, 64, 143, 0.12), transparent),
+                radial-gradient(1px 1px at 92% 55%, rgba(184, 139, 38, 0.15), transparent),
+                radial-gradient(1px 1px at 45% 45%, rgba(184, 139, 38, 0.12), transparent);
+            animation: twinkle 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0%   { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 620px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Logo */
+        .logo-wrap {
+            margin-bottom: 2rem;
+        }
+        .logo-wrap a {
+            display: inline-block;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+        .logo-wrap a:hover {
+            transform: scale(1.05);
+        }
+        .logo-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            box-shadow:
+                0 4px 24px rgba(184, 139, 38, 0.18),
+                0 0 0 3px rgba(201, 160, 63, 0.15);
+            background: #fff;
+        }
+
+        /* 404 number */
+        .error-code {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(5rem, 15vw, 9rem);
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            background: linear-gradient(138deg, #0c1a3a 0%, #162b60 40%, #1e3d7a 75%, #b88b26 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.25rem;
+        }
+
+        .error-label {
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #b88b26;
+            margin-bottom: 2rem;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0 auto 2rem;
+            max-width: 260px;
+        }
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #c9a03f, transparent);
+        }
+        .divider-star {
+            color: #c9a03f;
+            font-size: 0.7rem;
+        }
+
+        /* Quote */
+        .quote-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(201, 160, 63, 0.18);
+            border-radius: 1.25rem;
+            padding: 2rem 2.25rem;
+            margin-bottom: 2.5rem;
+            box-shadow:
+                0 8px 32px rgba(15, 23, 42, 0.06),
+                0 1px 3px rgba(184, 139, 38, 0.08);
+            transition: box-shadow 0.3s ease;
+        }
+        .quote-card:hover {
+            box-shadow:
+                0 12px 40px rgba(15, 23, 42, 0.08),
+                0 2px 6px rgba(184, 139, 38, 0.12);
+        }
+
+        .quote-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem;
+            font-style: italic;
+            font-weight: 400;
+            line-height: 1.7;
+            color: #2c3a54;
+            margin-bottom: 1rem;
+        }
+
+        .quote-source {
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            color: #b88b26;
+        }
+
+        .quote-hebrew {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: #4a5568;
+            direction: rtl;
+            margin-bottom: 0.75rem;
+            line-height: 1.8;
+        }
+
+        /* Message */
+        .message {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #4a5568;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Buttons */
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.75rem;
+            border-radius: 0.75rem;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(138deg, #0c1a3a 0%, #162b60 50%, #1e3d7a 100%);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(22, 43, 96, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(22, 43, 96, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.7);
+            color: #1f2a44;
+            border: 1px solid rgba(201, 160, 63, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(201, 160, 63, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        /* Footer note */
+        .footer-note {
+            margin-top: 3rem;
+            font-size: 0.78rem;
+            color: #8a8478;
+            letter-spacing: 0.02em;
+        }
+        .footer-note a {
+            color: #b88b26;
+            text-decoration: none;
+        }
+        .footer-note a:hover {
+            text-decoration: underline;
+        }
+
+        /* Fade in animation */
+        .container {
+            animation: fadeUp 0.8s ease-out both;
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .quote-card {
+            animation: fadeUp 0.8s ease-out 0.2s both;
+        }
+        .btn-row {
+            animation: fadeUp 0.8s ease-out 0.4s both;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .quote-card {
+                padding: 1.5rem 1.25rem;
+            }
+            .quote-text {
+                font-size: 1.15rem;
+            }
+            .btn-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- Logo -->
+        <div class="logo-wrap">
+            <a href="/" aria-label="Go to homepage">
+                <img src="/media/images/logonew.png" alt="A Letter in the Scroll" class="logo-img" width="80" height="80">
+            </a>
+        </div>
+
+        <!-- 404 -->
+        <div class="error-code" aria-hidden="true">404</div>
+        <p class="error-label">Page Not Found</p>
+
+        <!-- Divider -->
+        <div class="divider" aria-hidden="true">
+            <span class="divider-line"></span>
+            <span class="divider-star">&#10038;</span>
+            <span class="divider-line"></span>
+        </div>
+
+        <!-- Inspirational quote — randomly selected -->
+        <div class="quote-card" id="quote-card">
+            <p class="quote-hebrew" id="quote-hebrew"></p>
+            <p class="quote-text" id="quote-text"></p>
+            <p class="quote-source" id="quote-source"></p>
+        </div>
+
+        <p class="message">
+            The page you're looking for has moved or doesn't exist — but every
+            journey has unexpected turns. Let's find your way back.
+        </p>
+
+        <!-- Actions -->
+        <div class="btn-row">
+            <a class="btn btn-primary" href="/dashboard">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10.5L12 3l9 7.5M5 9.5V21h14V9.5"/></svg>
+                Go Home
+            </a>
+            <a class="btn btn-secondary" href="/study">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                Study Room
+            </a>
+            <a class="btn btn-secondary" href="/holidays">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2" ry="2" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3v4M8 3v4M3 11h18"/></svg>
+                Holidays
+            </a>
+        </div>
+
+        <p class="footer-note">
+            <a href="/">A Letter in the Scroll</a> &mdash; Every Jewish soul is a letter in the Torah.
+        </p>
+    </div>
+
+    <script>
+    (function () {
+        var quotes = [
+            {
+                hebrew: "גַּם זוּ לְטוֹבָה",
+                text: "This too is for the good.",
+                source: "Talmud, Taanit 21a"
+            },
+            {
+                hebrew: "לֹא עָלֶיךָ הַמְּלָאכָה לִגְמוֹר, וְלֹא אַתָּה בֶן חוֹרִין לְהִבָּטֵל מִמֶּנָּה",
+                text: "It is not your duty to finish the work, but neither are you free to neglect it.",
+                source: "Pirkei Avot 2:16"
+            },
+            {
+                hebrew: "בִּמְקוֹם שֶׁאֵין אֲנָשִׁים, הִשְׁתַּדֵּל לִהְיוֹת אִישׁ",
+                text: "In a place where there are no leaders, strive to be one.",
+                source: "Pirkei Avot 2:5"
+            },
+            {
+                hebrew: "הֱוֵי מְקַבֵּל אֶת כָּל הָאָדָם בְּסֵבֶר פָּנִים יָפוֹת",
+                text: "Greet every person with a warm and friendly face.",
+                source: "Pirkei Avot 1:15"
+            },
+            {
+                hebrew: "אִם אֵין אֲנִי לִי, מִי לִי? וּכְשֶׁאֲנִי לְעַצְמִי, מָה אֲנִי? וְאִם לֹא עַכְשָׁיו, אֵימָתַי?",
+                text: "If I am not for myself, who will be for me? If I am only for myself, what am I? And if not now, when?",
+                source: "Pirkei Avot 1:14"
+            },
+            {
+                hebrew: "כָּל יִשְׂרָאֵל עֲרֵבִים זֶה בָּזֶה",
+                text: "All of Israel are responsible for one another.",
+                source: "Talmud, Shevuot 39a"
+            },
+            {
+                hebrew: "הַלּוֹמֵד מִכָּל אָדָם... הוּא חָכָם",
+                text: "Who is wise? One who learns from every person.",
+                source: "Pirkei Avot 4:1"
+            },
+            {
+                hebrew: "עֲשֵׂה לְךָ רַב, וּקְנֵה לְךָ חָבֵר",
+                text: "Find yourself a teacher, and acquire for yourself a friend.",
+                source: "Pirkei Avot 1:6"
+            },
+            {
+                hebrew: "דַּע מֵאַיִן בָּאתָ, וּלְאָן אַתָּה הוֹלֵךְ",
+                text: "Know where you came from, and where you are going.",
+                source: "Pirkei Avot 3:1"
+            },
+            {
+                hebrew: "יָפָה שָׁעָה אַחַת בִּתְשׁוּבָה וּמַעֲשִׂים טוֹבִים בָּעוֹלָם הַזֶּה מִכָּל חַיֵּי הָעוֹלָם הַבָּא",
+                text: "One hour of repentance and good deeds in this world is more beautiful than all of the World to Come.",
+                source: "Pirkei Avot 4:17"
+            }
+        ];
+
+        var pick = quotes[Math.floor(Math.random() * quotes.length)];
+        document.getElementById('quote-hebrew').textContent = pick.hebrew;
+        document.getElementById('quote-text').textContent = '\u201C' + pick.text + '\u201D';
+        document.getElementById('quote-source').textContent = '\u2014 ' + pick.source;
+    })();
+    </script>
+
+</body>
+</html>
