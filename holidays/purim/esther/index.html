@@ -405,7 +405,7 @@
         getReactionCountsForBook,
         getUserReactions,
         getBookmarkCountsForBook,
-        getUserBookmarksForVerses,
+        getUserBookmarks,
         addBookmark,
         removeBookmark
     } from '/js/firebase.js';
@@ -817,11 +817,16 @@
     }
 
     async function batchGetUserBookmarks(userId, allRefs) {
+        const allBookmarks = await getUserBookmarks(userId);
         const result = {};
-        for (let i = 0; i < allRefs.length; i += 30) {
-            const batch = allRefs.slice(i, i + 30);
-            const batchResult = await getUserBookmarksForVerses(userId, batch);
-            Object.assign(result, batchResult);
+        const refSet = new Set(allRefs);
+        if (Array.isArray(allBookmarks)) {
+            allBookmarks.forEach(bm => {
+                const vRef = bm.verseRef || bm.ref;
+                if (vRef && refSet.has(vRef)) {
+                    result[vRef] = true;
+                }
+            });
         }
         return result;
     }
