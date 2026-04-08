@@ -2574,6 +2574,7 @@ async function deleteCommentAsTeacher(commentId) {
 }
 
 export {
+  auth,
   db,
   initAuth,
   getCurrentUserId,
