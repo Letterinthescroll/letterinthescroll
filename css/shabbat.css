@@ -339,6 +339,11 @@ body.shabbat-mode #shabbat-banner::before {
     z-index: 0;
 }
 
+/* No glow pseudo on the login-page banner — it clips and leaves a visible edge */
+body.shabbat-mode #shabbat-banner.shabbat-login-banner::before {
+    display: none;
+}
+
 /* =============================================
    10. COMMUNITY STATUS BAR TEXT COLORS
    ============================================= */
@@ -988,7 +993,7 @@ body.shabbat-mode #back-to-top {
    No audio, compact greeting, floating icons.
    ============================================= */
 
-/* Login header — warm sunrise gradient */
+/* Login header — warm sunrise gradient, kill default box-shadow */
 body.shabbat-mode .gradient-header {
     background: linear-gradient(
         145deg,
@@ -999,6 +1004,7 @@ body.shabbat-mode .gradient-header {
         #b88520 100%
     ) !important;
     background-size: 200% 200% !important;
+    box-shadow: none !important;
 }
 
 /* Compact shabbat banner inside login header */
@@ -1006,7 +1012,9 @@ body.shabbat-mode .gradient-header {
     position: relative;
     text-align: center;
     padding: 0.8rem 1rem 0;
-    overflow: hidden;
+    overflow: visible;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .shabbat-login-banner .shabbat-greeting {
