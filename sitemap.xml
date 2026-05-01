@@ -4,7 +4,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://www.aletterinthescroll.com/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -12,49 +12,43 @@
   <!-- Main sections -->
   <url>
     <loc>https://www.aletterinthescroll.com/study/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/psalms/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/prayers/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/about/</loc>
-    <lastmod>2026-04-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.aletterinthescroll.com/dashboard/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -62,103 +56,103 @@
   <!-- Holiday pages -->
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/passover/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/passover/haggadah/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/passover/story/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/passover/trivia/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/purim/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/purim/story/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/purim/esther/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/purim/songs/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/rosh-hashanah/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/yom-kippur/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/sukkot/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/hanukkah/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/shavuot/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/tu-bishvat/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/lag-baomer/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/yom-hazikaron/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/yom-haatzmaut/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -166,13 +160,13 @@
   <!-- Additional holiday pages -->
   <url>
     <loc>https://www.aletterinthescroll.com/tisha-bav/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/holiday-landing/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -180,43 +174,43 @@
   <!-- Purim songs -->
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/purim/song-chag-purim/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/purim/song-mashup/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/purim/song-ten-katef/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/purim/song-mishak-purim/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/purim/song-sasson-viykar/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/purim/song-ani-purim/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/holidays/purim/song-shoshanat-yaakov/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -224,211 +218,211 @@
   <!-- Song detail pages (0-34) -->
   <url>
     <loc>https://www.aletterinthescroll.com/songs/0.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/1.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/2.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/3.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/4.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/5.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/6.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/7.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/8.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/9.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/10.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/11.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/12.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/13.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/14.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/15.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/16.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/17.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/18.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/19.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/20.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/21.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/22.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/23.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/24.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/25.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/26.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/27.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/28.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/29.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/30.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/31.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/32.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/33.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/songs/34.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -436,759 +430,735 @@
   <!-- Recipe pages (120 recipes) -->
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/abgoosht-with-gondi-persian-lamb-chickpea-stew.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/ashkenazi-apple-noodle-kugel.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/ashkenazi-arbes-ritual-peppery-chickpeas.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/ashkenazi-kishke.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/ashkenazi-kreplach-meat-dumplings.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/ashkenazi-mushroom-barley-soup.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/ashkenazi-sweet-and-sour-tongue.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/authentic-israeli-hummus.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/biscochos-de-huevo-sephardic-bracelet-cookies.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/bukharan-bakhsh-green-herb-pilaf.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/bukharan-osh-sovo-overnight-slow-cooked-rice.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/chocolate-babka.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/chopped-liver.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/classic-gefilte-fish.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/classic-potato-kugel-fluffy-method.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/coconut-cream-malabi.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/couscous-au-lait-moroccan-mimouna-special.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/dairy-noodle-kugel.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/ethiopian-dabo-ritual-honey-bread.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/etrog-jam.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/fig-pomegranate-brisket.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/ghormeh-sabzi.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/green-schug-yemenite-herb-paste.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/hamod-lebanese-lemon-potato-soup.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/holiday-challah.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/homemade-amba.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/homemade-falafel.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/homemade-labneh.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/honey-ginger-teiglach-with-nuts.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/huevos-haminados-sephardic-slow-cooked-eggs.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/iraqi-amba-fish-mango-braised-fish.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/iraqi-chicken-shorba-hearty-rice-soup.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/iraqi-chickpea-sambousak.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/iraqi-ingeryieh.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/iraqi-kubbeh-bamia.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/iraqi-kubbeh-batata.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/iraqi-kubbeh-hamusta-sour-chard-soup.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/iraqi-kubbeh-hamusta.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/iraqi-spayty-chicken-coconut-curry.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/iraqi-stuffed-vegetables-mahshi.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/iraqi-tbeet.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/israeli-arayes.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/israeli-baked-cheesecake-shavuot.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/israeli-chicken-schnitzel.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/israeli-chopped-salad.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/israeli-jelly-sufganiyot.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/israeli-krembo-chocolate-marshmallow-cookies.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/israeli-malawach-pizza-modern-fusion.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/israeli-pletzl-ashkenazi-onion-flatbread.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/israeli-sabich-salad-deconstructed.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/jewish-honey-cake.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/keftes-de-prasa.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/kubbeh-patata-iraqi-potato-meat-dumplings.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/kubbeh-selek-iraqi-beet-dumpling-soup.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/libyan-asida-semolina-pudding.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/libyan-couscous-seven-vegetables.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/lisan-el-qathi-iraqi-stuffed-eggplant-rolls.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/maakouda-moroccan-potato-fritters.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/maamoul-date-cookies.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/matbucha.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/matzah-ball-soup.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/mejadra-lentils-rice.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/meorav-yerushalmi-jerusalem-mixed-grill.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/mina-de-carne-sephardic-meat-matzo-pie.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/moroccan-carrot-salad.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/moroccan-chicken-pastilla.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/moroccan-cumin-beet-salad-barba.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/moroccan-fish-patties-ktzitzot-dagim.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/moroccan-harira-soup.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/moroccan-lamb-tagine.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/moroccan-moufleta.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/moroccan-schina-hamin.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/moroccan-schina-wheat-berry.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/moroccan-sfenj.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/moroccan-spiced-kumquat-jam.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/moroccan-tfaya-caramelized-onion-topping.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/msabaha-warm-chunky-hummus.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/olive-oil-mandel-bread.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/persian-faloodeh.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/persian-fesenjan.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/persian-gondi.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/pomegranate-glazed-salmon.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/potato-knishes.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/red-schug-fiery-yemenite-chili-paste.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/saluf-yemenite-soft-pita.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/sefa-moroccan-sweet-ceremonial-couscous.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/sephardic-aggristada-fish-classic.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/sephardic-agristada-fish.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/sephardic-bimuelos.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/sephardic-borekas-de-spinaka-spinach-cheese-triangles.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/sephardic-date-charoset.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/sephardic-orange-chiffon-cake.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/sephardic-pan-de-espana-sponge-cake.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/sephardic-pastelicos-meat-rice-pies.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/sephardic-travados-walnut-filled-pastries.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/shirin-polo-persian-wedding-rice.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/spicy-moroccan-fish-chraime.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/spinach-cheese-bourekas.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/spinach-feta-kugel.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/stuffed-cabbage-holishkes.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/syrian-bazargan-bulgur-tamarind-salad.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/syrian-cherry-meatballs-kibbeh-geraz.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/syrian-lachmagine.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/syrian-muhammara-walnut-pepper-dip.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/syrian-stuffed-zucchini-dried-fruit.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/syrian-tamarind-meatballs.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/tahini-cookies.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/traditional-teiglach.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/tunisian-fricassee-fried-sandwich-buns.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/yemenite-chicken-soup.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/yemenite-hawaij-coffee-ritual-spice.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/yemenite-hilbe-fenugreek-dip.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/yemenite-jachnun.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/yemenite-kubaneh.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/yemenite-lachuch-spongy-pancake-bread.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/yemenite-malawach.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/yemenite-saltah-fenugreek-stew.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/yemenite-zhug-cilantro-chili-paste.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/yerushalmi-kugel.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/food/recipes/zaalouk.html</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Utility pages -->
   <url>
-    <loc>https://www.aletterinthescroll.com/flashcards/</loc>
-    <lastmod>2026-04-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://www.aletterinthescroll.com/flashcards/study.html</loc>
-    <lastmod>2026-04-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://www.aletterinthescroll.com/journal/</loc>
-    <lastmod>2026-04-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://www.aletterinthescroll.com/bookmarks/</loc>
-    <lastmod>2026-04-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://www.aletterinthescroll.com/join/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/invite/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -1196,13 +1166,13 @@
   <!-- Legal pages -->
   <url>
     <loc>https://www.aletterinthescroll.com/privacy/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.aletterinthescroll.com/terms/</loc>
-    <lastmod>2026-04-09</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

@@ -11,5 +11,11 @@ Disallow: /teachers/
 Disallow: /settings/
 Disallow: /shabbat-preview/
 
+# Disallow auth-gated user pages (signed-in only)
+Disallow: /dashboard/
+Disallow: /journal/
+Disallow: /bookmarks/
+Disallow: /flashcards/
+
 # Sitemap
 Sitemap: https://www.aletterinthescroll.com/sitemap.xml
