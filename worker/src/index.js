@@ -31,7 +31,7 @@ async function handleUnsubscribe(url, env) {
   try {
     const fs = new FirestoreClient({
       projectId: env.FIREBASE_PROJECT_ID,
-      serviceAccountJson: env.FIREBASE_SERVICE_ACCOUNT_JSON
+      serviceAccount: assembleServiceAccount(env)
     });
     // Look up user by unsubscribeToken.
     const matches = await fs.runQuery('users', [
@@ -57,7 +57,7 @@ function redirectToConfirmation(env, isError) {
 async function runWeeklyJob(env) {
   const fs = new FirestoreClient({
     projectId: env.FIREBASE_PROJECT_ID,
-    serviceAccountJson: env.FIREBASE_SERVICE_ACCOUNT_JSON
+    serviceAccount: assembleServiceAccount(env)
   });
 
   // 1. Find every UID in any chavruta.
@@ -200,4 +200,23 @@ function randomToken() {
   let s = '';
   for (let i = 0; i < bytes.length; i++) s += bytes[i].toString(16).padStart(2, '0');
   return s;
+}
+
+// Assemble the service account from three individual Worker secrets.
+// We split it up because the original JSON contains newlines + quotes that
+// make `wrangler secret put` a pain to paste in one shot. The private_key
+// secret should be the PEM as a single line with literal \n where the
+// newlines were — we restore them here.
+function assembleServiceAccount(env) {
+  if (!env.FIREBASE_CLIENT_EMAIL || !env.FIREBASE_PRIVATE_KEY) {
+    throw new Error('Missing FIREBASE_CLIENT_EMAIL or FIREBASE_PRIVATE_KEY secret');
+  }
+  // Restore real newlines whether the secret was pasted with literal \n or
+  // with actual newlines.
+  const privateKey = env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n');
+  return {
+    client_email: env.FIREBASE_CLIENT_EMAIL,
+    private_key: privateKey,
+    project_id: env.FIREBASE_PROJECT_ID
+  };
 }

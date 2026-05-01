@@ -10,47 +10,101 @@ is a separate zone and is not touched.
 
 ## One-time setup
 
-You only do this once. Run all commands from this `worker/` directory.
+You only do this once. Run all commands from this `worker/` directory:
 
 ```bash
-# 1. Install wrangler globally if you don't have it
+cd worker
 npm install -g wrangler
-
-# 2. Log in to Cloudflare (opens a browser)
 wrangler login
+```
 
-# 3. Set the Resend API key as a secret
+The browser opens — log in with the Cloudflare account that owns
+`aletterinthescroll.com`.
+
+### Set the secrets
+
+The Worker needs three secrets. We split the Firebase service account into
+two pieces (`client_email` + `private_key`) so each is short enough to paste
+into a terminal cleanly without newline trouble.
+
+#### 1. Resend API key
+
+```bash
 wrangler secret put RESEND_API_KEY
-#   → paste the key from your Resend dashboard
+```
+Paste the API key from your Resend dashboard, press Enter.
 
-# 4. Set the Firebase service account JSON as a secret.
-#    Generate the key first:
-#      https://console.firebase.google.com/project/letterinthescroll/settings/serviceaccounts/adminsdk
-#      → "Generate new private key" → downloads a JSON file
-#    Then run:
-wrangler secret put FIREBASE_SERVICE_ACCOUNT_JSON
-#   → paste the entire contents of the downloaded JSON file
-#     (yes, the whole thing including the {} braces)
+#### 2. Generate the Firebase service account
 
-# 5. Deploy
+Open https://console.firebase.google.com/project/letterinthescroll/settings/serviceaccounts/adminsdk
+and click **"Generate new private key"**. A JSON file downloads. Open it in
+any text editor — you'll see something like:
+
+```json
+{
+  "type": "service_account",
+  "project_id": "letterinthescroll",
+  "private_key_id": "...",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBg...\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-xxxxx@letterinthescroll.iam.gserviceaccount.com",
+  ...
+}
+```
+
+You only need TWO fields: `client_email` and `private_key`.
+
+#### 3. Set FIREBASE_CLIENT_EMAIL
+
+```bash
+wrangler secret put FIREBASE_CLIENT_EMAIL
+```
+Paste only the `client_email` value (the part inside the quotes,
+e.g. `firebase-adminsdk-xxxxx@letterinthescroll.iam.gserviceaccount.com`).
+Press Enter.
+
+#### 4. Set FIREBASE_PRIVATE_KEY
+
+```bash
+wrangler secret put FIREBASE_PRIVATE_KEY
+```
+Paste the `private_key` value — the **entire string between the quotes**,
+including all the `\n` literals. It's a long single line that looks like:
+
+```
+-----BEGIN PRIVATE KEY-----\nMIIEvQ...\n-----END PRIVATE KEY-----\n
+```
+
+Press Enter. The Worker will convert the `\n` literals back into real
+newlines automatically.
+
+> **Tip:** if your terminal mangles the long paste, save the value to a temp
+> file and pipe it instead:
+> ```bash
+> echo "-----BEGIN PRIVATE KEY-----\nMIIEvQ...\n-----END PRIVATE KEY-----\n" | wrangler secret put FIREBASE_PRIVATE_KEY
+> ```
+
+### Deploy
+
+```bash
 wrangler deploy
 ```
 
-You'll see something like `Published alits-parsha-reminder (1.23 sec)` and
-the routes bound to your domain.
+You'll see something like `Published alits-parsha-reminder` and the routes
+bound to your domain.
 
-## Verifying it works
+## Verifying
 
 ```bash
 # Tail logs in real time
 wrangler tail
 
-# Manually trigger the cron (from another terminal — uses the deployed worker)
-curl -X POST "https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/workers/scripts/alits-parsha-reminder/schedules" \
-  -H "Authorization: Bearer <CF_API_TOKEN>"
+# Test the unsubscribe routing (should 302 to /unsubscribed/?error=1)
+curl -I "https://www.aletterinthescroll.com/unsubscribe?token=test123"
 ```
 
-Or simply wait until Wednesday and check `wrangler tail` from 17:00 UTC.
+To force-trigger the cron without waiting for Wednesday, the easiest path is
+to temporarily change the cron in `wrangler.toml` to a near-future minute,
+re-deploy, then change it back.
 
 ## Updating
 
@@ -64,8 +118,9 @@ Secrets persist across deploys; you don't need to re-set them.
 
 | Variable | Where set | What it is |
 |---|---|---|
-| `RESEND_API_KEY` | `wrangler secret put` | Resend dashboard |
-| `FIREBASE_SERVICE_ACCOUNT_JSON` | `wrangler secret put` | Firebase admin SDK service account JSON |
+| `RESEND_API_KEY` | `wrangler secret put` | Resend dashboard key |
+| `FIREBASE_CLIENT_EMAIL` | `wrangler secret put` | `client_email` field from Firebase service-account JSON |
+| `FIREBASE_PRIVATE_KEY` | `wrangler secret put` | `private_key` field (single line, with `\n` literals) |
 | `SITE_URL` | `wrangler.toml` `[vars]` | `https://www.aletterinthescroll.com` |
 | `FROM_EMAIL` | `wrangler.toml` `[vars]` | `A Letter in the Scroll <hello@aletterinthescroll.com>` |
 | `FIREBASE_PROJECT_ID` | `wrangler.toml` `[vars]` | `letterinthescroll` |

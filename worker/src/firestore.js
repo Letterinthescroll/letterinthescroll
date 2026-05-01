@@ -11,11 +11,15 @@ const SCOPE = 'https://www.googleapis.com/auth/datastore';
 let _cachedToken = null; // { accessToken, expiresAt }
 
 export class FirestoreClient {
-  constructor({ projectId, serviceAccountJson }) {
+  constructor({ projectId, serviceAccount, serviceAccountJson }) {
     this.projectId = projectId;
-    this.sa = typeof serviceAccountJson === 'string'
-      ? JSON.parse(serviceAccountJson)
-      : serviceAccountJson;
+    if (serviceAccount) {
+      this.sa = typeof serviceAccount === 'string' ? JSON.parse(serviceAccount) : serviceAccount;
+    } else if (serviceAccountJson) {
+      this.sa = typeof serviceAccountJson === 'string' ? JSON.parse(serviceAccountJson) : serviceAccountJson;
+    } else {
+      throw new Error('FirestoreClient requires serviceAccount or serviceAccountJson');
+    }
     this.basePath = `projects/${projectId}/databases/(default)/documents`;
   }
 

@@ -23,6 +23,9 @@ FROM_EMAIL = "A Letter in the Scroll <hello@aletterinthescroll.com>"
 FIREBASE_PROJECT_ID = "letterinthescroll"
 
 # Secrets — set via `wrangler secret put`:
-#   RESEND_API_KEY                 — your Resend API key
-#   FIREBASE_SERVICE_ACCOUNT_JSON  — full JSON contents of the Firebase admin
-#                                    service account key (one big string)
+#   RESEND_API_KEY            — your Resend API key
+#   FIREBASE_CLIENT_EMAIL     — the "client_email" field from the Firebase
+#                               service account JSON (one short line)
+#   FIREBASE_PRIVATE_KEY      — the "private_key" field, as a single line.
+#                               Newlines must be either literal \n or real
+#                               newlines; the worker accepts both.
