@@ -24,9 +24,18 @@
     const DEFAULT_SIZE = TEXT_SIZES.MEDIUM;
     const STORAGE_KEY = 'preferredTorahTextSize';
 
+    // Language modes: show both Hebrew + English, or Hebrew only.
+    const LANG_MODES = {
+        BOTH: 'torah-language-both',
+        HEBREW: 'torah-language-hebrew'
+    };
+    const DEFAULT_LANG = LANG_MODES.BOTH;
+    const LANG_STORAGE_KEY = 'preferredTorahLanguage';
+
     let controlElement = null;
     let toggleButton = null;
     let menuElement = null;
+    let langToggleButton = null;
 
     /**
      * Initialize the text size control widget
@@ -55,9 +64,11 @@
 
         toggleButton = controlElement.querySelector('.text-size-toggle');
         menuElement = controlElement.querySelector('.text-size-menu');
+        langToggleButton = controlElement.querySelector('.text-lang-toggle');
 
-        // Load saved preference
+        // Load saved preferences
         loadSavedPreference();
+        loadSavedLanguage();
 
         // Set up event listeners
         setupEventListeners();
@@ -81,6 +92,10 @@
                 <svg class="text-size-caret" viewBox="0 0 12 8" aria-hidden="true" focusable="false">
                     <path d="M10.59.59 6 5.17 1.41.59 0 2l6 6 6-6z" fill="currentColor"></path>
                 </svg>
+            </button>
+            <button type="button" class="text-lang-toggle" aria-pressed="false" aria-label="Toggle Hebrew-only display" title="Show Hebrew only">
+                <span class="text-lang-icon" aria-hidden="true">א</span>
+                <span class="text-lang-toggle-label">Hebrew + English</span>
             </button>
             <div class="text-size-menu" role="menu">
                 <button type="button" class="text-size-btn" data-size="${TEXT_SIZES.SMALL}" role="menuitemradio" aria-checked="false" aria-label="Set Torah text to small">
@@ -164,6 +179,10 @@
             toggleButton.addEventListener('click', toggleMenu);
         }
 
+        if (langToggleButton) {
+            langToggleButton.addEventListener('click', toggleLanguage);
+        }
+
         document.addEventListener('click', handleDocumentClick);
         document.addEventListener('keydown', handleKeydown);
     }
@@ -243,6 +262,55 @@
         } catch (e) {
             console.warn('Could not load text size preference:', e);
             setTextSize(DEFAULT_SIZE);
+        }
+    }
+
+    /**
+     * Apply a language mode (both / hebrew-only) to the document body and
+     * update the toggle button's label & state.
+     * @param {string} mode
+     */
+    function setLanguageMode(mode) {
+        if (!Object.values(LANG_MODES).includes(mode)) {
+            mode = DEFAULT_LANG;
+        }
+        Object.values(LANG_MODES).forEach(cls => document.body.classList.remove(cls));
+        document.body.classList.add(mode);
+
+        if (langToggleButton) {
+            const label = langToggleButton.querySelector('.text-lang-toggle-label');
+            const isHebrewOnly = mode === LANG_MODES.HEBREW;
+            if (label) {
+                label.textContent = isHebrewOnly ? 'Hebrew only' : 'Hebrew + English';
+            }
+            langToggleButton.classList.toggle('active', isHebrewOnly);
+            langToggleButton.setAttribute('aria-pressed', isHebrewOnly ? 'true' : 'false');
+            langToggleButton.setAttribute('title', isHebrewOnly ? 'Show English translation' : 'Hide English translation');
+        }
+        try { localStorage.setItem(LANG_STORAGE_KEY, mode); } catch (e) {}
+    }
+
+    /**
+     * Toggle between Hebrew + English and Hebrew-only.
+     */
+    function toggleLanguage() {
+        const isHebrewOnly = document.body.classList.contains(LANG_MODES.HEBREW);
+        setLanguageMode(isHebrewOnly ? LANG_MODES.BOTH : LANG_MODES.HEBREW);
+    }
+
+    /**
+     * Load the saved language preference from localStorage.
+     */
+    function loadSavedLanguage() {
+        try {
+            const saved = localStorage.getItem(LANG_STORAGE_KEY);
+            if (saved && Object.values(LANG_MODES).includes(saved)) {
+                setLanguageMode(saved);
+            } else {
+                setLanguageMode(DEFAULT_LANG);
+            }
+        } catch (e) {
+            setLanguageMode(DEFAULT_LANG);
         }
     }
 

@@ -3837,11 +3837,19 @@ body.torah-text-size-xlarge #parsha-text .english-text {
     line-height: 2.0;
 }
 
+/* Hebrew-only mode: hide English translations under #parsha-text. The verse
+   container becomes shorter so Hebrew readers can scroll faster. */
+body.torah-language-hebrew #parsha-text .english-text {
+    display: none !important;
+}
+
 /* Text Size Control Widget - Compact Header Button */
 .text-size-control {
     position: relative;
     display: inline-flex;
     align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
     z-index: 100;
 }
 
@@ -3873,6 +3881,49 @@ body.torah-text-size-xlarge #parsha-text .english-text {
 .text-size-toggle:focus-visible {
     outline: none;
     box-shadow: 0 0 0 2px rgba(191, 219, 254, 0.6);
+}
+
+/* Language toggle (Hebrew + English / Hebrew only) — matches the size pill */
+.text-lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #1e3a5f;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(30, 58, 95, 0.25);
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    backdrop-filter: blur(6px);
+}
+
+.text-lang-toggle:hover,
+.text-lang-toggle:focus-visible {
+    background: rgba(30, 58, 95, 0.12);
+    border-color: rgba(30, 58, 95, 0.35);
+    color: #0f2844;
+}
+
+.text-lang-toggle:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(191, 219, 254, 0.6);
+}
+
+.text-lang-toggle.active {
+    background: rgba(30, 58, 95, 0.92);
+    color: #fffaf0;
+    border-color: rgba(30, 58, 95, 0.92);
+}
+
+.text-lang-icon {
+    font-family: 'Frank Ruhl Libre', 'David', 'Times New Roman', serif;
+    font-size: 1.05rem;
+    line-height: 1;
 }
 
 .text-size-icon {
