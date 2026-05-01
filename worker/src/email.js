@@ -51,90 +51,121 @@ export function buildEmail(p) {
     ? `${p.holidayName || 'a special week'}`
     : `${p.parshaName}${p.hebrewName ? ` (${p.hebrewName})` : ''}`;
 
-  const parshaDisplay = p.isHoliday
-    ? `<span style="font-family:Georgia,'Times New Roman',serif;color:#1a2744;">${escapeHtml(p.holidayName || 'a special week')}</span>`
-    : `<span style="font-family:Georgia,'Times New Roman',serif;color:#1a2744;">${escapeHtml(p.parshaName)}</span>${p.hebrewName ? `<br><span style="font-family:'Frank Ruhl Libre','Times New Roman',serif;color:#c89a35;font-size:30px;font-weight:400;">${escapeHtml(p.hebrewName)}</span>` : ''}`;
+  const SAN_STACK = "-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Segoe UI',Roboto,Helvetica,Arial,sans-serif";
+  const HEB_STACK = "'SBL Hebrew','Frank Ruhl Libre','David',Georgia,'Times New Roman',serif";
 
-  // The design avoids classic Promotions-tab triggers:
-  //   • No gradient CTA button (uses an underlined gold link instead)
-  //   • No hidden display:none preheader
-  //   • No "you're receiving this because…" footer block
-  //   • Personal sign-off, first-name greeting, single-column layout
-  // ...while still feeling like a beautiful, intentional letter.
+  // The design philosophy:
+  //   • Apple-newsletter style: white card on warm cream, generous padding,
+  //     confident typography, lots of breathing room, restrained color
+  //   • Logo treated like a real mark: in a soft circle ring instead of a
+  //     bare image
+  //   • No gradient CTA button — single styled inline link with gold accent
+  //   • Hebrew name big and confident, set in a Hebrew-friendly serif
+  //   • Personal first-name greeting and warm sign-off keep this in Primary
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body style="margin:0;padding:0;background:#fdfaf3;font-family:Georgia,'Times New Roman',Times,serif;color:#1a2744;line-height:1.65;">
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#fdfaf3;">
-    <tr><td align="center" style="padding:40px 16px 32px;">
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="560" style="max-width:560px;width:100%;">
+<body style="margin:0;padding:0;background:#f5efe2;font-family:${SAN_STACK};color:#1a2744;line-height:1.6;-webkit-font-smoothing:antialiased;">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#f5efe2;">
+    <tr><td align="center" style="padding:40px 16px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width:600px;width:100%;background:#ffffff;border-radius:24px;box-shadow:0 1px 2px rgba(15,23,42,0.04),0 12px 32px rgba(15,23,42,0.06);overflow:hidden;">
 
-        <!-- Small logo, no banner -->
-        <tr><td align="center" style="padding:0 0 24px;">
-          <img src="${attr(p.siteUrl)}/media/images/logonew.png" alt="" width="56" height="56" style="display:block;border:0;opacity:0.92;">
+        <!-- Logo card: ring around the mark, very Apple-like -->
+        <tr><td align="center" style="padding:56px 56px 0;">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+            <tr><td align="center" style="background:#fdfaf3;border-radius:50%;width:88px;height:88px;border:1px solid rgba(200,154,53,0.22);">
+              <img src="${attr(p.siteUrl)}/media/images/logonew.png" alt="" width="56" height="56" style="display:block;margin:0 auto;border:0;">
+            </td></tr>
+          </table>
+          <p style="margin:18px 0 0;font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:#a08a4f;">
+            A Letter in the Scroll
+          </p>
+        </td></tr>
+
+        <!-- Hairline separator below the logo block -->
+        <tr><td style="padding:32px 56px 0;">
+          <div style="height:1px;background:rgba(200,154,53,0.18);font-size:0;line-height:0;">&nbsp;</div>
         </td></tr>
 
         <!-- Letter body -->
-        <tr><td style="font-size:17px;color:#1a2744;padding:0 4px;">
-          <p style="margin:0 0 18px;font-size:17px;">${escapeHtml(greeting)}</p>
+        <tr><td style="padding:36px 56px 0;font-size:17px;line-height:1.65;color:#1a2744;">
+          <p style="margin:0 0 20px;font-size:17px;">${escapeHtml(greeting)}</p>
 
-          <p style="margin:0 0 18px;">
+          <p style="margin:0 0 32px;color:#3d4555;">
             ${p.isHoliday
-              ? `Wishing you a beautiful ${escapeHtml(p.holidayName || 'holiday')} this week.`
+              ? `Wishing you a beautiful ${escapeHtml(p.holidayName || 'holiday')} this week. We haven&rsquo;t seen you on the site yet, and your chavruta is missing you.`
               : `Just a quick note &mdash; we haven&rsquo;t seen you on the site yet this week, and your chavruta is missing you.`}
           </p>
+        </td></tr>
 
-          <p style="margin:0 0 22px;">
-            ${p.isHoliday
-              ? `This week takes us out of the regular parsha cycle for the special holiday readings. Here&rsquo;s a taste of what&rsquo;s coming:`
-              : `This week we&rsquo;re reading:`}
-          </p>
+        ${p.isHoliday ? '' : `
+        <!-- Parsha hero card -->
+        <tr><td style="padding:0 56px;">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#fdfaf3;border-radius:18px;border:1px solid rgba(200,154,53,0.18);">
+            <tr><td align="center" style="padding:36px 32px 32px;">
+              <p style="margin:0 0 14px;font-size:11px;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:#a08a4f;">
+                This Week&rsquo;s Parsha
+              </p>
+              <p style="margin:0 0 ${p.hebrewName ? '8px' : '0'};font-family:Georgia,'Times New Roman',serif;font-size:42px;font-weight:600;line-height:1.1;color:#1a2744;letter-spacing:-0.02em;">
+                ${escapeHtml(p.parshaName)}
+              </p>
+              ${p.hebrewName ? `<p style="margin:0;font-family:${HEB_STACK};font-size:34px;color:#c89a35;font-weight:400;line-height:1.2;direction:rtl;">${escapeHtml(p.hebrewName)}</p>` : ''}
+            </td></tr>
+          </table>
+        </td></tr>
+        `}
 
-          ${p.isHoliday ? '' : `
-          <!-- Parsha title -->
-          <p style="margin:0 0 6px;font-size:13px;font-weight:400;letter-spacing:0.16em;text-transform:uppercase;color:#c89a35;">
-            This week&rsquo;s parsha
-          </p>
-          <p style="margin:0 0 26px;font-size:34px;font-weight:700;line-height:1.15;color:#1a2744;letter-spacing:-0.01em;">
-            ${parshaDisplay}
-          </p>
-          `}
+        ${p.isHoliday ? `
+        <!-- Holiday hero (slightly different framing) -->
+        <tr><td style="padding:0 56px;">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#fdfaf3;border-radius:18px;border:1px solid rgba(200,154,53,0.18);">
+            <tr><td align="center" style="padding:36px 32px;">
+              <p style="margin:0 0 14px;font-size:11px;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:#a08a4f;">
+                This Week
+              </p>
+              <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:36px;font-weight:600;line-height:1.15;color:#1a2744;letter-spacing:-0.015em;">
+                ${escapeHtml(p.holidayName || 'A special week')}
+              </p>
+            </td></tr>
+          </table>
+        </td></tr>
+        ` : ''}
 
-          <!-- Teaser with the gold border quote treatment -->
-          <p style="margin:0 0 26px;padding:4px 0 4px 18px;border-left:3px solid #c89a35;color:#3d4555;font-style:italic;font-size:16px;line-height:1.7;">
-            ${escapeHtml(p.teaser)}
-          </p>
+        <!-- Teaser -->
+        <tr><td style="padding:36px 56px 0;font-size:17px;line-height:1.7;color:#3d4555;">
+          <p style="margin:0;">${escapeHtml(p.teaser)}</p>
+        </td></tr>
 
-          <!-- Inline link, not a marketing button -->
-          <p style="margin:0 0 22px;">
+        <!-- Inline link instead of a marketing button -->
+        <tr><td style="padding:32px 56px 0;font-size:16px;line-height:1.7;color:#3d4555;">
+          <p style="margin:0;">
             You can open it together with your chavruta here &rarr;
-            <a href="${attr(p.studyUrl)}" style="color:#1e3d7a;text-decoration:underline;text-decoration-color:#c89a35;text-underline-offset:3px;font-weight:600;">aletterinthescroll.com/study</a>
+            <a href="${attr(p.studyUrl)}" style="color:#1e3d7a;text-decoration:underline;text-decoration-color:#c89a35;text-decoration-thickness:2px;text-underline-offset:4px;font-weight:600;">aletterinthescroll.com/study</a>
           </p>
-
-          <p style="margin:0 0 22px;">
-            Even five minutes counts. Every word you read becomes part of the story.
-          </p>
-
-          <p style="margin:0 0 22px;font-style:italic;color:#5a6478;">
-            Every Jewish soul is a letter in the Torah &mdash; and the Torah is incomplete without yours.
-          </p>
-
-          <!-- Personal sign-off -->
-          <p style="margin:32px 0 4px;">Warmly,</p>
-          <p style="margin:0 0 4px;font-family:Georgia,serif;font-size:18px;color:#1a2744;">Yair</p>
-          <p style="margin:0 0 0;font-size:13px;color:#8b8579;font-style:italic;">A Letter in the Scroll</p>
         </td></tr>
 
-        <!-- Subtle gold rule -->
-        <tr><td style="padding:32px 0 16px;">
-          <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(200,154,53,0.4),transparent);font-size:0;line-height:0;">&nbsp;</div>
+        <!-- Closing notes -->
+        <tr><td style="padding:28px 56px 0;font-size:16px;line-height:1.7;color:#5a6478;">
+          <p style="margin:0 0 18px;">Even five minutes counts. Every word you read becomes part of the story.</p>
+          <p style="margin:0;font-style:italic;">Every Jewish soul is a letter in the Torah &mdash; and the Torah is incomplete without yours.</p>
         </td></tr>
 
-        <!-- Quiet, single-line footer (no "you're receiving this because…") -->
-        <tr><td style="font-size:12px;color:#9b958a;line-height:1.6;padding:0 4px;">
+        <!-- Personal sign-off -->
+        <tr><td style="padding:32px 56px 0;font-size:16px;color:#1a2744;line-height:1.5;">
+          <p style="margin:0 0 6px;color:#5a6478;">Warmly,</p>
+          <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:20px;color:#1a2744;">Yair</p>
+        </td></tr>
+
+        <!-- Hairline separator -->
+        <tr><td style="padding:40px 56px 0;">
+          <div style="height:1px;background:rgba(200,154,53,0.18);font-size:0;line-height:0;">&nbsp;</div>
+        </td></tr>
+
+        <!-- Quiet footer with unsubscribe -->
+        <tr><td style="padding:20px 56px 48px;font-size:12px;line-height:1.7;color:#9b958a;">
           Don&rsquo;t want these weekly notes?
           <a href="${attr(p.unsubscribeUrl)}" style="color:#9b958a;text-decoration:underline;">Unsubscribe</a>
           or
@@ -142,6 +173,14 @@ export function buildEmail(p) {
         </td></tr>
 
       </table>
+
+      <!-- Tiny mark below the card -->
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width:600px;width:100%;">
+        <tr><td align="center" style="padding:20px 16px 0;font-size:11px;color:#a8a293;font-family:${SAN_STACK};">
+          A Letter in the Scroll &middot; <a href="${attr(p.siteUrl)}" style="color:#a8a293;text-decoration:none;">aletterinthescroll.com</a>
+        </td></tr>
+      </table>
+
     </td></tr>
   </table>
 </body>
