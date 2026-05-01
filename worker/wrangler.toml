@@ -1,0 +1,28 @@
+name = "alits-parsha-reminder"
+main = "src/index.js"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Cron: every Wednesday at 17:00 UTC = 12:00 PM EST (1:00 PM EDT during summer).
+# This locks the local-time delivery to "early afternoon" year-round.
+[triggers]
+crons = ["0 17 * * 3"]
+
+# Route the unsubscribe URL to this worker (only on aletterinthescroll.com).
+# Leaves all other paths to GitHub Pages (via Cloudflare proxy).
+# IMPORTANT: This binding is scoped to aletterinthescroll.com only —
+# catalyst-magazine.com is on a separate zone and is not affected.
+routes = [
+  { pattern = "www.aletterinthescroll.com/unsubscribe*", zone_name = "aletterinthescroll.com" },
+  { pattern = "aletterinthescroll.com/unsubscribe*", zone_name = "aletterinthescroll.com" }
+]
+
+[vars]
+SITE_URL = "https://www.aletterinthescroll.com"
+FROM_EMAIL = "A Letter in the Scroll <hello@aletterinthescroll.com>"
+FIREBASE_PROJECT_ID = "letterinthescroll"
+
+# Secrets — set via `wrangler secret put`:
+#   RESEND_API_KEY                 — your Resend API key
+#   FIREBASE_SERVICE_ACCOUNT_JSON  — full JSON contents of the Firebase admin
+#                                    service account key (one big string)

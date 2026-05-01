@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsubscribed — A Letter in the Scroll</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(170deg, #fdfcf9 0%, #f5f0e6 100%);
+            color: #1a2744;
+            padding: 2rem 1rem;
+        }
+        .card {
+            background: linear-gradient(170deg, #ffffff 0%, #fdfcf9 100%);
+            border: 1px solid rgba(200, 154, 53, 0.18);
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 50px rgba(23, 42, 95, 0.08);
+            max-width: 500px;
+            width: 100%;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, #1e3d7a 0%, #c89a35 50%, #1e3d7a 100%);
+        }
+        .logo { width: 72px; height: 72px; margin: 0 auto 1.5rem; }
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1a2744;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+        p {
+            color: #6b7280;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        .accent { color: #c89a35; font-weight: 600; }
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #1e3d7a 0%, #274d94 100%);
+            color: white;
+            padding: 0.85rem 2rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 0.25rem;
+        }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(30, 61, 122, 0.25); }
+        .btn-secondary {
+            background: white;
+            color: #1e3d7a;
+            border: 1.5px solid rgba(30, 58, 95, 0.25);
+        }
+        .btn-secondary:hover { background: rgba(30, 58, 95, 0.05); }
+        .error { color: #b91c1c; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <img src="/media/images/logonew.png" alt="A Letter in the Scroll" class="logo">
+        <h1 id="title">You're unsubscribed</h1>
+        <p id="msg">
+            We won't send you any more weekly parsha reminders. We hope you'll keep coming back to study with us — <span class="accent">every soul is a letter in the Torah</span>.
+        </p>
+        <p style="font-size:0.85rem;">
+            Changed your mind? You can re-enable reminders anytime in <a href="/settings#sec-parsha-reminder" style="color:#1e3d7a;font-weight:600;">your settings</a>.
+        </p>
+        <div style="margin-top:1.5rem;">
+            <a href="/" class="btn">Go to homepage</a>
+            <a href="/dashboard" class="btn btn-secondary">My dashboard</a>
+        </div>
+    </div>
+    <script>
+        // If the worker passed an error param, show it
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('error')) {
+            document.getElementById('title').textContent = 'Hmm, something went wrong';
+            document.getElementById('title').classList.add('error');
+            document.getElementById('msg').textContent = 'We couldn\'t find that unsubscribe link. You can manage your reminders in your settings instead.';
+        }
+    </script>
+</body>
+</html>

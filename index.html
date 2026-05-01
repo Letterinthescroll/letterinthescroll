@@ -1108,6 +1108,14 @@
             return fallback.split(' ')[0];
         }
 
+        function generateUnsubscribeToken() {
+            const bytes = new Uint8Array(24);
+            (window.crypto || window.msCrypto).getRandomValues(bytes);
+            let s = '';
+            for (let i = 0; i < bytes.length; i++) s += bytes[i].toString(16).padStart(2, '0');
+            return s;
+        }
+
         async function syncUserProfile(user, preferredDisplayName, includeCreatedAt) {
             if (!user || !user.uid) return;
             let existing = {};
@@ -1136,6 +1144,16 @@
             };
             if (includeCreatedAt && !profileExists) {
                 payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+            }
+            // Default opt-in for weekly parsha reminders + mint a stable
+            // unsubscribe token. Both are written only on first profile creation
+            // so we never override a user's later opt-out.
+            if (!profileExists) {
+                payload.weeklyParshaEmails = true;
+                payload.unsubscribeToken = generateUnsubscribeToken();
+            } else if (existing.unsubscribeToken === undefined) {
+                // Backfill for existing users who don't have a token yet.
+                payload.unsubscribeToken = generateUnsubscribeToken();
             }
             await db.collection('users').doc(user.uid).set(payload, { merge: true });
             if (payload.displayName && user.displayName !== payload.displayName) {

@@ -323,6 +323,10 @@
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                         Teacher Mode
                     </a>
+                    <a href="#sec-parsha-reminder" class="nav-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                        Parsha Reminders
+                    </a>
                     <a href="#sec-newsletter" class="nav-item">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2"/></svg>
                         Newsletter
@@ -581,6 +585,22 @@
                     </div>
                 </div>
 
+                <!-- Weekly Parsha Reminder -->
+                <div id="sec-parsha-reminder" class="s-card scroll-mt-24">
+                    <div style="padding:1.25rem 1.5rem">
+                        <div class="toggle-row">
+                            <div class="toggle-row-text">
+                                <p class="toggle-row-title">Weekly Parsha Reminders</p>
+                                <p class="toggle-row-desc">If you're in a chavruta and haven't visited the site by Wednesday afternoon, we'll send you a sweet email with this week's parsha and a quick teaser to inspire your study.</p>
+                            </div>
+                            <div id="parsha-reminder-toggle" class="s-toggle active" onclick="toggleParshaReminder()" role="switch" aria-checked="true" tabindex="0">
+                                <div class="s-toggle-thumb"></div>
+                            </div>
+                        </div>
+                        <div id="parsha-reminder-msg" class="hidden s-msg mt-3" style="background:rgba(31,63,118,0.06);border:1px solid rgba(31,63,118,0.12);color:var(--ink-700)"></div>
+                    </div>
+                </div>
+
                 <!-- Newsletter -->
                 <div id="sec-newsletter" class="s-card scroll-mt-24">
                     <div class="s-card-header">
@@ -752,6 +772,7 @@
         initShabbatToggle();
         initHebrewStudyToggle();
         initTeacherModeToggle();
+        initParshaReminderToggle();
 
         db.collection('users').doc(user.uid).get().then(userDoc => {
             const uData = userDoc.exists ? (userDoc.data() || {}) : {};
@@ -882,6 +903,39 @@
             }
         } catch (err) {
             msgEl.textContent = 'Failed to update Teacher Mode. Please try again.';
+            msgEl.classList.remove('hidden');
+        }
+    }
+
+    /* ════ WEEKLY PARSHA REMINDER TOGGLE ════ */
+    function initParshaReminderToggle() {
+        const toggle = document.getElementById('parsha-reminder-toggle');
+        if (!toggle || !currentUser) return;
+        // Default: ON. Only OFF when explicitly stored as false.
+        db.collection('users').doc(currentUser.uid).get().then(userDoc => {
+            const data = userDoc.exists ? (userDoc.data() || {}) : {};
+            const isEnabled = data.weeklyParshaEmails !== false;
+            toggle.classList.toggle('active', isEnabled);
+            toggle.setAttribute('aria-checked', String(isEnabled));
+        }).catch(() => {});
+    }
+
+    async function toggleParshaReminder() {
+        const toggle = document.getElementById('parsha-reminder-toggle');
+        const msgEl = document.getElementById('parsha-reminder-msg');
+        if (!toggle || !currentUser) return;
+        const isCurrentlyActive = toggle.classList.contains('active');
+        const next = !isCurrentlyActive;
+        try {
+            await db.collection('users').doc(currentUser.uid).set({ weeklyParshaEmails: next }, { merge: true });
+            toggle.classList.toggle('active', next);
+            toggle.setAttribute('aria-checked', String(next));
+            msgEl.textContent = next
+                ? 'You\'ll receive a gentle reminder on Wednesdays when you haven\'t visited the site that week.'
+                : 'Weekly parsha reminders are now off. You can turn them back on anytime.';
+            msgEl.classList.remove('hidden');
+        } catch (err) {
+            msgEl.textContent = 'Failed to update preference. Please try again.';
             msgEl.classList.remove('hidden');
         }
     }

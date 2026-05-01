@@ -17,5 +17,9 @@ Disallow: /journal/
 Disallow: /bookmarks/
 Disallow: /flashcards/
 
+# Disallow utility / one-shot endpoints
+Disallow: /unsubscribe
+Disallow: /unsubscribed/
+
 # Sitemap
 Sitemap: https://www.aletterinthescroll.com/sitemap.xml
