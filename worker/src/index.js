@@ -14,7 +14,10 @@ export default {
     if (url.pathname === '/unsubscribe' || url.pathname === '/unsubscribe/') {
       return handleUnsubscribe(url, env);
     }
-    return new Response('Not found', { status: 404 });
+    // Any other path that hits the Worker (because the Cloudflare route
+    // pattern `*/unsubscribe*` is greedy and catches /unsubscribed/, etc.)
+    // is transparently forwarded to the origin so GitHub Pages serves it.
+    return fetch(request);
   },
 
   async scheduled(event, env, ctx) {
