@@ -14,6 +14,9 @@ export default {
     if (url.pathname === '/unsubscribe' || url.pathname === '/unsubscribe/') {
       return handleUnsubscribe(url, env);
     }
+    if (url.pathname === '/test-send' || url.pathname === '/test-send/') {
+      return handleTestSend(url, env);
+    }
     // Any other path that hits the Worker (because the Cloudflare route
     // pattern `*/unsubscribe*` is greedy and catches /unsubscribed/, etc.)
     // is transparently forwarded to the origin so GitHub Pages serves it.
@@ -53,6 +56,59 @@ async function handleUnsubscribe(url, env) {
 function redirectToConfirmation(env, isError) {
   const dest = `${env.SITE_URL}/unsubscribed/${isError ? '?error=1' : ''}`;
   return Response.redirect(dest, 302);
+}
+
+// ───────────────── manual test-send (token-guarded) ─────────────────
+//
+// GET /test-send?email=foo@bar.com&token=<TEST_TOKEN>&firstName=Yair
+//   → sends one parsha-reminder email exactly like the Wednesday cron would.
+// Token comes from the TEST_TOKEN secret. firstName is optional.
+async function handleTestSend(url, env) {
+  const provided = url.searchParams.get('token') || '';
+  if (!env.TEST_TOKEN || provided !== env.TEST_TOKEN) {
+    return new Response('Unauthorized', { status: 401 });
+  }
+  const email = (url.searchParams.get('email') || '').trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return new Response('Provide ?email=<valid address>', { status: 400 });
+  }
+  const firstName = url.searchParams.get('firstName') || '';
+
+  try {
+    const parsha = await getCurrentParsha();
+    const html = buildEmailHtml({
+      firstName,
+      parshaName: parsha.name,
+      hebrewName: parsha.hebrewName,
+      teaser: parsha.teaser,
+      studyUrl: `${env.SITE_URL}/study`,
+      unsubscribeUrl: `${env.SITE_URL}/unsubscribe?token=test-preview`,
+      isHoliday: parsha.isHoliday,
+      holidayName: parsha.holidayName,
+      siteUrl: env.SITE_URL
+    });
+    const subject = parsha.isHoliday
+      ? `Chag Sameach — ${parsha.holidayName || 'a special week'} is here 🌿`
+      : `This week's parsha: ${parsha.name} — your chavruta is waiting`;
+    const result = await sendEmail({
+      apiKey: env.RESEND_API_KEY,
+      from: env.FROM_EMAIL,
+      to: email,
+      subject,
+      html
+    });
+    return new Response(JSON.stringify({
+      ok: true,
+      sentTo: email,
+      parsha: parsha.name,
+      isHoliday: parsha.isHoliday,
+      resendId: result.id || null
+    }, null, 2), {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (e) {
+    return new Response(`Error: ${e.message}`, { status: 500 });
+  }
 }
 
 // ───────────────── weekly cron ─────────────────
