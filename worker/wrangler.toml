@@ -8,14 +8,12 @@ compatibility_flags = ["nodejs_compat"]
 [triggers]
 crons = ["0 17 * * 3"]
 
-# Route the unsubscribe URL to this worker (only on aletterinthescroll.com).
-# Leaves all other paths to GitHub Pages (via Cloudflare proxy).
-# IMPORTANT: This binding is scoped to aletterinthescroll.com only —
-# catalyst-magazine.com is on a separate zone and is not affected.
-routes = [
-  { pattern = "www.aletterinthescroll.com/unsubscribe*", zone_name = "aletterinthescroll.com" },
-  { pattern = "aletterinthescroll.com/unsubscribe*", zone_name = "aletterinthescroll.com" }
-]
+# Routes are configured in the Cloudflare dashboard (Workers Routes) for
+# the aletterinthescroll.com zone:
+#   *aletterinthescroll.com/unsubscribe*
+#   www.aletterinthescroll.com/unsubscribe*
+# IMPORTANT: catalyst-magazine.com is on a separate zone and is NOT bound
+# to this worker.
 
 [vars]
 SITE_URL = "https://www.aletterinthescroll.com"
