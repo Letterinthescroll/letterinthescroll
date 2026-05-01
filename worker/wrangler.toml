@@ -17,7 +17,7 @@ crons = ["0 17 * * 3"]
 
 [vars]
 SITE_URL = "https://www.aletterinthescroll.com"
-FROM_EMAIL = "A Letter in the Scroll <hello@aletterinthescroll.com>"
+FROM_EMAIL = "Yair from A Letter in the Scroll <hello@aletterinthescroll.com>"
 FIREBASE_PROJECT_ID = "letterinthescroll"
 
 # Secrets — set via `wrangler secret put`:

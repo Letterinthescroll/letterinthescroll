@@ -2,7 +2,7 @@
 
 const RESEND_API = 'https://api.resend.com/emails';
 
-export async function sendEmail({ apiKey, from, to, subject, html, replyTo }) {
+export async function sendEmail({ apiKey, from, to, subject, html, text, replyTo }) {
   const res = await fetch(RESEND_API, {
     method: 'POST',
     headers: {
@@ -14,6 +14,7 @@ export async function sendEmail({ apiKey, from, to, subject, html, replyTo }) {
       to: Array.isArray(to) ? to : [to],
       subject,
       html,
+      ...(text ? { text } : {}),
       ...(replyTo ? { reply_to: replyTo } : {})
     })
   });
@@ -25,108 +26,78 @@ export async function sendEmail({ apiKey, from, to, subject, html, replyTo }) {
 }
 
 /**
- * Build the email HTML.
+ * Build the email body. Returns { html, text } — Resend sends the
+ * multipart/alternative with both, which Gmail uses for classification.
+ *
+ * Design philosophy: this looks like a short personal note, not a
+ * designed newsletter. Heavy gradients, brand-banner headers, and big
+ * CTA buttons trigger Gmail's Promotions classifier. We avoid all three.
+ *
  * @param {object} p
  * @param {string} p.firstName
- * @param {string} p.parshaName     - English parsha or holiday name
- * @param {string} p.hebrewName     - Hebrew name (optional)
- * @param {string} p.teaser         - Teaser paragraph
- * @param {string} p.studyUrl       - Link to /study
- * @param {string} p.unsubscribeUrl - Token-bound URL
+ * @param {string} p.parshaName
+ * @param {string} p.hebrewName
+ * @param {string} p.teaser
+ * @param {string} p.studyUrl
+ * @param {string} p.unsubscribeUrl
  * @param {boolean} p.isHoliday
  * @param {string|null} p.holidayName
  * @param {string} p.siteUrl
  */
-export function buildEmailHtml(p) {
-  const greeting = p.firstName ? `Hi ${escapeHtml(p.firstName)},` : 'Hi friend,';
-  const titleLine = p.isHoliday
-    ? `Chag Sameach! 🌿`
-    : `This week's parsha is here`;
-  const subhead = p.isHoliday
-    ? `Wishing you a beautiful ${escapeHtml(p.holidayName || 'holiday')}`
-    : `${escapeHtml(p.parshaName)}${p.hebrewName ? ` <span style="font-family:'Frank Ruhl Libre',Georgia,serif;color:#c89a35;">· ${escapeHtml(p.hebrewName)}</span>` : ''}`;
+export function buildEmail(p) {
+  const name = (p.firstName || '').trim();
+  const greeting = name ? `Hi ${name},` : 'Hi,';
+  const parshaLine = p.isHoliday
+    ? `${p.holidayName || 'a special week'}`
+    : `${p.parshaName}${p.hebrewName ? ` (${p.hebrewName})` : ''}`;
 
-  return `<!DOCTYPE html>
+  const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>This Week's Parsha — A Letter in the Scroll</title>
 </head>
-<body style="margin:0;padding:0;background:#f5f0e6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#1a2744;">
-  <div style="display:none;max-height:0;overflow:hidden;">${escapeHtml(p.parshaName)} — open the scroll with your chavruta this week.</div>
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#f5f0e6;padding:32px 16px;">
-    <tr><td align="center">
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width:600px;width:100%;background:#ffffff;border-radius:18px;overflow:hidden;box-shadow:0 20px 50px rgba(23,42,95,0.10);border:1px solid rgba(200,154,53,0.18);">
+<body style="margin:0;padding:0;background:#ffffff;font-family:Georgia,'Times New Roman',Times,serif;color:#222;line-height:1.6;">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#ffffff;">
+    <tr><td align="center" style="padding:32px 16px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="560" style="max-width:560px;width:100%;">
 
-        <!-- Top accent bar -->
-        <tr><td style="height:5px;background:linear-gradient(90deg,#1e3d7a 0%,#c89a35 50%,#1e3d7a 100%);font-size:0;line-height:0;">&nbsp;</td></tr>
+        <tr><td style="font-size:16px;color:#222;padding:0 8px;">
+          <p style="margin:0 0 16px;">${escapeHtml(greeting)}</p>
 
-        <!-- Header / logo -->
-        <tr><td style="padding:36px 40px 16px 40px;text-align:center;background:linear-gradient(170deg,#ffffff 0%,#fdfcf9 100%);">
-          <a href="${attr(p.siteUrl)}" style="text-decoration:none;display:inline-block;">
-            <img src="${attr(p.siteUrl)}/media/images/logonew.png" alt="A Letter in the Scroll" width="80" height="80" style="display:block;margin:0 auto 12px;border:0;">
-            <div style="font-size:14px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:#1e3d7a;">A Letter in the Scroll</div>
-          </a>
-        </td></tr>
-
-        <!-- Greeting + parsha -->
-        <tr><td style="padding:24px 40px 12px 40px;">
-          <p style="margin:0 0 14px;font-size:16px;color:#3d4555;line-height:1.6;">${greeting}</p>
-          <p style="margin:0 0 22px;font-size:15px;color:#5a6478;line-height:1.7;">
-            We noticed you haven't stopped by this week, and your chavruta is waiting. There's a beautiful parsha in front of us, and the world is just a little bit better when we open the scroll together.
+          <p style="margin:0 0 16px;">
+            ${p.isHoliday
+              ? `Wishing you a beautiful ${escapeHtml(p.holidayName || 'holiday')} this week.`
+              : `Just a quick note &mdash; we haven&rsquo;t seen you on the site yet this week, and your chavruta is missing you.`}
           </p>
 
-          <h1 style="margin:8px 0 6px;font-size:13px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#c89a35;">${titleLine}</h1>
-          <h2 style="margin:0 0 18px;font-size:30px;font-weight:700;color:#1a2744;letter-spacing:-0.01em;line-height:1.25;">${subhead}</h2>
-        </td></tr>
-
-        <!-- Teaser card -->
-        <tr><td style="padding:0 40px;">
-          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:linear-gradient(170deg,#fdf8ed 0%,#fef6e0 100%);border:1px solid rgba(200,154,53,0.25);border-radius:14px;">
-            <tr><td style="padding:22px 24px;">
-              <p style="margin:0;font-size:15.5px;line-height:1.75;color:#3d4555;">${escapeHtml(p.teaser)}</p>
-            </td></tr>
-          </table>
-        </td></tr>
-
-        <!-- CTA -->
-        <tr><td style="padding:28px 40px 12px 40px;text-align:center;">
-          <a href="${attr(p.studyUrl)}" style="display:inline-block;background:linear-gradient(135deg,#1e3d7a 0%,#274d94 100%);color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 36px;border-radius:10px;letter-spacing:0.02em;box-shadow:0 4px 16px rgba(30,61,122,0.25);">
-            Open this week's parsha →
-          </a>
-          <p style="margin:14px 0 0;font-size:13px;color:#8b8579;">
-            Takes you straight to the Study room.
+          <p style="margin:0 0 16px;">
+            ${p.isHoliday
+              ? `This week takes us out of the regular parsha cycle for the holiday readings. Here&rsquo;s a short preview:`
+              : `This week we&rsquo;re reading <strong>${escapeHtml(parshaLine)}</strong>. Here&rsquo;s a quick taste of what&rsquo;s coming:`}
           </p>
-        </td></tr>
 
-        <!-- Closing -->
-        <tr><td style="padding:24px 40px 8px 40px;">
-          <p style="margin:0;font-size:14.5px;line-height:1.7;color:#5a6478;">
-            Whether it's just five minutes or a full hour, every word you read becomes part of the story. Your chavruta is part of yours, and you of theirs.
+          <p style="margin:0 0 20px;padding-left:16px;border-left:3px solid #c89a35;color:#3d4555;font-style:italic;">
+            ${escapeHtml(p.teaser)}
           </p>
-          <p style="margin:14px 0 0;font-size:14.5px;line-height:1.7;color:#5a6478;font-style:italic;">
-            Every Jewish soul is a letter in the Torah — and the Torah is incomplete without yours.
-          </p>
-        </td></tr>
 
-        <!-- Divider -->
-        <tr><td style="padding:28px 40px 0 40px;">
-          <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(200,154,53,0.45),transparent);"></div>
-        </td></tr>
+          <p style="margin:0 0 16px;">
+            You can read it together with your chavruta here:<br>
+            <a href="${attr(p.studyUrl)}" style="color:#1e3d7a;">${attr(p.studyUrl)}</a>
+          </p>
 
-        <!-- Footer / unsubscribe -->
-        <tr><td style="padding:18px 40px 32px 40px;text-align:center;">
-          <p style="margin:0 0 8px;font-size:12px;color:#8b8579;">
-            You're receiving this because you joined a chavruta on A Letter in the Scroll.
+          <p style="margin:0 0 16px;">
+            Even five minutes counts. Hope to see you in the study room soon.
           </p>
-          <p style="margin:0 0 6px;font-size:12px;color:#8b8579;">
-            <a href="${attr(p.unsubscribeUrl)}" style="color:#1e3d7a;text-decoration:underline;font-weight:600;">Opt out of weekly reminder emails</a>
-            &nbsp;·&nbsp;
-            <a href="${attr(p.siteUrl)}/settings#sec-parsha-reminder" style="color:#1e3d7a;text-decoration:underline;font-weight:600;">Manage in settings</a>
-          </p>
-          <p style="margin:14px 0 0;font-size:11px;color:#a8a293;">
-            A Letter in the Scroll · A free non-profit Torah study community
+
+          <p style="margin:0 0 4px;">Warmly,</p>
+          <p style="margin:0 0 28px;">Yair</p>
+          <p style="margin:0 0 28px;color:#777;font-size:14px;font-style:italic;">A Letter in the Scroll</p>
+
+          <p style="margin:0;font-size:12px;color:#999;">
+            If you&rsquo;d rather not get these weekly notes, you can
+            <a href="${attr(p.unsubscribeUrl)}" style="color:#999;">unsubscribe here</a>
+            or <a href="${attr(p.siteUrl)}/settings#sec-parsha-reminder" style="color:#999;">change it in your settings</a>.
           </p>
         </td></tr>
 
@@ -135,7 +106,40 @@ export function buildEmailHtml(p) {
   </table>
 </body>
 </html>`;
+
+  const text = [
+    greeting,
+    '',
+    p.isHoliday
+      ? `Wishing you a beautiful ${p.holidayName || 'holiday'} this week.`
+      : `Just a quick note — we haven't seen you on the site yet this week, and your chavruta is missing you.`,
+    '',
+    p.isHoliday
+      ? `This week takes us out of the regular parsha cycle for the holiday readings. Here's a short preview:`
+      : `This week we're reading ${parshaLine}. Here's a quick taste of what's coming:`,
+    '',
+    `  ${p.teaser}`,
+    '',
+    `You can read it together with your chavruta here:`,
+    `  ${p.studyUrl}`,
+    '',
+    `Even five minutes counts. Hope to see you in the study room soon.`,
+    '',
+    `Warmly,`,
+    `Yair`,
+    `A Letter in the Scroll`,
+    '',
+    '---',
+    `If you'd rather not get these weekly notes, you can unsubscribe here:`,
+    `  ${p.unsubscribeUrl}`,
+    `Or manage it in your settings: ${p.siteUrl}/settings#sec-parsha-reminder`
+  ].join('\n');
+
+  return { html, text };
 }
+
+// Back-compat shim — older code paths that just want the HTML.
+export function buildEmailHtml(p) { return buildEmail(p).html; }
 
 function escapeHtml(s) {
   if (s == null) return '';

@@ -6,7 +6,7 @@
 
 import { FirestoreClient } from './firestore.js';
 import { getCurrentParsha } from './parsha.js';
-import { sendEmail, buildEmailHtml } from './email.js';
+import { sendEmail, buildEmail } from './email.js';
 
 export default {
   async fetch(request, env, ctx) {
@@ -76,7 +76,7 @@ async function handleTestSend(url, env) {
 
   try {
     const parsha = await getCurrentParsha();
-    const html = buildEmailHtml({
+    const { html, text } = buildEmail({
       firstName,
       parshaName: parsha.name,
       hebrewName: parsha.hebrewName,
@@ -87,15 +87,15 @@ async function handleTestSend(url, env) {
       holidayName: parsha.holidayName,
       siteUrl: env.SITE_URL
     });
-    const subject = parsha.isHoliday
-      ? `Chag Sameach — ${parsha.holidayName || 'a special week'} is here 🌿`
-      : `This week's parsha: ${parsha.name} — your chavruta is waiting`;
+    const subject = subjectFor(firstName, parsha);
     const result = await sendEmail({
       apiKey: env.RESEND_API_KEY,
       from: env.FROM_EMAIL,
       to: email,
       subject,
-      html
+      html,
+      text,
+      replyTo: 'hello@aletterinthescroll.com'
     });
     return new Response(JSON.stringify({
       ok: true,
@@ -178,8 +178,9 @@ async function runWeeklyJob(env) {
   let sent = 0, failed = 0;
   for (const c of candidates) {
     try {
-      const html = buildEmailHtml({
-        firstName: c.firstName || (c.displayName ? c.displayName.split(' ')[0] : ''),
+      const firstName = c.firstName || (c.displayName ? c.displayName.split(' ')[0] : '');
+      const { html, text } = buildEmail({
+        firstName,
         parshaName: parsha.name,
         hebrewName: parsha.hebrewName,
         teaser: parsha.teaser,
@@ -189,15 +190,14 @@ async function runWeeklyJob(env) {
         holidayName: parsha.holidayName,
         siteUrl: env.SITE_URL
       });
-      const subject = parsha.isHoliday
-        ? `Chag Sameach — ${parsha.holidayName || 'a special week'} is here 🌿`
-        : `This week's parsha: ${parsha.name} — your chavruta is waiting`;
       await sendEmail({
         apiKey: env.RESEND_API_KEY,
         from: env.FROM_EMAIL,
         to: c.email,
-        subject,
-        html
+        subject: subjectFor(firstName, parsha),
+        html,
+        text,
+        replyTo: 'hello@aletterinthescroll.com'
       });
       sent++;
     } catch (e) {
@@ -259,6 +259,20 @@ function randomToken() {
   let s = '';
   for (let i = 0; i < bytes.length; i++) s += bytes[i].toString(16).padStart(2, '0');
   return s;
+}
+
+// Subject lines kept short, conversational, and lead with the recipient's
+// name when available. Avoids marketing emoji, hype, and generic blasts —
+// these all push Gmail toward the Promotions tab.
+function subjectFor(firstName, parsha) {
+  const name = (firstName || '').trim();
+  if (parsha.isHoliday) {
+    const h = parsha.holidayName || 'a special week';
+    return name ? `${name}, ${h} this week` : `${h} this week`;
+  }
+  return name
+    ? `${name}, this week's parsha is ${parsha.name}`
+    : `This week's parsha is ${parsha.name}`;
 }
 
 // Assemble the service account from three individual Worker secrets.
