@@ -73,20 +73,16 @@ export function buildEmail(p) {
     <tr><td align="center" style="padding:40px 16px;">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width:600px;width:100%;background:#ffffff;border-radius:24px;box-shadow:0 1px 2px rgba(15,23,42,0.04),0 12px 32px rgba(15,23,42,0.06);overflow:hidden;">
 
-        <!-- Logo card: ring around the mark, very Apple-like -->
-        <tr><td align="center" style="padding:56px 56px 0;">
-          <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-            <tr><td align="center" style="background:#fdfaf3;border-radius:50%;width:88px;height:88px;border:1px solid rgba(200,154,53,0.22);">
-              <img src="${attr(p.siteUrl)}/media/images/logonew.png" alt="" width="56" height="56" style="display:block;margin:0 auto;border:0;">
-            </td></tr>
-          </table>
-          <p style="margin:18px 0 0;font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:#a08a4f;">
+        <!-- Logo (already a circle, no ring needed) -->
+        <tr><td align="center" style="padding:36px 56px 0;">
+          <img src="${attr(p.siteUrl)}/media/images/logonew.png" alt="" width="52" height="52" style="display:block;margin:0 auto;border:0;">
+          <p style="margin:10px 0 0;font-size:10px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#a08a4f;">
             A Letter in the Scroll
           </p>
         </td></tr>
 
         <!-- Hairline separator below the logo block -->
-        <tr><td style="padding:32px 56px 0;">
+        <tr><td style="padding:22px 56px 0;">
           <div style="height:1px;background:rgba(200,154,53,0.18);font-size:0;line-height:0;">&nbsp;</div>
         </td></tr>
 
