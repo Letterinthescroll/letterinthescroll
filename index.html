@@ -952,7 +952,7 @@
 
         const firebaseConfig = {
             apiKey: "AIzaSyCpDtcBpKvjLwihnL2bizxBFxXD6Qn8Lb4",
-            authDomain: "letterinthescroll.firebaseapp.com",
+            authDomain: "www.aletterinthescroll.com",
             projectId: "letterinthescroll",
             storageBucket: "letterinthescroll.firebasestorage.app",
             messagingSenderId: "625129870318",
@@ -1241,7 +1241,10 @@
             btn.disabled = true;
             btn.classList.add('opacity-75', 'cursor-not-allowed');
             authFlowInProgress = true;
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const ua = navigator.userAgent || '';
+            const isiPadOS = navigator.platform === 'MacIntel' && (navigator.maxTouchPoints || 0) > 1;
+            const isInAppBrowser = /FBAN|FBAV|Instagram|Line|Twitter|TikTok|LinkedInApp|Snapchat|MicroMessenger|WhatsApp/i.test(ua);
+            const isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(ua) || isiPadOS || isInAppBrowser;
             if (isMobile) {
                 try {
                     await auth.signInWithRedirect(googleProvider);
