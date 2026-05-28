@@ -215,6 +215,19 @@
         .dp-callout svg { flex: none; width: 1.05rem; height: 1.05rem; margin-top: 0.15rem; color: var(--dp-gold); }
         .dp-callout strong { color: #54430f; font-weight: 700; }
 
+        /* How & when — navy "instruction" box for beginners */
+        .dp-howto {
+            display: flex; gap: 0.85rem; margin: 0 0 1.25rem;
+            padding: 1rem 1.25rem;
+            background: linear-gradient(180deg, rgba(30,55,148,0.055), rgba(30,55,148,0.03));
+            border: 1px solid rgba(30,55,148,0.16); border-left: 3px solid var(--dp-navy);
+            border-radius: 0.9rem;
+            font-size: 0.875rem; line-height: 1.72; color: #394769;
+        }
+        .dp-howto svg { flex: none; width: 1.1rem; height: 1.1rem; margin-top: 0.15rem; color: var(--dp-navy); }
+        .dp-howto strong { color: var(--dp-navy); font-weight: 700; }
+        .dp-howto em { font-style: italic; color: var(--dp-navy); }
+
         /* Lists */
         ol.dp-list, ul.dp-list { margin: 0 0 1.1rem; padding-left: 0; list-style: none; counter-reset: step; max-width: 64ch; }
         ol.dp-list li, ul.dp-list li {
@@ -293,6 +306,11 @@
 
             <p class="dp-intro">The day begins the moment you wake. Sleep, our sages teach, is a fractional taste of death — the soul ascends through the night and returns at dawn. This order restores the spirit step by step: first gratitude, then the washing that lifts the night's impurity, then the blessings that greet the day.</p>
 
+            <div class="dp-howto" style="margin-bottom:3rem">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                <div><strong>New to this? Read this first.</strong> Follow the steps <strong>in order, top to bottom</strong>. Each step has a blue “How &amp; when” box telling you exactly what to do, whether to sit or stand, and whether you need others present. <strong>Almost everything here is done alone</strong> — you do <em>not</em> need a synagogue or a <em>minyan</em> (a group of ten) for the morning blessings. A minyan only matters for the communal service that comes afterward. Use the <strong>Man / Woman</strong> switch at the top — the prayers update to the correct wording for you.</div>
+            </div>
+
             <!-- 1. Modeh / Modah Ani -->
             <section class="dp-step">
                 <div class="dp-step-head">
@@ -303,6 +321,10 @@
                     </div>
                 </div>
                 <p class="dp-note">The instant you wake — before rising, before touching your eyes, mouth, or any food — acknowledge the return of your soul. Because the hands are not yet washed, this prayer contains <strong>no holy Name of God</strong>, so it may be said with unwashed hands while still lying down. A man says <em>Modeh</em>; a woman says <em>Modah</em>.</p>
+                <div class="dp-howto">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-4M12 8h.01"/></svg>
+                    <div><strong>How &amp; when:</strong> The very first thing you say, <strong>lying in bed with eyes barely open</strong>, before you get up. Say it once, quietly, in any language you understand if you can't read the Hebrew. No washing, no standing, no minyan needed — just gratitude.</div>
+                </div>
 
                 <div class="dp-prayer for-male">
                     <div class="dp-prayer-tag">Modeh Ani · for a man</div>
@@ -330,6 +352,10 @@
                         <h2 class="dp-step-title">Netilat Yadayim</h2>
                         <span class="dp-step-sub">The morning washing of the hands</span>
                     </div>
+                </div>
+                <div class="dp-howto">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-4M12 8h.01"/></svg>
+                    <div><strong>How &amp; when:</strong> Do this <strong>as soon as you get out of bed</strong>, before you do almost anything else. You need a <strong>cup</strong> (any cup with two handles is traditional, but any cup works) and a sink. Stand at the sink; this is a private act — no minyan. The blessing comes <strong>after</strong> the pouring, while your hands are still wet and raised.</div>
                 </div>
                 <p class="dp-note">Go directly to a sink — ideally in the kitchen, <strong>never the bathroom</strong> (blessings may not be said there). Use a cup or vessel (a <em>natla</em>), not the faucet directly. To drive off the night's impurity, the pours must <strong>alternate</strong> between hands:</p>
                 <ol class="dp-list">
@@ -364,6 +390,10 @@
                     </div>
                 </div>
                 <p class="dp-note">Gratitude for the body's intricate workings — that the systems which must stay open remain open, and those that must stay closed remain closed.</p>
+                <div class="dp-howto">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-4M12 8h.01"/></svg>
+                    <div><strong>How &amp; when:</strong> Said <strong>every time you use the bathroom and wash your hands</strong> — including this first morning time — not only in the morning. Recited <strong>seated or standing, alone</strong>, no minyan. If you didn't need the bathroom on waking, skip it for now and say it later when you do.</div>
+                </div>
                 <div class="dp-prayer">
                     <div class="dp-prayer-tag">Asher Yatzar · the body</div>
                     <div class="dp-prayer-body">
@@ -383,7 +413,11 @@
                         <span class="dp-step-sub">The purity of the soul</span>
                     </div>
                 </div>
-                <p class="dp-note">Said directly after Asher Yatzar — turning from the body to the soul, thanking God for the pure soul entrusted to us. A man says <em>modeh</em>; a woman says <em>modah</em>.</p>
+                <p class="dp-note">Said directly after Asher Yatzar — turning from the body to the soul, thanking God for the pure soul entrusted to us. A man says <em>modeh</em>; a woman says <em>modah</em> (the word changes automatically below to match your selection).</p>
+                <div class="dp-howto">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-4M12 8h.01"/></svg>
+                    <div><strong>How &amp; when:</strong> Once a day, in the morning, <strong>right after Asher Yatzar</strong>. Seated or standing, alone — no minyan. Many people flow straight from here into the Birkot HaShachar below without pausing.</div>
+                </div>
                 <div class="dp-prayer">
                     <div class="dp-prayer-tag">Elohai Neshamah · the soul</div>
                     <div class="dp-prayer-body">
@@ -405,7 +439,11 @@
                         <span class="dp-step-sub">The morning blessings, recited in order</span>
                     </div>
                 </div>
-                <p class="dp-note">A continuous sequence mirroring the return of consciousness — from discernment, through identity and the body, to the strength and glory given to Israel. The blessing on <strong>spiritual role</strong> differs by gender, shown in its place below. Each is given here in full.</p>
+                <p class="dp-note">A continuous sequence mirroring the return of consciousness. <strong>This list follows the authentic Sephardic (Edot HaMizrach) order</strong>, which differs from the Ashkenazic one — the three “identity” blessings come near the end. Each is given here in full.</p>
+                <div class="dp-howto">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-4M12 8h.01"/></svg>
+                    <div><strong>How &amp; when:</strong> Say all fifteen <strong>standing or seated, but seated is the norm</strong> — there is no need to stand. Recite them <strong>after washing, in the order below</strong>, ideally first thing in the morning at home, or in the synagogue before the service. They do <strong>not</strong> require a minyan — you say them alone. Read each one aloud (or in a soft whisper); it is best to understand the words, so use the English alongside the Hebrew.</div>
+                </div>
 
                 <div class="dp-prayer dp-prayer--compact">
                     <div class="dp-prayer-tag"><span class="num">1</span> Discernment</div>
@@ -417,26 +455,134 @@
                 </div>
 
                 <div class="dp-prayer dp-prayer--compact">
-                    <div class="dp-prayer-tag"><span class="num">2</span> Spiritual identity</div>
+                    <div class="dp-prayer-tag"><span class="num">2</span> Sight</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, פּוֹקֵחַ עִוְרִים.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, pokei'ach ivrim.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who opens the eyes of the blind.</div>
+                    </div>
+                </div>
+
+                <div class="dp-prayer dp-prayer--compact">
+                    <div class="dp-prayer-tag"><span class="num">3</span> Freedom of movement</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, מַתִּיר אֲסוּרִים.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, matir asurim.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who releases the bound.</div>
+                    </div>
+                </div>
+
+                <div class="dp-prayer dp-prayer--compact">
+                    <div class="dp-prayer-tag"><span class="num">4</span> Posture</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, זוֹקֵף כְּפוּפִים.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, zokef kefufim.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who straightens the bent.</div>
+                    </div>
+                </div>
+
+                <div class="dp-prayer dp-prayer--compact">
+                    <div class="dp-prayer-tag"><span class="num">5</span> Clothing</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, מַלְבִּישׁ עֲרֻמִּים.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, malbish arumim.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who clothes the naked.</div>
+                    </div>
+                </div>
+
+                <div class="dp-prayer dp-prayer--compact">
+                    <div class="dp-prayer-tag"><span class="num">6</span> Vitality</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, הַנּוֹתֵן לַיָּעֵף כֹּחַ.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, hanotein laya'ef koach.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who gives strength to the weary.</div>
+                    </div>
+                </div>
+
+                <div class="dp-prayer dp-prayer--compact">
+                    <div class="dp-prayer-tag"><span class="num">7</span> The earth</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, רוֹקַע הָאָרֶץ עַל הַמָּיִם.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, roka ha'aretz al hamayim.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who spreads the earth upon the waters.</div>
+                    </div>
+                </div>
+
+                <div class="dp-prayer dp-prayer--compact">
+                    <div class="dp-prayer-tag"><span class="num">8</span> Guidance</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, הַמֵּכִין מִצְעֲדֵי גָבֶר.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, hameichin mitzadei gaver.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who prepares the steps of man.</div>
+                    </div>
+                </div>
+
+                <div class="dp-prayer dp-prayer--compact">
+                    <div class="dp-prayer-tag"><span class="num">9</span> Provision</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, שֶׁעָשָׂה לִי כָּל צָרְכִּי.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, she'asah li kol tzorki.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who has provided me with all my needs.</div>
+                    </div>
+                </div>
+
+                <div class="dp-prayer dp-prayer--compact">
+                    <div class="dp-prayer-tag"><span class="num">10</span> Strength</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אוֹזֵר יִשְׂרָאֵל בִּגְבוּרָה.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, ozer Yisrael bigvurah.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who girds Israel with strength.</div>
+                    </div>
+                </div>
+
+                <div class="dp-prayer dp-prayer--compact">
+                    <div class="dp-prayer-tag"><span class="num">11</span> Glory</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, עוֹטֵר יִשְׂרָאֵל בְּתִפְאָרָה.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, oter Yisrael b'tifarah.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who crowns Israel with glory.</div>
+                    </div>
+                </div>
+
+                <!-- 12 — Spiritual identity (gendered conjugation) -->
+                <div class="dp-prayer dp-prayer--compact for-male">
+                    <div class="dp-prayer-tag"><span class="num">12</span> Spiritual identity · for a man</div>
                     <div class="dp-prayer-body">
                         <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, שֶׁלֹּא עָשַׂנִי גּוֹי.</div>
                         <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, shelo asani goy.</div>
                         <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who has not made me a gentile.</div>
                     </div>
                 </div>
+                <div class="dp-prayer dp-prayer--compact for-female">
+                    <div class="dp-prayer-tag"><span class="num">12</span> Spiritual identity · for a woman</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, שֶׁלֹּא עָשַׂנִי גּוֹיָה.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, shelo asani goyah.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who has not made me a gentile. <span style="color:var(--dp-ink-400)">(feminine form: <em>goyah</em>)</span></div>
+                    </div>
+                </div>
 
-                <div class="dp-prayer dp-prayer--compact">
-                    <div class="dp-prayer-tag"><span class="num">3</span> Freedom</div>
+                <!-- 13 — Freedom (gendered conjugation) -->
+                <div class="dp-prayer dp-prayer--compact for-male">
+                    <div class="dp-prayer-tag"><span class="num">13</span> Freedom · for a man</div>
                     <div class="dp-prayer-body">
                         <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, שֶׁלֹּא עָשַׂנִי עָבֶד.</div>
                         <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, shelo asani aved.</div>
                         <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who has not made me a slave.</div>
                     </div>
                 </div>
+                <div class="dp-prayer dp-prayer--compact for-female">
+                    <div class="dp-prayer-tag"><span class="num">13</span> Freedom · for a woman</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, שֶׁלֹּא עָשַׂנִי שִׁפְחָה.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, shelo asani shifchah.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who has not made me a maidservant. <span style="color:var(--dp-ink-400)">(feminine form: <em>shifchah</em>)</span></div>
+                    </div>
+                </div>
 
-                <!-- 4 — gendered -->
+                <!-- 14 — Spiritual role (gendered) -->
                 <div class="dp-prayer dp-prayer--compact for-male">
-                    <div class="dp-prayer-tag"><span class="num">4</span> Spiritual role · for a man</div>
+                    <div class="dp-prayer-tag"><span class="num">14</span> Spiritual role · for a man</div>
                     <div class="dp-prayer-body">
                         <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, שֶׁלֹּא עָשַׂנִי אִשָּׁה.</div>
                         <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, shelo asani ishah.</div>
@@ -444,7 +590,7 @@
                     </div>
                 </div>
                 <div class="dp-prayer dp-prayer--compact for-female">
-                    <div class="dp-prayer-tag"><span class="num">4</span> Spiritual role · for a woman</div>
+                    <div class="dp-prayer-tag"><span class="num">14</span> Spiritual role · for a woman</div>
                     <div class="dp-prayer-body">
                         <div class="dp-heb">בָּרוּךְ שֶׁעָשַׂנִי כִּרְצוֹנוֹ.</div>
                         <div class="dp-translit">Baruch she'asani kirtzono.</div>
@@ -454,96 +600,6 @@
                 <div class="dp-callout for-female">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" d="M12 8h.01M11 12h1v4h1"/></svg>
                     <div><strong>Sephardic ruling:</strong> A woman recites this blessing <strong>without God's Name and Kingship</strong> — simply <em>“Baruch she'asani kirtzono”</em> — because of a doubt in its formulation, following the principle of leniency with blessings (<em>safek brachot l'hakel</em>).</div>
-                </div>
-
-                <div class="dp-prayer dp-prayer--compact">
-                    <div class="dp-prayer-tag"><span class="num">5</span> Sight</div>
-                    <div class="dp-prayer-body">
-                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, פּוֹקֵחַ עִוְרִים.</div>
-                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, pokei'ach ivrim.</div>
-                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who opens the eyes of the blind.</div>
-                    </div>
-                </div>
-
-                <div class="dp-prayer dp-prayer--compact">
-                    <div class="dp-prayer-tag"><span class="num">6</span> Clothing</div>
-                    <div class="dp-prayer-body">
-                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, מַלְבִּישׁ עֲרֻמִּים.</div>
-                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, malbish arumim.</div>
-                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who clothes the naked.</div>
-                    </div>
-                </div>
-
-                <div class="dp-prayer dp-prayer--compact">
-                    <div class="dp-prayer-tag"><span class="num">7</span> Posture</div>
-                    <div class="dp-prayer-body">
-                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, זוֹקֵף כְּפוּפִים.</div>
-                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, zokef kefufim.</div>
-                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who straightens the bent.</div>
-                    </div>
-                </div>
-
-                <div class="dp-prayer dp-prayer--compact">
-                    <div class="dp-prayer-tag"><span class="num">8</span> Freedom of movement</div>
-                    <div class="dp-prayer-body">
-                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, מַתִּיר אֲסוּרִים.</div>
-                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, matir asurim.</div>
-                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who releases the bound.</div>
-                    </div>
-                </div>
-
-                <div class="dp-prayer dp-prayer--compact">
-                    <div class="dp-prayer-tag"><span class="num">9</span> The earth</div>
-                    <div class="dp-prayer-body">
-                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, רוֹקַע הָאָרֶץ עַל הַמָּיִם.</div>
-                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, roka ha'aretz al hamayim.</div>
-                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who spreads the earth upon the waters.</div>
-                    </div>
-                </div>
-
-                <div class="dp-prayer dp-prayer--compact">
-                    <div class="dp-prayer-tag"><span class="num">10</span> Provision</div>
-                    <div class="dp-prayer-body">
-                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, שֶׁעָשָׂה לִי כָּל צָרְכִּי.</div>
-                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, she'asah li kol tzorki.</div>
-                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who has provided me with all my needs.</div>
-                    </div>
-                </div>
-
-                <div class="dp-prayer dp-prayer--compact">
-                    <div class="dp-prayer-tag"><span class="num">11</span> Guidance</div>
-                    <div class="dp-prayer-body">
-                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, הַמֵּכִין מִצְעֲדֵי גָבֶר.</div>
-                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, hameichin mitzadei gaver.</div>
-                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who prepares the steps of man.</div>
-                    </div>
-                </div>
-
-                <div class="dp-prayer dp-prayer--compact">
-                    <div class="dp-prayer-tag"><span class="num">12</span> Strength</div>
-                    <div class="dp-prayer-body">
-                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אוֹזֵר יִשְׂרָאֵל בִּגְבוּרָה.</div>
-                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, ozer Yisrael bigvurah.</div>
-                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who girds Israel with strength.</div>
-                    </div>
-                </div>
-
-                <div class="dp-prayer dp-prayer--compact">
-                    <div class="dp-prayer-tag"><span class="num">13</span> Glory</div>
-                    <div class="dp-prayer-body">
-                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, עוֹטֵר יִשְׂרָאֵל בְּתִפְאָרָה.</div>
-                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, oter Yisrael b'tifarah.</div>
-                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who crowns Israel with glory.</div>
-                    </div>
-                </div>
-
-                <div class="dp-prayer dp-prayer--compact">
-                    <div class="dp-prayer-tag"><span class="num">14</span> Vitality</div>
-                    <div class="dp-prayer-body">
-                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, הַנּוֹתֵן לַיָּעֵף כֹּחַ.</div>
-                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, hanotein laya'ef koach.</div>
-                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who gives strength to the weary.</div>
-                    </div>
                 </div>
 
                 <div class="dp-prayer dp-prayer--compact">
@@ -568,6 +624,10 @@
                     </div>
                 </div>
                 <p class="dp-note">It is forbidden to speak words of Torah before these blessings. Sephardic custom says <em>al divrei Torah</em> (“concerning words of Torah”). Three blessings are recited together:</p>
+                <div class="dp-howto">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-4M12 8h.01"/></svg>
+                    <div><strong>How &amp; when:</strong> Once a day, in the morning, after Birkot HaShachar. Say all <strong>three in a row</strong> without interruption. Seated or standing, alone — no minyan. After these, it is customary to immediately read a short Torah verse or two (any verse) so the blessing is “used.”</div>
+                </div>
 
                 <div class="dp-prayer">
                     <div class="dp-prayer-tag">First blessing</div>
@@ -609,6 +669,10 @@
                         </div>
                     </div>
                     <p class="dp-note">These are positive, time-bound commandments — an explicit obligation for men, from which women are exempt. Inspect the fringes of the Tallit, then wrap it around your head and shoulders while reciting:</p>
+                    <div class="dp-howto">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-4M12 8h.01"/></svg>
+                        <div><strong>How &amp; when:</strong> For <strong>weekday mornings only</strong> (Tefillin is not worn on Shabbat or festivals). Put on the Tallit first, then the Tefillin, <strong>standing</strong>, just before the morning service. You don't need a minyan to wear them, but the morning <em>Amidah</em> is best said with one. If you're new to this, ask someone to show you how to wind the straps the first time.</div>
+                    </div>
                     <div class="dp-prayer">
                         <div class="dp-prayer-tag">Tallit</div>
                         <div class="dp-prayer-body">
@@ -667,6 +731,10 @@
                         <h2 class="dp-step-title">Shema Yisrael</h2>
                         <span class="dp-step-sub">The declaration of God's oneness — first paragraph</span>
                     </div>
+                </div>
+                <div class="dp-howto">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-4M12 8h.01"/></svg>
+                    <div><strong>How &amp; when:</strong> Said within the morning prayers (and again at night). When you say the <strong>first line</strong> (“Shema Yisrael…”), the custom is to <strong>cover your eyes with your right hand</strong> and concentrate on the meaning — God is One. The second line is said in an undertone (whispered). No minyan required, though the full Shema is part of the communal service.</div>
                 </div>
                 <div class="dp-prayer">
                     <div class="dp-prayer-tag">Shema · first paragraph</div>
