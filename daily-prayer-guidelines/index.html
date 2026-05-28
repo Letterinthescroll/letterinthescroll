@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Prayer Guidelines — Sephardic Morning Order | A Letter in the Scroll</title>
+    <meta name="description" content="A step-by-step Sephardic (Edot HaMizrach) guide to the morning prayers, from Modeh Ani and Netilat Yadayim through Birkot HaShachar — with full Hebrew, transliteration, and English, tailored for men and women.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://www.aletterinthescroll.com/daily-prayer-guidelines/">
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/svg+xml" href="/media/images/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" sizes="180x180" href="/media/images/apple-touch-icon.png">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/shabbat.css">
+    <link rel="stylesheet" href="/css/mobile-overrides.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --dp-navy: #1e3794;
+            --dp-navy-deep: #152046;
+            --dp-gold: #b8860b;
+            --dp-gold-soft: #d4af37;
+            --dp-ink: #1a1a2e;
+            --dp-ink-600: #4b5563;
+            --dp-ink-400: #6b7280;
+            --dp-line: #ece8df;
+            --dp-paper: #fbf9f4;
+            --dp-card: #ffffff;
+        }
+        * { -webkit-font-smoothing: antialiased; }
+        body {
+            background:
+                radial-gradient(1200px 600px at 50% -200px, rgba(30,55,148,0.05), transparent),
+                var(--dp-paper);
+            color: var(--dp-ink);
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        .dp-wrap { max-width: 880px; margin: 0 auto; padding: 0 1.25rem; }
+
+        /* ── Hero ── */
+        .dp-hero {
+            background: linear-gradient(135deg, var(--dp-navy-deep) 0%, var(--dp-navy) 55%, #24429f 100%);
+            color: #fff;
+            padding: 3.25rem 0 3rem;
+            text-align: center;
+            border-bottom: 3px solid rgba(212,175,55,0.4);
+        }
+        .dp-hero-eyebrow {
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: var(--dp-gold-soft); font-weight: 700; margin-bottom: 0.85rem;
+        }
+        .dp-hero h1 { font-size: clamp(1.9rem, 5vw, 2.9rem); font-weight: 700; line-height: 1.1; margin: 0 0 0.9rem; letter-spacing: -0.01em; }
+        .dp-hero p { font-family: ui-sans-serif, system-ui, sans-serif; max-width: 560px; margin: 0 auto; color: rgba(255,255,255,0.82); font-size: 0.95rem; line-height: 1.65; }
+
+        /* ── Gender selector ── */
+        .dp-gender {
+            position: sticky; top: 0; z-index: 40;
+            background: rgba(251,249,244,0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--dp-line);
+            padding: 0.85rem 0;
+        }
+        .dp-gender-inner { display: flex; align-items: center; justify-content: center; gap: 0.9rem; flex-wrap: wrap; }
+        .dp-gender-label { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 0.78rem; color: var(--dp-ink-400); font-weight: 600; }
+        .dp-seg {
+            display: inline-flex; background: #fff; border: 1px solid var(--dp-line);
+            border-radius: 999px; padding: 0.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .dp-seg button {
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            border: none; background: transparent; cursor: pointer;
+            padding: 0.5rem 1.4rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600;
+            color: var(--dp-ink-600); transition: all 0.2s ease;
+        }
+        .dp-seg button.active { background: var(--dp-navy); color: #fff; box-shadow: 0 2px 8px rgba(30,55,148,0.28); }
+
+        /* ── Body ── */
+        .dp-body { padding: 2.5rem 0 4rem; }
+        .dp-intro {
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            background: #fff; border: 1px solid var(--dp-line); border-left: 4px solid var(--dp-gold-soft);
+            border-radius: 0.9rem; padding: 1.25rem 1.4rem; margin-bottom: 2.5rem;
+            font-size: 0.9rem; line-height: 1.7; color: var(--dp-ink-600);
+        }
+
+        /* Step card */
+        .dp-step { margin-bottom: 2.1rem; }
+        .dp-step-head { display: flex; align-items: baseline; gap: 0.85rem; margin-bottom: 0.65rem; }
+        .dp-num {
+            flex: none; width: 2.1rem; height: 2.1rem; border-radius: 50%;
+            background: linear-gradient(135deg, var(--dp-navy), #2c4ab0); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-family: ui-sans-serif, system-ui, sans-serif; font-weight: 700; font-size: 0.95rem;
+            box-shadow: 0 3px 10px rgba(30,55,148,0.25); align-self: center;
+        }
+        .dp-step-title { font-size: 1.45rem; font-weight: 700; color: var(--dp-ink); margin: 0; line-height: 1.2; }
+        .dp-step-sub { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 0.78rem; color: var(--dp-ink-400); font-style: italic; }
+        .dp-note {
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            margin: 0 0 0.9rem 2.95rem; font-size: 0.9rem; line-height: 1.7; color: var(--dp-ink-600);
+        }
+        .dp-note strong { color: var(--dp-ink); }
+
+        /* Prayer block */
+        .dp-prayer {
+            margin: 0 0 0 2.95rem;
+            background: var(--dp-card); border: 1px solid var(--dp-line);
+            border-radius: 1rem; overflow: hidden;
+            box-shadow: 0 6px 24px rgba(26,26,46,0.05);
+        }
+        .dp-prayer-tag {
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            background: linear-gradient(90deg, rgba(30,55,148,0.06), transparent);
+            padding: 0.55rem 1.35rem; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+            font-weight: 700; color: var(--dp-navy); border-bottom: 1px solid var(--dp-line);
+        }
+        .dp-prayer-body { padding: 1.35rem 1.5rem 1.45rem; }
+        .dp-heb {
+            direction: rtl; text-align: right; font-size: 1.45rem; line-height: 2.15;
+            color: var(--dp-ink); font-family: 'Frank Ruhl Libre', 'Times New Roman', serif;
+            margin-bottom: 0.85rem;
+        }
+        .dp-translit {
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            font-style: italic; color: var(--dp-navy); font-size: 0.95rem; line-height: 1.65;
+            padding-bottom: 0.75rem; border-bottom: 1px dashed var(--dp-line); margin-bottom: 0.75rem;
+        }
+        .dp-eng {
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            color: var(--dp-ink-600); font-size: 0.92rem; line-height: 1.7;
+        }
+
+        /* Gendered visibility */
+        .for-female { display: none; }
+        body[data-gender="female"] .for-male { display: none; }
+        body[data-gender="female"] .for-female { display: block; }
+        .dp-seg-inline.for-female { display: none; }
+        body[data-gender="female"] .dp-seg-inline.for-male { display: none; }
+        body[data-gender="female"] .dp-seg-inline.for-female { display: block; }
+
+        /* Callout */
+        .dp-callout {
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            margin: 0.9rem 0 0 2.95rem; padding: 0.95rem 1.2rem;
+            background: rgba(184,134,11,0.07); border: 1px solid rgba(184,134,11,0.22);
+            border-radius: 0.75rem; font-size: 0.84rem; line-height: 1.65; color: #6b5618;
+        }
+        .dp-callout strong { color: #5a4710; }
+
+        .dp-divider { height: 1px; background: var(--dp-line); margin: 2.5rem 2.95rem; }
+
+        ul.dp-list { font-family: ui-sans-serif, system-ui, sans-serif; margin: 0 0 0.9rem 2.95rem; padding-left: 1.1rem; color: var(--dp-ink-600); font-size: 0.9rem; line-height: 1.75; }
+        ul.dp-list li { margin-bottom: 0.35rem; }
+        ol.dp-list { font-family: ui-sans-serif, system-ui, sans-serif; margin: 0 0 0.9rem 2.95rem; padding-left: 1.3rem; color: var(--dp-ink-600); font-size: 0.9rem; line-height: 1.75; }
+        ol.dp-list li { margin-bottom: 0.4rem; }
+
+        .dp-section-break {
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            text-align: center; margin: 3rem 0 2.25rem;
+        }
+        .dp-section-break span {
+            display: inline-block; font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+            font-weight: 700; color: var(--dp-gold); padding: 0 1rem; position: relative;
+        }
+        .dp-section-break:before { content: ""; display: block; height: 1px; background: linear-gradient(90deg, transparent, var(--dp-line), transparent); margin-bottom: -0.72rem; }
+
+        @media (max-width: 640px) {
+            .dp-prayer, .dp-note, .dp-callout, .dp-list, .dp-divider { margin-left: 0; }
+            .dp-heb { font-size: 1.25rem; line-height: 1.95; }
+            .dp-step-head { gap: 0.6rem; }
+        }
+    </style>
+</head>
+<body data-header-fallback="true" data-gender="male">
+
+    <!-- Header -->
+    <div id="shared-header-mount" style="background:linear-gradient(135deg,#152046 0%,#1e3794 50%,#1e3794 100%);min-height:64px"></div>
+    <script src="/js/header-loader.js"></script>
+
+    <!-- Hero -->
+    <header class="dp-hero">
+        <div class="dp-wrap">
+            <div class="dp-hero-eyebrow">Sephardic · Edot HaMizrach</div>
+            <h1>Daily Prayer Guidelines</h1>
+            <p>A step-by-step guide to the morning order — from the first breath of gratitude to the fifteen morning blessings — with full Hebrew, transliteration, and English.</p>
+        </div>
+    </header>
+
+    <!-- Gender selector -->
+    <div class="dp-gender">
+        <div class="dp-wrap dp-gender-inner">
+            <span class="dp-gender-label">These guidelines are tailored for a:</span>
+            <div class="dp-seg" role="tablist" aria-label="Select tradition">
+                <button id="seg-male" class="active" type="button" role="tab" aria-selected="true">Man</button>
+                <button id="seg-female" type="button" role="tab" aria-selected="false">Woman</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="dp-body">
+        <div class="dp-wrap">
+
+            <div class="dp-intro">
+                The day begins the moment you wake. According to Sephardic tradition, sleep is a fractional taste of death — the higher soul ascends through the night and returns at dawn. The order below restores spiritual equilibrium step by step: first gratitude, then the washing that removes the night's impurity, then the blessings that greet the returning day. Follow it in order, top to bottom.
+            </div>
+
+            <!-- 1. Modeh / Modah Ani -->
+            <section class="dp-step">
+                <div class="dp-step-head">
+                    <span class="dp-num">1</span>
+                    <div>
+                        <h2 class="dp-step-title">Modeh / Modah Ani</h2>
+                        <span class="dp-step-sub">The first words, while still in bed</span>
+                    </div>
+                </div>
+                <p class="dp-note">The instant you wake — before rising, before touching your eyes, mouth, or any food — acknowledge the return of your soul. Because the hands are not yet washed, this prayer deliberately contains <strong>no holy Name of God</strong>, so it may be said with unwashed hands while still lying down. A man says <strong>Modeh</strong>; a woman says <strong>Modah</strong>.</p>
+
+                <!-- Male version -->
+                <div class="dp-prayer for-male">
+                    <div class="dp-prayer-tag">Modeh Ani · for a man</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">מוֹדֶה אֲנִי לְפָנֶיךָ מֶלֶךְ חַי וְקַיָּם, שֶׁהֶחֱזַרְתָּ בִּי נִשְׁמָתִי בְּחֶמְלָה, רַבָּה אֱמוּנָתֶךָ.</div>
+                        <div class="dp-translit">Modeh ani lefanekha, Melekh chai vekayam, shehechezarta bi nishmati bechemlah, rabbah emunatekha.</div>
+                        <div class="dp-eng">I give thanks before You, living and everlasting King, for You have returned my soul within me with compassion. Great is Your faithfulness.</div>
+                    </div>
+                </div>
+
+                <!-- Female version -->
+                <div class="dp-prayer for-female">
+                    <div class="dp-prayer-tag">Modah Ani · for a woman</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">מוֹדָה אֲנִי לְפָנֶיךָ מֶלֶךְ חַי וְקַיָּם, שֶׁהֶחֱזַרְתָּ בִּי נִשְׁמָתִי בְּחֶמְלָה, רַבָּה אֱמוּנָתֶךָ.</div>
+                        <div class="dp-translit">Modah ani lefanekha, Melekh chai vekayam, shehechezarta bi nishmati bechemlah, rabbah emunatekha.</div>
+                        <div class="dp-eng">I give thanks before You, living and everlasting King, for You have returned my soul within me with compassion. Great is Your faithfulness.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Netilat Yadayim -->
+            <section class="dp-step">
+                <div class="dp-step-head">
+                    <span class="dp-num">2</span>
+                    <div>
+                        <h2 class="dp-step-title">Netilat Yadayim</h2>
+                        <span class="dp-step-sub">The morning washing of the hands</span>
+                    </div>
+                </div>
+                <p class="dp-note">Go directly to a sink — ideally in the kitchen, <strong>never in the bathroom</strong> (blessings may not be said there). Use a cup or vessel (a <em>natla</em>), not the faucet directly. To drive off the night's impurity, the pours must <strong>alternate</strong> between hands:</p>
+                <ol class="dp-list">
+                    <li>Take the cup in your right hand, fill it, and pass it to your left hand.</li>
+                    <li>Pour over the entire right hand, up to the wrist.</li>
+                    <li>Pass the cup back to the right hand and pour over the entire left hand.</li>
+                    <li>Repeat the alternating pattern — <strong>Right, Left, Right, Left, Right, Left</strong> — three times each, six pours in all.</li>
+                </ol>
+                <p class="dp-note">According to Sephardic custom, recite the blessing <strong>after washing but before drying</strong>, holding your wet hands up in front of you. Do not let the water run back down onto your wrists.</p>
+
+                <div class="dp-prayer">
+                    <div class="dp-prayer-tag">Blessing on washing the hands</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֺתָיו, וְצִוָּנוּ עַל נְטִילַת יָדָיִם.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, asher kideshanu bemitzvotav vetzivanu al netilat yadayim.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who has sanctified us with His commandments, and commanded us concerning the washing of the hands.</div>
+                    </div>
+                </div>
+                <div class="dp-callout"><strong>Sephardic note:</strong> If you must use the bathroom first, go before washing. Afterward, wash once with the six alternating pours and recite the blessing then. Do not wash twice with two blessings — once the obligation is fulfilled, a second blessing would be said in vain (<em>bracha l'vatala</em>).</div>
+            </section>
+
+            <!-- 3. Asher Yatzar -->
+            <section class="dp-step">
+                <div class="dp-step-head">
+                    <span class="dp-num">3</span>
+                    <div>
+                        <h2 class="dp-step-title">Asher Yatzar</h2>
+                        <span class="dp-step-sub">After using the restroom &amp; washing</span>
+                    </div>
+                </div>
+                <p class="dp-note">Recited after relieving oneself and washing the hands — gratitude for the body's intricate workings, that the systems which must stay open remain open and those that must stay closed remain closed.</p>
+                <div class="dp-prayer">
+                    <div class="dp-prayer-tag">Asher Yatzar · the body</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר יָצַר אֶת הָאָדָם בְּחָכְמָה, וּבָרָא בוֹ נְקָבִים נְקָבִים, חֲלוּלִים חֲלוּלִים. גָּלוּי וְיָדוּעַ לִפְנֵי כִסֵּא כְבוֹדֶךָ, שֶׁאִם יִפָּתֵחַ אֶחָד מֵהֶם, אוֹ יִסָּתֵם אֶחָד מֵהֶם, אִי אֶפְשַׁר לְהִתְקַיֵּם וְלַעֲמוֹד לְפָנֶיךָ אֲפִילּוּ שָׁעָה אֶחָת. בָּרוּךְ אַתָּה יְיָ, רוֹפֵא כָל בָּשָׂר וּמַפְלִיא לַעֲשׂוֹת.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, asher yatzar et ha'adam bechochmah, u'vara vo nekavim nekavim, chalulim chalulim. Galui veyadua lifnei chisei kevodekha, she'im yipatei'ach echad meihem, o yisateim echad meihem, ee efshar lehitkayeim vela'amod lefanekha afilu sha'ah achat. Baruch atah Adonai, rofei chol basar u'mafli la'asot.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who formed man in wisdom and created within him numerous orifices and cavities. It is revealed and known before the Throne of Your Glory that if but one of them were to be opened, or one of them were to be blocked, it would be impossible to exist and stand before You even for a single hour. Blessed are You, Lord, who heals all flesh and acts wondrously.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Elohai Neshamah -->
+            <section class="dp-step">
+                <div class="dp-step-head">
+                    <span class="dp-num">4</span>
+                    <div>
+                        <h2 class="dp-step-title">Elohai Neshamah</h2>
+                        <span class="dp-step-sub">The purity of the soul</span>
+                    </div>
+                </div>
+                <p class="dp-note">Said directly after Asher Yatzar — turning from the body to the soul, thanking God for the pure soul entrusted to us. A man says <strong>modeh</strong>; a woman says <strong>modah</strong>.</p>
+                <div class="dp-prayer">
+                    <div class="dp-prayer-tag">Elohai Neshamah · the soul</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">אֱלֹהַי, נְשָׁמָה שֶׁנָּתַתָּ בִּי טְהוֹרָה הִיא. אַתָּה בְרָאתָהּ, אַתָּה יְצַרְתָּהּ, אַתָּה נְפַחְתָּהּ בִּי, וְאַתָּה מְשַׁמְּרָהּ בְּקִרְבִּי, וְאַתָּה עָתִיד לִטְּלָהּ מִמֶּנִּי, וּלְהַחֲזִירָהּ בִּי לֶעָתִיד לָבוֹא. כָּל זְמַן שֶׁהַנְּשָׁמָה בְקִרְבִּי, <span class="dp-seg-inline for-male">מוֹדֶה</span><span class="dp-seg-inline for-female">מוֹדָה</span> אֲנִי לְפָנֶיךָ, יְיָ אֱלֹהַי וֵאלֹהֵי אֲבוֹתַי, רִבּוֹן כָּל הַמַּעֲשִׂים, אֲדוֹן כָּל הַנְּשָׁמוֹת. בָּרוּךְ אַתָּה יְיָ, הַמַּחֲזִיר נְשָׁמוֹת לִפְגָרִים מֵתִים.</div>
+                        <div class="dp-translit">Elohai, neshamah shenatata bi tehorah hi. Atah veratah, atah yetzartah, atah nefachtah bi, ve'atah meshamrah bekirbi, ve'atah atid litelah mimeni, ulehachazirah bi le'atid lavo. Kol z'man shehaneshamah bekirbi, <span class="dp-seg-inline for-male">modeh</span><span class="dp-seg-inline for-female">modah</span> ani lefanekha, Adonai Elohai ve'lohei avotai, Ribbon kol hama'asim, Adon kol haneshamot. Baruch atah Adonai, hamachazir neshamot lifgarim metim.</div>
+                        <div class="dp-eng">My God, the soul You placed within me is pure. You created it, You formed it, You breathed it into me, You preserve it within me, and one day You will take it from me and restore it to me in the time to come. As long as the soul is within me, I give thanks before You, Lord my God and God of my ancestors, Master of all works, Lord of all souls. Blessed are You, Lord, who restores souls to lifeless bodies.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Birkot HaShachar -->
+            <div class="dp-section-break"><span>The Fifteen Morning Blessings</span></div>
+
+            <section class="dp-step">
+                <div class="dp-step-head">
+                    <span class="dp-num">5</span>
+                    <div>
+                        <h2 class="dp-step-title">Birkot HaShachar</h2>
+                        <span class="dp-step-sub">The morning blessings, recited in order</span>
+                    </div>
+                </div>
+                <p class="dp-note">A continuous sequence of blessings that mirror the return of consciousness — from discernment, through identity and the body, to the strength and glory given to Israel. Each begins <em>Baruch atah Adonai, Eloheinu Melech ha'olam…</em> (Blessed are You, Lord our God, King of the universe…). The blessing on <strong>spiritual role differs by gender</strong>, shown in its place below.</p>
+
+                <!-- 1 -->
+                <div class="dp-prayer">
+                    <div class="dp-prayer-tag">1 · Discernment</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, הַנּוֹתֵן לַשֶּׂכְוִי בִינָה לְהַבְחִין בֵּין יוֹם וּבֵין לָיְלָה.</div>
+                        <div class="dp-translit">…hanotein lasechvi vinah lehavchin bein yom u'vein lailah.</div>
+                        <div class="dp-eng">…who gives the rooster understanding to distinguish between day and night.</div>
+                    </div>
+                </div>
+
+                <!-- 2 -->
+                <div class="dp-prayer" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">2 · Spiritual identity</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, שֶׁלֹּא עָשַׂנִי גּוֹי.</div>
+                        <div class="dp-translit">…shelo asani goy.</div>
+                        <div class="dp-eng">…who has not made me a gentile.</div>
+                    </div>
+                </div>
+
+                <!-- 3 -->
+                <div class="dp-prayer" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">3 · Freedom</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, שֶׁלֹּא עָשַׂנִי עָבֶד.</div>
+                        <div class="dp-translit">…shelo asani aved.</div>
+                        <div class="dp-eng">…who has not made me a slave.</div>
+                    </div>
+                </div>
+
+                <!-- 4 — gendered -->
+                <div class="dp-prayer for-male" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">4 · Spiritual role · for a man</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, שֶׁלֹּא עָשַׂנִי אִשָּׁה.</div>
+                        <div class="dp-translit">…shelo asani ishah.</div>
+                        <div class="dp-eng">…who has not made me a woman.</div>
+                    </div>
+                </div>
+                <div class="dp-prayer for-female" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">4 · Spiritual role · for a woman</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ שֶׁעָשַׂנִי כִּרְצוֹנוֹ.</div>
+                        <div class="dp-translit">Baruch she'asani kirtzono.</div>
+                        <div class="dp-eng">Blessed is He who has made me according to His will.</div>
+                    </div>
+                </div>
+                <div class="dp-callout for-female"><strong>Sephardic ruling:</strong> A woman recites this blessing <strong>without God's Name and Kingship</strong> — simply <em>"Baruch she'asani kirtzono"</em> — because of a doubt in its formulation, following the principle of leniency with blessings (<em>safek brachot l'hakel</em>).</div>
+
+                <!-- 5 -->
+                <div class="dp-prayer" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">5 · Sight</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, פּוֹקֵחַ עִוְרִים.</div>
+                        <div class="dp-translit">…pokei'ach ivrim.</div>
+                        <div class="dp-eng">…who opens the eyes of the blind.</div>
+                    </div>
+                </div>
+
+                <!-- 6 -->
+                <div class="dp-prayer" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">6 · Clothing</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, מַלְבִּישׁ עֲרֻמִּים.</div>
+                        <div class="dp-translit">…malbish arumim.</div>
+                        <div class="dp-eng">…who clothes the naked.</div>
+                    </div>
+                </div>
+
+                <!-- 7 -->
+                <div class="dp-prayer" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">7 · Posture</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, זוֹקֵף כְּפוּפִים.</div>
+                        <div class="dp-translit">…zokef kefufim.</div>
+                        <div class="dp-eng">…who straightens the bent.</div>
+                    </div>
+                </div>
+
+                <!-- 8 -->
+                <div class="dp-prayer" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">8 · Freedom of movement</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, מַתִּיר אֲסוּרִים.</div>
+                        <div class="dp-translit">…matir asurim.</div>
+                        <div class="dp-eng">…who releases the bound.</div>
+                    </div>
+                </div>
+
+                <!-- 9 -->
+                <div class="dp-prayer" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">9 · The earth</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, רוֹקַע הָאָרֶץ עַל הַמָּיִם.</div>
+                        <div class="dp-translit">…roka ha'aretz al hamayim.</div>
+                        <div class="dp-eng">…who spreads the earth upon the waters.</div>
+                    </div>
+                </div>
+
+                <!-- 10 -->
+                <div class="dp-prayer" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">10 · Provision</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, שֶׁעָשָׂה לִי כָּל צָרְכִּי.</div>
+                        <div class="dp-translit">…she'asah li kol tzorki.</div>
+                        <div class="dp-eng">…who has provided me with all my needs.</div>
+                    </div>
+                </div>
+
+                <!-- 11 -->
+                <div class="dp-prayer" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">11 · Guidance</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, הַמֵּכִין מִצְעֲדֵי גָבֶר.</div>
+                        <div class="dp-translit">…hameichin mitzadei gaver.</div>
+                        <div class="dp-eng">…who prepares the steps of man.</div>
+                    </div>
+                </div>
+
+                <!-- 12 -->
+                <div class="dp-prayer" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">12 · Strength</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אוֹזֵר יִשְׂרָאֵל בִּגְבוּרָה.</div>
+                        <div class="dp-translit">…ozer Yisrael bigvurah.</div>
+                        <div class="dp-eng">…who girds Israel with strength.</div>
+                    </div>
+                </div>
+
+                <!-- 13 -->
+                <div class="dp-prayer" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">13 · Glory</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, עוֹטֵר יִשְׂרָאֵל בְּתִפְאָרָה.</div>
+                        <div class="dp-translit">…oter Yisrael b'tifarah.</div>
+                        <div class="dp-eng">…who crowns Israel with glory.</div>
+                    </div>
+                </div>
+
+                <!-- 14 -->
+                <div class="dp-prayer" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">14 · Vitality</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, הַנּוֹתֵן לַיָּעֵף כֹּחַ.</div>
+                        <div class="dp-translit">…hanotein laya'ef koach.</div>
+                        <div class="dp-eng">…who gives strength to the weary.</div>
+                    </div>
+                </div>
+
+                <!-- 15 -->
+                <div class="dp-prayer" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">15 · Wakefulness</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, הַמַּעֲבִיר שֵׁנָה מֵעֵינָי וּתְנוּמָה מֵעַפְעַפָּי.</div>
+                        <div class="dp-translit">…hama'avir sheinah mei'einai u'tnumah mei'afapai.</div>
+                        <div class="dp-eng">…who removes sleep from my eyes and slumber from my eyelids.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Birchot HaTorah -->
+            <div class="dp-section-break"><span>Blessings over the Torah</span></div>
+
+            <section class="dp-step">
+                <div class="dp-step-head">
+                    <span class="dp-num">6</span>
+                    <div>
+                        <h2 class="dp-step-title">Birchot HaTorah</h2>
+                        <span class="dp-step-sub">Before any words of Torah are studied</span>
+                    </div>
+                </div>
+                <p class="dp-note">It is forbidden to speak words of Torah before these blessings. Sephardic custom says <em>al divrei Torah</em> (“concerning words of Torah”). Three blessings are recited together:</p>
+
+                <div class="dp-prayer">
+                    <div class="dp-prayer-tag">First blessing</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֺתָיו וְצִוָּנוּ עַל דִּבְרֵי תוֹרָה.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, asher kideshanu bemitzvotav vetzivanu al divrei Torah.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who has sanctified us with His commandments and commanded us concerning words of Torah.</div>
+                    </div>
+                </div>
+
+                <div class="dp-prayer" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">Second blessing · Ve'ha'arev Na</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">וְהַעֲרֶב נָא יְיָ אֱלֹהֵינוּ אֶת דִּבְרֵי תוֹרָתְךָ בְּפִינוּ וּבְפִי עַמְּךָ בֵּית יִשְׂרָאֵל, וְנִהְיֶה אֲנַחְנוּ וְצֶאֱצָאֵינוּ וְצֶאֱצָאֵי עַמְּךָ בֵּית יִשְׂרָאֵל, כֻּלָּנוּ יוֹדְעֵי שְׁמֶךָ וְלוֹמְדֵי תוֹרָתֶךָ לִשְׁמָהּ. בָּרוּךְ אַתָּה יְיָ, הַמְלַמֵּד תּוֹרָה לְעַמּוֹ יִשְׂרָאֵל.</div>
+                        <div class="dp-translit">Veha'arev na Adonai Eloheinu et divrei toratecha befinu uvefi amecha beit Yisrael, venihyeh anachnu vetze'etza'einu vetze'etza'ei amecha beit Yisrael, kulanu yodei shemecha velomdei toratecha lishmah. Baruch atah Adonai, hamelamed Torah le'amo Yisrael.</div>
+                        <div class="dp-eng">Please, Lord our God, make the words of Your Torah sweet in our mouths and in the mouths of Your people the House of Israel, that we and our descendants and the descendants of Your people the House of Israel may all know Your Name and study Your Torah for its own sake. Blessed are You, Lord, who teaches Torah to His people Israel.</div>
+                    </div>
+                </div>
+
+                <div class="dp-prayer" style="margin-top:1rem">
+                    <div class="dp-prayer-tag">Third blessing · Asher Bachar Banu</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר בָּחַר בָּנוּ מִכָּל הָעַמִּים וְנָתַן לָנוּ אֶת תּוֹרָתוֹ. בָּרוּךְ אַתָּה יְיָ, נוֹתֵן הַתּוֹרָה.</div>
+                        <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, asher bachar banu mikol ha'amim venatan lanu et torato. Baruch atah Adonai, notein haTorah.</div>
+                        <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who has chosen us from among all the peoples and given us His Torah. Blessed are You, Lord, who gives the Torah.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Men only: Tallit & Tefillin -->
+            <div class="for-male">
+                <div class="dp-section-break"><span>For a man · before Shacharit</span></div>
+
+                <section class="dp-step">
+                    <div class="dp-step-head">
+                        <span class="dp-num">7</span>
+                        <div>
+                            <h2 class="dp-step-title">Tallit &amp; Tefillin</h2>
+                            <span class="dp-step-sub">Worn by men before the morning Amidah</span>
+                        </div>
+                    </div>
+                    <p class="dp-note">These are positive, time-bound commandments — an explicit obligation for men, from which women are exempt. Inspect the fringes of the Tallit, then wrap it around your head and shoulders while reciting:</p>
+                    <div class="dp-prayer">
+                        <div class="dp-prayer-tag">Tallit</div>
+                        <div class="dp-prayer-body">
+                            <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֺתָיו וְצִוָּנוּ לְהִתְעַטֵּף בַּצִּיצִית.</div>
+                            <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, asher kideshanu bemitzvotav vetzivanu lehitatef batzitzit.</div>
+                            <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who has sanctified us with His commandments and commanded us to enwrap ourselves in tzitzit.</div>
+                        </div>
+                    </div>
+
+                    <p class="dp-note" style="margin-top:1.1rem">Then the Tefillin. Per Sephardic custom, <strong>one blessing covers both</strong> the arm- and head-tefillin — recited before tightening the arm-tefillin, with no speaking in between.</p>
+                    <div class="dp-prayer">
+                        <div class="dp-prayer-tag">Tefillin</div>
+                        <div class="dp-prayer-body">
+                            <div class="dp-heb">בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֺתָיו וְצִוָּנוּ לְהָנִיחַ תְּפִלִּין.</div>
+                            <div class="dp-translit">Baruch atah Adonai, Eloheinu Melech ha'olam, asher kideshanu bemitzvotav vetzivanu lehani'ach tefillin.</div>
+                            <div class="dp-eng">Blessed are You, Lord our God, King of the universe, who has sanctified us with His commandments and commanded us to put on tefillin.</div>
+                        </div>
+                    </div>
+                    <div class="dp-callout">Men continue into the full <strong>Shacharit</strong> service — Pesukei DeZimra, the Shema and its blessings, and the Amidah — ideally with a <em>minyan</em>.</div>
+                </section>
+            </div>
+
+            <!-- 7. Women only -->
+            <div class="for-female">
+                <div class="dp-section-break"><span>For a woman · the daily obligation</span></div>
+
+                <section class="dp-step">
+                    <div class="dp-step-head">
+                        <span class="dp-num">7</span>
+                        <div>
+                            <h2 class="dp-step-title">One Prayer a Day</h2>
+                            <span class="dp-step-sub">The Sephardic obligation for women</span>
+                        </div>
+                    </div>
+                    <p class="dp-note">Following the Rambam and codified by Rabbi Ovadia Yosef, a woman is obligated to pray <strong>once daily</strong>, not bound to the three fixed services. The advice is to keep one consistent routine — usually Shacharit — so it is never forgotten. If she prays in the morning, her minimal requirement is:</p>
+                    <ul class="dp-list">
+                        <li><strong>Birkot HaShachar</strong> — the morning blessings (above).</li>
+                        <li><strong>Birchot HaTorah</strong> — the Torah blessings (above).</li>
+                        <li><strong>The first verse of the Shema</strong> — declaring God's oneness.</li>
+                        <li><strong>The Amidah</strong> — the silent standing prayer, the core of prayer.</li>
+                    </ul>
+                    <div class="dp-callout">A woman recites these prayers and blessings <strong>even while menstruating</strong> (<em>niddah</em>). Mainstream Sephardic halacha holds that ritual impurity does not prevent a woman from praying, entering a synagogue, or studying Torah.</div>
+                </section>
+            </div>
+
+            <!-- The Shema (shared) -->
+            <div class="dp-divider"></div>
+            <section class="dp-step">
+                <div class="dp-step-head">
+                    <span class="dp-num">✡</span>
+                    <div>
+                        <h2 class="dp-step-title">Shema Yisrael</h2>
+                        <span class="dp-step-sub">The declaration of God's oneness — first verse &amp; paragraph</span>
+                    </div>
+                </div>
+                <div class="dp-prayer">
+                    <div class="dp-prayer-tag">Shema · first paragraph</div>
+                    <div class="dp-prayer-body">
+                        <div class="dp-heb">שְׁמַע יִשְׂרָאֵל, יְיָ אֱלֹהֵינוּ, יְיָ אֶחָד.<br><span style="font-size:1.1rem;color:var(--dp-ink-400)">(בְּלַחַשׁ:) בָּרוּךְ שֵׁם כְּבוֹד מַלְכוּתוֹ לְעוֹלָם וָעֶד.</span><br>וְאָהַבְתָּ אֵת יְיָ אֱלֹהֶיךָ, בְּכָל לְבָבְךָ וּבְכָל נַפְשְׁךָ וּבְכָל מְאֹדֶךָ. וְהָיוּ הַדְּבָרִים הָאֵלֶּה אֲשֶׁר אָנֹכִי מְצַוְּךָ הַיּוֹם עַל לְבָבֶךָ. וְשִׁנַּנְתָּם לְבָנֶיךָ וְדִבַּרְתָּ בָּם, בְּשִׁבְתְּךָ בְּבֵיתֶךָ וּבְלֶכְתְּךָ בַדֶּרֶךְ וּבְשָׁכְבְּךָ וּבְקוּמֶךָ. וּקְשַׁרְתָּם לְאוֹת עַל יָדֶךָ וְהָיוּ לְטֹטָפֹת בֵּין עֵינֶיךָ. וּכְתַבְתָּם עַל מְזֻזוֹת בֵּיתֶךָ וּבִשְׁעָרֶיךָ.</div>
+                        <div class="dp-translit">Shema Yisrael, Adonai Eloheinu, Adonai Echad. <span style="opacity:.8">(whispered:) Baruch shem kevod malchuto le'olam va'ed.</span> Ve'ahavta et Adonai Elohecha, bechol levavecha uvechol nafshecha uvechol me'odecha. Vehayu hadevarim ha'eleh asher anochi metzavecha hayom al levavecha. Veshinantam levanecha vedibarta bam, beshivtecha beveitecha uvelechtecha vaderech uveshochbecha uvekumecha. Ukshartam le'ot al yadecha vehayu letotafot bein einecha. Uchtavtam al mezuzot beitecha uvisharecha.</div>
+                        <div class="dp-eng">Hear, O Israel: the Lord is our God, the Lord is One. <span style="opacity:.85">(whispered:) Blessed is the Name of His glorious kingdom forever and ever.</span> And you shall love the Lord your God with all your heart, with all your soul, and with all your might. These words which I command you today shall be upon your heart. Teach them diligently to your children and speak of them when you sit at home and when you walk on the way, when you lie down and when you rise. Bind them as a sign upon your hand and let them be tefillin between your eyes. Write them on the doorposts of your house and upon your gates.</div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="dp-callout" style="margin-top:2.5rem">
+                <strong>A note of guidance:</strong> This page is a study aid, not a substitute for a complete siddur or for the rulings of your own rabbi. Customs vary between communities; where you are unsure, follow your family's tradition and ask a qualified halachic authority.
+            </div>
+
+        </div>
+    </main>
+
+    <script type="module" src="/js/page-auth.js"></script>
+    <script src="/js/sidebar-nav.js"></script>
+    <div id="shared-footer-mount"></div>
+    <script src="/js/footer-loader.js"></script>
+
+    <script>
+        (function () {
+            // If the feature was turned off, send the user back to settings.
+            try {
+                if (localStorage.getItem('alits_daily_prayers') !== 'true') {
+                    // Still allow viewing — but the page is normally reached via the sidebar.
+                }
+            } catch (_) {}
+
+            var body = document.body;
+            var male = document.getElementById('seg-male');
+            var female = document.getElementById('seg-female');
+            var KEY = 'alits_daily_prayers_gender';
+
+            function setGender(g) {
+                body.setAttribute('data-gender', g);
+                var isMale = g === 'male';
+                male.classList.toggle('active', isMale);
+                female.classList.toggle('active', !isMale);
+                male.setAttribute('aria-selected', String(isMale));
+                female.setAttribute('aria-selected', String(!isMale));
+                try { localStorage.setItem(KEY, g); } catch (_) {}
+            }
+
+            var saved = 'male';
+            try { saved = localStorage.getItem(KEY) || 'male'; } catch (_) {}
+            setGender(saved === 'female' ? 'female' : 'male');
+
+            male.addEventListener('click', function () { setGender('male'); });
+            female.addEventListener('click', function () { setGender('female'); });
+        })();
+    </script>
+</body>
+</html>

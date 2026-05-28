@@ -108,6 +108,17 @@
             { href: '/about',     label: 'About',    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>' }
         ];
 
+        // Optional item, shown only when Daily Prayers is enabled in Settings.
+        try {
+            if (localStorage.getItem('alits_daily_prayers') === 'true') {
+                navItems.splice(navItems.length - 1, 0, {
+                    href: '/daily-prayer-guidelines',
+                    label: 'Daily Prayers',
+                    icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3c-1.1 2.2-2.5 3.6-4 4.5C6.2 8.6 5 10.6 5 13a7 7 0 0014 0c0-2.4-1.2-4.4-3-5.5-1.5-.9-2.9-2.3-4-4.5z"/>'
+                });
+            }
+        } catch (_) {}
+
         navItems.forEach(function (item) {
             var a = document.createElement('a');
             a.href = item.href;
@@ -218,7 +229,8 @@
                 'about':      'a[href$="/about"]',
                 'bookmarks':  'a[href$="/bookmarks"]',
                 'settings':   'a[href$="/settings"]',
-                'song-detail':'a[href$="/songs"]'
+                'song-detail':'a[href$="/songs"]',
+                'daily-prayer-guidelines':'a[href$="/daily-prayer-guidelines"]'
             };
 
             var holidayPages = [
