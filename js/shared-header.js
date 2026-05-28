@@ -63,7 +63,7 @@
         if (localStorage.getItem('alits_daily_prayers') === 'true') {
             NAV.splice(NAV.length - 1, 0, {
                 href: '/daily-prayer-guidelines',
-                label: 'Daily Prayers',
+                label: 'Daily',
                 title: 'Daily prayer guidelines',
                 icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3c-1.1 2.2-2.5 3.6-4 4.5C6.2 8.6 5 10.6 5 13a7 7 0 0014 0c0-2.4-1.2-4.4-3-5.5-1.5-.9-2.9-2.3-4-4.5z"/>'
             });
