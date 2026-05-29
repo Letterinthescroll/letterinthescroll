@@ -24,7 +24,12 @@ const HEB_BOOK_NAMES = {
  *                                     fields. Hebrew preferred; English used as a graceful fallback.
  */
 export function buildParshaEmail(p) {
-  const HEB_STACK = "'SBL Hebrew','Frank Ruhl Libre','Noto Serif Hebrew','David','Times New Roman',serif";
+  // Verse text stays in a traditional Hebrew serif (best for niqqud/te'amim).
+  const HEB_SERIF = "'Frank Ruhl Libre','SBL Hebrew','Noto Serif Hebrew','David',Georgia,'Times New Roman',serif";
+  // Body Hebrew (greeting, significance, footer) uses a modern sans that
+  // renders cleanly across all major mail clients with graceful fallbacks
+  // to whatever Hebrew face the OS ships with.
+  const HEB_SANS = "'Heebo','Assistant','Arial Hebrew','Apple SD Gothic Neo','Helvetica Neue',Arial,sans-serif";
   const SAN_STACK = "-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,Helvetica,Arial,sans-serif";
 
   const heBook = HEB_BOOK_NAMES[p.book] || '';
@@ -52,17 +57,22 @@ export function buildParshaEmail(p) {
     { key: 'significance', he: 'משמעות' }
   ];
   const sig = p.significance || {};
-  const sigBlocks = SIG_FIELDS
-    .map(f => {
-      const text = cleanSig(sig[f.key]);
-      if (!text) return '';
+  const sigEntries = SIG_FIELDS
+    .map(f => ({ f, text: cleanSig(sig[f.key]) }))
+    .filter(x => x.text);
+  const sigBlocks = sigEntries
+    .map((x, i) => {
+      const isLast = i === sigEntries.length - 1;
+      const sep = isLast
+        ? 'margin:0;'
+        : 'margin:0 0 22px;padding-bottom:22px;border-bottom:1px dotted rgba(200,154,53,0.25);';
       return `
-        <div style="margin:0 0 18px;">
-          <p style="margin:0 0 6px;font-family:${SAN_STACK};font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#a08a4f;direction:rtl;text-align:right;">
-            ${escapeHtml(f.he)}
+        <div style="${sep}">
+          <p style="margin:0 0 10px;font-family:${HEB_SANS};font-size:14px;font-weight:600;color:#a08a4f;direction:rtl;text-align:right;">
+            ${escapeHtml(x.f.he)}
           </p>
-          <p style="margin:0;font-family:${HEB_STACK};direction:rtl;text-align:right;font-size:16px;line-height:1.9;color:#1a2744;">
-            ${escapeHtml(text)}
+          <p style="margin:0;font-family:${HEB_SANS};direction:rtl;text-align:right;font-size:16px;line-height:1.95;color:#1a2744;font-weight:400;">
+            ${escapeHtml(x.text)}
           </p>
         </div>`;
     })
@@ -84,7 +94,7 @@ export function buildParshaEmail(p) {
 
   const chaptersHtml = chapters.map(ch => `
     <tr><td style="padding:28px 56px 8px;">
-      <p style="margin:0;font-family:${HEB_STACK};direction:rtl;text-align:center;font-size:18px;color:#a08a4f;letter-spacing:0.02em;">
+      <p style="margin:0;font-family:${HEB_SERIF};direction:rtl;text-align:center;font-size:18px;color:#a08a4f;letter-spacing:0.02em;">
         ${escapeHtml(toHebrewNumeral(ch.chapter))}&nbsp;&middot;&nbsp;פֶּרֶק ${escapeHtml(String(ch.chapter))}
       </p>
     </td></tr>
@@ -95,7 +105,7 @@ export function buildParshaEmail(p) {
           <td valign="top" align="left" width="42" style="padding:6px 0 6px 12px;font-family:${SAN_STACK};font-size:12px;font-weight:600;color:#c89a35;line-height:1.9;direction:ltr;text-align:left;">
             ${v.chapter}:${v.verse}
           </td>
-          <td valign="top" style="padding:6px 0;font-family:${HEB_STACK};direction:rtl;text-align:right;font-size:19px;line-height:1.95;color:#1a2744;">
+          <td valign="top" style="padding:6px 0;font-family:${HEB_SERIF};direction:rtl;text-align:right;font-size:19px;line-height:1.95;color:#1a2744;">
             ${escapeHtml(v.he)}
           </td>
         </tr>`).join('')}
@@ -112,10 +122,24 @@ export function buildParshaEmail(p) {
 </head>
 <body style="margin:0;padding:0;background:#f5efe2;font-family:${SAN_STACK};color:#1a2744;line-height:1.6;-webkit-font-smoothing:antialiased;">
 
-  <!-- View-in-browser strip (Hebrew) -->
+  <!-- View-in-browser banner (Hebrew, prominent — Gmail clips long parshiot
+       at ~102KB, so we want the recipient to spot this fast). -->
   <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#f5efe2;">
-    <tr><td align="center" dir="rtl" style="padding:14px 16px 0;font-size:13px;color:#5a6478;font-family:${HEB_STACK};direction:rtl;">
-      המייל לא נטען כראוי? <a href="${attr(p.readerUrl)}" style="color:#a08a4f;text-decoration:underline;font-weight:600;">לחצו כאן לפתיחה בדפדפן</a>
+    <tr><td align="center" style="padding:24px 16px 0;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="640" style="max-width:640px;width:100%;">
+        <tr><td align="center" dir="rtl" style="padding:18px 24px;background:#fffaf0;border:1px solid rgba(200,154,53,0.35);border-radius:14px;font-family:${HEB_SANS};direction:rtl;">
+          <p style="margin:0 0 12px;font-size:16px;line-height:1.6;color:#1a2744;font-weight:600;">
+            אם המייל נחתך באמצע או לא נטען כראוי &mdash;
+          </p>
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.65;color:#5a6478;font-weight:400;">
+            פרשות ארוכות עלולות להיחתך על ידי Gmail. לחצו על הכפתור כדי לפתוח את כל הפרשה בדפדפן, בנוחות.
+          </p>
+          <a href="${attr(p.readerUrl)}"
+             style="display:inline-block;padding:14px 28px;background:#1a2744;color:#ffffff;text-decoration:none;font-family:${HEB_SANS};font-size:15px;font-weight:600;border-radius:10px;letter-spacing:0.01em;mso-padding-alt:0;">
+            פתיחת הפרשה המלאה בדפדפן &larr;
+          </a>
+        </td></tr>
+      </table>
     </td></tr>
   </table>
 
@@ -137,11 +161,11 @@ export function buildParshaEmail(p) {
         </td></tr>
 
         <!-- Hebrew greeting -->
-        <tr><td align="center" style="padding:30px 56px 0;font-family:${HEB_STACK};direction:rtl;">
-          <p style="margin:0 0 12px;font-size:22px;color:#1a2744;">
+        <tr><td align="center" style="padding:30px 56px 0;font-family:${HEB_SANS};direction:rtl;">
+          <p style="margin:0 0 12px;font-size:22px;font-weight:500;color:#1a2744;">
             בוקר טוב,
           </p>
-          <p style="margin:0 0 8px;font-size:17px;color:#3d4555;line-height:1.7;">
+          <p style="margin:0 0 8px;font-size:17px;font-weight:400;color:#3d4555;line-height:1.7;">
             תהנו מפרשת השבוע&nbsp;&mdash;
           </p>
         </td></tr>
@@ -153,11 +177,11 @@ export function buildParshaEmail(p) {
               <p style="margin:0 0 10px;font-size:11px;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:#a08a4f;font-family:${SAN_STACK};">
                 Parashat Hashavua
               </p>
-              ${hebrewName ? `<p style="margin:0 0 6px;font-family:${HEB_STACK};direction:rtl;font-size:44px;font-weight:600;line-height:1.1;color:#1a2744;letter-spacing:-0.01em;">${escapeHtml(parshaLabel)}</p>` : ''}
+              ${hebrewName ? `<p style="margin:0 0 6px;font-family:${HEB_SERIF};direction:rtl;font-size:44px;font-weight:600;line-height:1.1;color:#1a2744;letter-spacing:-0.01em;">${escapeHtml(parshaLabel)}</p>` : ''}
               <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:18px;color:#a08a4f;font-weight:500;">
                 ${escapeHtml(p.parshaName)}
               </p>
-              ${p.heRef ? `<p style="margin:14px 0 0;font-family:${HEB_STACK};direction:rtl;font-size:15px;color:#5a6478;">${escapeHtml(p.heRef)}</p>` : `<p style="margin:14px 0 0;font-family:${SAN_STACK};font-size:13px;color:#5a6478;">${escapeHtml(p.ref)}</p>`}
+              ${p.heRef ? `<p style="margin:14px 0 0;font-family:${HEB_SERIF};direction:rtl;font-size:15px;color:#5a6478;">${escapeHtml(p.heRef)}</p>` : `<p style="margin:14px 0 0;font-family:${SAN_STACK};font-size:13px;color:#5a6478;">${escapeHtml(p.ref)}</p>`}
             </td></tr>
           </table>
         </td></tr>
@@ -173,14 +197,14 @@ export function buildParshaEmail(p) {
         </td></tr>
 
         <!-- Closing note (Hebrew) -->
-        <tr><td align="center" style="padding:24px 56px 0;font-family:${HEB_STACK};direction:rtl;">
-          <p style="margin:0;font-size:15px;color:#5a6478;line-height:1.8;">
+        <tr><td align="center" style="padding:24px 56px 0;font-family:${HEB_SANS};direction:rtl;">
+          <p style="margin:0;font-size:16px;font-weight:500;color:#5a6478;line-height:1.8;">
             שבת שלום ומבורך
           </p>
         </td></tr>
 
         <!-- Reader link & quiet footer -->
-        <tr><td align="center" dir="rtl" style="padding:18px 56px 40px;font-family:${HEB_STACK};font-size:13px;color:#5a6478;line-height:1.9;direction:rtl;">
+        <tr><td align="center" dir="rtl" style="padding:18px 56px 40px;font-family:${HEB_SANS};font-size:14px;color:#5a6478;line-height:1.9;direction:rtl;">
           <a href="${attr(p.readerUrl)}" style="color:#a08a4f;text-decoration:underline;font-weight:600;">פתחו את הפרשה בדפדפן</a>
           <span style="color:#a8a293;">&middot;</span>
           <a href="${attr(p.siteUrl)}/study" style="color:#9b958a;text-decoration:underline;font-family:${SAN_STACK};direction:ltr;">aletterinthescroll.com/study</a>

@@ -8,7 +8,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;600;700&family=Heebo:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
             --ink: #1a2744;
@@ -24,9 +24,10 @@
         html, body {
             background: var(--cream);
             color: var(--ink);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Heebo', 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
             min-height: 100vh;
         }
         .page {
@@ -153,14 +154,16 @@
             margin: 28px 0 8px;
         }
         .greeting-bold {
-            font-family: 'Frank Ruhl Libre', serif;
+            font-family: 'Heebo', sans-serif;
             font-size: 22px;
+            font-weight: 500;
             color: var(--ink);
             margin-bottom: 6px;
         }
         .greeting-sub {
-            font-family: 'Frank Ruhl Libre', serif;
+            font-family: 'Heebo', sans-serif;
             font-size: 16px;
+            font-weight: 400;
             color: var(--ink-soft);
         }
 
@@ -209,7 +212,7 @@
             direction: ltr;
         }
         .sig-label-he {
-            font-family: 'Frank Ruhl Libre', serif;
+            font-family: 'Heebo', sans-serif;
             font-size: 14px;
             font-weight: 600;
             letter-spacing: 0;
@@ -218,21 +221,22 @@
             direction: rtl;
         }
         .sig-he {
-            font-family: 'Frank Ruhl Libre', 'SBL Hebrew', serif;
+            font-family: 'Heebo', 'Frank Ruhl Libre', 'SBL Hebrew', sans-serif;
+            font-weight: 400;
             direction: rtl;
             text-align: right;
             font-size: 17px;
-            line-height: 1.85;
+            line-height: 1.95;
             color: var(--ink);
             margin: 0;
         }
         .sig-en {
-            font-family: Georgia, 'Times New Roman', serif;
+            font-family: 'Lora', Georgia, 'Times New Roman', serif;
             direction: ltr;
             text-align: left;
             unicode-bidi: isolate;
-            font-size: 15.5px;
-            line-height: 1.75;
+            font-size: 16px;
+            line-height: 1.8;
             color: var(--ink-soft);
             margin: 12px 0 0;
         }
@@ -241,7 +245,7 @@
             border-top: 1px dotted rgba(200, 154, 53, 0.22);
         }
         .sig-fallback {
-            font-family: 'Frank Ruhl Libre', serif;
+            font-family: 'Heebo', sans-serif;
             direction: rtl;
             text-align: right;
             font-size: 14px;
@@ -276,19 +280,20 @@
         }
         .vtext {
             font-family: 'Frank Ruhl Libre', 'SBL Hebrew', 'David', Georgia, serif;
-            font-size: 20px;
+            font-size: 21px;
+            font-weight: 500;
             line-height: 2;
             color: var(--ink);
             padding: 4px 0;
         }
         .vtext-en {
-            font-family: Georgia, 'Times New Roman', serif;
+            font-family: 'Lora', Georgia, 'Times New Roman', serif;
             direction: ltr;
             text-align: left;
-            font-size: 15px;
-            line-height: 1.7;
+            font-size: 16px;
+            line-height: 1.75;
             color: var(--ink-soft);
-            padding-top: 2px;
+            padding-top: 4px;
         }
 
         .closing {
@@ -296,8 +301,9 @@
             margin-top: 40px;
             padding-top: 28px;
             border-top: 1px solid var(--hairline);
-            font-family: 'Frank Ruhl Libre', serif;
-            font-size: 15px;
+            font-family: 'Heebo', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
             color: var(--muted);
         }
         .footer-links {
