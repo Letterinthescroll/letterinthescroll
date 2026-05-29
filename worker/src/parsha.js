@@ -42,6 +42,7 @@ export async function getCurrentParsha() {
       name: englishName,
       hebrewName,
       ref,
+      heRef: (parshaItem.heRef || '').trim(),
       sefariaUrl: ref ? `https://www.sefaria.org/${encodeURIComponent(ref.replace(/\s+/g, '_'))}` : '',
       teaser,
       isHoliday: false,

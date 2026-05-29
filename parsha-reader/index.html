@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פרשת השבוע — A Letter in the Scroll</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" sizes="32x32" href="/media/images/favicon-32x32.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a2744;
+            --ink-soft: #3d4555;
+            --muted: #5a6478;
+            --gold: #c89a35;
+            --gold-soft: #a08a4f;
+            --cream: #f5efe2;
+            --card: #ffffff;
+            --hairline: rgba(200, 154, 53, 0.22);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body {
+            background: var(--cream);
+            color: var(--ink);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+        .page {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 32px 16px 64px;
+        }
+        .browser-strip {
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 16px;
+            direction: ltr;
+        }
+        .browser-strip a {
+            color: var(--gold-soft);
+            text-decoration: underline;
+        }
+        .card {
+            background: var(--card);
+            border-radius: 24px;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04),
+                        0 12px 32px rgba(15, 23, 42, 0.06);
+            padding: 36px 48px 48px;
+            position: relative;
+            overflow: hidden;
+        }
+        .brand {
+            text-align: center;
+            padding-bottom: 22px;
+            border-bottom: 1px solid var(--hairline);
+            margin-bottom: 28px;
+            direction: ltr;
+        }
+        .brand img {
+            display: block;
+            margin: 0 auto;
+            width: 52px;
+            height: 52px;
+        }
+        .brand-label {
+            margin-top: 10px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold-soft);
+        }
+
+        /* Language toggle */
+        .lang-toggle {
+            display: inline-flex;
+            background: #fdfaf3;
+            border: 1px solid var(--hairline);
+            border-radius: 999px;
+            padding: 4px;
+            margin: 0 auto 28px;
+            direction: ltr;
+        }
+        .lang-toggle-wrap {
+            text-align: center;
+        }
+        .lang-btn {
+            border: 0;
+            background: transparent;
+            color: var(--muted);
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            padding: 8px 18px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.18s ease, color 0.18s ease;
+        }
+        .lang-btn:hover { color: var(--ink); }
+        .lang-btn.active {
+            background: var(--ink);
+            color: #fff;
+            box-shadow: 0 1px 2px rgba(15,23,42,0.18);
+        }
+
+        .hero {
+            text-align: center;
+            background: #fdfaf3;
+            border: 1px solid var(--hairline);
+            border-radius: 18px;
+            padding: 30px 24px;
+        }
+        .hero-eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: var(--gold-soft);
+            margin-bottom: 10px;
+            direction: ltr;
+        }
+        .hero-he {
+            font-family: 'Frank Ruhl Libre', 'SBL Hebrew', Georgia, serif;
+            font-size: 44px;
+            font-weight: 600;
+            line-height: 1.1;
+            color: var(--ink);
+            letter-spacing: -0.01em;
+            margin-bottom: 6px;
+        }
+        .hero-en {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 18px;
+            color: var(--gold-soft);
+            font-weight: 500;
+            direction: ltr;
+        }
+        .hero-ref {
+            margin-top: 14px;
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 15px;
+            color: var(--muted);
+        }
+        .greeting {
+            text-align: center;
+            margin: 28px 0 8px;
+        }
+        .greeting-bold {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 22px;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+        .greeting-sub {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 16px;
+            color: var(--ink-soft);
+        }
+
+        /* Significance panel */
+        .significance {
+            margin: 32px 0 8px;
+            background: #fdfaf3;
+            border: 1px solid var(--hairline);
+            border-radius: 18px;
+            padding: 28px 32px;
+        }
+        .sig-eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: var(--gold-soft);
+            margin-bottom: 16px;
+            text-align: center;
+            direction: ltr;
+        }
+        .sig-block { margin-bottom: 18px; }
+        .sig-block:last-child { margin-bottom: 0; }
+        .sig-label-he,
+        .sig-label-en {
+            font-family: 'Inter', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--gold-soft);
+            margin-bottom: 6px;
+        }
+        .sig-label-en { direction: ltr; }
+        .sig-he {
+            font-family: 'Frank Ruhl Libre', 'SBL Hebrew', serif;
+            direction: rtl;
+            text-align: right;
+            font-size: 17px;
+            line-height: 1.85;
+            color: var(--ink);
+        }
+        .sig-en {
+            font-family: Georgia, 'Times New Roman', serif;
+            direction: ltr;
+            text-align: left;
+            font-size: 15px;
+            line-height: 1.75;
+            color: var(--ink-soft);
+            margin-top: 8px;
+            padding-top: 12px;
+            border-top: 1px dashed rgba(200,154,53,0.25);
+        }
+        .sig-fallback {
+            font-family: 'Frank Ruhl Libre', serif;
+            direction: rtl;
+            text-align: right;
+            font-size: 14px;
+            color: var(--muted);
+            font-style: italic;
+        }
+
+        .chapter-heading {
+            text-align: center;
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 17px;
+            color: var(--gold-soft);
+            letter-spacing: 0.02em;
+            margin: 36px 0 4px;
+        }
+        .verses {
+            display: grid;
+            grid-template-columns: 48px 1fr;
+            gap: 4px 14px;
+            align-items: start;
+        }
+        .vnum {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gold);
+            line-height: 2;
+            direction: ltr;
+            text-align: left;
+            padding-top: 6px;
+        }
+        .vtext {
+            font-family: 'Frank Ruhl Libre', 'SBL Hebrew', 'David', Georgia, serif;
+            font-size: 20px;
+            line-height: 2;
+            color: var(--ink);
+            padding: 4px 0;
+        }
+        .vtext-en {
+            font-family: Georgia, 'Times New Roman', serif;
+            direction: ltr;
+            text-align: left;
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--ink-soft);
+            padding-top: 2px;
+        }
+
+        .closing {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 28px;
+            border-top: 1px solid var(--hairline);
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 15px;
+            color: var(--muted);
+        }
+        .footer-links {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 12px;
+            color: var(--muted);
+            direction: ltr;
+        }
+        .footer-links a {
+            color: var(--gold-soft);
+            text-decoration: underline;
+        }
+        .state {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--muted);
+            font-family: 'Inter', sans-serif;
+        }
+        .state.error { color: #9b2c2c; }
+
+        @media (max-width: 540px) {
+            .card { padding: 28px 22px 36px; border-radius: 18px; }
+            .hero-he { font-size: 34px; }
+            .vtext { font-size: 18px; line-height: 1.95; }
+            .vtext-en { font-size: 14px; }
+            .verses { grid-template-columns: 40px 1fr; gap: 4px 10px; }
+            .significance { padding: 22px 18px; }
+            .page { padding: 18px 10px 48px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <p class="browser-strip">
+            <a href="/study">Open the full Torah study experience →</a>
+        </p>
+
+        <article class="card">
+            <header class="brand">
+                <img src="/media/images/logonew.png" alt="">
+                <p class="brand-label">A Letter in the Scroll</p>
+            </header>
+
+            <div class="lang-toggle-wrap">
+                <div class="lang-toggle" role="tablist" aria-label="Language">
+                    <button class="lang-btn active" data-lang="he" role="tab" aria-selected="true">עברית</button>
+                    <button class="lang-btn" data-lang="he-en" role="tab" aria-selected="false">עברית + English</button>
+                </div>
+            </div>
+
+            <section id="content">
+                <div class="state" id="state-loading">טוען את הפרשה…</div>
+            </section>
+
+            <footer class="footer-links">
+                <a href="/study">aletterinthescroll.com/study</a>
+            </footer>
+        </article>
+    </main>
+
+    <script>
+        (function () {
+            'use strict';
+
+            var HEB_BOOKS = {
+                Genesis: 'בְּרֵאשִׁית',
+                Exodus: 'שְׁמוֹת',
+                Leviticus: 'וַיִּקְרָא',
+                Numbers: 'בְּמִדְבַּר',
+                Deuteronomy: 'דְּבָרִים'
+            };
+            var SEFARIA_CALENDAR = 'https://www.sefaria.org/api/calendars?diaspora=1';
+            var SEFARIA_V3 = 'https://www.sefaria.org/api/v3/texts/';
+            var SIG_EN_URL = '/data/parsha_significance.json';
+            var SIG_HE_URL = '/data/parsha_significance_he.json';
+            var LANG_KEY = 'parshaReaderLang';
+
+            // Page state — mutated by the language toggle and the data loaders.
+            var state = {
+                lang: 'he',           // 'he' or 'he-en'
+                meta: null,           // { name, hebrewName, ref, heRef, book }
+                versesHe: null,       // [{chapter, verse, he}]
+                versesEn: null,       // [{chapter, verse, en}]
+                sigEn: null,          // map keyed by parsha name
+                sigHe: null
+            };
+
+            function qs(name) {
+                var m = new URLSearchParams(window.location.search);
+                return (m.get(name) || '').trim();
+            }
+            function escapeHtml(s) {
+                if (s == null) return '';
+                return String(s)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+            function cleanText(s) {
+                if (typeof s !== 'string') return '';
+                return s
+                    .replace(/&nbsp;/g, ' ')
+                    .replace(/&thinsp;/g, ' ')
+                    .replace(/&amp;/g, '&')
+                    .replace(/<[^>]+>/g, '')
+                    .replace(/\{[פסש]\}/g, '')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+            }
+            function bookFromRef(ref) {
+                var m = /^([A-Za-z]+(?:\s[A-Za-z]+)?)/.exec(ref || '');
+                return m ? m[1] : '';
+            }
+            function renderState(msg, isError) {
+                document.getElementById('content').innerHTML =
+                    '<div class="state ' + (isError ? 'error' : '') + '">' +
+                    escapeHtml(msg) + '</div>';
+            }
+
+            // ── Sefaria fetchers ────────────────────────────────────────────
+            function fetchSefariaText(ref, language) {
+                var url = SEFARIA_V3 + encodeURIComponent(ref) + '?version=' + language + '&return_format=text_only';
+                return fetch(url).then(function (r) {
+                    if (!r.ok) throw new Error('Sefaria ' + r.status);
+                    return r.json();
+                }).then(function (data) {
+                    var versions = data.versions || [];
+                    var langCode = language === 'hebrew' ? 'he' : 'en';
+                    var v = versions.find(function (vv) { return vv && vv.language === langCode && Array.isArray(vv.text); })
+                          || versions.find(function (vv) { return vv && Array.isArray(vv.text); });
+                    if (!v) throw new Error('No text for ' + language);
+                    var startCh = parseInt((data.sections || [])[0], 10);
+                    var startV  = parseInt((data.sections || [])[1], 10);
+                    var verses = [];
+                    var raw = v.text;
+                    var pushVerse = function (chapter, verse, txt) {
+                        if (typeof txt !== 'string') return;
+                        var c = cleanText(txt);
+                        if (!c) return;
+                        var entry = { chapter: chapter, verse: verse };
+                        entry[langCode] = c;
+                        verses.push(entry);
+                    };
+                    if (Array.isArray(raw) && raw.length && Array.isArray(raw[0])) {
+                        raw.forEach(function (chapterVerses, chapIdx) {
+                            var chapter = startCh + chapIdx;
+                            var off = chapIdx === 0 ? startV : 1;
+                            chapterVerses.forEach(function (he, vIdx) {
+                                pushVerse(chapter, off + vIdx, he);
+                            });
+                        });
+                    } else if (Array.isArray(raw)) {
+                        raw.forEach(function (he, vIdx) { pushVerse(startCh, startV + vIdx, he); });
+                    }
+                    return { verses: verses, heRef: data.heRef || '' };
+                });
+            }
+            function fetchCalendarParsha() {
+                return fetch(SEFARIA_CALENDAR).then(function (r) {
+                    if (!r.ok) throw new Error('Calendar ' + r.status);
+                    return r.json();
+                }).then(function (d) {
+                    var items = d.calendar_items || [];
+                    return items.find(function (it) {
+                        return it.title && (it.title.en === 'Parashat Hashavua' || it.title.en === 'Torah Reading');
+                    });
+                });
+            }
+
+            // ── Significance loader (best-effort; never blocks the reader) ─
+            function loadSignificance(url) {
+                return fetch(url).then(function (r) {
+                    if (!r.ok) return null;
+                    return r.json();
+                }).then(function (data) {
+                    if (!data || !data.significance) return null;
+                    return data.significance;
+                }).catch(function () { return null; });
+            }
+            // Try a few key variants — some parsha names appear with different
+            // apostrophe styles or casing across sources.
+            function lookupSignificance(map, name) {
+                if (!map || !name) return null;
+                if (map[name]) return map[name];
+                var variants = [
+                    name.replace(/'/g, "'"),
+                    name.replace(/'/g, "'"),
+                    name.replace(/-/g, ' '),
+                    name.replace(/\s+/g, '-')
+                ];
+                for (var i = 0; i < variants.length; i++) {
+                    if (map[variants[i]]) return map[variants[i]];
+                }
+                return null;
+            }
+
+            // ── Rendering ──────────────────────────────────────────────────
+            function buildHero(meta) {
+                var hebrewName = meta.hebrewName || '';
+                var parshaLabel = hebrewName ? 'פָּרָשַׁת ' + hebrewName : 'הפרשה';
+                var heRefLine = meta.heRef
+                    ? '<p class="hero-ref">' + escapeHtml(meta.heRef) + '</p>'
+                    : '<p class="hero-ref">' + escapeHtml(meta.ref) + '</p>';
+                return '' +
+                    '<section class="hero">' +
+                        '<p class="hero-eyebrow">Parashat Hashavua</p>' +
+                        (hebrewName ? '<h1 class="hero-he">' + escapeHtml(parshaLabel) + '</h1>' : '') +
+                        '<p class="hero-en">' + escapeHtml(meta.name || '') + '</p>' +
+                        heRefLine +
+                    '</section>';
+            }
+            function buildGreeting(meta) {
+                var hebrewName = meta.hebrewName || meta.name || 'השבוע';
+                return '' +
+                    '<section class="greeting">' +
+                        '<p class="greeting-bold">בוקר טוב,</p>' +
+                        '<p class="greeting-sub">תהנו מפרשת ' + escapeHtml(hebrewName) + '&nbsp;—</p>' +
+                    '</section>';
+            }
+
+            // Significance panel. Field order matches the English file.
+            function buildSignificance() {
+                var name = state.meta && state.meta.name;
+                if (!name) return '';
+                var en = lookupSignificance(state.sigEn, name);
+                var he = lookupSignificance(state.sigHe, name);
+                if (!en && !he) return ''; // nothing to show
+
+                var fields = [
+                    { key: 'nameMeaning',  he: 'משמעות השם',     en: 'Name Meaning' },
+                    { key: 'context',      he: 'הקשר',           en: 'Context' },
+                    { key: 'summary',      he: 'סיכום',          en: 'Summary' },
+                    { key: 'significance', he: 'משמעות',         en: 'Significance' }
+                ];
+
+                var showEn = state.lang === 'he-en';
+                var blocks = fields.map(function (f) {
+                    var heText = he && he[f.key];
+                    var enText = en && en[f.key];
+                    if (!heText && !enText) return '';
+
+                    var heBlock = heText
+                        ? '<div class="sig-label-he">' + escapeHtml(f.he) + '</div>' +
+                          '<div class="sig-he">' + escapeHtml(heText) + '</div>'
+                        : '<div class="sig-label-he">' + escapeHtml(f.he) + '</div>' +
+                          '<div class="sig-fallback">תרגום עברי יתווסף בקרוב.</div>';
+
+                    var enBlock = (showEn && enText)
+                        ? '<div class="sig-label-en">' + escapeHtml(f.en) + '</div>' +
+                          '<div class="sig-en">' + escapeHtml(enText) + '</div>'
+                        : '';
+                    return '<div class="sig-block">' + heBlock + enBlock + '</div>';
+                }).join('');
+
+                return '' +
+                    '<section class="significance">' +
+                        '<p class="sig-eyebrow">About this Parsha</p>' +
+                        blocks +
+                    '</section>';
+            }
+
+            function buildVerses() {
+                if (!state.versesHe || !state.versesHe.length) return '';
+                // Index English verses by chapter:verse for fast lookup.
+                var enIndex = {};
+                if (state.versesEn) {
+                    state.versesEn.forEach(function (v) {
+                        enIndex[v.chapter + ':' + v.verse] = v.en;
+                    });
+                }
+                var chapters = [];
+                var current = null;
+                state.versesHe.forEach(function (v) {
+                    if (!current || current.chapter !== v.chapter) {
+                        current = { chapter: v.chapter, verses: [] };
+                        chapters.push(current);
+                    }
+                    current.verses.push(v);
+                });
+                var showEn = state.lang === 'he-en';
+                return chapters.map(function (ch) {
+                    var rows = ch.verses.map(function (v) {
+                        var enText = showEn ? enIndex[v.chapter + ':' + v.verse] : '';
+                        var enLine = enText ? '<div class="vtext-en">' + escapeHtml(enText) + '</div>' : '';
+                        return '' +
+                            '<div class="vnum">' + v.chapter + ':' + v.verse + '</div>' +
+                            '<div>' +
+                                '<div class="vtext">' + escapeHtml(v.he) + '</div>' +
+                                enLine +
+                            '</div>';
+                    }).join('');
+                    return '' +
+                        '<h2 class="chapter-heading">פֶּרֶק ' + escapeHtml(String(ch.chapter)) + '</h2>' +
+                        '<div class="verses">' + rows + '</div>';
+                }).join('');
+            }
+
+            function render() {
+                if (!state.meta || !state.versesHe) return;
+                var hebrewName = state.meta.hebrewName || '';
+                var parshaLabel = hebrewName ? 'פָּרָשַׁת ' + hebrewName : 'הפרשה';
+                document.title = parshaLabel + ' — A Letter in the Scroll';
+                document.getElementById('content').innerHTML =
+                    buildHero(state.meta) +
+                    buildSignificance() +
+                    buildGreeting(state.meta) +
+                    buildVerses() +
+                    '<p class="closing">שבת שלום ומבורך</p>';
+            }
+
+            // ── Language toggle ────────────────────────────────────────────
+            function setLang(lang) {
+                if (lang !== 'he' && lang !== 'he-en') lang = 'he';
+                state.lang = lang;
+                try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
+                document.querySelectorAll('.lang-btn').forEach(function (btn) {
+                    var match = btn.getAttribute('data-lang') === lang;
+                    btn.classList.toggle('active', match);
+                    btn.setAttribute('aria-selected', match ? 'true' : 'false');
+                });
+                // If switching to bilingual and we haven't fetched English yet, do it now.
+                if (lang === 'he-en' && state.meta && !state.versesEn) {
+                    fetchSefariaText(state.meta.ref, 'english').then(function (out) {
+                        state.versesEn = out.verses;
+                        render();
+                    }).catch(function (e) {
+                        console.warn('English verses fetch failed:', e);
+                        render();
+                    });
+                }
+                render();
+            }
+            document.querySelectorAll('.lang-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    setLang(btn.getAttribute('data-lang'));
+                });
+            });
+
+            // Restore preference (default = Hebrew only).
+            try {
+                var saved = localStorage.getItem(LANG_KEY);
+                if (saved === 'he-en') state.lang = 'he-en';
+            } catch (e) {}
+            // Reflect restored state in toggle UI on first paint.
+            document.querySelectorAll('.lang-btn').forEach(function (btn) {
+                var match = btn.getAttribute('data-lang') === state.lang;
+                btn.classList.toggle('active', match);
+                btn.setAttribute('aria-selected', match ? 'true' : 'false');
+            });
+
+            // ── Boot ───────────────────────────────────────────────────────
+            function start() {
+                var ref = qs('ref');
+                var name = qs('name');
+                var hebrewName = qs('he');
+
+                var prep = ref
+                    ? Promise.resolve({ ref: ref, name: name, hebrewName: hebrewName, heRef: '' })
+                    : fetchCalendarParsha().then(function (item) {
+                          if (!item) throw new Error('No parsha in calendar');
+                          return {
+                              ref: item.ref || '',
+                              name: (item.displayValue && item.displayValue.en) || '',
+                              hebrewName: (item.displayValue && item.displayValue.he) || '',
+                              heRef: item.heRef || ''
+                          };
+                      });
+
+                // Significance files load in parallel; they're optional.
+                loadSignificance(SIG_EN_URL).then(function (m) { state.sigEn = m; render(); });
+                loadSignificance(SIG_HE_URL).then(function (m) { state.sigHe = m; render(); });
+
+                prep.then(function (meta) {
+                    if (!meta.ref) throw new Error('No reference available');
+                    meta.book = bookFromRef(meta.ref);
+                    state.meta = meta;
+
+                    var jobs = [fetchSefariaText(meta.ref, 'hebrew')];
+                    if (state.lang === 'he-en') {
+                        jobs.push(fetchSefariaText(meta.ref, 'english'));
+                    }
+                    return Promise.all(jobs).then(function (results) {
+                        state.versesHe = results[0].verses;
+                        if (!meta.heRef) meta.heRef = results[0].heRef;
+                        if (results[1]) state.versesEn = results[1].verses;
+                        render();
+                    });
+                }).catch(function (err) {
+                    console.error(err);
+                    renderState('לא הצלחנו לטעון את הפרשה. נסה שוב מאוחר יותר.', true);
+                });
+            }
+            start();
+        })();
+    </script>
+</body>
+</html>

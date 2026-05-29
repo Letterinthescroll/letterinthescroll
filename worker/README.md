@@ -3,7 +3,11 @@
 Cloudflare Worker that:
 1. Every Wednesday at 17:00 UTC (12:00 PM EST / 1:00 PM EDT) emails users in
    any chavruta who haven't visited the site since Sunday 00:00 ET.
-2. Handles `GET /unsubscribe?token=...` to one-click opt out.
+2. Every Thursday at 06:00 UTC (1:00 AM EST / 2:00 AM EDT) emails the full
+   Hebrew weekly parsha (verse-by-verse) to a private recipient list defined
+   in the `THURSDAY_PARSHA_RECIPIENTS` secret. The list is **not** in this
+   repo. See "Thursday Hebrew-parsha email" below.
+3. Handles `GET /unsubscribe?token=...` to one-click opt out.
 
 The worker is bound to `aletterinthescroll.com` only — `catalyst-magazine.com`
 is a separate zone and is not touched.
@@ -121,6 +125,48 @@ Secrets persist across deploys; you don't need to re-set them.
 | `RESEND_API_KEY` | `wrangler secret put` | Resend dashboard key |
 | `FIREBASE_CLIENT_EMAIL` | `wrangler secret put` | `client_email` field from Firebase service-account JSON |
 | `FIREBASE_PRIVATE_KEY` | `wrangler secret put` | `private_key` field (single line, with `\n` literals) |
+| `TEST_TOKEN` | `wrangler secret put` | Shared token for `/test-send` and `/test-thursday` |
+| `THURSDAY_PARSHA_RECIPIENTS` | `wrangler secret put` | Comma-separated emails for the Thursday Hebrew parsha email |
 | `SITE_URL` | `wrangler.toml` `[vars]` | `https://www.aletterinthescroll.com` |
 | `FROM_EMAIL` | `wrangler.toml` `[vars]` | `A Letter in the Scroll <hello@aletterinthescroll.com>` |
 | `FIREBASE_PROJECT_ID` | `wrangler.toml` `[vars]` | `letterinthescroll` |
+
+## Thursday Hebrew-parsha email
+
+A second cron (`0 6 * * 4` → Thursday 06:00 UTC) fetches the upcoming
+parsha + its full Hebrew verses from Sefaria and emails them to every
+address listed in the `THURSDAY_PARSHA_RECIPIENTS` secret. The recipients
+never appear in the repo or in `wrangler.toml` — they live only in
+Cloudflare Worker secret storage.
+
+### Set or update the recipient list
+
+```bash
+wrangler secret put THURSDAY_PARSHA_RECIPIENTS
+```
+
+Paste a comma-separated list, e.g.:
+
+```
+orameridor@gmail.com, bendoryair@gmail.com
+```
+
+Re-run the same command to replace the list. To remove someone, paste the
+list again without them.
+
+### Preview before Thursday
+
+```bash
+# Send to a single test address (does NOT hit the real list)
+curl "https://www.aletterinthescroll.com/test-thursday?token=$TEST_TOKEN&email=you@example.com"
+
+# Fire a real run against the configured recipients (skip ?email=)
+curl "https://www.aletterinthescroll.com/test-thursday?token=$TEST_TOKEN"
+```
+
+### Public reader page
+
+The Thursday email links to `/parsha-reader/?ref=...&name=...` — a static,
+no-login page that fetches and renders the full Hebrew parsha client-side
+from Sefaria. Used as a "view in browser" fallback in case Gmail clips a
+long email.

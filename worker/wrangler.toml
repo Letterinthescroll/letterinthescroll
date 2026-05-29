@@ -3,10 +3,12 @@ main = "src/index.js"
 compatibility_date = "2025-04-01"
 compatibility_flags = ["nodejs_compat"]
 
-# Cron: every Wednesday at 17:00 UTC = 12:00 PM EST (1:00 PM EDT during summer).
-# This locks the local-time delivery to "early afternoon" year-round.
+# Crons:
+#   • Wed 17:00 UTC — chavruta reminder (12:00 PM EST / 1:00 PM EDT)
+#   • Thu 06:00 UTC — Hebrew parsha email to private recipients
+#                     (1:00 AM EST / 2:00 AM EDT) → runThursdayParshaJob
 [triggers]
-crons = ["0 17 * * 3"]
+crons = ["0 17 * * 3", "0 6 * * 4"]
 
 # Routes are configured in the Cloudflare dashboard (Workers Routes) for
 # the aletterinthescroll.com zone:
@@ -27,3 +29,8 @@ FIREBASE_PROJECT_ID = "letterinthescroll"
 #   FIREBASE_PRIVATE_KEY      — the "private_key" field, as a single line.
 #                               Newlines must be either literal \n or real
 #                               newlines; the worker accepts both.
+#   TEST_TOKEN                — shared token for /test-send and /test-thursday
+#   THURSDAY_PARSHA_RECIPIENTS — comma-separated list of email addresses that
+#                                receive the Thursday Hebrew-parsha email.
+#                                Kept as a secret so the addresses never appear
+#                                in the public GitHub repo.
