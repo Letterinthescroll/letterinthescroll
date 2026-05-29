@@ -30,7 +30,7 @@
             min-height: 100vh;
         }
         .page {
-            max-width: 720px;
+            max-width: 960px;
             margin: 0 auto;
             padding: 32px 16px 64px;
         }
@@ -50,7 +50,7 @@
             border-radius: 24px;
             box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04),
                         0 12px 32px rgba(15, 23, 42, 0.06);
-            padding: 36px 48px 48px;
+            padding: 44px 72px 56px;
             position: relative;
             overflow: hidden;
         }
@@ -170,7 +170,8 @@
             background: #fdfaf3;
             border: 1px solid var(--hairline);
             border-radius: 18px;
-            padding: 28px 32px;
+            padding: 32px 40px;
+            direction: ltr; /* the panel itself is LTR; each block sets its own direction */
         }
         .sig-eyebrow {
             font-family: 'Inter', sans-serif;
@@ -179,23 +180,43 @@
             letter-spacing: 0.24em;
             text-transform: uppercase;
             color: var(--gold-soft);
-            margin-bottom: 16px;
+            margin: 0 0 24px;
             text-align: center;
             direction: ltr;
         }
-        .sig-block { margin-bottom: 18px; }
-        .sig-block:last-child { margin-bottom: 0; }
-        .sig-label-he,
-        .sig-label-en {
+        .sig-block {
+            margin-bottom: 22px;
+            padding-bottom: 22px;
+            border-bottom: 1px dashed rgba(200, 154, 53, 0.25);
+        }
+        .sig-block:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
+        .sig-label {
             font-family: 'Inter', sans-serif;
             font-size: 10px;
             font-weight: 700;
-            letter-spacing: 0.16em;
+            letter-spacing: 0.18em;
             text-transform: uppercase;
             color: var(--gold-soft);
-            margin-bottom: 6px;
+            margin: 0 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            direction: ltr;
         }
-        .sig-label-en { direction: ltr; }
+        .sig-label-he {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0;
+            text-transform: none;
+            color: var(--gold);
+            direction: rtl;
+        }
         .sig-he {
             font-family: 'Frank Ruhl Libre', 'SBL Hebrew', serif;
             direction: rtl;
@@ -203,17 +224,21 @@
             font-size: 17px;
             line-height: 1.85;
             color: var(--ink);
+            margin: 0;
         }
         .sig-en {
             font-family: Georgia, 'Times New Roman', serif;
             direction: ltr;
             text-align: left;
-            font-size: 15px;
+            unicode-bidi: isolate;
+            font-size: 15.5px;
             line-height: 1.75;
             color: var(--ink-soft);
-            margin-top: 8px;
+            margin: 12px 0 0;
+        }
+        .sig-he + .sig-en {
             padding-top: 12px;
-            border-top: 1px dashed rgba(200,154,53,0.25);
+            border-top: 1px dotted rgba(200, 154, 53, 0.22);
         }
         .sig-fallback {
             font-family: 'Frank Ruhl Libre', serif;
@@ -222,6 +247,7 @@
             font-size: 14px;
             color: var(--muted);
             font-style: italic;
+            margin: 0;
         }
 
         .chapter-heading {
@@ -293,13 +319,18 @@
         }
         .state.error { color: #9b2c2c; }
 
-        @media (max-width: 540px) {
+        @media (max-width: 900px) {
+            .card { padding: 36px 44px 44px; }
+        }
+        @media (max-width: 640px) {
             .card { padding: 28px 22px 36px; border-radius: 18px; }
             .hero-he { font-size: 34px; }
             .vtext { font-size: 18px; line-height: 1.95; }
             .vtext-en { font-size: 14px; }
             .verses { grid-template-columns: 40px 1fr; gap: 4px 10px; }
             .significance { padding: 22px 18px; }
+            .sig-he { font-size: 16px; }
+            .sig-en { font-size: 14.5px; }
             .page { padding: 18px 10px 48px; }
         }
     </style>
@@ -381,6 +412,20 @@
                     .replace(/&amp;/g, '&')
                     .replace(/<[^>]+>/g, '')
                     .replace(/\{[פסש]\}/g, '')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+            }
+            // Clean stray escape artifacts that appear in some entries of
+            // parsha_significance.json (e.g. literal \" sequences left from
+            // an earlier export). Also normalizes Markdown-style *emphasis*
+            // to plain text so it doesn't read like raw asterisks.
+            function cleanSig(s) {
+                if (typeof s !== 'string') return '';
+                return s
+                    .replace(/\\"/g, '"')
+                    .replace(/\\'/g, "'")
+                    .replace(/\\n/g, ' ')
+                    .replace(/\*([^*\n]+)\*/g, '$1')
                     .replace(/\s+/g, ' ')
                     .trim();
             }
@@ -512,26 +557,31 @@
 
                 var showEn = state.lang === 'he-en';
                 var blocks = fields.map(function (f) {
-                    var heText = he && he[f.key];
-                    var enText = en && en[f.key];
+                    var heText = he && he[f.key] ? cleanSig(he[f.key]) : '';
+                    var enText = en && en[f.key] ? cleanSig(en[f.key]) : '';
                     if (!heText && !enText) return '';
 
-                    var heBlock = heText
-                        ? '<div class="sig-label-he">' + escapeHtml(f.he) + '</div>' +
-                          '<div class="sig-he">' + escapeHtml(heText) + '</div>'
-                        : '<div class="sig-label-he">' + escapeHtml(f.he) + '</div>' +
-                          '<div class="sig-fallback">תרגום עברי יתווסף בקרוב.</div>';
+                    // One row: Hebrew label (right) | English label (left).
+                    // If we're in HE-only mode the English label is hidden.
+                    var labelRow =
+                        '<div class="sig-label">' +
+                            '<span>' + escapeHtml(f.en) + '</span>' +
+                            '<span class="sig-label-he">' + escapeHtml(f.he) + '</span>' +
+                        '</div>';
 
-                    var enBlock = (showEn && enText)
-                        ? '<div class="sig-label-en">' + escapeHtml(f.en) + '</div>' +
-                          '<div class="sig-en">' + escapeHtml(enText) + '</div>'
+                    var hePart = heText
+                        ? '<p class="sig-he">' + escapeHtml(heText) + '</p>'
+                        : '<p class="sig-fallback">תרגום עברי יתווסף בקרוב.</p>';
+
+                    var enPart = (showEn && enText)
+                        ? '<p class="sig-en">' + escapeHtml(enText) + '</p>'
                         : '';
-                    return '<div class="sig-block">' + heBlock + enBlock + '</div>';
+                    return '<div class="sig-block">' + labelRow + hePart + enPart + '</div>';
                 }).join('');
 
                 return '' +
                     '<section class="significance">' +
-                        '<p class="sig-eyebrow">About this Parsha</p>' +
+                        '<p class="sig-eyebrow">About this Parsha &middot; על הפרשה</p>' +
                         blocks +
                     '</section>';
             }

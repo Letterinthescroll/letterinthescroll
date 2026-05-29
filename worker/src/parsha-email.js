@@ -54,7 +54,7 @@ export function buildParshaEmail(p) {
   const sig = p.significance || {};
   const sigBlocks = SIG_FIELDS
     .map(f => {
-      const text = (sig[f.key] || '').toString().trim();
+      const text = cleanSig(sig[f.key]);
       if (!text) return '';
       return `
         <div style="margin:0 0 18px;">
@@ -255,3 +255,17 @@ function escapeHtml(s) {
     .replace(/'/g, '&#39;');
 }
 function attr(s) { return escapeHtml(s); }
+
+// Strip escape-sequence artifacts (\", \', \n) and Markdown-style
+// *emphasis* asterisks that some entries of parsha_significance.json
+// were exported with. Keeps the visible text clean in the email.
+function cleanSig(s) {
+  if (typeof s !== 'string') return '';
+  return s
+    .replace(/\\"/g, '"')
+    .replace(/\\'/g, "'")
+    .replace(/\\n/g, ' ')
+    .replace(/\*([^*\n]+)\*/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
