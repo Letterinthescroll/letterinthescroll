@@ -1144,10 +1144,35 @@
 
     window.signInForApplication = function() {
         var provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+        var ua = navigator.userAgent || '';
+        var isInApp = /FBAN|FBAV|Instagram|Line|TikTok|LinkedInApp|Snapchat|MicroMessenger|WhatsApp/i.test(ua);
+        var isiPadOS = navigator.platform === 'MacIntel' && (navigator.maxTouchPoints || 0) > 1;
+        var isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(ua) || isiPadOS;
+        if (isInApp) {
+            alert('Google sign-in is blocked inside this app’s browser. Please open this page in Safari or Chrome and try again.');
+            return;
+        }
+        if (isMobile) {
+            // onAuthStateChanged above shows the form on return — no extra handling needed.
+            auth.signInWithRedirect(provider).catch(function(err) {
+                alert('Sign-in failed: ' + (err.message || err.code));
+            });
+            return;
+        }
         auth.signInWithPopup(provider).catch(function(err) {
-            if (err.code !== 'auth/popup-closed-by-user') {
-                alert('Sign-in failed: ' + err.message);
+            // A severed/blocked popup can report "closed" even on success.
+            if (auth.currentUser) return;
+            if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
+                return;
             }
+            if (err.code === 'auth/popup-blocked') {
+                auth.signInWithRedirect(provider).catch(function(e) {
+                    alert('Sign-in failed: ' + (e.message || e.code));
+                });
+                return;
+            }
+            alert('Sign-in failed: ' + (err.message || err.code));
         });
     };
 

@@ -973,9 +973,19 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
         const googleProvider = new firebase.auth.GoogleAuthProvider();
+        // Always show the account chooser. Without this, users signed into
+        // multiple Google accounts (or carrying a stale Google session) can get
+        // silently stuck with no picker — a common "nothing happens" report.
+        googleProvider.setCustomParameters({ prompt: 'select_account' });
 
         let authFlowInProgress = false;
         let signingOut = false;
+        // Set just before signInWithRedirect (survives the full-page reload that
+        // the redirect causes). On return, getRedirectResult owns the post-login
+        // navigation; onAuthStateChanged must NOT also redirect, or the two race
+        // and the user can bounce back to the login page. Cleared once handled.
+        const REDIRECT_PENDING_KEY = 'googleRedirectPending';
+        let redirectHandledThisLoad = false;
 
         // ── Prevent auto-login after sign-out (bfcache / sessionStorage flag) ──
         if (sessionStorage.getItem('justSignedOut')) {
@@ -993,9 +1003,25 @@
             }
         });
 
+        // Safety net: if Firebase doesn't restore a session within 4s, reveal
+        // the login UI so a returning user with an expired session (or a dropped
+        // OAuth redirect) isn't stuck on the loader. Declared here so the
+        // redirect-result handler below can clear it on early resolution.
+        var _alitsSessionRevealTimer = setTimeout(function() {
+            document.documentElement.classList.remove('alits-restoring-session');
+        }, 4000);
+
         // ── Handle redirect result (for mobile Google sign-in) ──
+        // Did WE start a redirect on the previous page load? If so, this load is
+        // the return trip and we own the post-login navigation.
+        var startedRedirect = false;
+        try { startedRedirect = sessionStorage.getItem(REDIRECT_PENDING_KEY) === '1'; } catch (_) {}
         auth.getRedirectResult().then(async function(result) {
             if (result && result.user) {
+                // Take ownership so onAuthStateChanged doesn't also redirect.
+                redirectHandledThisLoad = true;
+                authFlowInProgress = true;
+                try { sessionStorage.removeItem(REDIRECT_PENDING_KEY); } catch (_) {}
                 const user = result.user;
                 var isNewGoogleRedirectUser = false;
                 try {
@@ -1013,8 +1039,24 @@
                 } else {
                     window.location.href = '/dashboard';
                 }
+            } else if (startedRedirect) {
+                // We initiated a redirect but came back with no user AND no error.
+                // Some browsers (Safari ITP, in-app webviews) drop the OAuth state
+                // so the result is silently empty — the classic mobile "bounce".
+                // Clear the flag and reveal the login UI so the user can retry,
+                // rather than leaving them staring at the loader.
+                try { sessionStorage.removeItem(REDIRECT_PENDING_KEY); } catch (_) {}
+                clearTimeout(_alitsSessionRevealTimer);
+                document.documentElement.classList.remove('alits-restoring-session');
+                if (!auth.currentUser) {
+                    showError('Google sign-in didn’t complete. Please try again, or use email and password below.');
+                }
             }
         }).catch(function(error) {
+            redirectHandledThisLoad = true;
+            try { sessionStorage.removeItem(REDIRECT_PENDING_KEY); } catch (_) {}
+            clearTimeout(_alitsSessionRevealTimer);
+            document.documentElement.classList.remove('alits-restoring-session');
             console.error('Google redirect sign-in error:', error.code, error.message);
             if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
                 if (!auth.currentUser) {
@@ -1201,19 +1243,16 @@
             }
         }
 
-        // Safety net: if Firebase doesn't restore a session within 4s, reveal
-        // the login UI so a returning user with an expired session isn't stuck
-        // on the loader.
-        var _alitsSessionRevealTimer = setTimeout(function() {
-            document.documentElement.classList.remove('alits-restoring-session');
-        }, 4000);
-
         auth.onAuthStateChanged(async function(user) {
             if (!user) {
                 clearTimeout(_alitsSessionRevealTimer);
                 document.documentElement.classList.remove('alits-restoring-session');
                 return;
             }
+            // If we just returned from a Google redirect, getRedirectResult owns
+            // the profile sync + navigation. Don't duplicate it here, or the two
+            // paths race and can bounce the user back to login.
+            if (redirectHandledThisLoad || startedRedirect) return;
             if (authFlowInProgress || signingOut) return;
             try { localStorage.setItem('hasSignedIn', '1'); } catch(e) {}
             try {
@@ -1244,6 +1283,12 @@
             });
         });
 
+        function reEnableGoogleBtn(btn) {
+            if (!btn) return;
+            btn.disabled = false;
+            btn.classList.remove('opacity-75', 'cursor-not-allowed');
+        }
+
         async function handleGoogleSignIn() {
             clearMessages();
             const btn = document.getElementById('google-signin-btn');
@@ -1252,16 +1297,32 @@
             authFlowInProgress = true;
             const ua = navigator.userAgent || '';
             const isiPadOS = navigator.platform === 'MacIntel' && (navigator.maxTouchPoints || 0) > 1;
-            const isInAppBrowser = /FBAN|FBAV|Instagram|Line|Twitter|TikTok|LinkedInApp|Snapchat|MicroMessenger|WhatsApp/i.test(ua);
+            const isInAppBrowser = /FBAN|FBAV|Instagram|Line|Twitter|TikTok|LinkedInApp|Snapchat|MicroMessenger|WhatsApp|GSA/i.test(ua);
             const isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(ua) || isiPadOS || isInAppBrowser;
+
+            // Embedded in-app browsers (Instagram, Facebook, TikTok, etc.) are
+            // blocked by Google's OAuth ("disallowed_useragent") and frequently
+            // drop the redirect state, which is a top cause of mobile sign-in
+            // failures. Tell the user how to escape the webview instead of
+            // sending them into a flow that silently fails.
+            if (isInAppBrowser) {
+                showError('Google sign-in is blocked inside this app’s browser. Tap the ⋯ or “Open in browser” option to open this page in Safari or Chrome, then try again — or sign in with email and password below.');
+                reEnableGoogleBtn(btn);
+                authFlowInProgress = false;
+                return;
+            }
+
             if (isMobile) {
                 try {
+                    // Mark intent BEFORE redirect so the return trip is recognized
+                    // (this survives the full-page reload the redirect triggers).
+                    try { sessionStorage.setItem(REDIRECT_PENDING_KEY, '1'); } catch (_) {}
                     await auth.signInWithRedirect(googleProvider);
                 } catch (error) {
+                    try { sessionStorage.removeItem(REDIRECT_PENDING_KEY); } catch (_) {}
                     console.error('Google redirect error:', error.code, error.message);
                     showError(friendlyError(error.code));
-                    btn.disabled = false;
-                    btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                    reEnableGoogleBtn(btn);
                     authFlowInProgress = false;
                 }
                 return;
@@ -1288,21 +1349,31 @@
                 }
             } catch (error) {
                 console.error('Google popup sign-in error:', error.code, error.message);
+                // A blocked/severed popup (browser policy, COOP, extensions) can
+                // throw popup-closed-by-user EVEN THOUGH the user actually signed
+                // in — the SDK just couldn't read the result window. Always check
+                // for a real session before treating these as a cancel. This is
+                // the classic "popup opens then nothing happens" case.
+                if (auth.currentUser) { window.location.href = '/dashboard'; return; }
                 if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
-                    btn.disabled = false;
-                    btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                    reEnableGoogleBtn(btn);
                     authFlowInProgress = false;
                     return;
                 }
-                if (error.code === 'auth/popup-blocked') {
-                    try { await auth.signInWithRedirect(googleProvider); return; } catch (e) {
+                // Pop-up blocked, or popup couldn't return a result → fall back to
+                // a full-page redirect, which doesn't depend on window.opener.
+                if (error.code === 'auth/popup-blocked' || error.code === 'auth/internal-error' || error.code === 'auth/web-storage-unsupported') {
+                    try {
+                        try { sessionStorage.setItem(REDIRECT_PENDING_KEY, '1'); } catch (_) {}
+                        await auth.signInWithRedirect(googleProvider);
+                        return;
+                    } catch (e) {
+                        try { sessionStorage.removeItem(REDIRECT_PENDING_KEY); } catch (_) {}
                         console.error('Google redirect fallback error:', e.code, e.message);
                     }
                 }
-                if (auth.currentUser) { window.location.href = '/dashboard'; return; }
                 showError(friendlyError(error.code));
-                btn.disabled = false;
-                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                reEnableGoogleBtn(btn);
                 authFlowInProgress = false;
             }
         }
