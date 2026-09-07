@@ -13,6 +13,7 @@ import {
     updateParshaHeader,
     renderWeekNotice,
     renderWeekOfLine,
+    isWeeklyReadingRef,
     highlightCurrentParsha,
     updateNavigationButtons,
     populateParshaSelector,
@@ -881,9 +882,17 @@ function setupEventListeners() {
         }
         const weeklyRef = state.weeklyParshaRef || state.currentParshaRef;
         if (!weeklyRef) return;
+
+        // On a festival week the weekly reading is a special-reading id
+        // ("special:rosh-hashanah-day-1"), not a parsha reference. Bailing out
+        // when it isn't in allParshas made this button do nothing at all on
+        // exactly the weeks a reader most needs it. Keep the anchor index
+        // instead, and let loadParsha render the festival reading.
         const index = state.allParshas.findIndex(p => p.reference === weeklyRef);
-        if (index < 0) return;
-        setState({ currentParshaIndex: index, currentParshaRef: weeklyRef });
+        setState({
+            currentParshaIndex: index >= 0 ? index : state.weeklyParshaIndex,
+            currentParshaRef: weeklyRef
+        });
         document.querySelectorAll('select#parsha-selector').forEach((s) => {
             s.value = weeklyRef;
         });
@@ -1172,7 +1181,7 @@ function applyWeeklyReadingState(reading) {
     });
 
     document.body.classList.toggle('is-holiday-reading', isHoliday);
-    renderWeekNotice(reading, state.currentParshaRef);
+    renderWeekNotice(reading, isWeeklyReadingRef(state.currentParshaRef));
 }
 
 function startWeeklyParshaMonitor() {
@@ -4025,23 +4034,24 @@ async function loadParsha(parshaRef) {
             || (isSpecialReadingId(parshaRef) ? findSpecialReadingById(parshaRef) : null);
         const isMultiSection = !doublePairInfo && !!specialReading;
 
-        // Keep the "this is a special week" notice in step with what's on
-        // screen — it describes this week's reading, not whatever the reader
-        // has browsed to.
-        renderWeekNotice(state.weeklyReading, parshaRef);
+        // Both the special-week notice and the "week of" line describe what's
+        // on screen. They may only say "this week" when the reader is actually
+        // on this week's reading — never on a portion they browsed to.
+        const isViewingWeekly = isWeeklyReadingRef(parshaRef);
 
-        // …and tell the reader which Shabbat of the current cycle the portion
-        // they're looking at belongs to.
+        renderWeekNotice(state.weeklyReading, isViewingWeekly);
+
         const viewedIndex = state.allParshas.findIndex(p => p.reference === parshaRef);
-        if (viewedIndex < 0) {
+        if (isViewingWeekly) {
+            renderWeekOfLine({ shabbatDate: state.weeklyReading.shabbatDate, isThisWeek: true });
+        } else if (viewedIndex < 0) {
+            // A special reading chosen from the dropdown belongs to no
+            // particular Shabbat of the cycle.
             renderWeekOfLine(null);
         } else {
             const cycleReading = getCycleReading(viewedIndex, new Date(), isDiasporaUser());
             renderWeekOfLine(cycleReading
-                ? {
-                    shabbatDate: cycleReading.shabbatDate,
-                    isThisWeek: cycleReading.shabbatDate === state.weeklyReading?.shabbatDate
-                }
+                ? { shabbatDate: cycleReading.shabbatDate, isThisWeek: false }
                 : { note: 'Read on Simchat Torah, when the annual cycle ends and begins again' });
         }
 

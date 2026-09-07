@@ -56,6 +56,20 @@ export function updateParshaHeader(title, reference, overrideTitle) {
     document.getElementById('parsha-reference').textContent = reference;
 }
 
+/**
+ * Is `ref` this week's reading?
+ *
+ * Not a plain equality check: a double portion's weekly ref is its second
+ * half, so opening Nitzavim from the dropdown during Nitzavim-Vayeilech week
+ * is still this week. On a festival week the ref is a special-reading id.
+ */
+export function isWeeklyReadingRef(ref) {
+    const weekly = state.weeklyReading;
+    if (!weekly || !ref) return false;
+    if (weekly.ref === ref) return true;
+    return (weekly.parshas || []).some(p => p.reference === ref);
+}
+
 function escapeNoticeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text == null ? '' : String(text);
@@ -109,9 +123,10 @@ export function renderWeekOfLine(weekOf) {
  * portions at once, or a festival reading instead of a parsha.
  *
  * Shown only while the reader is actually on this week's reading — once they
- * navigate elsewhere it would describe something they aren't looking at.
+ * navigate elsewhere it would describe something they aren't looking at, so
+ * the caller decides with `isCurrentView`.
  */
-export function renderWeekNotice(reading, currentRef) {
+export function renderWeekNotice(reading, isCurrentView) {
     const notice = document.getElementById('parsha-week-notice');
     if (!notice) return;
 
@@ -120,7 +135,7 @@ export function renderWeekNotice(reading, currentRef) {
         notice.innerHTML = '';
     };
 
-    if (!reading || (currentRef && currentRef !== reading.ref)) {
+    if (!reading || !isCurrentView) {
         hide();
         return;
     }
@@ -195,9 +210,11 @@ export function updateNavigationButtons() {
     if (prevButtonMobile) prevButtonMobile.disabled = atStart;
     if (nextButtonMobile) nextButtonMobile.disabled = atEnd;
 
-    // "This Week's Parsha" button: hidden when already on the weekly parsha
+    // "This Week's Parsha" button: hidden when already on the weekly reading —
+    // which on a festival week is a special reading, and on a double week is
+    // either half.
     const isOnWeekly = state.weeklyParshaRef
-        ? state.currentParshaRef === state.weeklyParshaRef
+        ? isWeeklyReadingRef(state.currentParshaRef)
         : true;
     const weeklyBtnDesktop = document.getElementById('go-to-weekly-desktop');
     const weeklyBtnMobile = document.getElementById('go-to-weekly-mobile');
