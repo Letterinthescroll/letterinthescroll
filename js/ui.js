@@ -182,15 +182,17 @@ export function renderWeekNotice(reading, isCurrentView) {
 }
 
 /**
- * Highlight current week's parsha
+ * The blue "This Week's Parsha" ribbon on the reading card.
+ *
+ * This used to compare `parshaRef` against state.currentParshaRef — the very
+ * portion being rendered, which loadParsha had just assigned — so the test was
+ * always true and the ribbon sat on every parsha the reader opened, including
+ * ones from months ago. It has to be measured against *this week's* reading.
  */
 export function highlightCurrentParsha(parshaRef) {
     const contentArea = document.getElementById('content-area');
-    if (parshaRef === state.currentParshaRef) {
-        contentArea.classList.add('current-parsha-highlight');
-    } else {
-        contentArea.classList.remove('current-parsha-highlight');
-    }
+    if (!contentArea) return;
+    contentArea.classList.toggle('current-parsha-highlight', isWeeklyReadingRef(parshaRef));
 }
 
 /**

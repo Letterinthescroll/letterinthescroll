@@ -4244,7 +4244,10 @@ function renderParsha(data, parshaRef) {
     // Always keep the dropdown in sync with whatever parsha is being rendered
     document.querySelectorAll('select#parsha-selector').forEach(s => { s.value = parshaRef; });
 
-    updateParshaHeader(data.book || 'Torah Portion', parshaRef);
+    // Title the portion by name ("Ki Tavo"), not by book ("Deuteronomy") —
+    // the book alone reads as though every portion in it were the same page.
+    const parshaName = state.allParshas.find(p => p.reference === parshaRef)?.name;
+    updateParshaHeader(parshaName || data.book || 'Torah Portion', parshaRef);
     textContainer.innerHTML = '';
 
     let significanceText = null;
