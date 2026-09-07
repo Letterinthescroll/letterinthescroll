@@ -5,15 +5,10 @@ export const API_CONFIG = {
     HEBREW_VERSION: 'Miqra_according_to_the_Masorah'
 };
 
-// Double Parsha Pairs — combined during regular (non-leap) years
-export const DOUBLE_PARSHA_PAIRS = [
-    ['Vayakhel', 'Pekudei'],
-    ['Tazria', 'Metzora'],
-    ['Achrei Mot', 'Kedoshim'],
-    ['Behar', 'Bechukotai'],
-    ['Matot', 'Masei'],
-    ['Nitzavim', 'Vayeilech']
-];
+// Which parshiyot are combined in a given year is not a fixed list — it turns
+// on the Hebrew leap year, the day Rosh Hashanah falls on, and the Israel /
+// Diaspora split each spring. js/parsha-calendar.js answers that from the
+// precomputed schedule instead of a hardcoded pair list.
 
 // Torah Parshas Data
 export const TORAH_PARSHAS = [
@@ -201,6 +196,20 @@ export const SPECIAL_READINGS = [
         group: 'Sukkot',
         sections: [
             P('Torah Reading',  'Numbers 29:26-34'),
+        ],
+    },
+    {
+        id: 'special:sukkot-shabbat-chol-hamoed',
+        name: 'Shabbat Chol HaMoed Sukkot',
+        group: 'Sukkot',
+        // The maftir tracks which day of Chol HaMoed the Shabbat lands on, so
+        // it moves from year to year. On the actual week the study page takes
+        // the exact sections from js/parsha-calendar-data.js; this entry is
+        // what the dropdown offers the rest of the year.
+        sections: [
+            P('Torah Reading',  'Exodus 33:12-34:26'),
+            P('Maftir',         'Numbers 29:17-22'),
+            P('Haftarah',       'Ezekiel 38:18-39:16'),
         ],
     },
     {

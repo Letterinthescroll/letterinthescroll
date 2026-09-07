@@ -1,80 +1,102 @@
 import { PARSHA_TEASERS, HOLIDAY_TEASERS } from './teasers.js';
+import { getReadingForDate } from '../../js/parsha-calendar.js';
 
-// Sefaria's calendar API returns the upcoming Shabbat's parsha + the day's
-// readings. https://www.sefaria.org/api/calendars
-const SEFARIA_CALENDAR = 'https://www.sefaria.org/api/calendars?diaspora=1';
+// The weekly email used to ask Sefaria's calendar API what to read and trust
+// its display name. That broke the same two ways the study page did: a double
+// portion came through as one hyphenated string nothing matched, and a festival
+// Shabbat ("Rosh Hashana I") was reported as if it were the week's parsha.
+//
+// It now reads the same precomputed calendar the site ships, so the email and
+// the website can never disagree about which parsha it is. Emails follow the
+// Diaspora schedule.
+const DIASPORA = true;
 
 /**
- * Look up the upcoming parsha and a teaser. Returns:
- *   { name, hebrewName, ref, sefariaUrl, teaser, isHoliday, holidayName }
+ * Look up the upcoming Shabbat's reading. Returns:
+ *   { name, hebrewName, ref, heRef, sefariaUrl, teaser, isHoliday, holidayName,
+ *     parts, isDouble, shabbatDate }
  *
- * If Sefaria flags the week as a holiday with no regular parsha (Pesach/
- * Sukkot/Shavuot etc.), we set isHoliday=true and return a holiday teaser
- * + the holiday name.
+ * On a festival Shabbat with no weekly portion (Pesach/Sukkot/Rosh Hashanah
+ * etc.) isHoliday is true and holidayName carries the festival.
  */
-export async function getCurrentParsha() {
-  const res = await fetch(SEFARIA_CALENDAR, {
-    headers: { 'User-Agent': 'aletterinthescroll.com weekly-reminder' }
-  });
-  if (!res.ok) throw new Error(`Sefaria API returned ${res.status}`);
-  const data = await res.json();
+export function getCurrentParsha() {
+  const reading = getReadingForDate(new Date(), DIASPORA);
+  if (!reading) {
+    throw new Error(
+      'Date falls outside the shipped Torah-reading calendar — regenerate ' +
+      'js/parsha-calendar-data.js with dev/generate_parsha_calendar.py'
+    );
+  }
 
-  // Sefaria returns calendar_items[] — find the Parashat Hashavua entry.
-  const items = Array.isArray(data.calendar_items) ? data.calendar_items : [];
-  const parshaItem = items.find(it =>
-    it.title && (it.title.en === 'Parashat Hashavua' || it.title.en === 'Torah Reading')
-  );
-
-  // Detect holiday weeks where no regular parsha is read. Sefaria sometimes
-  // reports a Yom Tov reading as the parsha; we check for known holiday
-  // markers in the displayValue.
-  const holidayItem = items.find(it =>
-    it.title && (it.title.en === 'Holiday Torah Reading' || (it.displayValue && /Pesach|Sukkot|Shavuot|Rosh Hashanah|Yom Kippur|Shemini Atzeret|Simchat Torah/i.test(it.displayValue.en || '')))
-  );
-
-  if (parshaItem && parshaItem.displayValue && parshaItem.displayValue.en) {
-    const englishName = parshaItem.displayValue.en.trim();
-    const hebrewName = (parshaItem.displayValue.he || '').trim();
-    const ref = parshaItem.ref || '';
-    const teaser = PARSHA_TEASERS[englishName] || PARSHA_TEASERS[normalizeName(englishName)] || defaultTeaser(englishName);
-
+  if (reading.kind === 'holiday') {
+    const holidayName = matchHoliday(reading.name) || reading.name;
+    const ref = (reading.sections[0] && reading.sections[0].ref) || '';
     return {
-      name: englishName,
-      hebrewName,
+      name: reading.name,
+      hebrewName: reading.hebrewName || '',
       ref,
-      heRef: (parshaItem.heRef || '').trim(),
-      sefariaUrl: ref ? `https://www.sefaria.org/${encodeURIComponent(ref.replace(/\s+/g, '_'))}` : '',
-      teaser,
-      isHoliday: false,
-      holidayName: null
-    };
-  }
-
-  // Fallback: holiday week
-  if (holidayItem) {
-    const display = (holidayItem.displayValue && holidayItem.displayValue.en) || '';
-    const holidayName = matchHoliday(display) || 'this special week';
-    return {
-      name: display || holidayName,
-      hebrewName: (holidayItem.displayValue && holidayItem.displayValue.he) || '',
-      ref: holidayItem.ref || '',
-      sefariaUrl: holidayItem.ref ? `https://www.sefaria.org/${encodeURIComponent(holidayItem.ref.replace(/\s+/g, '_'))}` : '',
-      teaser: HOLIDAY_TEASERS[holidayName] || `It's ${holidayName} this week — a special time in the Jewish calendar with its own meaningful readings. Take a moment to study together with your chavruta.`,
+      heRef: '',
+      sefariaUrl: sefariaUrl(ref),
+      teaser: HOLIDAY_TEASERS[holidayName]
+        || `It's ${holidayName} this week — a special time in the Jewish calendar with its own meaningful readings. Take a moment to study together with your chavruta.`,
       isHoliday: true,
-      holidayName
+      holidayName,
+      parts: [],
+      isDouble: false,
+      shabbatDate: reading.shabbatDate
     };
   }
 
-  // Last resort
-  throw new Error('Could not determine current parsha from Sefaria response');
+  // A double portion is read as one continuous passage, so the email links to
+  // the combined range rather than half of it.
+  const ref = reading.combinedRef;
+  const parts = reading.parshas.map(p => p.name);
+
+  return {
+    name: reading.name,
+    hebrewName: reading.hebrewName || '',
+    ref,
+    heRef: '',
+    sefariaUrl: sefariaUrl(ref),
+    teaser: teaserFor(reading.name, parts),
+    isHoliday: false,
+    holidayName: null,
+    parts,
+    isDouble: reading.isDouble,
+    shabbatDate: reading.shabbatDate
+  };
 }
 
-// "Vayechi" / "Vayeshev" sometimes return with extra Hebrew transliteration variants
-function normalizeName(name) {
-  return name
-    .replace(/'/g, "'")
-    .replace(/[^A-Za-z\- ]/g, '')
-    .trim();
+function sefariaUrl(ref) {
+  return ref ? `https://www.sefaria.org/${encodeURIComponent(ref.replace(/\s+/g, '_'))}` : '';
+}
+
+/**
+ * Transliterations of parsha names vary ("Vayera" / "Vayeira", "Sh'lach" /
+ * "Shlach", "V'Zot HaBerachah" / "Vezot Haberakhah"), and teasers.js was
+ * written with its own spellings. Reducing a name to its consonant skeleton
+ * matches them all without a hand-maintained alias table.
+ */
+function nameSkeleton(name) {
+  return String(name || '')
+    .toLowerCase()
+    .replace(/kh/g, 'ch')
+    .replace(/[^a-z]/g, '')
+    .replace(/[aeiou]/g, '')
+    .replace(/h+$/, '');
+}
+
+const TEASERS_BY_SKELETON = new Map(
+  Object.keys(PARSHA_TEASERS).map(key => [nameSkeleton(key), PARSHA_TEASERS[key]])
+);
+
+/** Teaser for the week: the combined portion's own, else either half's. */
+function teaserFor(name, parts) {
+  for (const candidate of [name, ...parts]) {
+    const teaser = PARSHA_TEASERS[candidate] || TEASERS_BY_SKELETON.get(nameSkeleton(candidate));
+    if (teaser) return teaser;
+  }
+  return `This week we read ${name} — a beautiful portion of the Torah waiting for you. Open it together with your chavruta and discover what speaks to you this Shabbat.`;
 }
 
 function matchHoliday(display) {
@@ -82,17 +104,13 @@ function matchHoliday(display) {
     ['Pesach', 'Pesach'], ['Passover', 'Pesach'],
     ['Sukkot', 'Sukkot'],
     ['Shavuot', 'Shavuot'],
-    ['Rosh Hashanah', 'Rosh Hashanah'],
+    ['Rosh Hashanah', 'Rosh Hashanah'], ['Rosh Hashana', 'Rosh Hashanah'],
     ['Yom Kippur', 'Yom Kippur'],
-    ['Shemini Atzeret', 'Shemini Atzeret'],
+    ['Shemini Atzeret', 'Shemini Atzeret'], ['Shmini Atzeret', 'Shemini Atzeret'],
     ['Simchat Torah', 'Simchat Torah']
   ];
   for (const [needle, key] of map) {
     if (display.toLowerCase().includes(needle.toLowerCase())) return key;
   }
   return null;
-}
-
-function defaultTeaser(name) {
-  return `This week we read ${name} — a beautiful portion of the Torah waiting for you. Open it together with your chavruta and discover what speaks to you this Shabbat.`;
 }

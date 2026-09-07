@@ -453,9 +453,17 @@
     <!-- Main Content Area -->
     <main class="container mx-auto px-4 py-8">
         <div id="content-area" class="bg-white rounded-lg shadow-lg p-6 md:p-8 border border-gray-200">
+            <!-- Special-week notice: double portion, festival reading, or a
+                 named special Shabbat. Hidden on ordinary weeks. -->
+            <div id="parsha-week-notice" class="parsha-week-notice hidden" role="status"></div>
+
             <!-- Parsha Title and Reference -->
             <h1 id="parsha-title" class="text-2xl md:text-3xl font-bold mb-2 text-blue-900"></h1>
-            <h3 id="parsha-reference" class="text-lg italic mb-6 text-blue-700"></h3>
+            <h3 id="parsha-reference" class="text-lg italic mb-2 text-blue-700"></h3>
+
+            <!-- Which Shabbat this portion belongs to in the current annual
+                 cycle (the cycle restarts at Simchat Torah). -->
+            <div id="parsha-week-of" class="parsha-week-of hidden"></div>
             
             <!-- Loading/Error Messages -->
             <div id="loading-message" class="text-center py-8 text-gray-500 hidden">

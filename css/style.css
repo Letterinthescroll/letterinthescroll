@@ -629,6 +629,124 @@ select {
 }
 
 /* ── Double Parsha Banner ── */
+/* ── "Parsha for the week of …" ───────────────────────────────────────────
+   Sits under the reference line so a reader who has browsed to another
+   portion can see which Shabbat of the current cycle it belongs to. */
+.parsha-week-of {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    color: #475569;
+}
+
+.parsha-week-of.hidden {
+    display: none;
+}
+
+.parsha-week-of__label {
+    font-weight: 600;
+    color: #334155;
+}
+
+.parsha-week-of--current {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1e40af;
+}
+
+.parsha-week-of--current .parsha-week-of__label {
+    color: #1d4ed8;
+}
+
+/* ── Special-week notice ──────────────────────────────────────────────────
+   Sits above the parsha title on weeks that break the ordinary
+   one-parsha-per-Shabbat pattern: double portions, festival readings that
+   replace the parsha, and named special Shabbatot. */
+.parsha-week-notice {
+    position: relative;
+    padding: 1rem 1.25rem 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    background: #f8fafc;
+    overflow: hidden;
+}
+
+.parsha-week-notice.hidden {
+    display: none;
+}
+
+.parsha-week-notice::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: currentColor;
+}
+
+.parsha-week-notice__eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: currentColor;
+    margin-bottom: 0.2rem;
+}
+
+.parsha-week-notice__headline {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.3;
+}
+
+.parsha-week-notice__detail {
+    margin: 0.35rem 0 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: #475569;
+}
+
+.parsha-week-notice--double {
+    color: #15803d;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-color: #86efac;
+}
+
+.parsha-week-notice--holiday {
+    color: #b45309;
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-color: #fcd34d;
+}
+
+.parsha-week-notice--special {
+    color: #1d4ed8;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-color: #93c5fd;
+}
+
+@media (max-width: 640px) {
+    .parsha-week-notice {
+        padding: 0.85rem 1rem 0.85rem 1.15rem;
+        margin-bottom: 1.15rem;
+    }
+
+    .parsha-week-notice__headline {
+        font-size: 1.02rem;
+    }
+
+    .parsha-week-notice__detail {
+        font-size: 0.85rem;
+    }
+}
+
 .double-parsha-banner {
     display: flex;
     align-items: center;

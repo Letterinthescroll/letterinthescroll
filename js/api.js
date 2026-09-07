@@ -93,6 +93,15 @@ function _getDiasporaParam() {
 }
 
 /**
+ * True when the user follows the Diaspora reading schedule (the default).
+ * The two schedules diverge for a stretch each spring, after the eighth day
+ * of Pesach, so the weekly-parsha calendar needs to know which to use.
+ */
+export function isDiasporaUser() {
+    return _getDiasporaParam() !== '0';
+}
+
+/**
  * Dev-only holiday simulator.
  * Returns a mocked holiday reading when:
  *   - the page URL has ?simulateHoliday=pesach|shavuot|sukkot, AND

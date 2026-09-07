@@ -56,6 +56,116 @@ export function updateParshaHeader(title, reference, overrideTitle) {
     document.getElementById('parsha-reference').textContent = reference;
 }
 
+function escapeNoticeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text == null ? '' : String(text);
+    return div.innerHTML;
+}
+
+function formatShabbatDate(isoDate) {
+    if (!isoDate) return '';
+    const [y, m, d] = isoDate.split('-').map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString(undefined, {
+        month: 'long', day: 'numeric', year: 'numeric'
+    });
+}
+
+/**
+ * "Parsha for the week of …" — which Shabbat the portion on screen belongs to
+ * in the annual cycle the reader is currently in. Browsing back to an earlier
+ * portion shows the week it was read; the cycle restarts at Simchat Torah, so
+ * once the Torah begins again from Bereshit these dates roll forward with it.
+ *
+ * `weekOf` is either { shabbatDate, isThisWeek } or { note } for a portion
+ * with no Shabbat of its own (V'Zot HaBerachah, read on Simchat Torah).
+ */
+export function renderWeekOfLine(weekOf) {
+    const line = document.getElementById('parsha-week-of');
+    if (!line) return;
+
+    if (!weekOf) {
+        line.className = 'parsha-week-of hidden';
+        line.innerHTML = '';
+        return;
+    }
+
+    if (weekOf.note) {
+        line.className = 'parsha-week-of';
+        line.innerHTML = `<span>${escapeNoticeHtml(weekOf.note)}</span>`;
+        return;
+    }
+
+    const label = weekOf.isThisWeek ? 'This week' : 'Parsha for the week of';
+    line.className = `parsha-week-of${weekOf.isThisWeek ? ' parsha-week-of--current' : ''}`;
+    line.innerHTML = `
+        <span class="parsha-week-of__label">${escapeNoticeHtml(label)}</span>
+        <span>Shabbat, ${escapeNoticeHtml(formatShabbatDate(weekOf.shabbatDate))}</span>
+    `;
+}
+
+/**
+ * Flag the weeks that don't follow the plain one-parsha-per-Shabbat pattern,
+ * so nobody has to work out for themselves why the page is showing two
+ * portions at once, or a festival reading instead of a parsha.
+ *
+ * Shown only while the reader is actually on this week's reading — once they
+ * navigate elsewhere it would describe something they aren't looking at.
+ */
+export function renderWeekNotice(reading, currentRef) {
+    const notice = document.getElementById('parsha-week-notice');
+    if (!notice) return;
+
+    const hide = () => {
+        notice.className = 'parsha-week-notice hidden';
+        notice.innerHTML = '';
+    };
+
+    if (!reading || (currentRef && currentRef !== reading.ref)) {
+        hide();
+        return;
+    }
+
+    const when = formatShabbatDate(reading.shabbatDate);
+    let variant = null;
+    let eyebrow = '';
+    let headline = '';
+    let detail = '';
+
+    if (reading.kind === 'holiday') {
+        variant = 'holiday';
+        eyebrow = 'Festival Reading';
+        headline = reading.name;
+        detail = `There is no weekly parsha this Shabbat (${when}) — the festival reading takes its place.`;
+        if (reading.megillah) {
+            detail += ` ${reading.megillah.split(' ').slice(0, -1).join(' ')} is also read.`;
+        }
+    } else if (reading.isDouble) {
+        const [first, second] = reading.parshas;
+        variant = 'double';
+        eyebrow = 'Double Portion';
+        headline = `${first.name} + ${second.name}`;
+        detail = `Two parshiyot are read together this Shabbat (${when}). `
+            + `Both are shown below, ${first.name} first.`;
+    } else if (reading.specialShabbat) {
+        variant = 'special';
+        eyebrow = 'Special Shabbat';
+        headline = reading.specialShabbat;
+        detail = `${reading.name} is read this Shabbat (${when}) with an additional maftir and its own haftarah.`;
+    }
+
+    if (!variant) {
+        hide();
+        return;
+    }
+
+    notice.className = `parsha-week-notice parsha-week-notice--${variant}`;
+    notice.innerHTML = `
+        <div class="parsha-week-notice__eyebrow">${escapeNoticeHtml(eyebrow)}</div>
+        <div class="parsha-week-notice__headline">${escapeNoticeHtml(headline)}</div>
+        <p class="parsha-week-notice__detail">${escapeNoticeHtml(detail)}</p>
+    `;
+}
+
 /**
  * Highlight current week's parsha
  */

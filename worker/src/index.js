@@ -180,8 +180,14 @@ async function buildThursdayPayload(env) {
   }
   const text = await fetchParshaHebrew(parsha.ref);
   const book = (parsha.ref.match(/^([A-Za-z]+(?: [A-Za-z]+)?)/) || [])[1] || '';
-  const readerUrl = `${env.SITE_URL}/parsha-reader/?ref=${encodeURIComponent(parsha.ref)}&name=${encodeURIComponent(parsha.name)}`;
-  const significance = await fetchSignificance(env, parsha.name);
+  const readerUrl = `${env.SITE_URL}/parsha-reader/?ref=${encodeURIComponent(parsha.ref)}&name=${encodeURIComponent(parsha.name)}&he=${encodeURIComponent(parsha.hebrewName || '')}`;
+  // parsha_significance.json is keyed per portion, so a double week has no
+  // entry of its own — fall back to each half.
+  let significance = await fetchSignificance(env, parsha.name);
+  for (const part of parsha.parts || []) {
+    if (significance) break;
+    significance = await fetchSignificance(env, part);
+  }
   const { html, text: textBody } = buildParshaEmail({
     parshaName: parsha.name,
     hebrewName: parsha.hebrewName,

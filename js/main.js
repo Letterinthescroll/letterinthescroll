@@ -1,6 +1,7 @@
 // Main Application Entry Point - QUERY FIX FOR COMMENT BADGES + GENERAL PARSHA CHAT
-import { TORAH_PARSHAS, DOUBLE_PARSHA_PAIRS, SPECIAL_READINGS, findSpecialReadingById, isSpecialReadingId, splitCompoundRef } from './config.js';
-import { fetchCurrentParsha, fetchParshaText, loadCommentaryData, loadMitzvahChallenges, getCachedCurrentParsha, cacheCurrentParsha } from './api.js';
+import { TORAH_PARSHAS, SPECIAL_READINGS, findSpecialReadingById, isSpecialReadingId, splitCompoundRef } from './config.js';
+import { fetchCurrentParsha, fetchParshaText, loadCommentaryData, loadMitzvahChallenges, isDiasporaUser } from './api.js';
+import { getReadingForDate, getCycleReading, getNearestParshaIndex, getShabbatOfWeek, toLocalDateString, CALENDAR_RANGE } from './parsha-calendar.js';
 import { state, setState } from './state.js';
 import { isImportantVerse, getImportantVerseData } from './important-verses.js';
 import { getDisplayNameFromEmail } from './name-utils.js';
@@ -10,6 +11,8 @@ import {
     showError,
     hideError,
     updateParshaHeader,
+    renderWeekNotice,
+    renderWeekOfLine,
     highlightCurrentParsha,
     updateNavigationButtons,
     populateParshaSelector,
@@ -176,7 +179,6 @@ const WEEKLY_PARSHA_CHECK_INTERVAL = 15 * 60 * 1000; // 15 minutes
 let weeklyParshaCheckIntervalId = null;
 let isWeeklyParshaCheckRunning = false;
 let pendingWeeklyParshaCheck = false;
-let pendingWeeklyParshaForceAdvance = false;
 
 function escapeForAttributeSelector(value) {
     if (typeof value !== 'string') {
@@ -409,23 +411,6 @@ function getStoredWeeklyWeekWindow() {
         }
     }
     return calculateMitzvahWeekWindow();
-}
-
-function getNextWeeklyParshaInfo() {
-    if (!Array.isArray(state.allParshas) || state.allParshas.length === 0) {
-        return null;
-    }
-    const currentIndex = (typeof state.weeklyParshaIndex === 'number' && state.weeklyParshaIndex >= 0)
-        ? state.weeklyParshaIndex
-        : (typeof state.currentParshaIndex === 'number' && state.currentParshaIndex >= 0
-            ? state.currentParshaIndex
-            : 0);
-    const nextIndex = (currentIndex + 1) % state.allParshas.length;
-    const parsha = state.allParshas[nextIndex];
-    if (!parsha) {
-        return null;
-    }
-    return { parsha, index: nextIndex };
 }
 
 function parseVerseReference(verseRef) {
@@ -708,36 +693,17 @@ async function init() {
             ha.appendChild(sk);
         })();
 
-        // ── Phase 1: Instant UI — render cached parsha text before auth ──
+        // ── Phase 1: Instant UI ──
+        // This week's reading comes from a precomputed calendar shipped with
+        // the site (js/parsha-calendar-data.js), so we know the right parsha —
+        // including double weeks and festival readings — before any network
+        // request. No cache to go stale, no name matching to misfire.
         setState({ allParshas: TORAH_PARSHAS, specialReadings: SPECIAL_READINGS });
 
-        const cachedWeeklyParsha = getCachedCurrentParsha();
-        if (cachedWeeklyParsha) {
-            const cachedMatch = TORAH_PARSHAS.find(p => p.reference === cachedWeeklyParsha.ref);
-            if (cachedMatch) {
-                const idx = TORAH_PARSHAS.indexOf(cachedMatch);
-                const initialWeekStart = getWeekStartForDate();
-                setState({
-                    currentParshaRef: cachedMatch.reference,
-                    currentParshaIndex: idx,
-                    weeklyParshaRef: cachedMatch.reference,
-                    weeklyParshaIndex: idx,
-                    weeklyParshaWeekStart: initialWeekStart.toISOString()
-                });
-                console.log('⚡ Using cached parsha:', cachedMatch.name);
-            }
-        }
-
-        // If no cache, don't fall back to Genesis 1:1 — wait for the API
-        // so the correct weekly parsha is always shown on page load.
-        if ((state.weeklyParshaIndex == null || state.weeklyParshaIndex < 0) && state.currentParshaRef) {
-            const fallbackIndex = state.currentParshaIndex >= 0 ? state.currentParshaIndex : 0;
-            const initialWeekStart = getWeekStartForDate();
-            setState({
-                weeklyParshaRef: state.currentParshaRef,
-                weeklyParshaIndex: fallbackIndex,
-                weeklyParshaWeekStart: state.weeklyParshaWeekStart || initialWeekStart.toISOString()
-            });
+        const weeklyReading = getReadingForDate(new Date(), isDiasporaUser());
+        if (weeklyReading) {
+            applyWeeklyReadingState(weeklyReading);
+            console.log(`📖 Shabbat ${weeklyReading.shabbatDate}: ${weeklyReading.name}`);
         }
 
         populateParshaSelector();
@@ -746,8 +712,6 @@ async function init() {
         fetchAndApplyDailyQuoteTint();
 
         // ── Launch ALL async work in parallel immediately ──
-        const parshaNamePromise = fetchCurrentParsha();
-
         const authPromise = new Promise((resolve) => {
             let initialResolved = false;
             initAuth(async (user) => {
@@ -769,62 +733,22 @@ async function init() {
             loadMitzvahChallenges()
         ]);
 
-        // ── Fast path: cached weekly parsha → render instantly ──
-        const earlyRef = state.currentParshaRef;
-        if (earlyRef) {
-            await loadParsha(earlyRef);
-            console.log('⚡ Rendered cached parsha:', earlyRef);
+        // ── Render the reading; don't wait for auth ──
+        if (state.currentParshaRef) {
+            await loadParsha(state.currentParshaRef);
         } else {
-            // ── No cache: get parsha from API ASAP, don't wait for auth ──
+            // Only reachable past the end of the shipped calendar — ask the
+            // live calendar API instead.
             showLoading();
-            console.log('⚡ No cached parsha — fetching from API...');
-            const currentParshaInfo = await parshaNamePromise;
-            const currentParshaName = currentParshaInfo?.name || null;
-            if (currentParshaName) {
-                const match = findMatchingParshaByName(currentParshaName);
-                const matchingParsha = match?.parsha || null;
-                const matchingIndex = match?.index ?? -1;
-                if (matchingParsha && matchingIndex >= 0) {
-                    const initialWeekStart = getWeekStartForDate();
-                    cacheCurrentParsha({ ...currentParshaInfo, ref: matchingParsha.reference });
-                    setState({
-                        currentParshaRef: matchingParsha.reference,
-                        currentParshaIndex: matchingIndex,
-                        weeklyParshaRef: matchingParsha.reference,
-                        weeklyParshaIndex: matchingIndex,
-                        weeklyParshaWeekStart: initialWeekStart.toISOString(),
-                        currentHolidayName: null
-                    });
-                    document.body.classList.remove('is-holiday-reading');
-                    document.querySelectorAll('select#parsha-selector').forEach(s => {
-                        s.value = matchingParsha.reference;
-                    });
-                    updateNavigationButtons();
-                    await loadParsha(matchingParsha.reference);
-                    console.log('✅ Loaded weekly parsha from API:', match.displayName || matchingParsha.name);
-                } else if (currentParshaInfo.isHoliday && currentParshaInfo.ref) {
-                    // Sefaria returned a holiday reading (e.g., "Pesach Day 1") that
-                    // isn't in our TORAH_PARSHAS list. Mirror Sefaria: use its ref directly.
-                    const holidayRef = Array.isArray(currentParshaInfo.ref)
-                        ? currentParshaInfo.ref[0]
-                        : currentParshaInfo.ref;
-                    const initialWeekStart = getWeekStartForDate();
-                    cacheCurrentParsha(currentParshaInfo);
-                    setState({
-                        currentParshaRef: holidayRef,
-                        weeklyParshaRef: holidayRef,
-                        weeklyParshaWeekStart: initialWeekStart.toISOString(),
-                        currentHolidayName: currentParshaName
-                    });
-                    document.body.classList.add('is-holiday-reading');
-                    await loadParsha(holidayRef);
-                    console.log('✅ Loaded holiday reading from Sefaria:', currentParshaName, holidayRef);
-                } else {
-                    setState({ currentParshaRef: TORAH_PARSHAS[0].reference, currentParshaIndex: 0 });
-                    await loadParsha(TORAH_PARSHAS[0].reference);
-                }
+            const fallbackReading = await resolveWeeklyReading();
+            if (fallbackReading) {
+                applyWeeklyReadingState(fallbackReading);
+                document.querySelectorAll('select#parsha-selector').forEach((selector) => {
+                    selector.value = fallbackReading.ref;
+                });
+                updateNavigationButtons();
+                await loadParsha(fallbackReading.ref);
             } else {
-                // API failed — fall back to first parsha as last resort
                 setState({ currentParshaRef: TORAH_PARSHAS[0].reference, currentParshaIndex: 0 });
                 await loadParsha(TORAH_PARSHAS[0].reference);
             }
@@ -846,7 +770,7 @@ async function init() {
         // renderParsha ran before this data was available (the common case).
         refreshSignificanceButtons();
 
-        // ── Post-auth: reload counts + confirm weekly parsha from API ──
+        // ── Post-auth: reload counts for whatever is on screen ──
         const activeRef = state.currentParshaRef;
         if (activeRef) {
             await Promise.all([
@@ -854,67 +778,6 @@ async function init() {
                 loadReactionCounts(activeRef),
                 loadBookmarkCounts(activeRef)
             ]);
-        }
-
-        // If we had a cache hit, confirm/update the weekly parsha from the API
-        if (earlyRef) {
-            const currentParshaInfo = await parshaNamePromise;
-            const currentParshaName = currentParshaInfo?.name || null;
-            console.log('✅ Current parsha fetched:', currentParshaName);
-
-            if (currentParshaName) {
-                const match = findMatchingParshaByName(currentParshaName);
-                const matchingParsha = match?.parsha || null;
-                const matchingIndex = match?.index ?? -1;
-
-                if (matchingParsha && matchingIndex >= 0) {
-                    const initialWeekStart = getWeekStartForDate();
-
-                    cacheCurrentParsha({ ...currentParshaInfo, ref: matchingParsha.reference });
-
-                    setState({
-                        currentParshaRef: matchingParsha.reference,
-                        currentParshaIndex: matchingIndex,
-                        weeklyParshaRef: matchingParsha.reference,
-                        weeklyParshaIndex: matchingIndex,
-                        weeklyParshaWeekStart: initialWeekStart.toISOString()
-                    });
-
-                    document.body.classList.remove('is-holiday-reading');
-                    setState({ currentHolidayName: null });
-
-                    if (cachedWeeklyParsha?.ref !== matchingParsha.reference) {
-                        // Cache was stale — switch to the correct weekly parsha
-                        document.querySelectorAll('select#parsha-selector').forEach(s => {
-                            s.value = matchingParsha.reference;
-                        });
-                        updateNavigationButtons();
-                        await loadParsha(matchingParsha.reference);
-                    } else {
-                        updateMitzvahChallengeForParsha(match.displayName || matchingParsha.name);
-                    }
-                } else if (currentParshaInfo.isHoliday && currentParshaInfo.ref) {
-                    // Holiday week: Sefaria returned a reading not in our local list.
-                    // Swap over to it if the cached ref disagrees.
-                    const holidayRef = Array.isArray(currentParshaInfo.ref)
-                        ? currentParshaInfo.ref[0]
-                        : currentParshaInfo.ref;
-                    const initialWeekStart = getWeekStartForDate();
-                    cacheCurrentParsha(currentParshaInfo);
-                    setState({
-                        currentParshaRef: holidayRef,
-                        weeklyParshaRef: holidayRef,
-                        weeklyParshaWeekStart: initialWeekStart.toISOString(),
-                        currentHolidayName: currentParshaName
-                    });
-                    document.body.classList.add('is-holiday-reading');
-                    if (cachedWeeklyParsha?.ref !== holidayRef) {
-                        updateNavigationButtons();
-                        await loadParsha(holidayRef);
-                        console.log('✅ Switched to holiday reading:', currentParshaName, holidayRef);
-                    }
-                }
-            }
         }
 
         startWeeklyParshaMonitor();
@@ -968,20 +831,19 @@ function setupEventListeners() {
     async function handlePrevParsha() {
         if (state.currentParshaIndex > 0) {
             let newIndex = state.currentParshaIndex - 1;
-            // If the parsha we'd land on is the second in a double pair for this year,
-            // skip back to the first (loadParsha will show both in combined view)
-            const targetParsha = state.allParshas[newIndex];
-            if (targetParsha) {
-                const pairInfo = getDoubleParshaPairInfo(targetParsha.name);
-                if (pairInfo && pairInfo.position === 'first' && !isHebrewLeapYear(getCurrentHebrewYear())) {
-                    const currentParsha = state.allParshas[state.currentParshaIndex];
-                    const currentPairInfo = getDoubleParshaPairInfo(currentParsha?.name);
-                    if (currentPairInfo && currentPairInfo.position === 'second'
-                        && normalizeParshaName(currentPairInfo.pair[0]) === normalizeParshaName(pairInfo.pair[0])) {
-                        newIndex = Math.max(0, newIndex - 1);
-                    }
-                }
+            // A combined view is anchored on its second half, so stepping back
+            // one would just re-open the same double portion. Skip the whole
+            // pair instead — but only when that pair is what's on screen. On a
+            // festival week the index is only an anchor, and the double before
+            // it is somewhere the reader has not been yet.
+            const onThatParsha = state.allParshas[state.currentParshaIndex]?.reference === state.currentParshaRef;
+            const current = onThatParsha
+                ? getCycleReading(state.currentParshaIndex, new Date(), isDiasporaUser())
+                : null;
+            if (current?.isDouble && current.parshaIndexes.includes(newIndex)) {
+                newIndex = Math.min(...current.parshaIndexes) - 1;
             }
+            if (newIndex < 0) return;
             const prevParsha = state.allParshas[newIndex];
             setState({ currentParshaIndex: newIndex, currentParshaRef: prevParsha.reference });
             document.querySelectorAll('select#parsha-selector').forEach((s) => {
@@ -1173,172 +1035,144 @@ function setupMitzvahChallengeEventListeners() {
     }
 }
 
-function normalizeParshaName(rawName) {
-    if (!rawName || typeof rawName !== 'string') {
-        return '';
-    }
-    return rawName
-        .toLowerCase()
-        .replace(/parashat|parshat|parasha|parshah|parsha/gi, '')
-        .replace(/[^a-z0-9]+/g, ' ')
-        .trim();
-}
-
 /**
- * Get the approximate current Hebrew year based on the Gregorian date.
- * Before Rosh Hashanah (~September), the Hebrew year is Gregorian + 3760.
- * After Rosh Hashanah, it is Gregorian + 3761.
- */
-function getCurrentHebrewYear() {
-    const now = new Date();
-    const month = now.getMonth(); // 0-based (0 = Jan)
-    return now.getFullYear() + (month < 8 ? 3760 : 3761);
-}
-
-/**
- * Check if a Hebrew year is a leap year using the Metonic 19-year cycle.
- * Leap years fall on positions 3, 6, 8, 11, 14, 17, 19 (remainder 0) of the cycle.
- */
-function isHebrewLeapYear(hebrewYear) {
-    const remainder = hebrewYear % 19;
-    return [3, 6, 8, 11, 14, 17, 0].includes(remainder);
-}
-
-/**
- * Check if a parsha (by name) is part of a known double-parsha pair.
- * Returns { pairIndex, position: 'first'|'second', pair: [name1, name2] } or null.
- */
-function getDoubleParshaPairInfo(parshaName) {
-    if (!parshaName) return null;
-    const normalizedTarget = normalizeParshaName(parshaName);
-    for (let i = 0; i < DOUBLE_PARSHA_PAIRS.length; i++) {
-        const pair = DOUBLE_PARSHA_PAIRS[i];
-        if (normalizeParshaName(pair[0]) === normalizedTarget) {
-            return { pairIndex: i, position: 'first', pair };
-        }
-        if (normalizeParshaName(pair[1]) === normalizedTarget) {
-            return { pairIndex: i, position: 'second', pair };
-        }
-    }
-    return null;
-}
-
-/**
- * Determine if the given parsha should be displayed as part of a double-parsha pair
- * this year. Returns { firstParsha, secondParsha, firstIndex, secondIndex, displayName }
- * or null if the parsha is read alone this year.
+ * Is `parshaRef` read together with its neighbour in the reading year the user
+ * is in right now? Returns both halves, or null when it stands alone.
+ *
+ * Which pairs are combined is not a simple "leap years read everything
+ * separately" rule — it depends on the Hebrew leap year, the day Rosh Hashanah
+ * falls on, and (for a stretch each spring) whether the reader follows the
+ * Israel or Diaspora schedule. So we ask the precomputed calendar for the
+ * cycle we are actually in instead of guessing.
  */
 function resolveDoubleParshaForCurrentYear(parshaRef) {
-    const hebrewYear = getCurrentHebrewYear();
-    if (isHebrewLeapYear(hebrewYear)) {
-        // Leap year — all parshiyot are read separately
-        return null;
-    }
+    const parshaIndex = state.allParshas.findIndex(p => p.reference === parshaRef);
+    if (parshaIndex < 0) return null;
 
-    // Find which parsha this ref belongs to
-    const parshaObj = state.allParshas.find(p => p.reference === parshaRef);
-    if (!parshaObj) return null;
+    const reading = getCycleReading(parshaIndex, new Date(), isDiasporaUser());
+    if (!reading || !reading.isDouble) return null;
 
-    const pairInfo = getDoubleParshaPairInfo(parshaObj.name);
-    if (!pairInfo) return null;
-
-    // Find both parshiyot in the allParshas list
-    const firstIdx = state.allParshas.findIndex(p => normalizeParshaName(p.name) === normalizeParshaName(pairInfo.pair[0]));
-    const secondIdx = state.allParshas.findIndex(p => normalizeParshaName(p.name) === normalizeParshaName(pairInfo.pair[1]));
-
-    if (firstIdx < 0 || secondIdx < 0) return null;
+    const [firstIndex, secondIndex] = reading.parshaIndexes;
+    const firstParsha = state.allParshas[firstIndex];
+    const secondParsha = state.allParshas[secondIndex];
+    if (!firstParsha || !secondParsha) return null;
 
     return {
-        firstParsha: state.allParshas[firstIdx],
-        secondParsha: state.allParshas[secondIdx],
-        firstIndex: firstIdx,
-        secondIndex: secondIdx,
-        displayName: `${state.allParshas[firstIdx].name}-${state.allParshas[secondIdx].name}`
+        firstParsha,
+        secondParsha,
+        firstIndex,
+        secondIndex,
+        displayName: reading.name
     };
 }
 
 /**
- * Check if a raw parsha name from the API represents a double parsha
- * (e.g. "Parashat Vayakhel-Pekudei"). Returns the two individual names if so.
+ * This week's reading, from the shipped calendar.
+ *
+ * The calendar runs decades ahead, so the Sefaria fallback below is a safety
+ * net for dates past its end (regenerate with dev/generate_parsha_calendar.py).
+ * Even that fallback reads Sefaria's *reference* rather than its display name:
+ * a ref maps onto the parsha list exactly, where names like "Nitzavim-Vayeilech"
+ * or "Rosh Hashana I" do not.
  */
-function parseDoubleParsha(rawName) {
-    if (!rawName || typeof rawName !== 'string') return null;
-    const cleaned = rawName.replace(/parashat|parshat|parasha|parshah|parsha/gi, '').trim();
-    // Double parshiyot are hyphenated (e.g. "Vayakhel-Pekudei", "Tazria-Metzora")
-    const parts = cleaned.split(/\s*[-–—]\s*/);
-    if (parts.length === 2 && parts[0].length > 1 && parts[1].length > 1) {
-        return { first: parts[0].trim(), second: parts[1].trim() };
+let calendarRangeWarned = false;
+
+async function resolveWeeklyReading() {
+    const reading = getReadingForDate(new Date(), isDiasporaUser());
+    if (reading) return reading;
+
+    if (!calendarRangeWarned) {
+        calendarRangeWarned = true;
+        console.warn(
+            `Today falls outside the shipped Torah-reading calendar (${CALENDAR_RANGE.firstShabbat} – ` +
+            `${CALENDAR_RANGE.lastShabbat}). Regenerate it with dev/generate_parsha_calendar.py. ` +
+            'Falling back to the Sefaria calendar API.'
+        );
     }
-    return null;
+
+    try {
+        const info = await fetchCurrentParsha();
+        return info ? readingFromSefariaRef(info) : null;
+    } catch (error) {
+        console.warn('Sefaria calendar fallback failed:', error);
+        return null;
+    }
 }
 
-function findMatchingParshaByName(rawName) {
-    if (!rawName || !Array.isArray(state.allParshas) || state.allParshas.length === 0) {
-        return null;
+/** Map a Sefaria calendar entry onto our parsha list by its verse range. */
+function readingFromSefariaRef(info) {
+    const rawRef = Array.isArray(info.ref) ? info.ref[0] : info.ref;
+    if (!rawRef) return null;
+
+    const shabbatDate = toLocalDateString(getShabbatOfWeek());
+    const start = rawRef.split('-')[0].trim();          // "Deuteronomy 29:9"
+    const end = rawRef.split('-').pop().trim();         // "31:30"
+    const book = start.slice(0, start.lastIndexOf(' '));
+
+    const firstIndex = TORAH_PARSHAS.findIndex(p => p.reference.split('-')[0] === start);
+    const lastIndex = TORAH_PARSHAS.findIndex(
+        p => p.book === book && p.reference.split('-').pop() === end
+    );
+
+    if (firstIndex >= 0 && lastIndex >= firstIndex) {
+        const parshas = TORAH_PARSHAS.slice(firstIndex, lastIndex + 1);
+        return {
+            kind: 'parsha',
+            shabbatDate,
+            name: parshas.map(p => p.name).join('-'),
+            ref: parshas[parshas.length - 1].reference,
+            combinedRef: rawRef,
+            specialShabbat: null,
+            isDouble: parshas.length > 1,
+            parshas,
+            parshaIndexes: parshas.map((_, i) => firstIndex + i)
+        };
     }
 
-    // Handle double parshiyot (e.g. "Vayakhel-Pekudei") — match the SECOND
-    // parsha so the weekly index advances past both, and include both parsha
-    // references so the UI can load and display them together.
-    const doubleParts = parseDoubleParsha(rawName);
-    if (doubleParts) {
-        let firstMatch = null;
-        let secondMatch = null;
-        for (let i = 0; i < state.allParshas.length; i++) {
-            const parsha = state.allParshas[i];
-            if (!parsha?.name) continue;
-            const normalizedCandidate = normalizeParshaName(parsha.name);
-            if (!normalizedCandidate) continue;
-            const normalizedFirst = normalizeParshaName(doubleParts.first);
-            const normalizedSecond = normalizeParshaName(doubleParts.second);
-            if (normalizedCandidate === normalizedFirst) {
-                firstMatch = { parsha, index: i };
-            }
-            if (normalizedCandidate === normalizedSecond) {
-                secondMatch = { parsha, index: i };
-            }
-        }
-        if (secondMatch) {
-            const displayName = firstMatch
-                ? `${firstMatch.parsha.name}-${secondMatch.parsha.name}`
-                : secondMatch.parsha.name;
-            return {
-                parsha: secondMatch.parsha,
-                index: secondMatch.index,
-                displayName,
-                isDouble: true,
-                firstParsha: firstMatch ? firstMatch.parsha : null,
-                firstIndex: firstMatch ? firstMatch.index : -1
-            };
-        }
-        if (firstMatch) {
-            return { parsha: firstMatch.parsha, index: firstMatch.index };
-        }
-    }
+    // Not a weekly portion — a festival reading stands in for it.
+    return {
+        kind: 'holiday',
+        shabbatDate,
+        name: info.name || 'Holiday Reading',
+        ref: rawRef,
+        sections: [{ label: 'Torah Reading', ref: rawRef }],
+        megillah: null,
+        specialShabbat: null,
+        isDouble: false,
+        parshas: [],
+        parshaIndexes: []
+    };
+}
 
-    const normalizedTarget = normalizeParshaName(rawName);
-    if (!normalizedTarget) {
-        return null;
-    }
+/**
+ * Record `reading` as this week's reading. Pure state + chrome; it does not
+ * load any text, so it is safe to call before the page has rendered.
+ */
+function applyWeeklyReadingState(reading) {
+    if (!reading) return;
 
-    let fallbackMatch = null;
+    const isHoliday = reading.kind === 'holiday';
+    // A festival week reads no parsha, so anchor prev/next to the last one the
+    // annual cycle actually reached rather than leaving them stranded.
+    const weeklyIndex = isHoliday
+        ? getNearestParshaIndex(new Date(), isDiasporaUser())
+        : reading.parshaIndexes[reading.parshaIndexes.length - 1];
 
-    for (let i = 0; i < state.allParshas.length; i++) {
-        const parsha = state.allParshas[i];
-        if (!parsha?.name) continue;
-        const normalizedCandidate = normalizeParshaName(parsha.name);
-        if (!normalizedCandidate) continue;
+    setState({
+        weeklyReading: reading,
+        weeklyParshaRef: reading.ref,
+        weeklyParshaIndex: weeklyIndex,
+        weeklyParshaWeekStart: getWeekStartForDate().toISOString(),
+        isDoubleParsha: Boolean(reading.isDouble),
+        doubleParshaFirstIndex: reading.isDouble ? reading.parshaIndexes[0] : -1,
+        doubleParshaDisplayName: reading.isDouble ? reading.name : null,
+        currentHolidayName: isHoliday ? reading.name : null,
+        currentParshaRef: state.currentParshaRef || reading.ref,
+        currentParshaIndex: state.currentParshaRef ? state.currentParshaIndex : weeklyIndex
+    });
 
-        if (normalizedCandidate === normalizedTarget) {
-            return { parsha, index: i };
-        }
-
-        if (!fallbackMatch && (normalizedTarget.includes(normalizedCandidate) || normalizedCandidate.includes(normalizedTarget))) {
-            fallbackMatch = { parsha, index: i };
-        }
-    }
-
-    return fallbackMatch;
+    document.body.classList.toggle('is-holiday-reading', isHoliday);
+    renderWeekNotice(reading, state.currentParshaRef);
 }
 
 function startWeeklyParshaMonitor() {
@@ -1356,116 +1190,65 @@ function stopWeeklyParshaMonitor() {
     }
 }
 
-function scheduleImmediateWeeklyParshaCheck(options = {}) {
-    const forceAdvance = Boolean(options.forceAdvance);
-    if (forceAdvance) {
-        pendingWeeklyParshaForceAdvance = true;
-    }
+function scheduleImmediateWeeklyParshaCheck() {
     if (isWeeklyParshaCheckRunning) {
         pendingWeeklyParshaCheck = true;
         return;
     }
-    runWeeklyParshaCheck({ forceAdvance: forceAdvance || pendingWeeklyParshaForceAdvance });
+    runWeeklyParshaCheck();
 }
 
-async function runWeeklyParshaCheck(options = {}) {
-    const pendingForce = pendingWeeklyParshaForceAdvance;
-    pendingWeeklyParshaForceAdvance = false;
-    const forceAdvance = Boolean(options.forceAdvance || pendingForce);
-
+async function runWeeklyParshaCheck() {
     if (isWeeklyParshaCheckRunning) {
         pendingWeeklyParshaCheck = true;
-        pendingWeeklyParshaForceAdvance = pendingWeeklyParshaForceAdvance || forceAdvance;
         return;
     }
     isWeeklyParshaCheckRunning = true;
     try {
-        await checkAndApplyWeeklyParsha({ forceAdvance });
+        await checkAndApplyWeeklyParsha();
     } catch (error) {
         console.warn('Unable to refresh weekly parsha from calendar:', error);
     } finally {
         isWeeklyParshaCheckRunning = false;
         if (pendingWeeklyParshaCheck) {
-            const shouldForce = pendingWeeklyParshaForceAdvance;
             pendingWeeklyParshaCheck = false;
-            pendingWeeklyParshaForceAdvance = false;
-            runWeeklyParshaCheck({ forceAdvance: shouldForce });
+            runWeeklyParshaCheck();
         }
     }
 }
 
-async function checkAndApplyWeeklyParsha({ forceAdvance = false } = {}) {
+/**
+ * Roll the page over when the week turns (Saturday night → Sunday), or when a
+ * tab has been left open across a week boundary.
+ *
+ * There used to be a "force advance" path that assumed the next parsha in the
+ * list — a guess that silently skipped holiday weeks and half of every double
+ * portion. The calendar is authoritative now, so a check is just a re-read.
+ */
+async function checkAndApplyWeeklyParsha() {
     if (!Array.isArray(state.allParshas) || state.allParshas.length === 0) {
         return;
     }
 
-    const storedWeekStart = state.weeklyParshaWeekStart ? new Date(state.weeklyParshaWeekStart) : null;
-    const hasStoredWeekStart = storedWeekStart instanceof Date && !Number.isNaN(storedWeekStart.getTime());
-    const expectedNextWeekStart = hasStoredWeekStart ? addDays(storedWeekStart, 7) : null;
-    const hasWeekExpired = expectedNextWeekStart ? Date.now() >= expectedNextWeekStart.getTime() : false;
-
-    const prevWeeklyRef = state.weeklyParshaRef;
-
-    let latestParshaName = null;
-    try {
-        const info = await fetchCurrentParsha();
-        latestParshaName = info?.name || null;
-    } catch (error) {
-        latestParshaName = null;
-    }
-
-    let match = null;
-    if (latestParshaName) {
-        match = findMatchingParshaByName(latestParshaName);
-        if (!match) {
-            console.warn('Calendar parsha not found in local list:', latestParshaName);
-        }
-    }
-
-    if (match && (forceAdvance || hasWeekExpired) && prevWeeklyRef && match.parsha.reference === prevWeeklyRef) {
-        const nextMatch = getNextWeeklyParshaInfo();
-        if (nextMatch) {
-            match = nextMatch;
-        }
-    }
-
-    if (!match && (forceAdvance || hasWeekExpired)) {
-        match = getNextWeeklyParshaInfo();
-    }
-
-    if (!match) {
+    const reading = await resolveWeeklyReading();
+    if (!reading) {
         return;
     }
 
-    const alreadyCurrent = prevWeeklyRef === match.parsha.reference && state.weeklyParshaIndex === match.index;
-    if (alreadyCurrent && !hasWeekExpired && !forceAdvance) {
+    const previousRef = state.weeklyParshaRef;
+    const unchanged = previousRef === reading.ref
+        && state.weeklyReading?.shabbatDate === reading.shabbatDate;
+    if (unchanged) {
         return;
     }
 
-    const wasViewingWeekly = Boolean(prevWeeklyRef && state.currentParshaRef === prevWeeklyRef);
-
-    let newWeekStart = null;
-    const shouldUpdateWeekStart = !alreadyCurrent || !state.weeklyParshaWeekStart;
-    if (shouldUpdateWeekStart) {
-        if ((forceAdvance || hasWeekExpired) && hasStoredWeekStart) {
-            newWeekStart = addDays(storedWeekStart, 7);
-        } else {
-            newWeekStart = getWeekStartForDate();
-        }
-    }
-
-    setState({
-        weeklyParshaRef: match.parsha.reference,
-        weeklyParshaIndex: match.index,
-        isDoubleParsha: Boolean(match.isDouble),
-        doubleParshaFirstIndex: match.isDouble ? (match.firstIndex ?? -1) : -1,
-        doubleParshaDisplayName: match.isDouble ? (match.displayName || null) : null,
-        ...(newWeekStart ? { weeklyParshaWeekStart: newWeekStart.toISOString() } : {})
-    });
+    const wasViewingWeekly = Boolean(previousRef && state.currentParshaRef === previousRef);
+    applyWeeklyReadingState(reading);
 
     if (wasViewingWeekly || !state.currentParshaRef) {
-        await goToParshaAfterWeeklyChange(match.parsha.reference, match.index);
+        await goToParshaAfterWeeklyChange(reading);
     } else {
+        updateNavigationButtons();
         const activeParshaName = state.allParshas[state.currentParshaIndex]?.name || null;
         if (activeParshaName) {
             updateMitzvahChallengeForParsha(activeParshaName);
@@ -1473,29 +1256,21 @@ async function checkAndApplyWeeklyParsha({ forceAdvance = false } = {}) {
     }
 }
 
-async function goToParshaAfterWeeklyChange(reference, index) {
-    if (!reference) {
-        return;
-    }
-
-    const resolvedIndex = (typeof index === 'number' && index >= 0)
-        ? index
-        : state.allParshas.findIndex(p => p.reference === reference);
-
-    if (resolvedIndex < 0) {
+async function goToParshaAfterWeeklyChange(reading) {
+    if (!reading?.ref) {
         return;
     }
 
     setState({
-        currentParshaIndex: resolvedIndex,
-        currentParshaRef: reference
+        currentParshaIndex: state.weeklyParshaIndex,
+        currentParshaRef: reading.ref
     });
 
     document.querySelectorAll('select#parsha-selector').forEach((selector) => {
-        selector.value = reference;
+        selector.value = reading.ref;
     });
 
-    await loadParsha(reference);
+    await loadParsha(reading.ref);
     updateNavigationButtons();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -2388,7 +2163,7 @@ function formatDeadlineDisplayShort(date) {
 function handleMitzvahWindowClosed() {
     if (currentMitzvahChallengeMode === 'current') {
         hideMitzvahModal(true);
-        scheduleImmediateWeeklyParshaCheck({ forceAdvance: true });
+        scheduleImmediateWeeklyParshaCheck();
     }
     updateMitzvahAuthState();
 }
@@ -4211,8 +3986,9 @@ async function loadParsha(parshaRef) {
     hideError();
 
     try {
-        // Check if this parsha is part of a double-parsha pair for the current year.
-        // In regular (non-leap) years, certain pairs are always read together.
+        // Is this parsha read together with its neighbour in the reading year
+        // we're in? Answered from the precomputed calendar, so it is right in
+        // leap years and plain years alike.
         const doublePairInfo = resolveDoubleParshaForCurrentYear(parshaRef);
         let isDoubleView = false;
         let firstParshaRef = null;
@@ -4232,10 +4008,42 @@ async function loadParsha(parshaRef) {
         // Always routed through the multi-section renderer even when there's
         // only one section, so the labeled divider ("Torah Reading") appears
         // consistently and the rest of the single-section path stays untouched.
-        const specialReading = isSpecialReadingId(parshaRef)
-            ? findSpecialReadingById(parshaRef)
+        //
+        // When this *is* the festival reading standing in for the week's
+        // parsha, take the sections from the calendar rather than the fixed
+        // dropdown entry: a few of them (the maftir of Shabbat Chol HaMoed
+        // Sukkot) change from year to year.
+        const weeklyHolidayReading = (state.weeklyReading?.kind === 'holiday'
+            && state.weeklyReading.ref === parshaRef)
+            ? {
+                id: parshaRef,
+                name: state.weeklyReading.name,
+                sections: state.weeklyReading.sections
+            }
             : null;
+        const specialReading = weeklyHolidayReading
+            || (isSpecialReadingId(parshaRef) ? findSpecialReadingById(parshaRef) : null);
         const isMultiSection = !doublePairInfo && !!specialReading;
+
+        // Keep the "this is a special week" notice in step with what's on
+        // screen — it describes this week's reading, not whatever the reader
+        // has browsed to.
+        renderWeekNotice(state.weeklyReading, parshaRef);
+
+        // …and tell the reader which Shabbat of the current cycle the portion
+        // they're looking at belongs to.
+        const viewedIndex = state.allParshas.findIndex(p => p.reference === parshaRef);
+        if (viewedIndex < 0) {
+            renderWeekOfLine(null);
+        } else {
+            const cycleReading = getCycleReading(viewedIndex, new Date(), isDiasporaUser());
+            renderWeekOfLine(cycleReading
+                ? {
+                    shabbatDate: cycleReading.shabbatDate,
+                    isThisWeek: cycleReading.shabbatDate === state.weeklyReading?.shabbatDate
+                }
+                : { note: 'Read on Simchat Torah, when the annual cycle ends and begins again' });
+        }
 
         if (isDoubleView) {
             // Ensure currentParshaIndex points to the second parsha for consistent nav

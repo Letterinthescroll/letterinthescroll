@@ -1,6 +1,7 @@
 // Standalone Weekly Mitzvah Challenge loader for the dashboard.
 // Mirrors the essential logic from main.js without pulling in Torah-study state.
-import { fetchCurrentParsha, getCachedCurrentParsha, loadMitzvahChallenges } from './api.js';
+import { loadMitzvahChallenges, isDiasporaUser } from './api.js';
+import { getReadingForDate } from './parsha-calendar.js';
 import {
     initAuth,
     getCurrentUserId,
@@ -388,16 +389,9 @@ async function loadAndRender() {
     const section = document.getElementById('mitzvah-challenge-section');
     if (!section) return;
 
-    let parshaName = null;
-    try {
-        const cached = getCachedCurrentParsha();
-        if (cached && cached.name) {
-            parshaName = cached.name;
-        } else {
-            const info = await fetchCurrentParsha();
-            parshaName = info?.name || null;
-        }
-    } catch { /* no-op */ }
+    // Same precomputed calendar the study page uses, so the dashboard can
+    // never disagree with it about which parsha it is.
+    const reading = getReadingForDate(new Date(), isDiasporaUser());
 
     let challenges = [];
     try {
@@ -405,9 +399,20 @@ async function loadAndRender() {
         challenges = Array.isArray(data.challenges) ? data.challenges : [];
     } catch { /* no-op */ }
 
-    if (!parshaName || !challenges.length) { section.classList.add('hidden'); return; }
+    // On a festival Shabbat there is no weekly parsha, so no weekly challenge.
+    if (!reading || reading.kind !== 'parsha' || !challenges.length) {
+        section.classList.add('hidden');
+        return;
+    }
 
-    const challenge = challenges.find(c => c?.parsha && c.parsha.toLowerCase() === parshaName.toLowerCase());
+    // A double portion has no challenge of its own — fall back to either half.
+    const candidates = [reading.name, ...reading.parshas.map(p => p.name)];
+    let parshaName = null;
+    let challenge = null;
+    for (const candidate of candidates) {
+        challenge = challenges.find(c => c?.parsha && c.parsha.toLowerCase() === candidate.toLowerCase());
+        if (challenge) { parshaName = candidate; break; }
+    }
     if (!challenge) { section.classList.add('hidden'); return; }
 
     challengeId = `mitzvah-${parshaName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
